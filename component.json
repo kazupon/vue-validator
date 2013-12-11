@@ -1,0 +1,8 @@
+{
+    "name": "vue-validator",
+    "version": "0.1.0",
+    "description": "A collection of commonly-used validators for Vue.js",
+    "keywords": ["vue"],
+    "license": "MIT",
+    "scripts": ["index.js"]
+}
