@@ -1,0 +1,29 @@
+{
+    "indent": 4,
+    "maxlen": 80,
+    "eqeqeq": true,
+    "browser": true,
+    "asi": true,
+    "node": true,
+    "multistr": true,
+    "undef": true,
+    //"unused": true,
+    "trailing": true,
+    "sub": true,
+    "laxbreak": true,
+    "expr": true,
+    "evil": true,
+    "eqnull": true,
+    "globals": {
+        "console": true,
+        "it": true,
+        "describe": true,
+        "before": true,
+        "after": true,
+        "expect": true,
+        "mock": true,
+        "mockHTMLEvent": true,
+        "mockMouseEvent": true,
+        "mockKeyEvent": true
+    }
+}
