@@ -47,7 +47,7 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 <form id="user_form" v-validate>
     Password: <input type="password" v-model="password | required" /><br />
     <div>
-        <span v-show="$validation.password.required">required your password.</span>
+        <span v-show="!$validation.password.required">required your password.</span>
     </div>
 </form>
 ```
@@ -56,9 +56,9 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ```html
 <form id="user_form" v-validate>
-    E-mail: <input type="email" v-model="address | pattern /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/" /><br />
+    E-mail: <input type="email" v-model="address | pattern ^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$" /><br />
     <div>
-        <span v-show="$validation.address.pattern">Invalid format of your email address.</span>
+        <span v-show="!$validation.address.pattern">Invalid format of your email address.</span>
     </div>
 </form>
 ```
@@ -69,8 +69,8 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 <form id="blog_form" v-validate>
     <input type="text" v-model="comment | length min=16 max=128" />
     <div>
-        <span v-show="$validation.comment.max">too long your comment.</span>
-        <span v-show="$validation.comment.min">too short your comment.</span>
+        <span v-show="!$validation.comment.max">too long your comment.</span>
+        <span v-show="!$validation.comment.min">too short your comment.</span>
     </div>
 </form>
 ```
@@ -81,8 +81,8 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 <form id="config_form" v-validate>
     <input type="text" v-model="threshold | numeric min=0 max=100" />
     <div>
-        <span v-show="$validation.threshold.numeric.min">too long your comment.</span>
-        <span v-show="$validation.threshold.numeric.min">too short your comment.</span>
+        <span v-show="!$validation.threshold.numeric.min">too long your comment.</span>
+        <span v-show="!$validation.threshold.numeric.min">too short your comment.</span>
     </div>
 </form>
 ```
@@ -93,8 +93,8 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 <form id="blog_form" v-validate>
     <input type="text" v-model="comment | validator validateCustom" />
     <div>
-        <span v-show="$validation.comment.validator.max">too long your comment.</span>
-        <span v-show="$validation.comment.validator.min">too short your comment.</span>
+        <span v-show="!$validation.comment.validator.max">too long your comment.</span>
+        <span v-show="!$validation.comment.validator.min">too short your comment.</span>
     </div>
 </form>
 ```
@@ -109,10 +109,10 @@ new Vue({
         // Specify custom validate function
         validateCustom: function (val) {
             if (val.length < 16) {
-                this.$validation.comment.validator.min = true;
+                this.$validation.comment.validator.min = false;
             }
             if (val.length > 128) {
-                this.$validation.comment.validator.max = true;
+                this.$validation.comment.validator.max = false;
             }
             
             // other validate logic here ...
