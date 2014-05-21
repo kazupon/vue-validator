@@ -10,6 +10,6 @@
     "index.js"
   ],
   "dependencies": {
-    "yyx990803/vue": "~0.10.4"
+    "yyx990803/vue": "*"
   }
 }

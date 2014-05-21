@@ -11,7 +11,7 @@ check:
 		index.js test/tests.js
 
 components: component.json
-	@$(C8) install --dev
+	@$(C8) install --dev -r https://raw.githubusercontent.com
 
 node_modules: package.json
 	@npm install
