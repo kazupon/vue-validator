@@ -27,11 +27,13 @@ exports.install = function (Vue) {
     /**
      * pattern validate filter
      */
-    // TODO: Regexp flag
-    Vue.filter('pattern', function (val, pattern, key) {
-        utils.log('pattern filter: ' + val + ', ' + pattern + ', ' + key)
+    Vue.filter('pattern', function (val) {
         try {
-            this.$validation[key]['pattern'] = !(new RegExp(pattern).test(val))
+            var key = arguments[arguments.length - 1],
+                pattern = arguments[1].replace(/^'/, "").replace(/'$/, ""),
+                re = (arguments.length === 4 ? new RegExp(pattern, arguments[2])
+                                             : new RegExp(pattern))
+            this.$validation[key]['pattern'] = !re.test(val)
         } catch (e) {
             console.error('pattern filter error:', e)
         }
@@ -164,6 +166,7 @@ exports.install = function (Vue) {
             var $validation = this.vm.$validation || {},
                 el = this.el
 
+            try {
             if (el.nodeType === 1 && el.tagName !== 'SCRIPT' && el.hasChildNodes()) {
                 slice.call(el.childNodes).forEach(function (node) {
                     if (node.nodeType === 1) {
@@ -178,7 +181,7 @@ exports.install = function (Vue) {
                                         key = asts[0].key,
                                         filters = asts[0].filters
                                     console.log(asts)
-                                    console.log(key, filters)
+                                    console.log('key, filters', key, filters)
                                     $validation[key] = {}
                                     if (filters) {
                                         initValidationState($validation, key, filters)
@@ -189,6 +192,9 @@ exports.install = function (Vue) {
                         }
                     }
                 })
+            }
+            } catch (e) {
+              console.error('bind', e);
             }
             
             this.vm.$validation = $validation
