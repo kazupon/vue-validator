@@ -70,13 +70,55 @@ exports.install = function (Vue) {
         return val
     })
 
+    /**
+     * numeric validate filter
+     */
+    Vue.filter('numeric', function (val) {
+        try {
+            var key = arguments[arguments.length - 1],
+                args = {}
+            
+            if (isNaN(val)) {
+                this.$validation[key]['numeric']['value'] = true
+                this.$validation[key]['numeric']['min'] = false
+                this.$validation[key]['numeric']['max'] = false
+            } else {
+                this.$validation[key]['numeric']['value'] = false
+                
+                var value = parseInt(val)
+
+                // parse numeric condition arguments
+                for (var i = 1; i < arguments.length - 1; i++) {
+                    var parsed = arguments[i].split(':')
+                    if (parsed.length !== 2) { continue }
+                    if (isNaN(parsed[1])) { continue }
+                    args[parsed[0]] = parseInt(parsed[1])
+                }
+
+                // validate min
+                if ('min' in args) {
+                    this.$validation[key]['numeric']['min'] = (value < args['min'])
+                }
+
+                // validate max
+                if ('max' in args) {
+                    this.$validation[key]['numeric']['max'] = (value > args['max'])
+                }
+            }
+        } catch (e) {
+            console.error('numeric filter error:', e)
+        }
+
+        return val
+    })
+
 
     function initValidationState ($validation, key, filters) {
         for (var i = 0; i < filters.length; i++) {
             var filterName = filters[i].name
             if (filterName === 'required' || filterName === 'pattern') {
                 $validation[key][filterName] = false
-            } else if (filterName === 'length') {
+            } else if (filterName === 'length' || filterName === 'numeric') {
                 $validation[key][filterName] = initValidationArgsState(filters[i].args)
             } else {
                 $validation[key][filterName] = {}
