@@ -7,29 +7,6 @@ var Vue = require('vue'),
     validator = require('vue-validator')
 
 
-    /*
-function mockDirective (dirName, tag, type) {
-    var dir = Vue.directive(dirName),
-        ret = {
-            binding: { compiler: { vm: {} } },
-            compiler: { vm: {}, options: {}, execHook: function () {} },
-            el: document.createElement(tag || 'div')
-        }
-    if (typeof dir === 'function') {
-        ret.update = dir
-    } else {
-        for (var key in dir) {
-            ret[key] = dir[key]
-            ret._update = dir.update
-            ret._unbind = dir.unbind
-        }
-    }
-    if (tag === 'input') ret.el.type = type || 'text'
-    return ret
-}
-*/
-
-
 describe('vue-validator', function () {
     describe('required', function () {
         var input = mock(
@@ -47,25 +24,37 @@ describe('vue-validator', function () {
                 password: ''
             }
         })
-
+        
         describe('when input text empty', function () {
-            it('should set false value to $validation.password.required', function (done) {
+            before (function (done) {
                 input.value = ''
                 input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.password.required).to.be(false)
-                    done()
+                done()
+            })
+
+            describe('$validation.password.required', function () {
+                it('should be true', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.password.required).to.be(true)
+                        done()
+                    })
                 })
             })
         })
 
         describe('when input text some value', function () {
-            it('should set true value to $validation.password.required', function (done) {
+            before (function (done) {
                 input.value = 'bar'
                 input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.password.required).to.be(true)
-                    done()
+                done()
+            })
+
+            describe('$validation.password.required', function () {
+                it('should be false', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.password.required).to.be(false)
+                        done()
+                    })
                 })
             })
         })
@@ -90,23 +79,35 @@ describe('vue-validator', function () {
         })
 
         describe('when input invalid pattern', function () {
-            it('should set false value to $validation.value.pattern', function (done) {
+            before (function (done) {
                 input.value = 'hoge'
                 input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.value.pattern).to.be(false)
-                    done()
+                done()
+            })
+
+            describe('$validation.value.pattern', function () {
+                it('should be true', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.value.pattern).to.be(true)
+                        done()
+                    })
                 })
             })
         })
 
         describe('when input valid pattern', function () {
-            it('should set true value to $validation.value.pattern', function (done) {
+            before (function (done) {
                 input.value = '1111'
                 input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.value.pattern).to.be(true)
-                    done()
+                done()
+            })
+
+            describe('$validation.value.pattern', function () {
+                it('should be false', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.value.pattern).to.be(false)
+                        done()
+                    })
                 })
             })
         })
@@ -114,40 +115,167 @@ describe('vue-validator', function () {
 
 
     describe('length', function () {
-        var input = mock(
-            'validator-length',
-            '<form v-validate>' +
-            'comment: <input type="text" v-model="comment | length min=4 max=8" /><br />' +
-            '</form>'
-        ).getElementsByTagName('input')[0]
 
-        Vue.use(validator)
+        describe('when min and max arguments specify', function () {
+            var input = mock(
+                'validator-length1',
+                '<form v-validate>' +
+                'comment: <input type="text" v-model="comment | length min:4 max:8" /><br />' +
+                '</form>'
+            ).getElementsByTagName('input')[0]
 
-        var form = new Vue({
-            el: '#validator-comment',
-            data: {
-                comment: ''
-            }
-        })
+            Vue.use(validator)
 
-        describe('when input invalid pattern', function () {
-            it('should set false value to $validation.value.pattern', function (done) {
-                input.value = 'hoge'
-                input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.value.pattern).to.be(false)
+            var form = new Vue({
+                el: '#validator-length1',
+                data: {
+                    comment: ''
+                }
+            })
+
+            describe('when input 3 length string', function () {
+                before(function (done) {
+                    input.value = 'aaa'
+                    input.dispatchEvent(mockHTMLEvent('input'))
                     done()
+                })
+
+                describe('$validation.comment.length.min', function () {
+                    it('should be true', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.min).to.be(true)
+                            done()
+                        })
+                    })
+                })
+
+                describe('$validation.comment.length.max', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.max).to.be(false)
+                            done()
+                        })
+                    })
+                })
+            })
+
+            describe('when input 4 length string', function () {
+                before(function (done) {
+                    input.value = 'aaaa'
+                    input.dispatchEvent(mockHTMLEvent('input'))
+                    done()
+                })
+
+                describe('$validation.comment.length.min', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.min).to.be(false)
+                            done()
+                        })
+                    })
+                })
+
+                describe('$validation.comment.length.max', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.max).to.be(false)
+                            done()
+                        })
+                    })
+                })
+            })
+
+            describe('when input 8 length string', function () {
+                before(function (done) {
+                    input.value = 'aaaabbbb'
+                    input.dispatchEvent(mockHTMLEvent('input'))
+                    done()
+                })
+
+                describe('$validation.comment.length.min', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.min).to.be(false)
+                            done()
+                        })
+                    })
+                })
+
+                describe('$validation.comment.length.max', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.max).to.be(false)
+                            done()
+                        })
+                    })
+                })
+            })
+
+            describe('when input 9 length string', function () {
+                before(function (done) {
+                    input.value = 'aaaabbbbc'
+                    input.dispatchEvent(mockHTMLEvent('input'))
+                    done()
+                })
+
+                describe('$validation.comment.length.min', function () {
+                    it('should be false', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.min).to.be(false)
+                            done()
+                        })
+                    })
+                })
+
+                describe('$validation.comment.length.max', function () {
+                    it('should be true', function (done) {
+                        nextTick(function () {
+                            expect(form.$validation.comment.length.max).to.be(true)
+                            done()
+                        })
+                    })
                 })
             })
         })
 
-        describe('when input valid pattern', function () {
-            it('should set true value to $validation.value.pattern', function (done) {
-                input.value = '1111'
+        describe('when single argument specify', function () {
+            var input = mock(
+                'validator-length2',
+                '<form v-validate>' +
+                'comment: <input type="text" v-model="comment | length min:4" /><br />' +
+                '</form>'
+            ).getElementsByTagName('input')[0]
+
+            Vue.use(validator)
+
+            var form = new Vue({
+                el: '#validator-length2',
+                data: {
+                    comment: ''
+                }
+            })
+
+            before(function (done) {
+                input.value = 'aaaa'
                 input.dispatchEvent(mockHTMLEvent('input'))
-                nextTick(function () {
-                    expect(form.$validation.value.pattern).to.be(true)
-                    done()
+                done()
+            })
+
+            describe('$validation.comment.length.min', function () {
+                it('should be false', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.comment.length.min).to.be(false)
+                        done()
+                    })
+                })
+            })
+
+            describe('$validation.comment.length.max', function () {
+                it('should be undefined', function (done) {
+                    nextTick(function () {
+                        expect(form.$validation.comment.length.max).to.be(undefined)
+                        done()
+                    })
                 })
             })
         })
