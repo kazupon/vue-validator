@@ -288,7 +288,7 @@ describe('vue-validator', function () {
             var input = mock(
                 'validator-numeric1',
                 '<form v-validate>' +
-                'comment: <input type="text" v-model="threshold | numeric min:0 max:100" /><br />' +
+                'threshold: <input type="text" v-model="threshold | numeric min:0 max:100" /><br />' +
                 '</form>'
             ).getElementsByTagName('input')[0]
 

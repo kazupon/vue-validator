@@ -21,7 +21,7 @@ Vue.use(validator)
 ```
 
 ```html
-<form id="blog_form" v-validate>
+<form id="blog-form" v-validate>
     <input type="text" v-model="comment | length min:16 max:128" />
     <div>
         <span v-show="$validation.comment.length.max">too long your comment.</span>
@@ -30,10 +30,11 @@ Vue.use(validator)
 </form>
 ```
 
-Specify `v-validate` directive, the below:
+Specify `v-validate` directive, extend as follow:
 
-- `$validation` in the ViewModel instance become available.
-- validate filters become available in `v-model`.
+- `$validation`available in the ViewModel instance
+- Validate filters available in `v-model`
+- Validation result can reference property of `$validation`
 
 *NOTE:
 you need to specify `v-validate` at `form` or `div`, containerable tag.*
@@ -43,8 +44,10 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ## required
 
+For example, you can use `resuired` validation filter as follow.
+
 ```html
-<form id="user_form" v-validate>
+<form id="user-form" v-validate>
     Password: <input type="password" v-model="password | required" /><br />
     <div>
         <span v-show="$validation.password.required">required your password.</span>
@@ -54,8 +57,10 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ## pattern
 
+For example, you can use `pattern` validation filter as follow.
+
 ```html
-<form id="user_form" v-validate>
+<form id="user-form" v-validate>
     E-mail: <input type="email" v-model="address | pattern ^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$" /><br />
     <div>
         <span v-show="$validation.address.pattern">Invalid format of your email address.</span>
@@ -65,8 +70,10 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ## length
 
+For example, you can use `length` validation filter as follow.
+
 ```html
-<form id="blog_form" v-validate>
+<form id="blog-form" v-validate>
     <input type="text" v-model="comment | length min:16 max:128" />
     <div>
         <span v-show="$validation.comment.max">too long your comment.</span>
@@ -77,20 +84,25 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ## numeric
 
+For example, you can use `numeric` validation filter as follow.
+
 ```html
-<form id="config_form" v-validate>
+<form id="config-form" v-validate>
     <input type="text" v-model="threshold | numeric min:0 max:100" />
     <div>
-        <span v-show="$validation.threshold.numeric.min">too long your comment.</span>
-        <span v-show="$validation.threshold.numeric.min">too short your comment.</span>
+        <span v-show="$validation.threshold.numeric.min">too small threshold.</span>
+        <span v-show="$validation.threshold.numeric.min">too big threshold.</span>
+        <span v-show="$validation.threshold.numeric.value">Invalid threshold value.</span>
     </div>
 </form>
 ```
 
 ## custom validator
 
+For example, you can use `validator` validation filter as follow.
+
 ```html
-<form id="blog_form" v-validate>
+<form id="blog-form" v-validate>
     <input type="text" v-model="comment | validator validateCustom" />
     <div>
         <span v-show="$validation.comment.validator.max">too long your comment.</span>
@@ -101,19 +113,18 @@ you need to specify `v-validate` at `form` or `div`, containerable tag.*
 
 ```js
 new Vue({
-    el: '#blog_form',
+    el: '#blog-form',
     data: {
         comment: ''
     },
     methods: {
         // Specify custom validate function
         validateCustom: function (val) {
-            if (val.length < 16) {
-                this.$validation.comment.validator.min = true;
-            }
-            if (val.length > 128) {
-                this.$validation.comment.validator.max = true;
-            }
+            // validate min string length
+            this.$validation.comment.validator.min = (val.length < 16);
+
+            // validate max string length
+            this.$validation.comment.validator.max = (val.length > 128);
             
             // other validate logic here ...
 
@@ -127,6 +138,8 @@ new Vue({
 # Testing
 
 ```shell
+$ git clone git@github.com:kazupon/vue-validator.git
+$ npm install
 $ make test
 ```
 
