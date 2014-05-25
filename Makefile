@@ -1,14 +1,15 @@
 C8 = node_modules/.bin/component
 PONCHO = node_modules/.bin/poncho
 REPORTER = dot
+SRCS = $(shell find test/ -name "*.js")
 
 
 build: check node_modules components index.js
-	@$(C8) build --dev -o test
+	@$(C8) build --dev
 
 check:
 	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore \
-		index.js test/tests.js
+		index.js $(SRCS)
 
 components: component.json
 	@$(C8) install --dev -r https://raw.githubusercontent.com
@@ -27,7 +28,7 @@ test_coveralls: build
 	@$(PONCHO) --reporter lcov test/index.html | node_modules/.bin/coveralls
 
 clean:
-	@rm -f test/build.js
+	@rm -rf build
 
 
 .PHONY: test test_cov test_coveralls lib_cov clean

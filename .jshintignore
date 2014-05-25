@@ -1,2 +1,2 @@
-**/.DS_Store
-**/.swp
+test/mocha.js
+test/prepare.js

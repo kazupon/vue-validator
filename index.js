@@ -12,8 +12,6 @@ var slice = [].slice
 exports.install = function (Vue) {
     var utils = Vue.require('utils'),
         Directive = Vue.require('directive')
-    Vue.config('debug', true)
-
 
     /**
      * required validate filter
@@ -197,8 +195,6 @@ exports.install = function (Vue) {
                                     var asts = Directive.parse(attr.value),
                                         key = asts[0].key,
                                         filters = asts[0].filters
-                                    console.log(asts)
-                                    console.log('key, filters', key, filters)
                                     $validation[key] = {}
                                     if (filters) {
                                         initValidationState($validation, key, filters)
