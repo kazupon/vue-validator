@@ -12,7 +12,7 @@ describe('pattern', function () {
         var input = mock(
             'validator-pattern1',
             '<form v-validate>' +
-            'value: <input type="text" v-model="value | pattern \'[0-9]+\'" /><br />' +
+            'value: <input type="text" v-model="value | pattern /[0-9]+/" /><br />' +
             '</form>'
         ).getElementsByTagName('input')[0]
 
@@ -64,7 +64,7 @@ describe('pattern', function () {
         var input = mock(
             'validator-pattern2',
             '<form v-validate>' +
-            'message: <input type="text" v-model="message | pattern \'hello|world\' i" /><br />' +
+            'message: <input type="text" v-model="message | pattern \'/hello|world/i\'" /><br />' +
             '</form>'
         ).getElementsByTagName('input')[0]
 

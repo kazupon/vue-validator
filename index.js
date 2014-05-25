@@ -17,7 +17,6 @@ exports.install = function (Vue) {
      * required validate filter
      */
     Vue.filter('required', function (val, key) {
-        utils.log('required filter: ' + val + ', ' + key)
         this.$validation[key]['required'] = (val.length === 0)
         return val
     })
@@ -28,10 +27,13 @@ exports.install = function (Vue) {
     Vue.filter('pattern', function (val) {
         try {
             var key = arguments[arguments.length - 1],
-                pattern = arguments[1].replace(/^'/, "").replace(/'$/, ""),
-                re = (arguments.length === 4 ? new RegExp(pattern, arguments[2])
-                                             : new RegExp(pattern))
-            this.$validation[key]['pattern'] = !re.test(val)
+                pattern = arguments[1].replace(/^'/, "").replace(/'$/, ""), match, re
+
+            match = pattern.match(/^\/(.*)\/([gim]*)$/)
+            if (match) {
+                re = new RegExp(match[1], match[2])
+                this.$validation[key]['pattern'] = !re.test(val)
+            }
         } catch (e) {
             console.error('pattern filter error:', e)
         }
@@ -177,6 +179,7 @@ exports.install = function (Vue) {
 
 
     Vue.directive('validate', {
+        isLiteral: true,
         bind: function () {
             var $validation = this.vm.$validation || {},
                 el = this.el
@@ -211,25 +214,6 @@ exports.install = function (Vue) {
             }
             
             this.vm.$validation = $validation
-        },
-
-        update: function (val, init) {
-            console.log('update', val, init)
-            /*
-            if (typeof handle !== 'function') { return }
-
-            var name = this.el.getAttribute('name')
-            if (!name) { return }
-
-            var $validation = this.vm.$validation
-            if (this.arg) {
-              $validation[name][this.arg] = handle.call(this.vm)
-            } else {
-              $validation[name] = handle.call(this.vm)
-            }
-
-            this.vm.$validation = $validation
-            */
         }
     })
 }
