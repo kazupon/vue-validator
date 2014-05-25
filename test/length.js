@@ -164,9 +164,9 @@ describe('length', function () {
         })
 
         describe('$validation.comment.length.max', function () {
-            it('should be undefined', function (done) {
+            it('should be false', function (done) {
                 nextTick(function () {
-                    expect(form.$validation.comment.length.max).to.be(undefined)
+                    expect(form.$validation.comment.length.max).to.be(false)
                     done()
                 })
             })

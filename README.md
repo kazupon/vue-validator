@@ -61,9 +61,9 @@ For example, you can use `pattern` validation filter as follow.
 
 ```html
 <form id="user-form" v-validate>
-    E-mail: <input type="email" v-model="address | pattern '/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'" /><br />
+    Zip: <input type="text" v-model="zip | pattern /^[0-9]{3}-[0-9]{4}$/" /><br />
     <div>
-        <span v-show="$validation.address.pattern">Invalid format of your email address.</span>
+        <span v-show="$validation.zip.pattern">Invalid format of your zip code.</span>
     </div>
 </form>
 ```

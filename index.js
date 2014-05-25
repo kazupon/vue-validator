@@ -17,7 +17,12 @@ exports.install = function (Vue) {
      * required validate filter
      */
     Vue.filter('required', function (val, key) {
-        this.$validation[key]['required'] = (val.length === 0)
+        try {
+          this.$validation[key]['required'] = (val.length === 0)
+        } catch (e) {
+            console.error('required filter error:', e)
+        }
+
         return val
     })
 
@@ -37,6 +42,7 @@ exports.install = function (Vue) {
         } catch (e) {
             console.error('pattern filter error:', e)
         }
+
         return val
     })
 
@@ -55,6 +61,10 @@ exports.install = function (Vue) {
                 if (isNaN(parsed[1])) { continue }
                 args[parsed[0]] = parseInt(parsed[1])
             }
+
+            // initialize
+            this.$validation[key]['length']['min'] = false
+            this.$validation[key]['length']['max'] = false
 
             // validate min
             if ('min' in args) {
@@ -86,6 +96,8 @@ exports.install = function (Vue) {
                 this.$validation[key]['numeric']['max'] = false
             } else {
                 this.$validation[key]['numeric']['value'] = false
+                this.$validation[key]['numeric']['min'] = false
+                this.$validation[key]['numeric']['max'] = false
                 
                 var value = parseInt(val)
 
