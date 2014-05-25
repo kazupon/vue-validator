@@ -114,6 +114,21 @@ exports.install = function (Vue) {
         return val
     })
 
+    /**
+     * validator filter
+     */
+    Vue.filter('validator', function (val, custom) {
+        try {
+            var func = this.$options.methods[custom]
+            if (typeof func === 'function') {
+                val = func.call(this, val)
+            }
+        } catch (e) {
+            console.error('custom filter error:', e)
+        }
+
+        return val
+    })
 
     function initValidationState ($validation, key, filters) {
         for (var i = 0; i < filters.length; i++) {
@@ -122,6 +137,8 @@ exports.install = function (Vue) {
                 $validation[key][filterName] = false
             } else if (filterName === 'length' || filterName === 'numeric') {
                 $validation[key][filterName] = initValidationArgsState(filters[i].args)
+            } else if (filterName === 'validator') {
+                $validation[key][filterName] = {}
             } else {
                 $validation[key][filterName] = {}
             }
