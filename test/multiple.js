@@ -8,24 +8,41 @@ var Vue = require('vue'),
 
 
 describe('multiple', function () {
-    var element  = mock(
-        'validator-multiple',
-        '<form v-validate>' +
-        'Name: <input type="text" v-model="name | required | length min:3 max:32" /><br />' +
-        'Age: <input type="text" v-model="age | required | numeric min:18" /><br />' +
-        'Zip: <input type="text" v-model="zip | required | pattern /^[0-9]{3}-[0-9]{4}$/" /><br />' +
-        '</form>'
-    )
+    var element, form
+    
+    before(function (done) {
+        element  = mock(
+            'validator-multiple',
+            '<form v-validate>' +
+            'Name: <input type="text" v-model="name | required | length min:3 max:32" /><br />' +
+            'Age: <input type="text" v-model="age | required | numeric min:18" /><br />' +
+            'Zip: <input type="text" v-model="zip | required | pattern /^[0-9]{3}-[0-9]{4}$/" /><br />' +
+            '</form>' + 
+            '<div>' +
+            '<span v-show="$validation.name.required">name required</span>' + 
+            '<span v-show="$validation.name.length.min">name too short</span>' + 
+            '<span v-show="$validation.name.length.max">name too long</span>' + 
+            '<span v-show="$validation.age.required">age required</span>' + 
+            '<span v-show="$validation.age.numeric.min">age too smalll</span>' + 
+            '<span v-show="$validation.age.numeric.value">age invalid value</span>' + 
+            '<span v-show="$validation.zip.required">zip required</span>' + 
+            '<span v-show="$validation.zip.pattern">zip invalid format</span>' + 
+            '</div>'
+        )
 
-    Vue.use(validator)
+        Vue.use(validator)
 
-    var form = new Vue({
-        el: '#validator-multiple',
-        data: {
-            name: '',
-            age: 18,
-            zip: '0001111'
-        }
+        form = new Vue({
+            el: '#validator-multiple',
+            data: {
+                name: '',
+                age: 18,
+                zip: '0001111'
+            }
+        })
+
+        // adjust timing
+        nextTick(function () { done() })
     })
     
 
@@ -34,7 +51,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be true', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.name.required).to.be(true)
+                        expect(form.$validation['name.required']).to.be(true)
                         done()
                     })
                 })
@@ -44,7 +61,7 @@ describe('multiple', function () {
                 describe('min', function () {
                     it('should be true', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.name.length.min).to.be(true)
+                            expect(form.$validation['name.length.min']).to.be(true)
                             done()
                         })
                     })
@@ -53,7 +70,7 @@ describe('multiple', function () {
                 describe('max', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.name.length.max).to.be(false)
+                            expect(form.$validation['name.length.max']).to.be(false)
                             done()
                         })
                     })
@@ -65,7 +82,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.age.required).to.be(false)
+                        expect(form.$validation['age.required']).to.be(false)
                         done()
                     })
                 })
@@ -75,16 +92,16 @@ describe('multiple', function () {
                 describe('min', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.min).to.be(false)
+                            expect(form.$validation['age.numeric.min']).to.be(false)
                             done()
                         })
                     })
                 })
 
                 describe('max', function () {
-                    it('should be false', function (done) {
+                    it('should be undefined', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.max).to.be(false)
+                            expect(form.$validation['age.numeric.max']).to.be(undefined)
                             done()
                         })
                     })
@@ -93,7 +110,7 @@ describe('multiple', function () {
                 describe('value', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.value).to.be(false)
+                            expect(form.$validation['age.numeric.value']).to.be(false)
                             done()
                         })
                     })
@@ -105,7 +122,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.zip.required).to.be(false)
+                        expect(form.$validation['zip.required']).to.be(false)
                         done()
                     })
                 })
@@ -114,7 +131,7 @@ describe('multiple', function () {
             describe('pattern', function () {
                 it('should be true', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.zip.pattern).to.be(true)
+                        expect(form.$validation['zip.pattern']).to.be(true)
                         done()
                     })
                 })
@@ -141,7 +158,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.name.required).to.be(false)
+                        expect(form.$validation['name.required']).to.be(false)
                         done()
                     })
                 })
@@ -151,7 +168,7 @@ describe('multiple', function () {
                 describe('min', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.name.length.min).to.be(false)
+                            expect(form.$validation['name.length.min']).to.be(false)
                             done()
                         })
                     })
@@ -160,7 +177,7 @@ describe('multiple', function () {
                 describe('max', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.name.length.max).to.be(false)
+                            expect(form.$validation['name.length.max']).to.be(false)
                             done()
                         })
                     })
@@ -172,7 +189,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.age.required).to.be(false)
+                        expect(form.$validation['age.required']).to.be(false)
                         done()
                     })
                 })
@@ -182,16 +199,16 @@ describe('multiple', function () {
                 describe('min', function () {
                     it('should be true', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.min).to.be(true)
+                            expect(form.$validation['age.numeric.min']).to.be(true)
                             done()
                         })
                     })
                 })
 
                 describe('max', function () {
-                    it('should be false', function (done) {
+                    it('should be undefined', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.max).to.be(false)
+                            expect(form.$validation['age.numeric.max']).to.be(undefined)
                             done()
                         })
                     })
@@ -200,7 +217,7 @@ describe('multiple', function () {
                 describe('value', function () {
                     it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation.age.numeric.value).to.be(false)
+                            expect(form.$validation['age.numeric.value']).to.be(false)
                             done()
                         })
                     })
@@ -212,7 +229,7 @@ describe('multiple', function () {
             describe('required', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.zip.required).to.be(false)
+                        expect(form.$validation['zip.required']).to.be(false)
                         done()
                     })
                 })
@@ -221,7 +238,7 @@ describe('multiple', function () {
             describe('pattern', function () {
                 it('should be false', function (done) {
                     nextTick(function () {
-                        expect(form.$validation.zip.pattern).to.be(false)
+                        expect(form.$validation['zip.pattern']).to.be(false)
                         done()
                     })
                 })

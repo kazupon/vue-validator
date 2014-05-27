@@ -1,8 +1,5 @@
-/**
- * import(s)
- */
-
-var slice = [].slice
+var slice = [].slice,
+    hasOwn = ({}).hasOwnProperty
 
 
 /**
@@ -11,168 +8,129 @@ var slice = [].slice
 
 exports.install = function (Vue) {
     var utils = Vue.require('utils'),
-        Directive = Vue.require('directive')
+        Directive = Vue.require('directive'),
+        Binding = Vue.require('binding'),
+        Observer = Vue.require('observer')
 
-    /**
-     * required validate filter
-     */
-    Vue.filter('required', function (val, key) {
-        try {
-          this.$validation[key]['required'] = (val.length === 0)
-        } catch (e) {
-            console.error('required filter error:', e)
-        }
+    var validationKey = '$validation',
+        validationPropertyName = validationKey.split('$')[1]
 
-        return val
-    })
+    Vue.filter('required', validateRequired)
+    Vue.filter('pattern', validatePattern)
+    Vue.filter('length', validateLength)
+    Vue.filter('numeric', validateNumeric)
+    Vue.filter('validator', validateCustom)
 
-    /**
-     * pattern validate filter
-     */
-    Vue.filter('pattern', function (val) {
-        try {
-            var key = arguments[arguments.length - 1],
-                pattern = arguments[1].replace(/^'/, "").replace(/'$/, ""), match, re
+    Vue.directive('validate', {
+        bind: function () {
+            var compiler = this.compiler,
+                $validation = compiler[validationPropertyName] || {},
+                el = this.el,
+                validationBindings = this.validationBindings = []
 
-            match = pattern.match(/^\/(.*)\/([gim]*)$/)
-            if (match) {
-                re = new RegExp(match[1], match[2])
-                this.$validation[key]['pattern'] = !re.test(val)
+            this.vm[validationKey] = compiler[validationPropertyName] = $validation
+
+            Observer.observe($validation, validationKey, compiler.observer)
+            compiler.bindings[validationKey] = new Binding(compiler, validationKey)
+            validationBindings.push(validationKey)
+
+            try {
+            if (el.nodeType === 1 && el.tagName !== 'SCRIPT' && el.hasChildNodes()) {
+                slice.call(el.childNodes).forEach(function (node) {
+                    if (node.nodeType === 1) {
+                        var tag = node.tagName
+                        if ((tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') 
+                          && node.hasAttributes) {
+                            var attrs = slice.call(node.attributes)
+                            for (var i = 0; i < attrs.length; i++) {
+                                var attr = attrs[i]
+                                if (attr.name === 'v-model') {
+                                    var asts = Directive.parse(attr.value),
+                                        key = asts[0].key,
+                                        filters = asts[0].filters
+                                    if (filters) {
+                                        initValidationState($validation, key, filters, compiler, validationBindings)
+                                        attr.value = makeFilterExpression($validation, key, filters)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
             }
-        } catch (e) {
-            console.error('pattern filter error:', e)
-        }
-
-        return val
-    })
-
-    /**
-     * length validate filter
-     */
-    Vue.filter('length', function (val) {
-        try {
-            var key = arguments[arguments.length - 1],
-                args = {}
-
-            // parse length condition arguments
-            for (var i = 1; i < arguments.length - 1; i++) {
-                var parsed = arguments[i].split(':')
-                if (parsed.length !== 2) { continue }
-                if (isNaN(parsed[1])) { continue }
-                args[parsed[0]] = parseInt(parsed[1])
+            } catch (e) {
+                console.error('bind', e);
             }
+        },
 
-            // initialize
-            this.$validation[key]['length']['min'] = false
-            this.$validation[key]['length']['max'] = false
+        unbind: function () {
+            var compiler = this.compiler,
+                $validation = compiler[validationPropertyName],
+                validationBindings = this.validationBindings,
+                bindings = compiler.bindings
 
-            // validate min
-            if ('min' in args) {
-                this.$validation[key]['length']['min'] = (val.length < args['min'])
-            }
-
-            // validate max
-            if ('max' in args) {
-                this.$validation[key]['length']['max'] = (val.length > args['max'])
-            }
-        } catch (e) {
-            console.error('length filter error:', e)
-        }
-
-        return val
-    })
-
-    /**
-     * numeric validate filter
-     */
-    Vue.filter('numeric', function (val) {
-        try {
-            var key = arguments[arguments.length - 1],
-                args = {}
-            
-            if (isNaN(val)) {
-                this.$validation[key]['numeric']['value'] = true
-                this.$validation[key]['numeric']['min'] = false
-                this.$validation[key]['numeric']['max'] = false
-            } else {
-                this.$validation[key]['numeric']['value'] = false
-                this.$validation[key]['numeric']['min'] = false
-                this.$validation[key]['numeric']['max'] = false
-                
-                var value = parseInt(val)
-
-                // parse numeric condition arguments
-                for (var i = 1; i < arguments.length - 1; i++) {
-                    var parsed = arguments[i].split(':')
-                    if (parsed.length !== 2) { continue }
-                    if (isNaN(parsed[1])) { continue }
-                    args[parsed[0]] = parseInt(parsed[1])
+            var i = validationBindings.length
+            while (i--) {
+                var binding = bindings[validationBindings[i]]
+                if (binding) {
+                    binding.unbind()
                 }
-
-                // validate min
-                if ('min' in args) {
-                    this.$validation[key]['numeric']['min'] = (value < args['min'])
-                }
-
-                // validate max
-                if ('max' in args) {
-                    this.$validation[key]['numeric']['max'] = (value > args['max'])
-                }
+                validationBindings[i] = null
             }
-        } catch (e) {
-            console.error('numeric filter error:', e)
-        }
+            delete this.validationBindings
 
-        return val
+            Observer.unobserve($validation, validationKey, compiler.observer)
+            delete compiler[validationPropertyName]
+            delete this.vm[validationKey]
+        }
     })
 
-    /**
-     * validator filter
-     */
-    Vue.filter('validator', function (val, custom) {
-        try {
-            var func = this.$options.methods[custom]
-            if (typeof func === 'function') {
-                val = func.call(this, val)
-            }
-        } catch (e) {
-            console.error('custom filter error:', e)
-        }
 
-        return val
-    })
-
-    function initValidationState ($validation, key, filters) {
+    function initValidationState ($validation, key, filters, compiler, validationBindings) {
+        var binding, path, bindingPath, args = []
         for (var i = 0; i < filters.length; i++) {
             var filterName = filters[i].name
             if (filterName === 'required' || filterName === 'pattern') {
-                $validation[key][filterName] = false
+                path = [key, filterName].join('.')
+                bindingPath = [validationKey, key, filterName].join('.')
+                makeBinding(path, bindingPath)
             } else if (filterName === 'length' || filterName === 'numeric') {
-                $validation[key][filterName] = initValidationArgsState(filters[i].args)
+                args = parseFilterArgs(filters[i].args)
+                if (filterName === 'numeric') { args.push('value') }
+                for (var j = 0; j < args.length; j++) {
+                    path = [key, filterName, args[j]].join('.')
+                    bindingPath = [validationKey, key, filterName, args[j]].join('.')
+                    makeBinding(path, bindingPath)
+                }
             } else if (filterName === 'validator') {
-                $validation[key][filterName] = {}
-            } else {
-                $validation[key][filterName] = {}
+                path = [key, filterName, filters[i].args[0]].join('.')
+                bindingPath = [validationKey, key, filterName, filters[i].args[0]].join('.')
+                makeBinding(path, bindingPath)
             }
+        }
+
+        function makeBinding (path, bindingPath) {
+            binding = compiler.bindings[bindingPath] = new Binding(compiler, bindingPath)
+            validationBindings.push(bindingPath)
+            defineProperty($validation, path, binding)
         }
     }
 
-    function initValidationArgsState (args) {
-        var state = {}
+    function parseFilterArgs (args) {
+        var ret = []
 
         for (var i = 0; i < args.length; i++) {
             var arg = args[i],
                 parsed = arg.split(':')
             if (parsed.length !== 2) { continue }
-            state[parsed[0]] = false
+            ret.push(parsed[0])
         }
 
-        return state
+        return ret
     }
 
     function makeFilterExpression ($validation, key, filters) {
-        var elements = [key],
-            ret = ''
+        var elements = [key], ret = ''
 
         for (var i = 0; i < filters.length; i++) {
             var filterName = filters[i].name
@@ -189,43 +147,139 @@ exports.install = function (Vue) {
         return ret
     }
 
+    function defineProperty ($validation, key, binding) {
+        var observer = $validation.__emitter__
 
-    Vue.directive('validate', {
-        isLiteral: true,
-        bind: function () {
-            var $validation = this.vm.$validation || {},
-                el = this.el
-
-            try {
-            if (el.nodeType === 1 && el.tagName !== 'SCRIPT' && el.hasChildNodes()) {
-                slice.call(el.childNodes).forEach(function (node) {
-                    if (node.nodeType === 1) {
-                        var tag = node.tagName
-                        if ((tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') 
-                          && node.hasAttributes) {
-                            var attrs = slice.call(node.attributes)
-                            for (var i = 0; i < attrs.length; i++) {
-                                var attr = attrs[i]
-                                if (attr.name === 'v-model') {
-                                    var asts = Directive.parse(attr.value),
-                                        key = asts[0].key,
-                                        filters = asts[0].filters
-                                    $validation[key] = {}
-                                    if (filters) {
-                                        initValidationState($validation, key, filters)
-                                        attr.value = makeFilterExpression($validation, key, filters)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            }
-            } catch (e) {
-              console.error('bind', e);
-            }
-            
-            this.vm.$validation = $validation
+        if (!(hasOwn.call($validation, key))) {
+            $validation[key] = undefined
         }
-    })
+
+        if (observer && !(hasOwn.call(observer.values, key))) {
+            Observer.convertKey($validation, key)
+        }
+
+        binding.value = $validation[key]
+    }
+};
+
+
+/**
+ * validate filters
+ */
+
+function validateRequired (val, key) {
+    try {
+        this.$validation[[key, 'required'].join('.')] = (val.length === 0)
+    } catch (e) {
+        console.error('required filter error:', e)
+    }
+
+    return val
+}
+
+function validatePattern (val) {
+    try {
+        var key = arguments[arguments.length - 1],
+            pattern = arguments[1].replace(/^'/, "").replace(/'$/, "")
+
+        var match = pattern.match(/^\/(.*)\/([gim]*)$/)
+        if (match) {
+            var re = new RegExp(match[1], match[2])
+            this.$validation[[key, 'pattern'].join('.')] = !re.test(val)
+        }
+    } catch (e) {
+        console.error('pattern filter error:', e)
+    }
+
+    return val
+}
+
+function validateLength (val) {
+    try {
+        var key = arguments[arguments.length - 1],
+            minKey = [key, 'length', 'min'].join('.'),
+            maxKey = [key, 'length', 'max'].join('.'),
+            args = {}
+
+        // parse length condition arguments
+        for (var i = 1; i < arguments.length - 1; i++) {
+            var parsed = arguments[i].split(':')
+            if (parsed.length !== 2) { continue }
+            if (isNaN(parsed[1])) { continue }
+            args[parsed[0]] = parseInt(parsed[1])
+        }
+
+        // validate min
+        if ('min' in args) {
+            this.$validation[minKey] = (val.length < args['min'])
+        }
+
+        // validate max
+        if ('max' in args) {
+            this.$validation[maxKey] = (val.length > args['max'])
+        }
+    } catch (e) {
+        console.error('length filter error:', e)
+    }
+
+    return val
+}
+
+function validateNumeric (val) {
+    try {
+        var key = arguments[arguments.length - 1],
+            minKey = [key, 'numeric', 'min'].join('.'),
+            maxKey = [key, 'numeric', 'max'].join('.'),
+            valueKey = [key, 'numeric', 'value'].join('.'),
+            args = {}
+        
+        // parse numeric condition arguments
+        for (var i = 1; i < arguments.length - 1; i++) {
+            var parsed = arguments[i].split(':')
+            if (parsed.length !== 2) { continue }
+            if (isNaN(parsed[1])) { continue }
+            args[parsed[0]] = parseInt(parsed[1])
+        }
+
+        if (isNaN(val)) {
+            this.$validation[valueKey] = true
+            if ('min' in args) {
+              this.$validation[minKey] = false
+            }
+            if ('max' in args) {
+              this.$validation[maxKey] = false
+            }
+        } else {
+            this.$validation[valueKey] = false
+
+            var value = parseInt(val)
+
+            // validate min
+            if ('min' in args) {
+                this.$validation[minKey] = (value < args['min'])
+            }
+
+            // validate max
+            if ('max' in args) {
+                this.$validation[maxKey] = (value > args['max'])
+            }
+        }
+    } catch (e) {
+        console.error('numeric filter error:', e)
+    }
+
+    return val
+}
+
+function validateCustom (val, custom) {
+    try {
+        var fn = this.$options.methods[custom]
+        if (typeof fn === 'function') {
+            val = fn.call(this, val)
+        }
+    } catch (e) {
+        console.error('custom filter error:', e)
+    }
+
+    return val
 }
