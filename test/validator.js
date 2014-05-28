@@ -28,7 +28,7 @@ describe('validator', function () {
             },
             methods: {
                 validateCustom: function (val) {
-                    this.$validation['comment.validator.validateCustom'] = !(val.length > 0 & 3 > val.length)
+                    this.$validation['comment.validator.validateCustom'] = !(0 < val.length & val.length < 3)
                     return val
                 }
             }
