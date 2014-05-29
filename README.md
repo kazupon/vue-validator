@@ -1,5 +1,7 @@
 # vue-validator
 
+[![Build Status](https://travis-ci.org/kazupon/vue-validator.svg?branch=master)](https://travis-ci.org/kazupon/vue-validator) [![Coverage Status](https://img.shields.io/coveralls/kazupon/vue-validator.svg)](https://coveralls.io/r/kazupon/vue-validator)
+
 
 Validator component for Vue.js
 
