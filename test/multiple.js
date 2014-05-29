@@ -17,6 +17,7 @@ describe('multiple', function () {
             'Name: <input type="text" v-model="name | required | length min:3 max:32" /><br />' +
             'Age: <input type="text" v-model="age | required | numeric min:18" /><br />' +
             'Zip: <input type="text" v-model="zip | required | pattern /^[0-9]{3}-[0-9]{4}$/" /><br />' +
+            '<input id="multiple-submit" type="submit" value="send" v-if="$valid">' +
             '</form>' + 
             '<div>' +
             '<span v-show="$validation.name.required">name required</span>' + 
@@ -137,6 +138,24 @@ describe('multiple', function () {
                 })
             })
         })
+
+        describe('$valid', function () {
+            it('should be false', function (done) {
+                nextTick(function () {
+                    expect(form.$valid).to.be(false)
+                    done()
+                })
+            })
+        })
+
+        describe('submit button', function () {
+            it('should be null', function (done) {
+                nextTick(function () {
+                    expect(document.getElementById('multiple-submit')).to.be(null)
+                    done()
+                })
+            })
+        })
     })
 
 
@@ -147,7 +166,7 @@ describe('multiple', function () {
                 zip_input = element.getElementsByTagName('input')[2]
             name_input.value = 'validator'
             name_input.dispatchEvent(mockHTMLEvent('input'))
-            age_input.value = '17'
+            age_input.value = '21'
             age_input.dispatchEvent(mockHTMLEvent('input'))
             zip_input.value = '111-2222'
             zip_input.dispatchEvent(mockHTMLEvent('input'))
@@ -197,9 +216,9 @@ describe('multiple', function () {
 
             describe('numeric', function () {
                 describe('min', function () {
-                    it('should be true', function (done) {
+                    it('should be false', function (done) {
                         nextTick(function () {
-                            expect(form.$validation['age.numeric.min']).to.be(true)
+                            expect(form.$validation['age.numeric.min']).to.be(false)
                             done()
                         })
                     })
@@ -241,6 +260,24 @@ describe('multiple', function () {
                         expect(form.$validation['zip.pattern']).to.be(false)
                         done()
                     })
+                })
+            })
+        })
+
+        describe('$valid', function () {
+            it('should be true', function (done) {
+                nextTick(function () {
+                    expect(form.$valid).to.be(true)
+                    done()
+                })
+            })
+        })
+
+        describe('submit button', function () {
+            it('should be exists', function (done) {
+                nextTick(function () {
+                    expect(document.getElementById('multiple-submit')).to.be.ok()
+                    done()
                 })
             })
         })
