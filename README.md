@@ -184,9 +184,7 @@ $ make test
 
 
 # TODO
-- Filter name chaging option (Ex: length -> mylength)
-- Validation property name chaging option (Ex: $validation -> $my\_validation)
-- Support bower
+See the `TODO.md`
 
 
 # License
