@@ -7,6 +7,10 @@ SRCS = $(shell find test/ -name "*.js")
 build: check node_modules components index.js
 	@$(C8) build --dev
 
+bower: check node_modules components index.js
+	@$(C8) build --standalone vue-validator -o dist -n vue-validator
+	@$(C8) build --use component-uglifyjs --standalone vue-validator -o dist -n vue-validator.min
+
 check:
 	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore \
 		index.js $(SRCS)
@@ -29,6 +33,7 @@ test_coveralls: build
 
 clean:
 	@rm -rf build
+	@rm -rf dist
 
 
-.PHONY: test test_cov test_coveralls lib_cov clean
+.PHONY: bower test test_cov test_coveralls lib_cov clean
