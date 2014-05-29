@@ -36,29 +36,38 @@ exports.install = function (Vue) {
             validationBindings[validationKey] = compiler.bindings[validationKey]
 
             // register validation state from v-model directive
-            if (el.nodeType === 1 && el.tagName !== 'SCRIPT' && el.hasChildNodes()) {
-                slice.call(el.childNodes).forEach(function (node) {
-                    if (node.nodeType === 1) {
-                        var tag = node.tagName
-                        if ((tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') 
-                          && node.hasAttributes) {
-                            var attrs = slice.call(node.attributes)
-                            for (var i = 0; i < attrs.length; i++) {
-                                var attr = attrs[i]
-                                if (attr.name === 'v-model') {
-                                    var asts = Directive.parse(attr.value),
-                                        key = asts[0].key,
-                                        filters = asts[0].filters
-                                    if (filters) {
-                                        initValidationState($validation, key, filters, compiler, validationBindings)
-                                        attr.value = makeFilterExpression($validation, key, filters)
+            function registerValidation (element) {
+                if (element.nodeType === 1 
+                  && element.tagName !== 'SCRIPT' 
+                  && element.hasChildNodes()) {
+                    slice.call(element.childNodes).forEach(function (node) {
+                        if (node.nodeType === 1) {
+                            if (node.hasChildNodes()) {
+                                registerValidation(node)
+                            } else {
+                                var tag = node.tagName
+                                if ((tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') 
+                                  && node.hasAttributes) {
+                                    var attrs = slice.call(node.attributes)
+                                    for (var i = 0; i < attrs.length; i++) {
+                                        var attr = attrs[i]
+                                        if (attr.name === 'v-model') {
+                                            var asts = Directive.parse(attr.value),
+                                                key = asts[0].key,
+                                                filters = asts[0].filters
+                                            if (filters) {
+                                                initValidationState($validation, key, filters, compiler, validationBindings)
+                                                attr.value = makeFilterExpression($validation, key, filters)
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+                }
             }
+            registerValidation(el)
 
             // enable $valid
             var validBinding = compiler.bindings[validKey] = new Binding(compiler, validKey)
