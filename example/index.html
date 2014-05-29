@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vue-validate example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <form id="user-form" v-validate>
+      Name: <input type="text" v-model="name | required | length min:4 max:32" /><br />
+      Age: <input type="text" v-model="age | required | numeric min:18" /><br />
+      Zip: <input type="text" v-model="zip | required | pattern /^[0-9]{3}-[0-9]{4}$/" /><br />
+      <input type="submit" value="send" v-if="$valid">
+      <div>
+          <span v-show="$validation.name.required">Name: required</span><br />
+          <span v-show="$validation.name.length.min">Name: too short</span><br />
+          <span v-show="$validation.name.length.max">Name too long</span><br />
+          <span v-show="$validation.age.required">Age: required</span></br />
+          <span v-show="$validation.age.numeric.min">Age: too short</span><br />
+          <span v-show="$validation.age.numeric.value">Age: required numeric value</span><br />
+          <span v-show="$validation.zip.required">zip: required</span><br />
+          <span v-show="$validation.zip.pattern">zip: invalid format</span><br />
+      </div>
+    </form>
+    <script src="../build/build.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>

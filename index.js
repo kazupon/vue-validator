@@ -13,7 +13,8 @@ exports.install = function (Vue) {
         Observer = Vue.require('observer')
 
     var validationKey = '$validation',
-        validationPropertyName = validationKey.split('$')[1]
+        validationPropertyName = validationKey.split('$')[1],
+        validKey = '$valid'
 
     Vue.filter('required', validateRequired)
     Vue.filter('pattern', validatePattern)
@@ -25,16 +26,16 @@ exports.install = function (Vue) {
         bind: function () {
             var compiler = this.compiler,
                 $validation = compiler[validationPropertyName] || {},
-                el = this.el,
-                validationBindings = this.validationBindings = []
+                el = this.el, vm = this.vm, observer = compiler.observer,
+                validationBindings = this.validationBindings = {}
 
-            this.vm[validationKey] = compiler[validationPropertyName] = $validation
-
+            // enable $validation
+            vm[validationKey] = compiler[validationPropertyName] = $validation
             Observer.observe($validation, validationKey, compiler.observer)
             compiler.bindings[validationKey] = new Binding(compiler, validationKey)
-            validationBindings.push(validationKey)
+            validationBindings[validationKey] = compiler.bindings[validationKey]
 
-            try {
+            // register validation state from v-model directive
             if (el.nodeType === 1 && el.tagName !== 'SCRIPT' && el.hasChildNodes()) {
                 slice.call(el.childNodes).forEach(function (node) {
                     if (node.nodeType === 1) {
@@ -58,36 +59,72 @@ exports.install = function (Vue) {
                     }
                 })
             }
-            } catch (e) {
-                console.error('bind', e);
+
+            // enable $valid
+            var validBinding = compiler.bindings[validKey] = new Binding(compiler, validKey)
+            validationBindings[validKey] = validBinding
+            Object.defineProperty(vm, validKey, {
+                enumerable: true,
+                configurable: true,
+                get: function () {
+                    observer.emit('get', validKey)
+                    return validBinding.value
+                }
+            })
+
+            // inject validation checking handle
+            function updateValid () {
+                var valid = true
+                for (var key in $validation) {
+                    if ($validation[key]) {
+                        valid = false
+                        break
+                    }
+                }
+                validBinding.update(valid)
             }
+            this._handleValid = function (key) {
+                if (validationKey === key || validKey === key) { return }
+                if (key in validationBindings) {
+                    updateValid()
+                }
+            }
+            observer.on('set', this._handleValid)
         },
 
         unbind: function () {
-            var compiler = this.compiler,
+            var compiler = this.compiler, vm = this.vm,
+                observer = compiler.observer,
                 $validation = compiler[validationPropertyName],
                 validationBindings = this.validationBindings,
                 bindings = compiler.bindings
 
-            var i = validationBindings.length
-            while (i--) {
-                var binding = bindings[validationBindings[i]]
+            // disable $valid
+            observer.off(this._handleValid)
+            delete this._handleValid
+            delete vm[validKey]
+
+            // release bindings
+            for (var key in validationBindings) {
+                var binding = bindings[key]
                 if (binding) {
                     binding.unbind()
+                    delete bindings[key]
                 }
-                validationBindings[i] = null
+                validationBindings[key] = null
             }
             delete this.validationBindings
 
+            // disable $validation
             Observer.unobserve($validation, validationKey, compiler.observer)
             delete compiler[validationPropertyName]
-            delete this.vm[validationKey]
+            delete vm[validationKey]
         }
     })
 
 
     function initValidationState ($validation, key, filters, compiler, validationBindings) {
-        var binding, path, bindingPath, args = []
+        var path, bindingPath, args = []
         for (var i = 0; i < filters.length; i++) {
             var filterName = filters[i].name
             if (filterName === 'required' || filterName === 'pattern') {
@@ -110,8 +147,8 @@ exports.install = function (Vue) {
         }
 
         function makeBinding (path, bindingPath) {
-            binding = compiler.bindings[bindingPath] = new Binding(compiler, bindingPath)
-            validationBindings.push(bindingPath)
+            var binding = validationBindings[bindingPath] || new Binding(compiler, bindingPath)
+            compiler.bindings[bindingPath] = validationBindings[bindingPath] = binding
             defineProperty($validation, path, binding)
         }
     }
@@ -120,8 +157,7 @@ exports.install = function (Vue) {
         var ret = []
 
         for (var i = 0; i < args.length; i++) {
-            var arg = args[i],
-                parsed = arg.split(':')
+            var arg = args[i], parsed = arg.split(':')
             if (parsed.length !== 2) { continue }
             ret.push(parsed[0])
         }
@@ -160,7 +196,7 @@ exports.install = function (Vue) {
 
         binding.value = $validation[key]
     }
-};
+}
 
 
 /**
