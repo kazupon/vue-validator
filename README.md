@@ -72,7 +72,7 @@ For example, you can use `$valid` as follows
 ```html
 <form id="user-form" v-validate>
     ID: <input type="text" v-model="id | required | length min:3 max:16"><br />
-    Password: <input type="password" v-model="password | required | length min:8 max:16" /><br />
+    Password: <input type="password" v-model="password | required | length min:8 max:16"><br />
     <input type="submit" value="send" v-if="$valid">
     <div>
         <span v-show="$validation.id.required">required your ID.</span>
@@ -90,7 +90,7 @@ For example, you can use `$valid` as follows
 
 ## required
 
-For example, you can use `resuired` validation filter as follows.
+For example, you can use `required` validation filter as follows.
 
 ```html
 <form id="user-form" v-validate>
