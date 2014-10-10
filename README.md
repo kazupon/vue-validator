@@ -20,6 +20,12 @@ Validator component for Vue.js
 $ component install kazupon/vue-validator
 ```
 
+## bower
+
+```shell
+$ bower install vue-validator
+```
+
 
 # Usage
 

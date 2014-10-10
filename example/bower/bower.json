@@ -1,0 +1,17 @@
+{
+  "name": "bower-vue-validator-example",
+  "version": "0.0.1",
+  "description": "bower vue-validator example",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "Makefile",
+    "bower_components"
+  ],
+  "dependencies": {
+    "vue": "0.10.4",
+    "vue-validator": "0.1.1"
+  }
+}

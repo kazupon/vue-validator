@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>vue-validate example</title>
+    <title>bower-vue-validator-example</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <script src="bower_components/vue-validator/dist/vue-validator.js"></script>
   </head>
   <body>
     <form id="user-form" v-validate>
@@ -21,7 +23,6 @@
           <span v-show="$validation.zip.pattern">zip: invalid format</span><br />
       </div>
     </form>
-    <script src="./build/build.js"></script>
-    <script>require('vue-validator-example');</script>
+    <script src="index.js"></script>
   </body>
 </html>
