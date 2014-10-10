@@ -7,7 +7,14 @@
 Validator component for Vue.js
 
 
+# Support Vue.js version
+
+0.10.3 - 0.10.5
+
+
 # Installing
+
+## component (v0.19.9)
 
 ```shell
 $ component install kazupon/vue-validator
@@ -17,8 +24,8 @@ $ component install kazupon/vue-validator
 # Usage
 
 ```js
-var Vue = require('vue'),
-    validator = require('vue-validator')
+var Vue = require('vue')
+var validator = require('vue-validator')
 
 Vue.use(validator)
 ```

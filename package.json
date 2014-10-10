@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/kazupon/vue-validator",
   "devDependencies": {
-    "component": "^0.19.9",
+    "component": "0.19.9",
     "component-uglifyjs": "^0.3.0",
     "coveralls": "^2.10.0",
     "expect.js": "^0.3.1",

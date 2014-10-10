@@ -1,13 +1,13 @@
-var Vue = require('vue'),
-    validator = require('vue-validator')
+var Vue = require('vue')
+var validator = require('vue-validator')
     
 Vue.use(validator)
 
 var form = new Vue({
-    el: '#user-form',
-    data: {
-        name: '',
-        age: 18,
-        zip: '11112222'
-    }
+  el: '#user-form',
+  data: {
+    name: '',
+    age: 18,
+    zip: '11112222'
+  }
 })
