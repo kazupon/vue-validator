@@ -1,29 +1,18 @@
 {
-    "indent": 4,
-    "eqeqeq": true,
-    "browser": true,
-    "asi": true,
-    "node": true,
-    "multistr": true,
-    "undef": true,
-    "unused": true,
-    "trailing": true,
-    "sub": true,
-    "laxbreak": true,
-    "expr": true,
-    "evil": true,
-    "eqnull": true,
-    "debug": true,
-    "globals": {
-        "console": true,
-        "it": true,
-        "describe": true,
-        "before": true,
-        "after": true,
-        "expect": true,
-        "mock": true,
-        "mockHTMLEvent": true,
-        "mockMouseEvent": true,
-        "mockKeyEvent": true
-    }
+  // Enforcing
+  "eqeqeq": true,
+  "indent": 2,
+
+  // Relaxing
+  "asi": true,
+  "laxbreak": true,
+  "boss": true,
+  "expr": true,
+  "sub": true,
+
+  // Environments
+  "browser": true,
+
+  "globals": {
+  }
 }

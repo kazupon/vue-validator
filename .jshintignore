@@ -1,2 +1,4 @@
 test/mocha.js
 test/prepare.js
+test/multiple.js
+test/build.js
