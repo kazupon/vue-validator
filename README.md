@@ -43,6 +43,7 @@ Vue.use(validator)
 ```
 
 Install the plugin with `Vue.use`, `vue-validator` component enable to use, and then we can use `v-validate` directive.
+
 The following is an example.
 
 
@@ -196,20 +197,23 @@ You can specify options such as the following example.
 
 ```js
 Vue.use(plugin, {
+  // component
   component: {
-    id: 'my-validator',
-    name: 'MyValidator'
+    id: 'my-validator', // specify id of Vue.component
+    name: 'MyValidator' // specify Vue component name
   },
 
+  // namespace of data scope
   namespace: {
-    validation: 'myvalidation',
-    valid: 'myvalid',
-    dirty: 'mydirty'
+    validation: 'myvalidation', // specify `validation` data scope name
+    valid: 'myvalid', // specify `valid` data scope name
+    dirty: 'mydirty' // specify `dirty` data scope name
   },
 
-  validator: {
+  // user custom validator
+  validator: { // specify user custom validator
     digit: function (val) {
-      return /^[\d() \.\:\-\+#]+$/.test(value);
+      return /^[\d() \.\:\-\+#]+$/.test(value)
     }
   }
 })
@@ -221,7 +225,7 @@ Vue.use(plugin, {
 {
   component: {
     id: "vue-validator",
-    name: "VueValidator"'
+    name: "VueValidator"
   },
   namespace: {
     validation: "validation",
