@@ -7,12 +7,11 @@
 Validator component for Vue.js
 
 
-# Support Vue.js version
+# Resuqirements
+- Vue.js ^`0.11.rc3`
 
-`0.11.rc3` later.
 
-
-# Installing
+# Installation
 
 ## component
 
@@ -49,12 +48,113 @@ The following is an example.
 
 ```html
 <form id="blog-form" v-component="vue-validator">
-    <input type="text" v-model="comment" v-validate="minLength: 16, maxLength: 128">
+    <input type="text" v-model="comment" v-validate="minlength: 16, maxlength: 128">
     <div>
-        <span v-show="validation.comment.minLength">too long your comment.</span>
-        <span v-show="validation.comment.maxLength">too short your comment.</span>
+        <span v-show="validation.comment.minlength">too long your comment.</span>
+        <span v-show="validation.comment.maxlength">too short your comment.</span>
     </div>
     <input type="submit" value="send" v-if="valid">
+</form>
+```
+
+
+# Data scopes
+
+## validation
+The `validation` keep the validation result of validator per each `v-model`.
+
+The following format 
+
+```
+    validation.model.validator
+```
+
+
+For example, if you use `required` validator on the comment `v-model`, as follows
+
+```html
+<form id="user-form" v-component="vue-validator">
+    Password: <input type="password" v-model="password" v-validate="required"><br />
+    <div>
+        <span v-if="validation.password.required">required your password.</span>
+    </div>
+</form>
+```
+
+## valid
+The `valid` keep the validation result of validator in the `vue-validator` component.
+
+The `valid` keep two types validation result.
+
+### all validator
+For example, you can use `valid` as follows
+
+```html
+<form id="user-form" v-component="vue-validator">
+    ID: <input type="text" v-model="id" v-validate="required, minlength: 3, maxlength: 16"><br />
+    Password: <input type="password" v-model="password" v-validate="required, minlength: 8 maxlength: 16"><br />
+    <input type="submit" value="send" v-if="valid">
+    <div>
+        <span v-if="validation.id.required">required your ID.</span>
+        <span v-if="validation.id.minlength">too short your ID.</span>
+        <span v-if="validation.id.minlength">too long your ID.</span>
+        <span v-if="validation.password.required">required your password.</span>
+        <span v-if="validation.password.minlength">too short your password.</span>
+        <span v-if="validation.password.maxlength">too long your password.</span>
+    </div>
+</form>
+```
+
+### each validator
+For example, you can use `valid` as follows
+
+```html
+<form id="user-form" v-component="vue-validator">
+    <div v-class="error: validation.id.valid">
+        ID: <input type="text" v-model="id" v-validate="required, minlength: 3, maxlength: 16"><br />
+        <span v-if="validation.id.required">required your ID.</span>
+        <span v-if="validation.id.minlength">too short your ID.</span>
+        <span v-if="validation.id.minlength">too long your ID.</span>
+    </div>
+    <div v-class="error: validation.password.valid">
+        Password: <input type="password" v-model="password" v-validate="required, minlength: 8 maxlength: 16"><br />
+        <span v-if="validation.password.required">required your password.</span>
+        <span v-if="validation.password.minlength">too short your password.</span>
+        <span v-if="validation.password.maxlength">too long your password.</span>
+    </div>
+    <input type="submit" value="send" v-if="valid">
+</form>
+```
+
+## dirty
+The `dirty` keep whether there was a change since initial value of `v-model` in the `vue-validator` component.
+
+The `valid` keep two types.
+
+### all model
+For example, you can use `dirty` as follows
+
+```html
+<form id="blog-form" v-component="vue-validator">
+    <input type="text" value="" v-model="name" v-validate="required">
+    <input type="text" value="hello" v-model="comment" v-validate="maxlength: 128">
+    <input type="submit" value="send" v-if="valid && dirty">
+    <div>
+        <span v-if="validation.name.required">required your name.</span>
+        <span v-if="validation.comment.maxlength">too long your comment.</span>
+    </div>
+</form>
+```
+
+### each model
+For example, you can use `dirty` as follows
+
+```html
+<form id="blog-form" v-component="vue-validator">
+    <input type="text" value="hello" v-model="comment" v-validate="maxlength: 128">
+    <div>
+        <span v-if="validation.comment.valid && validation.comment.dirty">your comment OK !!</span>
+    </div>
 </form>
 ```
 
@@ -62,14 +162,13 @@ The following is an example.
 # Directives
 
 ## v-validate
-
 - This directive must be used together with `v-model`.
 - This directive need to use in `vue-validator` component.
 
 
 # Validators
 
-## Pre-defined validator
+## build-in validator
 
 ### required
 For example, you can use `required` validator as follows.
@@ -95,26 +194,26 @@ For example, you can use `pattern` validator as follows.
 </form>
 ```
 
-### minLength
-For example, you can use `minLength` validator as follows.
+### minlength
+For example, you can use `minlength` validator as follows.
 
 ```html
 <form id="blog-form" v-component="vue-validator">
-    <input type="text" v-model="comment" v-validate="minLength: 16">
+    <input type="text" v-model="comment" v-validate="minlength: 16">
     <div>
-        <span v-if="validation.comment.minLength"">too short your comment.</span>
+        <span v-if="validation.comment.minlength"">too short your comment.</span>
     </div>
 </form>
 ```
 
-### maxLength
-For example, you can use `maxLength` validator as follows.
+### maxlength
+For example, you can use `maxlength` validator as follows.
 
 ```html
 <form id="blog-form" v-component="vue-validator">
-    <input type="text" v-model="comment" v-validate="maxLength: 128">
+    <input type="text" v-model="comment" v-validate="maxlength: 128">
     <div>
-        <span v-if="validation.comment.maxLength">too long your comment.</span>
+        <span v-if="validation.comment.maxlength">too long your comment.</span>
     </div>
 </form>
 ```
@@ -146,50 +245,35 @@ For example, you can use `max` validator as follows.
 
 ## User custome validator
 
+In addition to build-in validator, you can use custom validator.
 
-# Data scope
-
-## validation
-The `validation` keep the validate result of validator per each `v-model`.
-
-```
-    validation.model.filter
-```
-
-
-For example, if you use `required` validator on the comment `v-model`, as follows
+The following custom validator
 
 ```html
 <form id="user-form" v-component="vue-validator">
-    Password: <input type="password" v-model="password" v-validate="required"><br />
+    name: <input type="text" v-model="name" v-validate="required"><br />
+    address: <input type="text" v-model="address" v-validate="email"><br />
+    <input type="submit" value="send" v-if="valid && dirty">
     <div>
-        <span v-if="validation.password.required">required your password.</span>
+        <span v-if="validation.name.required">required your name.</span>
+        <span v-if="validation.address.email">invalid your email address format.</span>
     </div>
 </form>
 ```
 
-## valid
-The `valid` keep the validate result of validator in the `vue-validator` component.
-
-For example, you can use `valid` as follows
-
-```html
-<form id="user-form" v-component="vue-validator">
-    ID: <input type="text" v-model="id" v-validate="required, minLength: 3, maxLength: 16"><br />
-    Password: <input type="password" v-model="password" v-validate="required, minLength: 8 maxLength: 16"><br />
-    <input type="submit" value="send" v-if="valid">
-    <div>
-        <span v-if="validation.id.required">required your ID.</span>
-        <span v-if="validation.id.minLength">too short your ID.</span>
-        <span v-if="validation.id.minLength">too long your ID.</span>
-        <span v-if="validation.password.required">required your password.</span>
-        <span v-if="validation.password.minLength">too short your password.</span>
-        <span v-if="validation.password.maxLength">too long your password.</span>
-    </div>
-</form>
+```js
+new Vue({
+  data: {
+    name: '',
+    address: ''
+  },
+  validator: {
+    email: function (val) {
+      return (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(val)"])"])))
+    }
+  }
+}).$mount('#user-form')
 ```
-
-## dirty
 
 
 # Plugin options
@@ -208,13 +292,6 @@ Vue.use(plugin, {
     validation: 'myvalidation', // specify `validation` data scope name
     valid: 'myvalid', // specify `valid` data scope name
     dirty: 'mydirty' // specify `dirty` data scope name
-  },
-
-  // user custom validator
-  validator: { // specify user custom validator
-    digit: function (val) {
-      return /^[\d() \.\:\-\+#]+$/.test(value)
-    }
   }
 })
 ```
@@ -224,13 +301,13 @@ Vue.use(plugin, {
 ```js
 {
   component: {
-    id: "vue-validator",
-    name: "VueValidator"
+    id: 'vue-validator',
+    name: 'VueValidator'
   },
   namespace: {
-    validation: "validation",
-    valid: "valid",
-    dirty: "dirty"
+    validation: 'validation',
+    valid: 'valid',
+    dirty: 'dirty'
   }
 }
 ```
