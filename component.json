@@ -1,6 +1,6 @@
 {
   "name": "vue-validator",
-  "version": "0.1.1",
+  "version": "0.10.0",
   "description": "A collection of commonly-used validators for Vue.js",
   "keywords": [
     "vue"
@@ -10,6 +10,6 @@
     "index.js"
   ],
   "development": {
-    "yyx990803/vue": "*"
+    "yyx990803/vue": "0.10.5"
   }
 }
