@@ -1,6 +1,6 @@
 {
   "name": "vue-validator",
-  "version": "0.1.1",
+  "version": "0.10.0",
   "description": "A collection of commonly-used validators for Vue.js",
   "private": true,
   "main": "index.js",
