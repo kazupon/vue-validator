@@ -1,4 +1,3 @@
-REPORTER = dot
 WEBPACK = node_modules/.bin/webpack
 KARMA = node_modules/karma/bin/karma
 SRCS = $(shell find test/ -name "*.js")
@@ -15,7 +14,7 @@ node_modules: package.json
 	@npm install
 
 test:
-	@$(KARMA) run
+	@$(KARMA) start --single-run
 
 clean:
 	@rm -rf coverage

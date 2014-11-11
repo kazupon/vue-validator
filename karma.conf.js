@@ -1,7 +1,13 @@
 // Karma configuration
 // Generated on Mon Nov 10 2014 00:43:50 GMT+0900 (JST)
 
-module.exports = function(config) {
+module.exports = function (config) {
+  var reporter = process.env.REPORTER || 'html'
+  var reporters = ['progress', 'coverage']
+  if (reporter === 'lcov') {
+    reporters.push('coveralls')
+  }
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -37,11 +43,11 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage', 'coveralls'],
+    reporters: reporters,
 
 
     coverageReporter: {
-      type : 'lcov',
+      type : reporter, 
       dir : 'coverage/'
     },
 
@@ -71,5 +77,5 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
-};
+  })
+}
