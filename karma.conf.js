@@ -4,8 +4,10 @@
 module.exports = function (config) {
   var reporter = process.env.REPORTER || 'html'
   var reporters = ['progress', 'coverage']
+  var browsers =  ['PhantomJS']
   if (reporter === 'lcov') {
     reporters.push('coveralls')
+    browsers = browsers.concat(['Chrome', 'Safari', 'Firefox'])
   }
 
   config.set({
@@ -22,6 +24,7 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/vue/dist/vue.js',
+      'validators.js',
       'index.js',
       'test/**/specs/*.js'
     ],
@@ -36,6 +39,7 @@ module.exports = function (config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'node_modules/vue/dist/vue.js': ['commonjs'],
+      'validators.js': ['coverage', 'commonjs'],
       'index.js': ['coverage', 'commonjs'],
       'test/**/specs/*.js': ['commonjs']
     },
@@ -71,7 +75,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS', 'Chrome'/*, 'Safari', 'Firefox'*/],
+    browsers: browsers,
 
 
     // Continuous Integration mode
