@@ -4,26 +4,12 @@
 
 var Vue = require('../../node_modules/vue/dist/vue')
 var validator = require('../../index')
-var wrapTemplate = require('./helper').wrapTemplate
-var nextTick = Vue.util.nextTick
+var createInstance = require('./helper').createInstance
 
 
 describe('pattern', function () {
   var vm, target
   
-  function createInstance (inject, data) {
-    var Validator = Vue.extend({
-      template: wrapTemplate(inject),
-      el: function () {
-        var el = document.createElement('div')
-        document.body.appendChild(el)
-        return el
-      },
-      data: data
-    })
-    return new Validator()
-  }
-
   before(function () {
     Vue.config.async = false
     Vue.use(validator)
