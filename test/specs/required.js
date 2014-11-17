@@ -14,28 +14,37 @@ describe('required', function () {
   function createInstance (inject, data) {
     var Validator = Vue.extend({
       template: wrapTemplate(inject),
-      el: function () { return document.createElement('div') },
+      el: function () {
+        var el = document.createElement('div')
+        document.body.appendChild(el)
+        return el
+      },
       data: data
     })
     return new Validator()
   }
 
   before(function () {
+    Vue.config.async = false
     Vue.use(validator)
+  })
+
+  after(function () {
+    Vue.config.async = true
   })
 
 
   describe('model data', function () {
     describe('set no empty', function () {
-      beforeEach(function (done) {
+      beforeEach(function () {
         vm = createInstance(
           '<input type="text" v-model="msg" v-validate="required">',
           { msg: null }
         )
         target = vm._children[0]
+
         vm.msg = 'hello'
         vm._digest() // force update
-        nextTick(done)
       })
 
       it('should be false', function () {
@@ -44,15 +53,15 @@ describe('required', function () {
     })
 
     describe('set empty', function () {
-      beforeEach(function (done) {
+      beforeEach(function () {
         vm = createInstance(
           '<input type="text" v-model="msg" v-validate="required">',
           { msg: 'hello' }
         )
         target = vm._children[0]
+
         vm.msg = ''
         vm._digest() // force update
-        nextTick(done)
       })
 
       it('should be true', function () {
@@ -64,13 +73,12 @@ describe('required', function () {
 
   describe('input `value` attribute', function () {
     describe('set no empty', function () {
-      beforeEach(function (done) {
+      beforeEach(function () {
         vm = createInstance(
           '<input type="text" value="hello" v-model="msg" v-validate="required">',
           { msg: null }
         )
         target = vm._children[0]
-        nextTick(done)
       })
 
       it('should be false', function () {
@@ -79,13 +87,12 @@ describe('required', function () {
     })
 
     describe('set empty', function () {
-      beforeEach(function (done) {
+      beforeEach(function () {
         vm = createInstance(
           '<input type="text" value="" v-model="msg" v-validate="required">',
           { msg: null }
         )
         target = vm._children[0]
-        nextTick(done)
       })
 
       it('should be true', function () {
