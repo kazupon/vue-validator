@@ -22,13 +22,13 @@ describe('minLength', function () {
   beforeEach(function () {
     vm = createInstance(
       '<input type="text" v-model="comment" v-validate="minLength: 4">',
-      { msg: null }
+      { comment: null }
     )
     target = vm._children[0]
   })
 
 
-  describe('when input 3 length string', function () {
+  describe('boundary value - 1', function () {
     beforeEach(function () {
       vm.comment = 'aaa'
       vm._digest() // force update
@@ -40,7 +40,7 @@ describe('minLength', function () {
   })
 
 
-  describe('when input 4 length string', function () {
+  describe('boundary value', function () {
     beforeEach(function () {
       vm.comment = 'aaaa'
       vm._digest() // force update
@@ -52,7 +52,7 @@ describe('minLength', function () {
   })
 
 
-  describe('when input 5 length string', function () {
+  describe('boundary value + 1', function () {
     beforeEach(function () {
       vm.comment = 'aaaaa'
       vm._digest() // force update
@@ -81,13 +81,13 @@ describe('maxLength', function () {
   beforeEach(function () {
     vm = createInstance(
       '<input type="text" v-model="comment" v-validate="maxLength: 4">',
-      { msg: null }
+      { comment: null }
     )
     target = vm._children[0]
   })
 
 
-  describe('when input 3 length string', function () {
+  describe('boundary value - 1', function () {
     beforeEach(function () {
       vm.comment = 'aaa'
       vm._digest() // force update
@@ -99,7 +99,7 @@ describe('maxLength', function () {
   })
 
 
-  describe('when input 4 length string', function () {
+  describe('boundary value', function () {
     beforeEach(function () {
       vm.comment = 'aaaa'
       vm._digest() // force update
@@ -111,7 +111,7 @@ describe('maxLength', function () {
   })
 
 
-  describe('when input 5 length string', function () {
+  describe('boundary value + 1', function () {
     beforeEach(function () {
       vm.comment = 'aaaaa'
       vm._digest() // force update
