@@ -1,5 +1,5 @@
 /**
- * import(s)
+ * Import(s)
  */
 
 var validates = require('../../lib/validates')
