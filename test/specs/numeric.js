@@ -19,7 +19,7 @@ describe('min', function () {
   })
   
 
-  describe('model', function () {
+  describe('boundary', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="min: 0">',
@@ -30,7 +30,7 @@ describe('min', function () {
     })
 
 
-    describe('boundary value - 1', function () {
+    describe('value - 1', function () {
       beforeEach(function () {
         vm.threshold = '-1'
         vm._digest() // force update
@@ -42,7 +42,7 @@ describe('min', function () {
     })
 
 
-    describe('boundary value', function () {
+    describe('just value', function () {
       beforeEach(function () {
         vm.threshold = '0'
         vm._digest() // force update
@@ -54,7 +54,7 @@ describe('min', function () {
     })
 
 
-    describe('boundary value + 1', function () {
+    describe('value + 1', function () {
       beforeEach(function () {
         vm.threshold = '1'
         vm._digest() // force update
@@ -70,40 +70,6 @@ describe('min', function () {
       beforeEach(function () {
         vm.threshold = 'hello'
         vm._digest() // force update
-      })
-
-      it('should be true', function () {
-        expect(targetVM.validation.threshold.min).to.be(true)
-      })
-    })
-  })
-
-
-  describe('expression', function () {
-    describe('numeric', function () {
-      beforeEach(function () {
-        vm = createInstance({
-          target: '<input type="text" v-model="threshold" v-validate="min: 50">',
-          validator: validator,
-          data: function () { return { threshold: '49' } }
-        })
-        targetVM = vm._children[0]
-      })
-
-      it('should be false', function () {
-        expect(targetVM.validation.threshold.min).to.be(false)
-      })
-    })
-
-
-    describe('not numeric', function () {
-      beforeEach(function () {
-        vm = createInstance({
-          target: '<input type="text" v-model="threshold" v-validate="min: \'hello\'">',
-          validator: validator,
-          data: function () { return { threshold: '49' } }
-        })
-        targetVM = vm._children[0]
       })
 
       it('should be true', function () {
@@ -127,7 +93,7 @@ describe('max', function () {
   })
   
 
-  describe('model', function () {
+  describe('boundary', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="max: 100">',
@@ -138,7 +104,7 @@ describe('max', function () {
     })
 
 
-    describe('boundary value - 1', function () {
+    describe('value - 1', function () {
       beforeEach(function () {
         vm.threshold = '99'
         vm._digest() // force update
@@ -150,7 +116,7 @@ describe('max', function () {
     })
 
 
-    describe('boundary value', function () {
+    describe('just value', function () {
       beforeEach(function () {
         vm.threshold = '100'
         vm._digest() // force update
@@ -162,7 +128,7 @@ describe('max', function () {
     })
 
 
-    describe('boundary value + 1', function () {
+    describe('value + 1', function () {
       beforeEach(function () {
         vm.threshold = '101'
         vm._digest() // force update
@@ -178,40 +144,6 @@ describe('max', function () {
       beforeEach(function () {
         vm.threshold = 'hello'
         vm._digest() // force update
-      })
-
-      it('should be true', function () {
-        expect(targetVM.validation.threshold.max).to.be(true)
-      })
-    })
-  })
-
-
-  describe('expression', function () {
-    describe('numeric', function () {
-      beforeEach(function () {
-        vm = createInstance({
-          target: '<input type="text" v-model="threshold" v-validate="max: -2">',
-          validator: validator,
-          data: function () { return { threshold: '-3' } }
-        })
-        targetVM = vm._children[0]
-      })
-
-      it('should be false', function () {
-        expect(targetVM.validation.threshold.max).to.be(false)
-      })
-    })
-
-
-    describe('not numeric', function () {
-      beforeEach(function () {
-        vm = createInstance({
-          target: '<input type="text" v-model="threshold" v-validate="max: \'hello\'">',
-          validator: validator,
-          data: function () { return { threshold: '100' } }
-        })
-        targetVM = vm._children[0]
       })
 
       it('should be true', function () {

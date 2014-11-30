@@ -18,48 +18,51 @@ describe('minLength', function () {
     Vue.config.async = true
   })
   
-  beforeEach(function () {
-    vm = createInstance({
-        target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
-        validator: validator,
-        data: function () { return { comment: null } }
-    })
-    targetVM = vm._children[0]
-  })
 
-
-  describe('boundary value - 1', function () {
+  describe('boundary', function () {
     beforeEach(function () {
-      vm.comment = 'aaa'
-      vm._digest() // force update
+      vm = createInstance({
+          target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
+          validator: validator,
+          data: function () { return { comment: null } }
+      })
+      targetVM = vm._children[0]
     })
 
-    it('should be true', function () {
-      expect(targetVM.validation.comment.minLength).to.be(true)
-    })
-  })
 
+    describe('length - 1', function () {
+      beforeEach(function () {
+        vm.comment = 'aaa'
+        vm._digest() // force update
+      })
 
-  describe('boundary value', function () {
-    beforeEach(function () {
-      vm.comment = 'aaaa'
-      vm._digest() // force update
-    })
-
-    it('should be false', function () {
-      expect(targetVM.validation.comment.minLength).to.be(false)
-    })
-  })
-
-
-  describe('boundary value + 1', function () {
-    beforeEach(function () {
-      vm.comment = 'aaaaa'
-      vm._digest() // force update
+      it('should be true', function () {
+        expect(targetVM.validation.comment.minLength).to.be(true)
+      })
     })
 
-    it('should be false', function () {
-      expect(targetVM.validation.comment.minLength).to.be(false)
+
+    describe('just length', function () {
+      beforeEach(function () {
+        vm.comment = 'aaaa'
+        vm._digest() // force update
+      })
+
+      it('should be false', function () {
+        expect(targetVM.validation.comment.minLength).to.be(false)
+      })
+    })
+
+
+    describe('length + 1', function () {
+      beforeEach(function () {
+        vm.comment = 'aaaaa'
+        vm._digest() // force update
+      })
+
+      it('should be false', function () {
+        expect(targetVM.validation.comment.minLength).to.be(false)
+      })
     })
   })
 })
@@ -77,48 +80,51 @@ describe('maxLength', function () {
     Vue.config.async = true
   })
   
-  beforeEach(function () {
-    vm = createInstance({
-      target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
-      validator: validator,
-      data: function () { return { comment: null } }
-    })
-    targetVM = vm._children[0]
-  })
 
-
-  describe('boundary value - 1', function () {
+  describe('boundary', function () {
     beforeEach(function () {
-      vm.comment = 'aaa'
-      vm._digest() // force update
+      vm = createInstance({
+        target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
+        validator: validator,
+        data: function () { return { comment: null } }
+      })
+      targetVM = vm._children[0]
     })
 
-    it('should be false', function () {
-      expect(targetVM.validation.comment.maxLength).to.be(false)
-    })
-  })
 
+    describe('length - 1', function () {
+      beforeEach(function () {
+        vm.comment = 'aaa'
+        vm._digest() // force update
+      })
 
-  describe('boundary value', function () {
-    beforeEach(function () {
-      vm.comment = 'aaaa'
-      vm._digest() // force update
-    })
-
-    it('should be false', function () {
-      expect(targetVM.validation.comment.maxLength).to.be(false)
-    })
-  })
-
-
-  describe('boundary value + 1', function () {
-    beforeEach(function () {
-      vm.comment = 'aaaaa'
-      vm._digest() // force update
+      it('should be false', function () {
+        expect(targetVM.validation.comment.maxLength).to.be(false)
+      })
     })
 
-    it('should be true', function () {
-      expect(targetVM.validation.comment.maxLength).to.be(true)
+
+    describe('just length', function () {
+      beforeEach(function () {
+        vm.comment = 'aaaa'
+        vm._digest() // force update
+      })
+
+      it('should be false', function () {
+        expect(targetVM.validation.comment.maxLength).to.be(false)
+      })
+    })
+
+
+    describe('length + 1', function () {
+      beforeEach(function () {
+        vm.comment = 'aaaaa'
+        vm._digest() // force update
+      })
+
+      it('should be true', function () {
+        expect(targetVM.validation.comment.maxLength).to.be(true)
+      })
     })
   })
 })
