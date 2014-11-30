@@ -1,5 +1,5 @@
 /**
- * import(s)
+ * Import(s)
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
@@ -8,11 +8,10 @@ var createInstance = require('./helper').createInstance
 
 
 describe('pattern', function () {
-  var vm, target
+  var vm, targetVM
   
   before(function () {
     Vue.config.async = false
-    Vue.use(validator)
   })
 
   after(function () {
@@ -22,11 +21,13 @@ describe('pattern', function () {
 
   describe('regex basic', function () {
     beforeEach(function () {
-      vm = createInstance(
-        '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
-        { msg: '111' }
-      )
-      target = vm._children[0]
+      vm = createInstance({
+        target: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
+        validator: validator,
+        //data: { msg: '111' }
+        data: function () { return { msg: '111' } }
+      })
+      targetVM = vm._children[0]
     })
 
     describe('valid', function () {
@@ -36,7 +37,7 @@ describe('pattern', function () {
       })
 
       it('should be false', function () {
-        expect(target.validation.msg.pattern).to.be(false)
+        expect(targetVM.validation.msg.pattern).to.be(false)
       })
     })
 
@@ -47,7 +48,7 @@ describe('pattern', function () {
       })
 
       it('should be true', function () {
-        expect(target.validation.msg.pattern).to.be(true)
+        expect(targetVM.validation.msg.pattern).to.be(true)
       })
     })
   })
@@ -55,11 +56,13 @@ describe('pattern', function () {
 
   describe('regex flag', function () {
     beforeEach(function () {
-      vm = createInstance(
-        '<input type="text" v-model="msg" v-validate="pattern: /hello/i">',
-        { msg: null }
-      )
-      target = vm._children[0]
+      vm = createInstance({
+        target: '<input type="text" v-model="msg" v-validate="pattern: /hello/i">',
+        validator: validator,
+        //data: { msg: null }
+        data: function () { return { msg: null } }
+      })
+      targetVM = vm._children[0]
     })
 
     describe('valid', function () {
@@ -69,7 +72,7 @@ describe('pattern', function () {
       })
 
       it('should be false', function () {
-        expect(target.validation.msg.pattern).to.be(false)
+        expect(targetVM.validation.msg.pattern).to.be(false)
       })
     })
 
@@ -80,7 +83,7 @@ describe('pattern', function () {
       })
 
       it('should be true', function () {
-        expect(target.validation.msg.pattern).to.be(true)
+        expect(targetVM.validation.msg.pattern).to.be(true)
       })
     })
   })

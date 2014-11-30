@@ -1,39 +1,61 @@
 /**
- * import(s)
+ * Import(s)
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
 
 
 /**
- * export(s)
+ * Export(s)
  */
 
 
 /**
- * wrap template
+ * Wrap template
+ *
+ * @param {String} target
+ * @param {String} name
+ * @param {tag} tag
+ * @return {String} validator tag
  */
 
-var wrapTemplate = exports.wrapTemplate = function (inject, name, tag) {
+var wrapTemplate = exports.wrapTemplate = function (target, name, tag) {
   name = name || 'vue-validator'
   tag = tag || 'form'
   return '<' + tag + ' v-component="' + name + '">' +
-    inject + '</' + tag + '>'
+    target + '</' + tag + '>'
 }
 
+
 /**
- * create instance
+ * Create instance
+ *
+ * @params {String} target
+ * @params {String} name
+ * @params {Object} validator
+ * @params {Object} data
+ * @return {Object} created Vue component instance
  */
 
-exports.createInstance = function (inject, data) {
+exports.createInstance = function (params) {
+  params = params || {}
+  params.target = params.target || ''
+  params.name = params.name || 'vue-validator'
+  params.validator = params.validator || {}
+  params.data = params.data || {}
+
+  var components = {}
+  components[params.name] = params.validator
+
   var Validator = Vue.extend({
-    template: wrapTemplate(inject),
+    components: components,
+    template: wrapTemplate(params.target, params.name),
     el: function () {
       var el = document.createElement('div')
       document.body.appendChild(el)
       return el
     },
-    data: data
+    data: params.data
   })
 
   return new Validator()

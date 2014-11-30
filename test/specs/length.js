@@ -1,5 +1,5 @@
 /**
- * import(s)
+ * Import(s)
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
@@ -8,11 +8,10 @@ var createInstance = require('./helper').createInstance
 
 
 describe('minLength', function () {
-  var vm, target
+  var vm, targetVM
 
   before(function () {
     Vue.config.async = false
-    Vue.use(validator)
   })
 
   after(function () {
@@ -20,11 +19,12 @@ describe('minLength', function () {
   })
   
   beforeEach(function () {
-    vm = createInstance(
-      '<input type="text" v-model="comment" v-validate="minLength: 4">',
-      { comment: null }
-    )
-    target = vm._children[0]
+    vm = createInstance({
+        target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
+        validator: validator,
+        data: function () { return { comment: null } }
+    })
+    targetVM = vm._children[0]
   })
 
 
@@ -35,7 +35,7 @@ describe('minLength', function () {
     })
 
     it('should be true', function () {
-      expect(target.validation.comment.minLength).to.be(true)
+      expect(targetVM.validation.comment.minLength).to.be(true)
     })
   })
 
@@ -47,7 +47,7 @@ describe('minLength', function () {
     })
 
     it('should be false', function () {
-      expect(target.validation.comment.minLength).to.be(false)
+      expect(targetVM.validation.comment.minLength).to.be(false)
     })
   })
 
@@ -59,7 +59,7 @@ describe('minLength', function () {
     })
 
     it('should be false', function () {
-      expect(target.validation.comment.minLength).to.be(false)
+      expect(targetVM.validation.comment.minLength).to.be(false)
     })
   })
 })
@@ -67,11 +67,10 @@ describe('minLength', function () {
 
 
 describe('maxLength', function () {
-  var vm, target
+  var vm, targetVM
 
   before(function () {
     Vue.config.async = false
-    Vue.use(validator)
   })
 
   after(function () {
@@ -79,11 +78,12 @@ describe('maxLength', function () {
   })
   
   beforeEach(function () {
-    vm = createInstance(
-      '<input type="text" v-model="comment" v-validate="maxLength: 4">',
-      { comment: null }
-    )
-    target = vm._children[0]
+    vm = createInstance({
+      target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
+      validator: validator,
+      data: function () { return { comment: null } }
+    })
+    targetVM = vm._children[0]
   })
 
 
@@ -94,7 +94,7 @@ describe('maxLength', function () {
     })
 
     it('should be false', function () {
-      expect(target.validation.comment.maxLength).to.be(false)
+      expect(targetVM.validation.comment.maxLength).to.be(false)
     })
   })
 
@@ -106,7 +106,7 @@ describe('maxLength', function () {
     })
 
     it('should be false', function () {
-      expect(target.validation.comment.maxLength).to.be(false)
+      expect(targetVM.validation.comment.maxLength).to.be(false)
     })
   })
 
@@ -118,7 +118,7 @@ describe('maxLength', function () {
     })
 
     it('should be true', function () {
-      expect(target.validation.comment.maxLength).to.be(true)
+      expect(targetVM.validation.comment.maxLength).to.be(true)
     })
   })
 })
