@@ -115,6 +115,20 @@ describe('validates', function () {
         })
       })
     })
+
+    describe('not regex format argument', function () {
+      describe('string', function () {
+        it('should be false', function () {
+          expect(pattern('foo', 'hello')).to.be(false)
+        })
+      })
+
+      describe('object', function () {
+        it('should be false', function () {
+          expect(pattern('foo', {})).to.be(false)
+        })
+      })
+    })
   })
 
 
@@ -142,6 +156,12 @@ describe('validates', function () {
     describe('not string', function () {
       it('should be false', function () {
         expect(minLength(111, '4')).to.be(false)
+      })
+    })
+
+    describe('not integer argument', function () {
+      it('should be false', function () {
+        expect(minLength('aaaa', 'hello')).to.be(false)
       })
     })
   })
@@ -173,6 +193,12 @@ describe('validates', function () {
         expect(maxLength({}, '4')).to.be(false)
       })
     })
+
+    describe('not integer argument', function () {
+      it('should be false', function () {
+        expect(maxLength('aaaa', 'hello')).to.be(false)
+      })
+    })
   })
 
 
@@ -202,6 +228,12 @@ describe('validates', function () {
         expect(min(function () {}, '4')).to.be(false)
       })
     })
+
+    describe('not integer argument', function () {
+      it('should be false', function () {
+        expect(min('5', 'hello')).to.be(false)
+      })
+    })
   })
 
 
@@ -229,6 +261,12 @@ describe('validates', function () {
     describe('not number', function () {
       it('should be false', function () {
         expect(max([1, 2], '4')).to.be(false)
+      })
+    })
+
+    describe('not integer argument', function () {
+      it('should be false', function () {
+        expect(max('5', 'hello')).to.be(false)
       })
     })
   })
