@@ -23,8 +23,7 @@ describe('pattern', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
-        validator: validator,
-        //data: { msg: '111' }
+        component: validator,
         data: function () { return { msg: '111' } }
       })
       targetVM = vm._children[0]
@@ -58,8 +57,7 @@ describe('pattern', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="msg" v-validate="pattern: /hello/i">',
-        validator: validator,
-        //data: { msg: null }
+        component: validator,
         data: function () { return { msg: null } }
       })
       targetVM = vm._children[0]

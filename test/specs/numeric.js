@@ -23,7 +23,7 @@ describe('min', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="min: 0">',
-        validator: validator,
+        component: validator,
         data: function () { return { threshold: null } }
       })
       targetVM = vm._children[0]
@@ -97,7 +97,7 @@ describe('max', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="max: 100">',
-        validator: validator,
+        component: validator,
         data: function () { return { threshold: null } }
       })
       targetVM = vm._children[0]

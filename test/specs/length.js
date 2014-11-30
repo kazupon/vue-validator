@@ -23,7 +23,7 @@ describe('minLength', function () {
     beforeEach(function () {
       vm = createInstance({
           target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
-          validator: validator,
+          component: validator,
           data: function () { return { comment: null } }
       })
       targetVM = vm._children[0]
@@ -85,7 +85,7 @@ describe('maxLength', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
-        validator: validator,
+        component: validator,
         data: function () { return { comment: null } }
       })
       targetVM = vm._children[0]

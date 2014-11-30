@@ -32,6 +32,7 @@ var wrapTemplate = exports.wrapTemplate = function (target, name, tag) {
  *
  * @params {String} target
  * @params {String} name
+ * @params {String} component
  * @params {Object} validator
  * @params {Object} data
  * @return {Object} created Vue component instance
@@ -41,14 +42,16 @@ exports.createInstance = function (params) {
   params = params || {}
   params.target = params.target || ''
   params.name = params.name || 'vue-validator'
+  params.component = params.component || {}
   params.validator = params.validator || {}
   params.data = params.data || {}
 
   var components = {}
-  components[params.name] = params.validator
+  components[params.name] = params.component
 
   var Validator = Vue.extend({
     components: components,
+    validator: params.validator,
     template: wrapTemplate(params.target, params.name),
     el: function () {
       var el = document.createElement('div')

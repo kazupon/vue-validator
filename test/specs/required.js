@@ -24,7 +24,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
-          validator: validator,
+          component: validator,
           data: function () { return { msg: null } }
         })
         targetVM = vm._children[0]
@@ -42,7 +42,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
-          validator: validator,
+          component: validator,
           data: function () { return { msg: 'hello' } }
         })
         targetVM = vm._children[0]
@@ -63,7 +63,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" value="hello" v-model="msg" v-validate="required">',
-          validator: validator,
+          component: validator,
           data: function () { return { msg: null } }
         })
         targetVM = vm._children[0]
@@ -78,7 +78,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" value="" v-model="msg" v-validate="required">',
-          validator: validator,
+          component: validator,
           data: function () { return { msg: 'hello' } }
         })
         targetVM = vm._children[0]

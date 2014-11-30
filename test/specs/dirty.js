@@ -21,7 +21,7 @@ describe('dirty', function () {
   beforeEach(function () {
     vm = createInstance({
        target: '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">',
-       validator: validator,
+       component: validator,
        data: function () { return { username: '' } }
     })
     targetVM = vm._children[0]

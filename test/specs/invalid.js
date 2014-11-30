@@ -23,7 +23,7 @@ describe('invalid', function () {
       + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
     vm = createInstance({
        target: inputs,
-       validator: validator,
+       component: validator,
        data: function () { return { username: '', zip: '' } }
     })
     targetVM = vm._children[0]
