@@ -1,7 +1,7 @@
 /**
- * export(s)
+ * Export(s)
  */
 
-module.exports = function (Vue, options) {
-  // TODO: must be implemented !!
+module.exports = {
+  mixins: [require('./lib/mixin')]
 }
