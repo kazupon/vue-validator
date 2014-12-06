@@ -1,14 +1,16 @@
-WEBPACK = node_modules/.bin/webpack
 KARMA = node_modules/karma/bin/karma
-SRCS = $(shell find test/ -name "*.js")
+SRCS = index.js karma.conf.js webpack.conf.js task/ \
+	   lib/*.js test/specs/*.js
 
 
-dist: check node_modules index.js
-	@$(WEBPACK) index.js dist/vue-validator.js
+dist: check node_modules
+	@./task/dist
+
+minify: check node_modules
+	@./task/minify
 
 check:
-	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore \
-		index.js $(SRCS)
+	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore $(SRCS)
 
 node_modules: package.json
 	@npm install
