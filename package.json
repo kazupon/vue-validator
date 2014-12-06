@@ -12,7 +12,9 @@
     "url": "git://github.com/kazupon/vue-validator.git"
   },
   "keywords": [
-    "vue"
+    "vue",
+    "validation",
+    "plugin"
   ],
   "author": "kazuya kawaguchi",
   "license": "MIT",

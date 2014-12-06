@@ -1,14 +1,18 @@
 {
   "name": "vue-validator",
+  "repo": "kazupon/vue-validator",
   "version": "0.11.0",
   "description": "A collection of commonly-used validators for Vue.js",
   "keywords": [
-    "vue"
+    "vue",
+    "validation",
+    "plugin"
   ],
   "license": "MIT",
   "scripts": [
     "lib/validates.js",
     "lib/validator.js",
     "index.js"
-  ]
+  ],
+  "main": "index.js"
 }
