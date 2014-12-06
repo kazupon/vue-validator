@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('pattern', function () {
   
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -23,8 +24,7 @@ describe('pattern', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
-        component: validator,
-        data: function () { return { msg: '111' } }
+        data: { msg: '111' }
       })
       targetVM = vm._children[0]
     })
@@ -57,8 +57,7 @@ describe('pattern', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="msg" v-validate="pattern: /hello/i">',
-        component: validator,
-        data: function () { return { msg: null } }
+        data: { msg: null }
       })
       targetVM = vm._children[0]
     })

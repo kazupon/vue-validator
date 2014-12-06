@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('valid', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -22,9 +23,7 @@ describe('valid', function () {
     var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
       + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
     vm = createInstance({
-       target: inputs,
-       component: validator,
-       data: function () { return { username: '', zip: '' } }
+       target: inputs, data: { username: '', zip: '' }
     })
     targetVM = vm._children[0]
   })

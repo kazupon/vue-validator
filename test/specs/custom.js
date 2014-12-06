@@ -1,9 +1,9 @@
 /**
- * import(s)
+ * Import(s)
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('custom', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -23,7 +24,6 @@ describe('custom', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="address" v-validate="email">',
-        component: validator,
         validator: {
           validates: {
             email: function (val) {
@@ -31,7 +31,7 @@ describe('custom', function () {
             }
           }
         },
-        data: function () { return { address: '' } }
+        data: { address: '' }
       })
       targetVM = vm._children[0]
     })
@@ -123,18 +123,16 @@ describe('custom', function () {
   describe('namespace', function () {
     beforeEach(function () {
       vm = createInstance({
-        target: '<input type="text" v-model="msg" v-validate1="required">',
-        component: validator,
+        target: '<input type="text" v-model="msg" v-validate="required">',
         validator: {
           namespace: {
             validation: 'validation1',
             valid: 'valid1',
             invalid: 'invalid1',
-            dirty: 'dirty1',
-            directive: 'validate1'
+            dirty: 'dirty1'
           }
         },
-        data: function () { return { msg: '' } }
+        data: { msg: '' }
       })
       targetVM = vm._children[0]
     })

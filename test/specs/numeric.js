@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('min', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -23,8 +24,7 @@ describe('min', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="min: 0">',
-        component: validator,
-        data: function () { return { threshold: null } }
+        data: { threshold: null }
       })
       targetVM = vm._children[0]
     })
@@ -86,6 +86,7 @@ describe('max', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -97,8 +98,7 @@ describe('max', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="threshold" v-validate="max: 100">',
-        component: validator,
-        data: function () { return { threshold: null } }
+        data: { threshold: null }
       })
       targetVM = vm._children[0]
     })

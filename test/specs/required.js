@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('required', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -24,8 +25,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
-          component: validator,
-          data: function () { return { msg: null } }
+          data: { msg: null }
         })
         targetVM = vm._children[0]
 
@@ -42,8 +42,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
-          component: validator,
-          data: function () { return { msg: 'hello' } }
+          data: { msg: 'hello' }
         })
         targetVM = vm._children[0]
 
@@ -63,8 +62,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" value="hello" v-model="msg" v-validate="required">',
-          component: validator,
-          data: function () { return { msg: null } }
+          data: { msg: null }
         })
         targetVM = vm._children[0]
       })
@@ -78,8 +76,7 @@ describe('required', function () {
       beforeEach(function () {
         vm = createInstance({
           target: '<input type="text" value="" v-model="msg" v-validate="required">',
-          component: validator,
-          data: function () { return { msg: 'hello' } }
+          data: { msg: 'hello' }
         })
         targetVM = vm._children[0]
       })

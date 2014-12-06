@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('dirty', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -21,8 +22,7 @@ describe('dirty', function () {
   beforeEach(function () {
     vm = createInstance({
        target: '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">',
-       component: validator,
-       data: function () { return { username: '' } }
+       data: { username: '' }
     })
     targetVM = vm._children[0]
   })

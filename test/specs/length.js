@@ -3,7 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
-var validator = require('../../index')
+var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
 
@@ -12,6 +12,7 @@ describe('minLength', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -23,8 +24,7 @@ describe('minLength', function () {
     beforeEach(function () {
       vm = createInstance({
           target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
-          component: validator,
-          data: function () { return { comment: null } }
+          data: { comment: null }
       })
       targetVM = vm._children[0]
     })
@@ -74,6 +74,7 @@ describe('maxLength', function () {
 
   before(function () {
     Vue.config.async = false
+    Vue.use(plugin)
   })
 
   after(function () {
@@ -85,8 +86,7 @@ describe('maxLength', function () {
     beforeEach(function () {
       vm = createInstance({
         target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
-        component: validator,
-        data: function () { return { comment: null } }
+        data: { comment: null }
       })
       targetVM = vm._children[0]
     })
