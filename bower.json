@@ -18,6 +18,7 @@
     "components",
     "bower_components",
     "example",
+    "task",
     "test",
     "tests",
     "Makefile",

@@ -8,8 +8,7 @@
   "license": "MIT",
   "scripts": [
     "lib/validates.js",
-    "lib/directive.js",
-    "lib/mixin.js",
+    "lib/validator.js",
     "index.js"
   ]
 }
