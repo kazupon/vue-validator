@@ -7,7 +7,7 @@ module.exports = function (config) {
   var browsers =  ['PhantomJS']
   if (reporter === 'lcov') {
     reporters.push('coveralls')
-    browsers = browsers.concat(['Chrome', 'Safari', 'Firefox'])
+    //browsers = browsers.concat(['Chrome', 'Safari', 'Firefox'])
   }
 
   config.set({
