@@ -1,0 +1,15 @@
+{
+  "name": "webpack-vue-validator-example",
+  "private": true,
+  "version": "0.0.1",
+  "description": "webpack vue-validator example",
+  "license": "MIT",
+  "keywords": [
+    "Vue.js",
+    "validate"
+  ],
+  "dependencies": {
+    "vue": "^0.11.2",
+    "vue-validator": "kazupon/vue-validator#master"
+  }
+}

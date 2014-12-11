@@ -1,6 +1,7 @@
 node_modules
+coverage
 bower_components
-components
+*.log
 .DS_Store
 *.swp
 *~

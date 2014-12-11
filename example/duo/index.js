@@ -1,5 +1,6 @@
-var validator = window['vue-validator']
-
+var Vue = require('yyx990803/vue@0.11.2')
+var validator = require('kazupon/vue-validator@0.11.0')
+    
 Vue.use(validator)
 
 var form = new Vue({
