@@ -10,8 +10,8 @@
     "internationalization"
   ],
   "dependencies": {
-    "yyx990803/vue": "v0.10.3",
-    "kazupon/vue-validator": "master"
+    "yyx990803/vue": "0.11.2",
+    "kazupon/vue-validator": "0.11.0"
   },
   "development": {},
   "scripts": [
