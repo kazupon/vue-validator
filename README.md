@@ -260,7 +260,7 @@ var MyComponent = Vue.extend({
   }
 })
 
-new MyValidator().$mount('#user-form')
+new MyComponent().$mount('#user-form')
 ```
 
 ```html
