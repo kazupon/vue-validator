@@ -8,7 +8,7 @@ Validator component for Vue.js
 
 
 # Resuqirements
-- Vue.js ^`0.11.2`
+- Vue.js ~`0.11.2`
 
 
 # Installation
@@ -64,7 +64,7 @@ The following is an example.
 
 
 
-# Data scopes
+# Data 
 
 ## validation
 The `validation` keep the validation result of validator per each `v-model`.
@@ -90,9 +90,13 @@ For example, if you use `required` validator on the password `v-model`, as follo
 ## valid
 The `valid` keep the validation result of validator.
 
+- type: Boolean
+    - true: success
+    - false: failed
+
 The `valid` keep two types validation result.
 
-### all validator
+### validation of all models
 For example, you can use `valid` as follows
 
 ```html
@@ -113,7 +117,7 @@ For example, you can use `valid` as follows
 
 In the above example, the `valid` keep the validation result of all validator.
 
-### each validator
+### validation per model
 For example, you can use `valid` as follows
 
 ```html
@@ -134,10 +138,28 @@ For example, you can use `valid` as follows
 </form>
 ```
 
-In the above example, the `valid` keep the validation result of each validator.
+## invalid
+The `invalid` (reverse of `valid`) keep the validation result of validator. 
+
+- type: Boolean
+    - true: failed
+    - false: success
+
+The `invalid` keep two types validation result.
+
+### validation of all models
+the `invalid` keep the validation result of all validator (See the example of `valid`).
+
+### validation per model
+the `invalid` keep the validation result of each validator (See the example of `valid`).
+
 
 ## dirty
 The `dirty` keep whether there was a change since initial value of `v-model`.
+
+- type: Boolean
+    - true: changed from the initial data
+    - false: not changed from the initial data
 
 For example, you can use `dirty` as follows
 
