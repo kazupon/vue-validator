@@ -1,3 +1,7 @@
+# v0.11.1 / 2014-12-26
+
+* Add end-to-end and saucelabs tests
+
 # v0.11.0 / 2014-12-12
 
 * Release vue-validator for Vue.js 0.11.2 later
