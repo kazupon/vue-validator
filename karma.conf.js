@@ -53,16 +53,16 @@ module.exports = function (config) {
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage']
       settings.coverageReporter = {
-        type : 'html', 
-        dir : 'coverage/'
+        type: 'html', 
+        dir: 'coverage/'
       }
       break
     case 'coveralls':
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage', 'coveralls']
       settings.coverageReporter = {
-        type : 'lcov', 
-        dir : 'coverage/'
+        type: 'lcov', 
+        dir: 'coverage/'
       }
       break
     case 'sauce':
