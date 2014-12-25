@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - 0.10
+before_install:
+  - npm install -g phantomjs
 env:
   global:
     - secure: ddVVDRU26t7d/L1biEPG6V9h8YZgzZ17BGpyTqHcyTla8pwHhg3pwpMHq0xFvrrvwnjx0/iMZYr+EIBWSboK/XbamvmS3FQOta25q/K3kHfSdv++2gT4kMYhnCuhBKq68q16FyL6f2XXpbh74DcS7BA87OtMnaxEeq2N3w2GDLQ=
