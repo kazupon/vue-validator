@@ -36,7 +36,7 @@ describe('registration', function () {
   }
 
   describe('first loaded page', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('should be invalid', function (done) {
       new Nightmare()
@@ -60,7 +60,7 @@ describe('registration', function () {
 
 
   describe('input valid username', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('should be valid', function (done) {
       new Nightmare()
@@ -85,7 +85,7 @@ describe('registration', function () {
 
 
   describe('input valid email', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('should be valid', function (done) {
       new Nightmare()
@@ -110,7 +110,7 @@ describe('registration', function () {
 
 
   describe('input valid confirm email', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('should be valid', function (done) {
       new Nightmare()
@@ -136,7 +136,7 @@ describe('registration', function () {
 
 
   describe('input valid password', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('should be valid', function (done) {
       new Nightmare()
@@ -161,7 +161,7 @@ describe('registration', function () {
 
 
   describe('input valid fileds', function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     it('join button should be enabled', function (done) {
       new Nightmare()
