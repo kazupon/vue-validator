@@ -1,3 +1,7 @@
+# v0.11.2 / 2014-12-29
+
+* Change saucelabs account
+
 # v0.11.1 / 2014-12-26
 
 * Add end-to-end and saucelabs tests
