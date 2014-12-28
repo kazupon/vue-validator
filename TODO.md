@@ -1,4 +1,4 @@
 # TODO
 - [x] multiple browser testing with saucelabs
-- [ ] create saucelabs account for vue-validator repo
-- [ ] e2e test
+- [x] create saucelabs account for vue-validator repo
+- [x] e2e test
