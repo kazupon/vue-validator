@@ -9,7 +9,7 @@ var pack = require('./package.json')
 var banner =
   '/**\n' +
   ' * ' + pack.name + ' v' + pack.version + '\n' +
-  ' * (c) ' + new Date().getFullYear() + ' ' + pack.author + '\n' +
+  ' * (c) 2014-' + new Date().getFullYear() + ' ' + pack.author + '\n' +
   ' * Released under the ' + pack.license + ' License.\n' +
   ' */\n'
 

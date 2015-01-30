@@ -1,7 +1,7 @@
 # vue-validator
 
-[![Build Status](https://travis-ci.org/kazupon/vue-validator.svg?branch=master)](https://travis-ci.org/kazupon/vue-validator)
-[![Coverage Status](https://img.shields.io/coveralls/kazupon/vue-validator.svg)](https://coveralls.io/r/kazupon/vue-validator)
+[![Build Status](https://travis-ci.org/vuejs/vue-validator.svg?branch=master)](https://travis-ci.org/vuejs/vue-validator)
+[![Coverage Status](https://img.shields.io/coveralls/vuejs/vue-validator.svg)](https://coveralls.io/r/vuejs/vue-validator)
 [![Sauce Test Status](https://saucelabs.com/buildstatus/vue-validator)](https://saucelabs.com/u/vue-validator)
 
 
@@ -14,9 +14,9 @@ Validator component for Vue.js
 
 # Installation
 
-## browserify (npm)
+## npm
 ```shell
-$ npm install kazupon/vue-validator
+$ npm install vue-validator
 ```
 
 ## bower
@@ -28,13 +28,13 @@ $ bower install vue-validator
 ## component
 
 ```shell
-$ component install kazupon/vue-validator
+$ component install vuejs/vue-validator
 ```
 
 ## duo
 
 ```javascript
-var validator = require('kazupon/vue-validator')
+var validator = require('vuejs/vue-validator')
 ```
 
 
@@ -384,8 +384,6 @@ If you did not specify, you can use validation directive name as 'v-validate' (d
 # Testing
 
 ```shell
-$ git clone git@github.com:kazupon/vue-validator.git
-$ npm install
 $ make test
 ```
 

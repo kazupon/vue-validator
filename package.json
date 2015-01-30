@@ -1,14 +1,14 @@
 {
   "name": "vue-validator",
-  "version": "0.11.2",
-  "description": "A collection of commonly-used validators for Vue.js",
+  "version": "0.11.3",
+  "description": "Validator component for Vue.js",
   "main": "index.js",
   "scripts": {
     "test": "make ci"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kazupon/vue-validator.git"
+    "url": "https://github.com/vuejs/vue-validator.git"
   },
   "keywords": [
     "vue",
@@ -18,9 +18,9 @@
   "author": "kazuya kawaguchi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kazupon/vue-validator/issues"
+    "url": "https://github.com/vuejs/vue-validator/issues"
   },
-  "homepage": "https://github.com/kazupon/vue-validator",
+  "homepage": "https://github.com/vuejs/vue-validator",
   "devDependencies": {
     "expect.js": "^0.3.1",
     "jshint": "^2.5.0",

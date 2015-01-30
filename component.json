@@ -1,8 +1,8 @@
 {
   "name": "vue-validator",
-  "repo": "kazupon/vue-validator",
-  "version": "0.11.2",
-  "description": "A collection of commonly-used validators for Vue.js",
+  "repo": "vuejs/vue-validator",
+  "version": "0.11.3",
+  "description": "Validator component for Vue.js",
   "keywords": [
     "vue",
     "validation",

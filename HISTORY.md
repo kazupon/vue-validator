@@ -1,3 +1,7 @@
+# v0.11.3 / 2015-01-31
+
+* Change namespace for vuejs orginaization
+
 # v0.11.2 / 2014-12-29
 
 * Change saucelabs account

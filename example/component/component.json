@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "yyx990803/vue": "0.11.2",
-    "kazupon/vue-validator": "0.11.0"
+    "vuejs/vue-validator": "0.11.0"
   },
   "development": {},
   "scripts": [
