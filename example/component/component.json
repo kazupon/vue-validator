@@ -1,0 +1,20 @@
+{
+  "name": "component-vue-validator-example",
+  "private": true,
+  "version": "0.0.1",
+  "description": "vue-validate example",
+  "license": "MIT",
+  "keywords": [
+    "Vue.js",
+    "validate"
+  ],
+  "dependencies": {
+    "yyx990803/vue": "0.11.2",
+    "kazupon/vue-validator": "0.11.0"
+  },
+  "development": {},
+  "scripts": [
+    "index.js"
+  ],
+  "main": "index.js"
+}

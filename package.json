@@ -1,0 +1,43 @@
+{
+  "name": "vue-validator",
+  "version": "0.11.2",
+  "description": "A collection of commonly-used validators for Vue.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "make ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kazupon/vue-validator.git"
+  },
+  "keywords": [
+    "vue",
+    "validation",
+    "plugin"
+  ],
+  "author": "kazuya kawaguchi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kazupon/vue-validator/issues"
+  },
+  "homepage": "https://github.com/kazupon/vue-validator",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "jshint": "^2.5.0",
+    "karma": "^0.12.24",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-commonjs": "0.0.12",
+    "karma-coverage": "^0.2.6",
+    "karma-coveralls": "^0.1.4",
+    "karma-expect": "^1.1.0",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-mocha": "^0.1.9",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-safari-launcher": "^0.1.1",
+    "karma-sauce-launcher": "^0.2.10",
+    "mocha": "^1.18.2",
+    "nightmare": "^1.6.5",
+    "vue": "~0.11.2",
+    "webpack": "^1.4.13"
+  }
+}

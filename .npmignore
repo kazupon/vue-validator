@@ -1,0 +1,7 @@
+.git
+.gitignore
+.DS_Store
+node_modules
+coverage
+bower_components
+npm-debug.log
