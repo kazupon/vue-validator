@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/vuejs/vue-validator.svg?branch=master)](https://travis-ci.org/vuejs/vue-validator)
 [![Coverage Status](https://img.shields.io/coveralls/vuejs/vue-validator.svg)](https://coveralls.io/r/vuejs/vue-validator)
-[![Sauce Test Status](https://saucelabs.com/buildstatus/vue-validator)](https://saucelabs.com/u/vue-validator)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/vuejs-validator)](https://saucelabs.com/u/vuejs-validator)
 
 
 Validator component for Vue.js
