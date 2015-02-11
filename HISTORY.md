@@ -1,3 +1,7 @@
+# v1.0.0 / 2015-02-12
+
+* Bump to latest version
+
 # v0.11.3 / 2015-01-31
 
 * Change namespace for vuejs orginaization
