@@ -40,7 +40,7 @@ var validator = require('vuejs/vue-validator')
 
 # Usage
 
-```js
+```javascript
 var Vue = require('vue')
 var validator = require('vue-validator')
 
@@ -149,10 +149,10 @@ The `invalid` (reverse of `valid`) keep the validation result of validator.
 The `invalid` keep two types validation result.
 
 ### validation of all models
-the `invalid` keep the validation result of all validator (See the example of `valid`).
+The `invalid` keep the validation result of all validator (See the example of `valid`).
 
 ### validation per model
-the `invalid` keep the validation result of each validator (See the example of `valid`).
+The `invalid` keep the validation result of each validator (See the example of `valid`).
 
 
 ## dirty
@@ -220,7 +220,7 @@ For example, you can use `minLength` validator as follows.
 <form id="blog-form">
     <input type="text" v-model="comment" v-validate="minLength: 16">
     <div>
-        <span v-if="validation.comment.minLength"">too short your comment.</span>
+        <span v-if="validation.comment.minLength">too short your comment.</span>
     </div>
 </form>
 ```
@@ -268,7 +268,7 @@ Additionally, you can use custom validator.
 
 The following custom validator
 
-```js
+```javascript
 var MyComponent = Vue.extend({
   data: {
     name: '',
@@ -312,7 +312,7 @@ Your custom validator function should return the boolean value (valid -> `true`,
 ### namespace
 You can specify installation options such as the following example.
 
-```js
+```javascript
 var MyComponent = Vue.extend({
   ...
   validator: {
@@ -359,7 +359,7 @@ If you did not specify, you can access validation result name as 'dirty' (defaul
 ## Plugin Options
 You can specify options such as the following example.
 
-```js
+```javascript
 Vue.use(plugin, {
   component: '$myvalidator',
   directive: 'myvalidate'
