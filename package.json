@@ -1,6 +1,6 @@
 {
   "name": "vue-validator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validator component for Vue.js",
   "main": "index.js",
   "scripts": {
