@@ -6,7 +6,7 @@ before_install:
 - npm install -g phantomjs
 env:
   global:
-  - secure: LuLx2Rasuwy4KBCdiGrGsatpNU+juEKgVrLp5uVQKYcwna4F8vev5jdV1lWo2NI5rYpn3PO2ijxc6YLSRT7TNlgpHwj+hEfMLFPOr/fuVL9HNAWfBTI+l0LATNSXygRSnYq26erKf3i+FFnRm62vwYedOjcoLq83Bo08pwkD8ak=
-  - secure: C0WLrqUsjSeZHJE5BntnV9zdsmmez+Oz39QGeoCgLW2o3fSTkvP0QApFRHvjq4P+9dCgg8OWAYQsEikpocqLJM00c0DocTHmN0rmUHzGsnKapdC5iTW/HdGKZtmDIxZvX3mscT7i4rBVniqDKZvRKMaws2CbscujB2Ey20Q+aO8=
+  - secure: sqmvPoHV5nK5eGc97FChcX2CWhM+sbM8rqHOyEkhFuhE7hKtDIZV1c38YQqOEPzjH3qW6iQm8AEbWoUc2vdJNDTRYfdiIG02lbtEuHLI4s+YvEo+7ikEh8WKKtMMvrLLctYApa9opFZd5YTxHe4NToYNJaPkMmjshHtWkQQr9PQ=
+  - secure: 0qXOcKRiQdkH1eDnxrWFo5zslFqRaNlcyJ4tBR+bCTq+Cku55juIFCEbGqc//BafS16TZn9hAGHKZVvM1IF3GJShZVN3ESKrRnGVD2LvJMDgaRszYtNXs0c2oKcgAqDR46tCPyTc3cVrsM8fm8+sgTzd56oggXbJPrekWBZsNBo=
 addons:
   sauce_connect: true
