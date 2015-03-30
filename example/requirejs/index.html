@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>vue-validate example for browserify</title>
+    <title>vue-validator example for require.js</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
@@ -27,6 +27,6 @@
         <p v-if="validation.zip.valid">zip: OK</p>
       </div>
     </form>
-    <script src="./build.js"></script>
+    <script data-main="index.js" src="bower_components/requirejs/require.js"></script>
   </body>
 </html>

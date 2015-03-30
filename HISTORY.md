@@ -1,3 +1,9 @@
+# v1.0.1 / 2015-03-30
+
+* Update READEME
+* Add example for require.js
+* Update examples
+
 # v1.0.0 / 2015-02-12
 
 * Bump to latest version
