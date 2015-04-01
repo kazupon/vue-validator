@@ -108,7 +108,7 @@ For example, you can use `valid` as follows
     <div>
         <span v-if="validation.id.required">required your ID.</span>
         <span v-if="validation.id.minLength">too short your ID.</span>
-        <span v-if="validation.id.minLength">too long your ID.</span>
+        <span v-if="validation.id.maxLength">too long your ID.</span>
         <span v-if="validation.password.required">required your password.</span>
         <span v-if="validation.password.minLength">too short your password.</span>
         <span v-if="validation.password.maxLength">too long your password.</span>
@@ -127,7 +127,7 @@ For example, you can use `valid` as follows
         ID: <input type="text" v-model="id" v-validate="required, minLength: 3, maxLength: 16"><br />
         <span v-if="validation.id.required">required your ID.</span>
         <span v-if="validation.id.minLength">too short your ID.</span>
-        <span v-if="validation.id.minLength">too long your ID.</span>
+        <span v-if="validation.id.maxLength">too long your ID.</span>
     </div>
     <div v-class="error: validation.password.valid">
         Password: <input type="password" v-model="password" v-validate="required, minLength: 8 maxLength: 16"><br />
