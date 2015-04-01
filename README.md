@@ -97,7 +97,7 @@ The `valid` keep the validation result of validator.
 
 The `valid` keep two types validation result.
 
-### validation of all models
+### all models validation
 For example, you can use `valid` as follows
 
 ```html
@@ -108,7 +108,7 @@ For example, you can use `valid` as follows
     <div>
         <span v-if="validation.id.required">required your ID.</span>
         <span v-if="validation.id.minLength">too short your ID.</span>
-        <span v-if="validation.id.minLength">too long your ID.</span>
+        <span v-if="validation.id.maxLength">too long your ID.</span>
         <span v-if="validation.password.required">required your password.</span>
         <span v-if="validation.password.minLength">too short your password.</span>
         <span v-if="validation.password.maxLength">too long your password.</span>
@@ -118,7 +118,7 @@ For example, you can use `valid` as follows
 
 In the above example, the `valid` keep the validation result of all validator.
 
-### validation per model
+### each model validation
 For example, you can use `valid` as follows
 
 ```html
@@ -127,7 +127,7 @@ For example, you can use `valid` as follows
         ID: <input type="text" v-model="id" v-validate="required, minLength: 3, maxLength: 16"><br />
         <span v-if="validation.id.required">required your ID.</span>
         <span v-if="validation.id.minLength">too short your ID.</span>
-        <span v-if="validation.id.minLength">too long your ID.</span>
+        <span v-if="validation.id.maxLength">too long your ID.</span>
     </div>
     <div v-class="error: validation.password.valid">
         Password: <input type="password" v-model="password" v-validate="required, minLength: 8 maxLength: 16"><br />
@@ -148,10 +148,10 @@ The `invalid` (reverse of `valid`) keep the validation result of validator.
 
 The `invalid` keep two types validation result.
 
-### validation of all models
+### all models validation
 The `invalid` keep the validation result of all validator (See the example of `valid`).
 
-### validation per model
+### each model validation
 The `invalid` keep the validation result of each validator (See the example of `valid`).
 
 

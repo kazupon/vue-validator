@@ -1,6 +1,6 @@
 {
   "name": "vue-validator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Validator component for Vue.js",
   "main": "index.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "mocha": "^1.18.2",
     "nightmare": "^1.6.5",
     "vue": "~0.11.2",
-    "webpack": "^1.4.13"
+    "webpack": "^1.4.13",
+    "commander": "^2.7.1"
   }
 }
