@@ -97,7 +97,7 @@ The `valid` keep the validation result of validator.
 
 The `valid` keep two types validation result.
 
-### validation of all models
+### all models validation
 For example, you can use `valid` as follows
 
 ```html
@@ -118,7 +118,7 @@ For example, you can use `valid` as follows
 
 In the above example, the `valid` keep the validation result of all validator.
 
-### validation per model
+### each model validation
 For example, you can use `valid` as follows
 
 ```html
@@ -148,10 +148,10 @@ The `invalid` (reverse of `valid`) keep the validation result of validator.
 
 The `invalid` keep two types validation result.
 
-### validation of all models
+### all models validation
 The `invalid` keep the validation result of all validator (See the example of `valid`).
 
-### validation per model
+### each model validation
 The `invalid` keep the validation result of each validator (See the example of `valid`).
 
 
