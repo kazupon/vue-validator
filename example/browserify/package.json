@@ -1,8 +1,8 @@
 {
-  "name": "browserify-vue-validator-example",
+  "name": "vue-validator-example-for-browserify",
   "private": true,
   "version": "0.0.1",
-  "description": "browserify vue-validator example",
+  "description": "vue-validator example for browserify",
   "license": "MIT",
   "keywords": [
     "Vue.js",
@@ -10,6 +10,6 @@
   ],
   "dependencies": {
     "vue": "^0.11.2",
-    "vue-validator": "vuejs/vue-validator#master"
+    "vue-validator": "1.0.1"
   }
 }
