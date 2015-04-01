@@ -1,3 +1,8 @@
+# v1.0.2 / 2015-04-02
+
+* Update READEME
+* Fix saucelabs failed on the travis ci
+
 # v1.0.1 / 2015-03-30
 
 * Update READEME
