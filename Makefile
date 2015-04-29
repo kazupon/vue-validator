@@ -3,19 +3,22 @@ MOCHA = ./node_modules/mocha/bin/_mocha
 SRCS = ./*.js lib/*.js test/specs/*.js test/specs/*.js
 
 
+lint:
+	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore $(SRCS)
+
 dist: lint node_modules
 	@./task/dist
 
 minify: lint node_modules
 	@./task/minify
 
-lint:
-	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore $(SRCS)
+semi: lint
+	@node_modules/.bin/semi rm $(SRCS) --silent
 
 node_modules: package.json
 	@npm install
 
-test: lint node_modules
+test: semi node_modules
 	@$(KARMA) start
 
 coverage:
