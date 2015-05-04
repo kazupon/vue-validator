@@ -13,6 +13,15 @@ function install (Vue, options) {
   options = options || {}
   var componentName = options.component = options.component || '$validator'
   var directiveName = options.directive = options.directive || 'validate'
+  var path = Vue.parsers.path
+
+  function getVal (obj, keypath) {
+    var ret = null
+    try {
+      ret = path.get(obj, keypath)
+    } catch (e) { }
+    return ret
+  }
 
   Vue.directive(directiveName, {
     priority: 1024,
@@ -30,20 +39,21 @@ function install (Vue, options) {
       var el = this.el
       var validation = $validator._getValidationNamespace('validation')
       var model = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
+      var keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
       var validator = this.arg ? this.arg : this.expression
       var arg = this.arg ? this.expression : null
-      var init = el.getAttribute('value') || vm[model]
+      var init = el.getAttribute('value') || vm.$get(keypath)
 
-      if (!$validator[validation][model]) {
-        $validator._defineModelValidationScope(model, init)
+      if (!getVal($validator[validation], keypath)) {
+        $validator._defineModelValidationScope(keypath, init)
       }
 
-      if (!$validator[validation][model][validator]) {
-        $validator._defineValidatorToValidationScope(model, validator)
-        $validator._addValidators(model, validator, arg)
+      if (!getVal($validator[validation], keypath + '.' + validator)) {
+        $validator._defineValidatorToValidationScope(keypath, validator)
+        $validator._addValidators(keypath, validator, arg)
       }
 
-      $validator._doValidate(model, init, $validator[model])
+      $validator._doValidate(keypath, init, $validator.$get(keypath))
     },
 
     unbind: function () {
