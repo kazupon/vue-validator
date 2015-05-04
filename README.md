@@ -8,6 +8,8 @@
 Validator component for Vue.js
 
 
+**NOTICE: This repository have been merge in the vuejs/vue-validator. From now on we will develop and maintenance on the vuejs/vue-validator.**
+
 # Resuqirements
 - Vue.js ~`0.11.2`
 
