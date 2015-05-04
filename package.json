@@ -1,26 +1,11 @@
 {
   "name": "vue-validator",
-  "version": "1.0.2",
   "description": "Validator component for Vue.js",
-  "main": "index.js",
-  "scripts": {
-    "test": "make ci"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vuejs/vue-validator.git"
-  },
-  "keywords": [
-    "vue",
-    "validation",
-    "plugin"
-  ],
+  "version": "1.0.2",
   "author": "kazuya kawaguchi",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vuejs/vue-validator/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-validator",
   "devDependencies": {
     "expect.js": "^0.3.1",
     "jshint": "^2.5.0",
@@ -37,8 +22,23 @@
     "karma-sauce-launcher": "^0.2.10",
     "mocha": "^1.18.2",
     "nightmare": "^1.6.5",
+    "semi": "^3.1.1",
     "vue": "~0.11.2",
-    "webpack": "^1.4.13",
-    "commander": "^2.7.1"
+    "webpack": "^1.4.13"
+  },
+  "homepage": "https://github.com/vuejs/vue-validator",
+  "keywords": [
+    "plugin",
+    "validation",
+    "vue"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuejs/vue-validator.git"
+  },
+  "scripts": {
+    "test": "make ci"
   }
 }
