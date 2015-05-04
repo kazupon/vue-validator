@@ -1,3 +1,7 @@
+# v1.0.3 / 2015-05-04
+
+* Fix keypath specific model (#12)
+
 # v1.0.2 / 2015-04-02
 
 * Update READEME
