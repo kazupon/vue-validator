@@ -1,3 +1,7 @@
+# v1.0.4 / 2015-05-08
+
+* Fix number option of v-model (#13)
+
 # v1.0.3 / 2015-05-04
 
 * Fix keypath specific model (#12)

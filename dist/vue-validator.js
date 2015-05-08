@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.0.3
+ * vue-validator v1.0.4
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -392,12 +392,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This function validate whether the minimum length of the string.
 	 *
 	 * @param {String} val
-	 * @param {String} min
+	 * @param {String|Number} min
 	 * @return {Boolean}
 	 */
 
 	function minLength (val, min) {
-	  return typeof(val) === 'string' && isInteger(min) && val.length >= parseInt(min)
+	  return typeof val === 'string' && isInteger(min) && val.length >= parseInt(min)
 	}
 
 
@@ -407,44 +407,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This function validate whether the maximum length of the string.
 	 *
 	 * @param {String} val
-	 * @param {String} max
+	 * @param {String|Number} max
 	 * @return {Boolean}
 	 */
 
 	function maxLength (val, max) {
-	  return typeof(val) === 'string' && isInteger(max) && val.length <= parseInt(max)
+	  return typeof val === 'string' && isInteger(max) && val.length <= parseInt(max)
 	}
 
 
 	/**
 	 * min
 	 *
-	 * This function validate whether the minimum value of the integer string.
+	 * This function validate whether the minimum value of the numberable value.
 	 *
-	 * @param {String} val
-	 * @param {String} arg minimum
+	 * @param {*} val
+	 * @param {*} arg minimum
 	 * @return {Boolean}
 	 */
 
 	function min (val, arg) {
-	  return typeof(val) === 'string' && isInteger(val) && 
-	    isInteger(arg) && parseInt(val) >= parseInt(arg)
+	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) >= +(arg))
 	}
 
 
 	/**
 	 * max
 	 *
-	 * This function validate whether the maximum value of the integer string.
+	 * This function validate whether the maximum value of the numberable value.
 	 *
-	 * @param {String} val
-	 * @param {String} arg maximum
+	 * @param {*} val
+	 * @param {*} arg maximum
 	 * @return {Boolean}
 	 */
 
 	function max (val, arg) {
-	  return typeof(val) === 'string' && isInteger(val) && 
-	    isInteger(arg) && parseInt(val) <= parseInt(arg)
+	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) <= +(arg))
 	}
 
 

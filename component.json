@@ -1,7 +1,7 @@
 {
   "name": "vue-validator",
   "repo": "vuejs/vue-validator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Validator component for Vue.js",
   "keywords": [
     "vue",
