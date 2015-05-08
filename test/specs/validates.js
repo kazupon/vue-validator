@@ -204,21 +204,63 @@ describe('validates', function () {
 
   describe('min', function () {
     describe('boundary', function () {
-      describe('value - 1', function () {
-        it('should be false', function () {
-          expect(min('3', '4')).to.be(false)
+      describe('value type: string', function () {
+        describe('value - 1', function () {
+          it('should be false', function () {
+            expect(min('3', '4')).to.be(false)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(min('4', 4)).to.be(true)
+          })
+        })
+
+        describe('value + 1', function () {
+          it('should be true', function () {
+            expect(min('5', '4')).to.be(true)
+          })
         })
       })
 
-      describe('just value', function () {
-        it('should be true', function () {
-          expect(min('4', '4')).to.be(true)
+      describe('value type: integer', function () {
+        describe('value - 1', function () {
+          it('should be false', function () {
+            expect(min(3, '4')).to.be(false)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(min(4, 4)).to.be(true)
+          })
+        })
+
+        describe('value + 1', function () {
+          it('should be true', function () {
+            expect(min(5, '4')).to.be(true)
+          })
         })
       })
 
-      describe('value + 1', function () {
-        it('should be true', function () {
-          expect(min('5', '4')).to.be(true)
+      describe('value type: float', function () {
+        describe('value - 0.1', function () {
+          it('should be false', function () {
+            expect(min(3.9, '4')).to.be(false)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(min(4.0, 4)).to.be(true)
+          })
+        })
+
+        describe('value + 0.1', function () {
+          it('should be true', function () {
+            expect(min(4.1, '4')).to.be(true)
+          })
         })
       })
     })
@@ -239,21 +281,63 @@ describe('validates', function () {
 
   describe('max', function () {
     describe('boundary', function () {
-      describe('value - 1', function () {
-        it('should be true', function () {
-          expect(max('7', '8')).to.be(true)
+      describe('value type: string', function () {
+        describe('value - 1', function () {
+          it('should be true', function () {
+            expect(max('7', '8')).to.be(true)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(max('8', 8)).to.be(true)
+          })
+        })
+
+        describe('value + 1', function () {
+          it('should be false', function () {
+            expect(max('9', '8')).to.be(false)
+          })
         })
       })
 
-      describe('just value', function () {
-        it('should be true', function () {
-          expect(max('8', '8')).to.be(true)
+      describe('value type: integer', function () {
+        describe('value - 1', function () {
+          it('should be true', function () {
+            expect(max(7, '8')).to.be(true)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(max(8, 8)).to.be(true)
+          })
+        })
+
+        describe('value + 1', function () {
+          it('should be false', function () {
+            expect(max(9, '8')).to.be(false)
+          })
         })
       })
 
-      describe('value + 1', function () {
-        it('should be false', function () {
-          expect(max('9', '8')).to.be(false)
+      describe('value type: float', function () {
+        describe('value - 0.1', function () {
+          it('should be true', function () {
+            expect(max(7.9, '8')).to.be(true)
+          })
+        })
+
+        describe('just value', function () {
+          it('should be true', function () {
+            expect(max(8.0, 8)).to.be(true)
+          })
+        })
+
+        describe('value + 0.1', function () {
+          it('should be false', function () {
+            expect(max(8.1, '8')).to.be(false)
+          })
         })
       })
     })
