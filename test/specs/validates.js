@@ -164,6 +164,12 @@ describe('validates', function () {
         expect(minLength('aaaa', 'hello')).to.be(false)
       })
     })
+
+    describe('integer argument', function () {
+      it('should be true', function () {
+        expect(minLength('aaaa', 4)).to.be(true)
+      })
+    })
   })
 
 
@@ -197,6 +203,12 @@ describe('validates', function () {
     describe('not integer argument', function () {
       it('should be false', function () {
         expect(maxLength('aaaa', 'hello')).to.be(false)
+      })
+    })
+
+    describe('integer argument', function () {
+      it('should be true', function () {
+        expect(maxLength('aaaa', 4)).to.be(true)
       })
     })
   })
