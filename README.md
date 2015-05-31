@@ -387,6 +387,12 @@ If you did not specify, you can use validation directive name as `v-validate` (d
 $ make test
 ```
 
+# Contributing
+- Fork it !
+- Create your top branch from `dev`: `git branch my-new-topic origin/dev`
+- Commit your changes: `git commit -am 'Add some topic'`
+- Push to the branch: `git push origin my-new-topic`
+- Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
 
 # TODO
 See the `TODO.md`
