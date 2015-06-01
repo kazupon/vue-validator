@@ -1,3 +1,7 @@
+# v1.0.5 / 2015-06-02
+
+* Add dirty of all models
+
 # v1.0.4 / 2015-05-08
 
 * Fix number option of v-model (#13)

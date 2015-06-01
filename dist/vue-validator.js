@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.0.4
+ * vue-validator v1.0.5
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -216,36 +216,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	      })
 	    },
 
+	    _defineDirtyProperty: function (target, getter) {
+	      Object.defineProperty(target, this._getValidationNamespace('dirty'), {
+	        enumerable: true,
+	        configurable: true,
+	        get: getter
+	      })
+	    },
+
 	    _defineProperties: function () {
 	      var self = this
+
+	      var walk = function (obj, propName, namespaces) {
+	        var ret = true
+	        var keys = Object.keys(obj)
+	        var i = keys.length
+	        var key, last
+	        while (i--) {
+	          key = keys[i]
+	          last = obj[key]
+	          if (!(key in namespaces) && typeof last === 'object') {
+	            ret = walk(last, propName, namespaces)
+	            if (!ret) { break }
+	          } else if (key === propName && typeof last !== 'object') {
+	            ret = last
+	            if (!ret) { break }
+	          }
+	        }
+	        return ret
+	      }
+
 	      this._defineValidProperty(this.$parent, function () {
 	        var validationName = self._getValidationNamespace('validation')
 	        var validName = self._getValidationNamespace('valid')
 	        var namespaces = self.$options.validator.namespace
 
-	        var walkValid = function (obj) {
-	          var ret = true
-	          var keys = Object.keys(obj)
-	          var i = keys.length
-	          var key, last
-	          while (i--) {
-	            key = keys[i]
-	            last = obj[key]
-	            if (!(key in namespaces) && typeof last === 'object') {
-	              ret = walkValid(last)
-	              if (!ret) { break }
-	            } else if (key === validName && typeof last !== 'object') {
-	              ret = last
-	              if (!ret) { break }
-	            }
-	          }
-	          return ret
-	        }
-
-	        return walkValid(this[validationName])
+	        return walk(this[validationName], validName, namespaces)
 	      })
 
 	      this._defineInvalidProperty(this.$parent)
+
+	      this._defineDirtyProperty(this.$parent, function () {
+	        var validationName = self._getValidationNamespace('validation')
+	        var dirtyName = self._getValidationNamespace('dirty')
+	        var namespaces = self.$options.validator.namespace
+
+	        return walk(this[validationName], dirtyName, namespaces)
+	      })
 	    },
 
 	    _defineValidationScope: function () {
