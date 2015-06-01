@@ -20,9 +20,11 @@ describe('dirty', function () {
   })
 
   beforeEach(function () {
+    var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
+      + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
     vm = createInstance({
-       target: '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">',
-       data: { username: '' }
+       target: inputs, 
+       data: { username: '', zip: '' }
     })
     targetVM = vm._children[0]
   })
@@ -31,15 +33,28 @@ describe('dirty', function () {
   describe('init instance', function () {
     describe('validation.username.dirty', function () {
       it('should be false', function () {
-        expect(targetVM.validation.username.valid).to.be(false)
+        expect(targetVM.validation.username.dirty).to.be(false)
+      })
+    })
+
+    describe('validation.zip.dirty', function () {
+      it('should be false', function () {
+        expect(targetVM.validation.zip.dirty).to.be(false)
+      })
+    })
+
+    describe('dirty', function () {
+      it('should be false', function () {
+        expect(targetVM.dirty).to.be(false)
       })
     })
   })
 
 
-  describe('edit username', function () {
+  describe('edit username, and zip', function () {
     beforeEach(function () {
       vm.username = 'kazupon'
+      vm.zip = '111-2222'
       vm._digest() // force update
     })
 
@@ -48,21 +63,41 @@ describe('dirty', function () {
         expect(targetVM.validation.username.dirty).to.be(true)
       })
     })
-  })
 
-
-  describe('edit, and reset username', function () {
-    beforeEach(function () {
-      vm.username = 'kazupon'
-      vm._digest() // force update
-
-      vm.username = ''
-      vm._digest() // force update
+    describe('validation.zip.dirty', function () {
+      it('should be true', function () {
+        expect(targetVM.validation.zip.dirty).to.be(true)
+      })
     })
 
-    describe('validation.username.dirty', function () {
-      it('should be false', function () {
-        expect(targetVM.validation.username.dirty).to.be(false)
+    describe('dirty', function () {
+      it('should be true', function () {
+        expect(targetVM.dirty).to.be(true)
+      })
+    })
+
+    describe('reset username', function () {
+      beforeEach(function () {
+        vm.username = ''
+        vm._digest() // force update
+      })
+
+      describe('validation.username.dirty', function () {
+        it('should be false', function () {
+          expect(targetVM.validation.username.dirty).to.be(false)
+        })
+      })
+
+      describe('validation.zip.dirty', function () {
+        it('should be true', function () {
+          expect(targetVM.validation.zip.dirty).to.be(true)
+        })
+      })
+
+      describe('dirty', function () {
+        it('should be false', function () {
+          expect(targetVM.dirty).to.be(false)
+        })
       })
     })
   })
