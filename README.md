@@ -9,7 +9,7 @@ Validator component for Vue.js
 
 
 # Resuqirements
-- Vue.js ~`0.11.2`
+- Vue.js ^`0.11.2`
 
 
 # Installation
@@ -65,7 +65,7 @@ The following is an example.
 
 
 
-# Data 
+# Properties
 
 ## validation
 The `validation` keep the validation result of validator per each `v-model`.
@@ -162,6 +162,9 @@ The `dirty` keep whether there was a change since initial value of `v-model`.
     - true: changed from the initial data
     - false: not changed from the initial data
 
+The `dirty` keep two types.
+
+### each model
 For example, you can use `dirty` as follows
 
 ```html
@@ -174,6 +177,21 @@ For example, you can use `dirty` as follows
 ```
 
 In the above example, the `dirty` keep the per each `v-model`.
+
+### all models
+The `dirty` keep the result of all moedls.
+
+For example, you can use `dirty` as follows
+
+```html
+<form id="user-form">
+    ID: <input type="text" v-model="id" v-validate="required, minLength: 3, maxLength: 16"><br />
+    Password: <input type="password" v-model="password" v-validate="required, minLength: 8 maxLength: 16"><br />
+    <input type="submit" value="send" v-if="valid && dirty">
+</form>
+```
+
+In the above example, the `dirty` keep the all `v-model`.
 
 
 # Directives
