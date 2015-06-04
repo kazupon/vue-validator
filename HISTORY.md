@@ -1,3 +1,7 @@
+# v1.0.6 / 2015-06-05
+
+* Support objects and arrays in required validator (#16)
+
 # v1.0.5 / 2015-06-02
 
 * Add dirty of all models
