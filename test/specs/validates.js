@@ -56,14 +56,30 @@ describe('validates', function () {
     })
 
     describe('object', function () {
-      it('should be true', function () {
-        expect(required({ foo: 'bar' })).to.be(true)
+      describe('empty', function () {
+        it('should be false', function () {
+          expect(required({})).to.be(false)
+        })
+      })
+
+      describe('not empty', function () {
+        it('should be true', function () {
+          expect(required({ foo: 'bar' })).to.be(true)
+        })
       })
     })
 
     describe('array', function () {
-      it('should be true', function () {
-        expect(required([1, 'foo'])).to.be(true)
+      describe('empty', function () {
+        it('should be false', function () {
+          expect(required([])).to.be(false)
+        })
+      })
+
+      describe('not empty', function () {
+        it('should be true', function () {
+          expect(required([1, 'foo'])).to.be(true)
+        })
       })
     })
 
