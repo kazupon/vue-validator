@@ -38,8 +38,7 @@ function install (Vue, options) {
       var $validator = vm[componentName]
       var el = this.el
       var validation = $validator._getValidationNamespace('validation')
-      var model = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
-      var keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
+      var keypath = this._keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
       var validator = this.arg ? this.arg : this.expression
       var arg = this.arg ? this.expression : null
       var init = el.getAttribute('value') || vm.$get(keypath)
@@ -53,14 +52,24 @@ function install (Vue, options) {
         $validator._addValidators(keypath, validator, arg)
       }
 
+      $validator._addManagedValidator(keypath, validator)
+
       $validator._doValidate(keypath, init, $validator.$get(keypath))
     },
 
     unbind: function () {
       var vm = this.vm
+      var keypath = this._keypath
+      var validator = this.arg ? this.arg : this.expression
       var $validator = vm[componentName]
 
-      if ($validator) {
+      $validator._undefineValidatorToValidationScope(keypath, validator)
+      $validator._deleteManagedValidator(keypath, validator)
+
+      if (!$validator._isManagedValidator()) {
+        for (var key in $validator.validation) {
+          $validator._undefineModelValidationScope(key)
+        }
         $validator.$destroy()
         vm[componentName] = null
         delete vm[componentName]
