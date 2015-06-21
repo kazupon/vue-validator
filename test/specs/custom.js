@@ -11,17 +11,12 @@ describe('custom', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
 
 
   describe('validates', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm = createInstance({
         target: '<input type="text" v-model="address" v-validate="email">',
         validator: {
@@ -34,6 +29,8 @@ describe('custom', function () {
         data: { address: '' }
       })
       targetVM = vm._children[0]
+      
+      Vue.nextTick(function () { done() })
     })
 
     describe('init instance', function () {
@@ -76,9 +73,10 @@ describe('custom', function () {
 
 
     describe('change address', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.address = 'test@domain.com'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       describe('validation.address.email', function () {
@@ -121,7 +119,7 @@ describe('custom', function () {
 
 
   describe('namespace', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm = createInstance({
         target: '<input type="text" v-model="msg" v-validate="required">',
         validator: {
@@ -135,6 +133,8 @@ describe('custom', function () {
         data: { msg: '' }
       })
       targetVM = vm._children[0]
+
+      Vue.nextTick(function () { done() })
     })
 
     describe('init instance', function () {
@@ -177,9 +177,10 @@ describe('custom', function () {
 
 
     describe('change address', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.msg = 'hello'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       describe('validation1.msg.required', function () {

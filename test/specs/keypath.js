@@ -11,7 +11,6 @@ describe('model keypath', function () {
   var vm, targetVM, options
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
 
     var inputs = '<input type="text" v-model="user.name.first" v-validate="required, minLength: 4, maxLength: 16">'
@@ -42,13 +41,10 @@ describe('model keypath', function () {
     targetVM = vm._children[0]
   })
 
-  after(function () {
-    Vue.config.async = true
-  })
 
   describe('init instance', function () {
-    beforeEach(function () {
-      vm._digest() // force update
+    beforeEach(function (done) {
+      Vue.nextTick(function () { done() })
     })
     
     describe('user.name.first', function () {
@@ -107,12 +103,13 @@ describe('model keypath', function () {
 
 
   describe('set validation pass value', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm.user.name.first = 'firstname'
       vm.user.name.last = 'lastname'
       vm.user.address = 'test@domain.com'
       vm.zip = '111-2222'
-      vm._digest() // force update
+
+      Vue.nextTick(function () { done() })
     })
 
     describe('user.name.first', function () {

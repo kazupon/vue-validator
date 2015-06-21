@@ -11,14 +11,9 @@ describe('min', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
   })
 
-  after(function () {
-    Vue.config.async = true
-  })
-  
 
   describe('boundary', function () {
     beforeEach(function () {
@@ -31,9 +26,10 @@ describe('min', function () {
 
 
     describe('value - 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '-1'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {
@@ -43,9 +39,10 @@ describe('min', function () {
 
 
     describe('just value', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '0'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -55,9 +52,10 @@ describe('min', function () {
 
 
     describe('value + 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '1'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -67,9 +65,10 @@ describe('min', function () {
 
 
     describe('not numeric value', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = 'hello'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {
@@ -85,12 +84,7 @@ describe('max', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
   
 
@@ -105,9 +99,10 @@ describe('max', function () {
 
 
     describe('value - 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '99'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -117,9 +112,10 @@ describe('max', function () {
 
 
     describe('just value', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '100'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -129,9 +125,10 @@ describe('max', function () {
 
 
     describe('value + 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = '101'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {
@@ -141,9 +138,10 @@ describe('max', function () {
 
 
     describe('not numeric value', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.threshold = 'hello'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {

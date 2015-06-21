@@ -10,23 +10,18 @@ var createInstance = require('./helper').createInstance
 describe('option', function () {
   var vm, targetVM
 
-  before(function () {
-    Vue.config.async = false
-  })
-
-  after(function () {
-    Vue.config.async = true
-  })
-
 
   describe('component', function () {
     describe('no specify', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         Vue.use(plugin)
+
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
           data: { msg: '' }
         })
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be assigned $validator', function () {
@@ -35,12 +30,15 @@ describe('option', function () {
     })
 
     describe('specify name', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         Vue.use(plugin, { component: '$validator1' })
+
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
           data: { msg: '' }
         })
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be assigned $validator1', function () {
@@ -52,16 +50,17 @@ describe('option', function () {
 
   describe('directive', function () {
     describe('no specify', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         Vue.use(plugin)
+
         vm = createInstance({
           target: '<input type="text" v-model="msg" v-validate="required">',
           data: { msg: '' }
         })
         targetVM = vm._children[0]
-
         vm.msg = 'hello'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be run "v-validate"', function () {
@@ -70,7 +69,7 @@ describe('option', function () {
     })
 
     describe('specify name', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         Vue.use(plugin, { directive: 'validate1' })
 
         vm = createInstance({
@@ -78,9 +77,9 @@ describe('option', function () {
           data: { msg: '' }
         })
         targetVM = vm._children[0]
-
         vm.msg = 'hello'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be run "v-validate1"', function () {

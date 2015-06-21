@@ -11,7 +11,6 @@ describe('directive unbind', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
 
     vm = createInstance({
@@ -20,14 +19,14 @@ describe('directive unbind', function () {
     })
   })
 
-  after(function () {
-    Vue.config.async = true
-  })
-
 
   describe('$destroy', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm.$destroy()
+
+      Vue.nextTick(function () {
+        done()
+      })
     })
 
     describe('validator instance', function () {

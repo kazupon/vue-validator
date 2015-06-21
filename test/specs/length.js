@@ -11,29 +11,25 @@ describe('minLength', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
   
 
   describe('boundary', function () {
     beforeEach(function () {
       vm = createInstance({
-          target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
-          data: { comment: null }
+        target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
+        data: { comment: null }
       })
       targetVM = vm._children[0]
     })
 
 
     describe('length - 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {
@@ -43,9 +39,10 @@ describe('minLength', function () {
 
 
     describe('just length', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -55,9 +52,10 @@ describe('minLength', function () {
 
 
     describe('length + 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaaaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -73,12 +71,7 @@ describe('maxLength', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
   
 
@@ -93,9 +86,10 @@ describe('maxLength', function () {
 
 
     describe('length - 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -105,9 +99,10 @@ describe('maxLength', function () {
 
 
     describe('just length', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -117,9 +112,10 @@ describe('maxLength', function () {
 
 
     describe('length + 1', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.comment = 'aaaaa'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {

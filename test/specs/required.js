@@ -11,27 +11,22 @@ describe('required', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
 
 
   describe('model data', function () {
     describe('string', function () {
       describe('set no empty', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           vm = createInstance({
             target: '<input type="text" v-model="msg" v-validate="required">',
             data: { msg: null }
           })
           targetVM = vm._children[0]
-
           vm.msg = 'hello'
-          vm._digest() // force update
+
+          Vue.nextTick(function () { done() })
         })
 
         it('should be false', function () {
@@ -40,15 +35,15 @@ describe('required', function () {
       })
 
       describe('set empty', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           vm = createInstance({
             target: '<input type="text" v-model="msg" v-validate="required">',
             data: { msg: 'hello' }
           })
           targetVM = vm._children[0]
-
           vm.msg = ''
-          vm._digest() // force update
+
+          Vue.nextTick(function () { done() })
         })
 
         it('should be true', function () {
@@ -59,7 +54,7 @@ describe('required', function () {
 
     describe('array', function () {
       describe('set no empty', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           var input = '<select v-model="multiSelect" v-validate="required", multiple>'
             + '<option>one</option></select>'
           vm = createInstance({
@@ -67,9 +62,9 @@ describe('required', function () {
             data: { multiSelect: [] }
           })
           targetVM = vm._children[0]
-
           vm.multiSelect.push('one')
-          vm._digest() // force update
+
+          Vue.nextTick(function () { done() })
         })
 
         it('should be false', function () {
@@ -78,7 +73,7 @@ describe('required', function () {
       })
 
       describe('set empty', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           var input = '<select v-model="multiSelect" v-validate="required", multiple>'
             + '<option>one</option></select>'
           vm = createInstance({
@@ -86,9 +81,9 @@ describe('required', function () {
             data: { multiSelect: ['onw'] }
           })
           targetVM = vm._children[0]
-
           vm.multiSelect.pop()
-          vm._digest() // force update
+
+          Vue.nextTick(function () { done() })
         })
 
         it('should be true', function () {
@@ -101,12 +96,14 @@ describe('required', function () {
 
   describe('input `value` attribute', function () {
     describe('set no empty', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm = createInstance({
           target: '<input type="text" value="hello" v-model="msg" v-validate="required">',
           data: { msg: null }
         })
         targetVM = vm._children[0]
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -115,12 +112,14 @@ describe('required', function () {
     })
 
     describe('set empty', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm = createInstance({
           target: '<input type="text" value="" v-model="msg" v-validate="required">',
           data: { msg: 'hello' }
         })
         targetVM = vm._children[0]
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {

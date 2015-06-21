@@ -11,12 +11,7 @@ describe('pattern', function () {
   var vm, targetVM
   
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
-  })
-
-  after(function () {
-    Vue.config.async = true
   })
 
 
@@ -30,9 +25,10 @@ describe('pattern', function () {
     })
 
     describe('valid', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.msg = 'foo11'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -41,9 +37,10 @@ describe('pattern', function () {
     })
 
     describe('invalid', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.msg = ''
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {
@@ -63,9 +60,10 @@ describe('pattern', function () {
     })
 
     describe('valid', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.msg = 'HELLO'
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be false', function () {
@@ -74,9 +72,10 @@ describe('pattern', function () {
     })
 
     describe('invalid', function () {
-      beforeEach(function () {
+      beforeEach(function (done) {
         vm.msg = ''
-        vm._digest() // force update
+
+        Vue.nextTick(function () { done() })
       })
 
       it('should be true', function () {

@@ -11,21 +11,19 @@ describe('invalid', function () {
   var vm, targetVM
 
   before(function () {
-    Vue.config.async = false
     Vue.use(plugin)
   })
 
-  after(function () {
-    Vue.config.async = true
-  })
 
-  beforeEach(function () {
+  beforeEach(function (done) {
     var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
       + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
     vm = createInstance({
        target: inputs, data: { username: '', zip: '' }
     })
     targetVM = vm._children[0]
+
+    Vue.nextTick(function () { done() })
   })
 
   
@@ -51,9 +49,10 @@ describe('invalid', function () {
 
 
   describe('pass username validation', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm.username = 'kazupon'
-      vm._digest() // force update
+
+      Vue.nextTick(function () { done() })
     })
 
     describe('validation.username.invalid', function () {
@@ -77,10 +76,11 @@ describe('invalid', function () {
 
 
   describe('pass username and zip validation', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       vm.username = 'kazupon'
       vm.zip = '111-2222'
-      vm._digest() // force update
+
+      Vue.nextTick(function () { done() })
     })
 
     describe('validation.username.invalid', function () {
