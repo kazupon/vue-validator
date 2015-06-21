@@ -9,7 +9,7 @@ Validator component for Vue.js
 
 
 # Requirements
-- Vue.js ^`0.11.2`
+- Vue.js ^`0.11.2` (for 0.12: WIP)
 
 
 # Installation
