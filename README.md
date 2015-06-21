@@ -406,9 +406,6 @@ $ make test
 - Push to the branch: `git push origin my-new-topic`
 - Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
 
-# TODO
-See the `TODO.md`
-
 
 # License
 
