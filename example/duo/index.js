@@ -1,5 +1,5 @@
 var Vue = require('yyx990803/vue@0.11.2')
-var validator = require('vuejs/vue-validator@1.0.1')
+var validator = require('vuejs/vue-validator@v1.0.6')
     
 Vue.use(validator)
 
