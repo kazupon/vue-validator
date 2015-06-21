@@ -1,5 +1,6 @@
 node_modules
 coverage
+components
 bower_components
 *.log
 .DS_Store
