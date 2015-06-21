@@ -25,12 +25,6 @@ $ npm install vue-validator
 $ bower install vue-validator
 ```
 
-## component
-
-```shell
-$ component install vuejs/vue-validator
-```
-
 ## duo
 
 ```javascript

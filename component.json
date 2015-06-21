@@ -3,16 +3,6 @@
   "repo": "vuejs/vue-validator",
   "version": "1.0.6",
   "description": "Validator component for Vue.js",
-  "keywords": [
-    "vue",
-    "validation",
-    "plugin"
-  ],
-  "license": "MIT",
-  "scripts": [
-    "lib/validates.js",
-    "lib/validator.js",
-    "index.js"
-  ],
-  "main": "index.js"
+  "main": "index.js",
+  "license": "MIT"
 }
