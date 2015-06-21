@@ -1,3 +1,7 @@
+# v1.0.7 / 2015-06-22
+
+* Fix unbind issue of directive (#19)
+
 # v1.0.6 / 2015-06-05
 
 * Support objects and arrays in required validator (#16)
