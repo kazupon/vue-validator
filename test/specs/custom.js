@@ -30,7 +30,7 @@ describe('custom', function () {
       })
       targetVM = vm._children[0]
       
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('init instance', function () {
@@ -76,7 +76,7 @@ describe('custom', function () {
       beforeEach(function (done) {
         vm.address = 'test@domain.com'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       describe('validation.address.email', function () {
@@ -134,7 +134,7 @@ describe('custom', function () {
       })
       targetVM = vm._children[0]
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('init instance', function () {
@@ -180,7 +180,7 @@ describe('custom', function () {
       beforeEach(function (done) {
         vm.msg = 'hello'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       describe('validation1.msg.required', function () {

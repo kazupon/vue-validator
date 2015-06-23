@@ -23,7 +23,7 @@ describe('invalid', function () {
     })
     targetVM = vm._children[0]
 
-    Vue.nextTick(function () { done() })
+    Vue.nextTick(done)
   })
 
   
@@ -52,7 +52,7 @@ describe('invalid', function () {
     beforeEach(function (done) {
       vm.username = 'kazupon'
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('validation.username.invalid', function () {
@@ -80,7 +80,7 @@ describe('invalid', function () {
       vm.username = 'kazupon'
       vm.zip = '111-2222'
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('validation.username.invalid', function () {

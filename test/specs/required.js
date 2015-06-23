@@ -26,7 +26,7 @@ describe('required', function () {
           targetVM = vm._children[0]
           vm.msg = 'hello'
 
-          Vue.nextTick(function () { done() })
+          Vue.nextTick(done)
         })
 
         it('should be false', function () {
@@ -43,7 +43,7 @@ describe('required', function () {
           targetVM = vm._children[0]
           vm.msg = ''
 
-          Vue.nextTick(function () { done() })
+          Vue.nextTick(done)
         })
 
         it('should be true', function () {
@@ -64,7 +64,7 @@ describe('required', function () {
           targetVM = vm._children[0]
           vm.multiSelect.push('one')
 
-          Vue.nextTick(function () { done() })
+          Vue.nextTick(done)
         })
 
         it('should be false', function () {
@@ -83,7 +83,7 @@ describe('required', function () {
           targetVM = vm._children[0]
           vm.multiSelect.pop()
 
-          Vue.nextTick(function () { done() })
+          Vue.nextTick(done)
         })
 
         it('should be true', function () {
@@ -103,7 +103,7 @@ describe('required', function () {
         })
         targetVM = vm._children[0]
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -119,7 +119,7 @@ describe('required', function () {
         })
         targetVM = vm._children[0]
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {

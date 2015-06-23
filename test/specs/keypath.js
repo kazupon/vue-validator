@@ -44,7 +44,7 @@ describe('model keypath', function () {
 
   describe('init instance', function () {
     beforeEach(function (done) {
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
     
     describe('user.name.first', function () {
@@ -109,7 +109,7 @@ describe('model keypath', function () {
       vm.user.address = 'test@domain.com'
       vm.zip = '111-2222'
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('user.name.first', function () {

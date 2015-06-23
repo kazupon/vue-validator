@@ -24,7 +24,7 @@ describe('directive unbind', function () {
 
       Vue.nextTick(function () {
         vm.$destroy()
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
     })
 
@@ -47,7 +47,7 @@ describe('directive unbind', function () {
         data: { foo: 'hello', bar: 1, enabled: true }
       })
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('enabled default value true', function () {
@@ -73,7 +73,7 @@ describe('directive unbind', function () {
     describe('set enabled value false', function () {
       beforeEach(function (done) {
         vm.enabled = false
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       describe('validation property', function () {
@@ -85,7 +85,7 @@ describe('directive unbind', function () {
       describe('set enabled value true', function () {
         beforeEach(function (done) {
           vm.enabled = true
-          Vue.nextTick(function () { done() })
+          Vue.nextTick(done)
         })
 
         describe('validation properties', function () {

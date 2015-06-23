@@ -29,7 +29,7 @@ describe('min', function () {
       beforeEach(function (done) {
         vm.threshold = '-1'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {
@@ -42,7 +42,7 @@ describe('min', function () {
       beforeEach(function (done) {
         vm.threshold = '0'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -55,7 +55,7 @@ describe('min', function () {
       beforeEach(function (done) {
         vm.threshold = '1'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -68,7 +68,7 @@ describe('min', function () {
       beforeEach(function (done) {
         vm.threshold = 'hello'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {
@@ -102,7 +102,7 @@ describe('max', function () {
       beforeEach(function (done) {
         vm.threshold = '99'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -115,7 +115,7 @@ describe('max', function () {
       beforeEach(function (done) {
         vm.threshold = '100'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -128,7 +128,7 @@ describe('max', function () {
       beforeEach(function (done) {
         vm.threshold = '101'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {
@@ -141,7 +141,7 @@ describe('max', function () {
       beforeEach(function (done) {
         vm.threshold = 'hello'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {

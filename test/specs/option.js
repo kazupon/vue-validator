@@ -21,7 +21,7 @@ describe('option', function () {
           data: { msg: '' }
         })
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be assigned $validator', function () {
@@ -38,7 +38,7 @@ describe('option', function () {
           data: { msg: '' }
         })
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be assigned $validator1', function () {
@@ -60,7 +60,7 @@ describe('option', function () {
         targetVM = vm._children[0]
         vm.msg = 'hello'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be run "v-validate"', function () {
@@ -79,7 +79,7 @@ describe('option', function () {
         targetVM = vm._children[0]
         vm.msg = 'hello'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be run "v-validate1"', function () {

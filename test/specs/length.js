@@ -29,7 +29,7 @@ describe('minLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {
@@ -42,7 +42,7 @@ describe('minLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -55,7 +55,7 @@ describe('minLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaaaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -89,7 +89,7 @@ describe('maxLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -102,7 +102,7 @@ describe('maxLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be false', function () {
@@ -115,7 +115,7 @@ describe('maxLength', function () {
       beforeEach(function (done) {
         vm.comment = 'aaaaa'
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       it('should be true', function () {

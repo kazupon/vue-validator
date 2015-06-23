@@ -24,7 +24,7 @@ describe('dirty', function () {
     })
     targetVM = vm._children[0]
 
-    Vue.nextTick(function () { done() })
+    Vue.nextTick(done)
   })
 
   
@@ -54,7 +54,7 @@ describe('dirty', function () {
       vm.username = 'kazupon'
       vm.zip = '111-2222'
 
-      Vue.nextTick(function () { done() })
+      Vue.nextTick(done)
     })
 
     describe('validation.username.dirty', function () {
@@ -79,7 +79,7 @@ describe('dirty', function () {
       beforeEach(function (done) {
         vm.username = ''
 
-        Vue.nextTick(function () { done() })
+        Vue.nextTick(done)
       })
 
       describe('validation.username.dirty', function () {
