@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.0.7
+ * vue-validator v1.1.0
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -385,7 +385,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _watchModel: function (keypath, fn) {
-	      this._validatorWatchers[keypath] = this.$watch(keypath, fn, false, true)
+	      this._validatorWatchers[keypath] = 
+	        this.$watch(keypath, fn, { deep: false, immediate: true })
 	    },
 
 	    _unwatchModel: function (keypath) {
@@ -486,7 +487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function pattern (val, pat) {
 	  if (typeof(pat) !== 'string') { return false }
 
-	  var match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'))
+	  var match = stripQuotes(pat).match(new RegExp('^/(.*?)/([gimy]*)$'))
 	  if (!match) { return false }
 
 	  return new RegExp(match[1], match[2]).test(val)
@@ -565,6 +566,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function isInteger (val) {
 	  return /^(-?[1-9]\d*|0)$/.test(val)
+	}
+
+
+	/**
+	 * Strip quotes from a string
+	 *
+	 * @param {String} str
+	 * @return {String | false}
+	 */
+
+	function stripQuotes (str) {
+	  var a = str.charCodeAt(0)
+	  var b = str.charCodeAt(str.length - 1)
+	  return a === b && (a === 0x22 || a === 0x27)
+	    ? str.slice(1, -1)
+	    : false
 	}
 
 
