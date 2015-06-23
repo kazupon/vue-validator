@@ -1,3 +1,8 @@
+# v1.1.0 / 2015-06-23
+
+* Support Vuejs 0.12 (#23)
+* Fix pattern validator regex issue (#17)
+
 # v1.0.7 / 2015-06-22
 
 * Fix unbind issue of directive (#19)

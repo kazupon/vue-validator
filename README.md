@@ -9,7 +9,7 @@ Validator component for Vue.js
 
 
 # Requirements
-- Vue.js ^`0.11.2` (for 0.12: WIP)
+- Vue.js ^`0.12.0`
 
 
 # Installation
@@ -216,9 +216,12 @@ For example, you can use `required` validator as follows.
 ### pattern
 For example, you can use `pattern` validator as follows.
 
+> NOTE: 
+v1.1.0 later, the usage of some existing `pattern` will have to be enclosed in quotes.
+
 ```html
 <form id="user-form">
-    Zip: <input type="text" v-model="zip" v-validate="pattern: /^[0-9]{3}-[0-9]{4}$/"><br />
+    Zip: <input type="text" v-model="zip" v-validate="pattern: '/^[0-9]{3}-[0-9]{4}$/'"><br />
     <div>
         <span v-if="validation.zip.pattern">Invalid format of your zip code.</span>
     </div>
@@ -313,8 +316,8 @@ new MyComponent().$mount('#user-form')
 You need to specify custom validator function to `validates` of `validator` installation option.
 If so, you can use validation result of custom validator.
 
-*NOTE:
-Your custom validator function should return the boolean value (valid -> `true`, invalid -> `false`).*
+> NOTE:
+Your custom validator function should return the boolean value (valid -> `true`, invalid -> `false`).
 
 
 # Options
@@ -393,12 +396,6 @@ If you specified the `myvalidate` to plugin option, you can use validation direc
 If you did not specify, you can use validation directive name as `v-validate` (default).
 
 
-# Testing
-
-```shell
-$ make test
-```
-
 # Contributing
 - Fork it !
 - Create your top branch from `dev`: `git branch my-new-topic origin/dev`
@@ -407,8 +404,13 @@ $ make test
 - Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
 
 
+# Testing
+
+```shell
+$ make test
+```
+
+
 # License
 
-## MIT
-
-See the `LICENSE`.
+[MIT](http://opensource.org/licenses/MIT)
