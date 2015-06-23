@@ -107,13 +107,13 @@ describe('validates', function () {
     describe('basic regex', function () {
       describe('valid', function () {
         it('should be true', function () {
-          expect(pattern('foo', '/^[0-9a-zA-Z]+$/')).to.be(true)
+          expect(pattern('foo', "'/^[0-9a-zA-Z]+$/'")).to.be(true)
         })
       })
 
       describe('invalid', function () {
         it('should be false', function () {
-          expect(pattern('', '/^[0-9a-zA-Z]+$/')).to.be(false)
+          expect(pattern('', "'/^[0-9a-zA-Z]+$/'")).to.be(false)
         })
       })
     })
@@ -121,13 +121,13 @@ describe('validates', function () {
     describe('flag regex', function () {
       describe('valid', function () {
         it('should be true', function () {
-          expect(pattern('HELLO', '/hello/i')).to.be(true)
+          expect(pattern('HELLO', "'/hello/i'")).to.be(true)
         })
       })
 
       describe('invalid', function () {
         it('should be false', function () {
-          expect(pattern('foo', '/hello/i')).to.be(false)
+          expect(pattern('foo', "'/hello/i'")).to.be(false)
         })
       })
     })
@@ -135,7 +135,7 @@ describe('validates', function () {
     describe('not regex format argument', function () {
       describe('string', function () {
         it('should be false', function () {
-          expect(pattern('foo', 'hello')).to.be(false)
+          expect(pattern('foo', "'hello'")).to.be(false)
         })
       })
 

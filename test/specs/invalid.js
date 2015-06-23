@@ -17,7 +17,7 @@ describe('invalid', function () {
 
   beforeEach(function (done) {
     var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
-      + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
+      + '<input type="text" v-model="zip" v-validate="required, pattern: \'/^[0-9]{3}-[0-9]{4}$/\'"'
     vm = createInstance({
        target: inputs, data: { username: '', zip: '' }
     })

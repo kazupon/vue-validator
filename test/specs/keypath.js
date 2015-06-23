@@ -16,7 +16,7 @@ describe('model keypath', function () {
     var inputs = '<input type="text" v-model="user.name.first" v-validate="required, minLength: 4, maxLength: 16">'
       + '<input type="text" v-model="user.name.last" v-validate="required, minLength: 4, maxLength: 16">'
       + '<input type="text" v-model="user.address" v-validate="email">'
-      + '<input type="text" v-model="zip" v-validate="required, pattern: /^[0-9]{3}-[0-9]{4}$/"'
+      + '<input type="text" v-model="zip" v-validate="required, pattern: \'/^[0-9]{3}-[0-9]{4}$/\'"'
     options = {
       target: inputs,
       validator: {
