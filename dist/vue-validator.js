@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.1.0
+ * vue-validator v1.1.1
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -487,7 +487,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	function pattern (val, pat) {
 	  if (typeof(pat) !== 'string') { return false }
 
-	  var match = stripQuotes(pat).match(new RegExp('^/(.*?)/([gimy]*)$'))
+	  var quoted = stripQuotes(pat)
+	  if (!quoted) { return false }
+
+	  var match = quoted.match(new RegExp('^/(.*?)/([gimy]*)$'))
 	  if (!match) { return false }
 
 	  return new RegExp(match[1], match[2]).test(val)
