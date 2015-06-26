@@ -119,20 +119,57 @@ describe('pattern', function () {
     })
   })
 
-  describe('regex param no-quoted', function () {
-    beforeEach(function (done) {
-      vm = createInstance({
-        template: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
-        data: { msg: '111' }
-      })
-      targetVM = vm._children[0]
-      vm.msg = 'foo11'
 
-      Vue.nextTick(done)
+  describe('regex param', function () {
+    describe('no quoted', function () {
+      beforeEach(function (done) {
+        vm = createInstance({
+          template: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
+          data: { msg: '111' }
+        })
+        targetVM = vm._children[0]
+        vm.msg = 'foo11'
+
+        Vue.nextTick(done)
+      })
+
+      it('should be invalid', function () {
+        expect(targetVM.validation.msg.pattern).to.be(true)
+      })
     })
 
-    it('should be invalid', function () {
-      expect(targetVM.validation.msg.pattern).to.be(true)
+    describe('single quote', function () {
+      beforeEach(function (done) {
+        vm = createInstance({
+          template: '<input type="text" v-model="msg" v-validate="pattern: \'/^[0-9a-zA-Z]+$/\'">',
+          data: { msg: '111' }
+        })
+        targetVM = vm._children[0]
+        vm.msg = 'foo11'
+
+        Vue.nextTick(done)
+      })
+
+      it('should be valid', function () {
+        expect(targetVM.validation.msg.pattern).to.be(false)
+      })
+    })
+
+    describe('single quote in pattern', function () {
+      beforeEach(function (done) {
+        vm = createInstance({
+          template: '<input type="text" v-model="msg" v-validate="pattern: \'/h\'ello/\'">',
+          data: { msg: '111' }
+        })
+        targetVM = vm._children[0]
+        vm.msg = 'h\'ello'
+
+        Vue.nextTick(done)
+      })
+
+      it('should be valid', function () {
+        expect(targetVM.validation.msg.pattern).to.be(false)
+      })
     })
   })
 })

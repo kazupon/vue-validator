@@ -132,15 +132,45 @@ describe('validates', function () {
       })
     })
 
-    describe('not regex format argument', function () {
-      describe('string', function () {
-        it('should be false', function () {
-          expect(pattern('foo', "'hello'")).to.be(false)
+    describe('regex pattern argument', function () {
+      describe('not quoted', function () {
+        it('should be validate', function () {
+          expect(pattern('foo', "/^[0-9a-zA-Z]+$/")).to.be(false)
         })
       })
 
-      describe('object', function () {
-        it('should be false', function () {
+      describe('single quoted', function () {
+        it('should be validate', function () {
+          expect(pattern('foo', "'/^[0-9a-zA-Z]+$/'")).to.be(true)
+        })
+      })
+
+      describe('double quoted', function () {
+        it('should be validate', function () {
+          expect(pattern('foo', '"/^[0-9a-zA-Z]+$/"')).to.be(true)
+        })
+      })
+
+      describe('single quote in pattern', function () {
+        it('should be validate', function () {
+          expect(pattern("f'oo", "'/f\'oo/'")).to.be(true)
+        })
+      })
+
+      describe('double quote in pattern', function () {
+        it('should be validate', function () {
+          expect(pattern('f"oo', '"/f\"oo/"')).to.be(true)
+        })
+      })
+
+      describe('alternation in pattern', function () {
+        it('should be validate', function () {
+          expect(pattern("foo", "'/(foo|bar)/'")).to.be(true)
+        })
+      })
+
+      describe('object type', function () {
+        it('should be validate', function () {
           expect(pattern('foo', {})).to.be(false)
         })
       })
