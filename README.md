@@ -216,8 +216,8 @@ For example, you can use `required` validator as follows.
 ### pattern
 For example, you can use `pattern` validator as follows.
 
-> NOTE: 
-v1.1.0 later, the usage of some existing `pattern` will have to be enclosed in quotes.
+> **NOTE:**
+v1.1.0 later, the usage of some existing `pattern` will have to be enclosed in single quotes.
 
 ```html
 <form id="user-form">
