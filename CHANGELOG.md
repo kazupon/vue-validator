@@ -1,3 +1,7 @@
+# v1.1.1 / 2015-06-27
+
+* Fix undefined method access error (#26)
+
 # v1.1.0 / 2015-06-23
 
 * Support Vuejs 0.12 (#23)
