@@ -28,7 +28,7 @@ describe('custom', function () {
         },
         data: { address: '' }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
       
       Vue.nextTick(done)
     })
@@ -132,7 +132,7 @@ describe('custom', function () {
         },
         data: { msg: '' }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
 
       Vue.nextTick(done)
     })

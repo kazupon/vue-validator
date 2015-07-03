@@ -57,7 +57,7 @@ describe('option', function () {
           target: '<input type="text" v-model="msg" v-validate="required">',
           data: { msg: '' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
         vm.msg = 'hello'
 
         Vue.nextTick(done)
@@ -76,7 +76,7 @@ describe('option', function () {
           target: '<input type="text" v-model="msg" v-validate1="required">',
           data: { msg: '' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
         vm.msg = 'hello'
 
         Vue.nextTick(done)

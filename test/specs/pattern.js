@@ -21,7 +21,7 @@ describe('pattern', function () {
         template: '<input type="text" v-model="msg" v-validate="pattern: \'/^[0-9a-zA-Z]+$/\'">',
         data: { msg: '111' }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
     describe('valid', function () {
@@ -56,7 +56,7 @@ describe('pattern', function () {
         template: '<input type="text" v-model="msg" v-validate="pattern: \'/hello|world/\'">',
         data: { msg: '' }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
     describe('valid', function () {
@@ -91,7 +91,7 @@ describe('pattern', function () {
         template: '<input type="text" v-model="msg" v-validate="pattern: \'/hello/i\'">',
         data: { msg: null }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
     describe('valid', function () {
@@ -127,7 +127,7 @@ describe('pattern', function () {
           template: '<input type="text" v-model="msg" v-validate="pattern: /^[0-9a-zA-Z]+$/">',
           data: { msg: '111' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
         vm.msg = 'foo11'
 
         Vue.nextTick(done)
@@ -144,7 +144,7 @@ describe('pattern', function () {
           template: '<input type="text" v-model="msg" v-validate="pattern: \'/^[0-9a-zA-Z]+$/\'">',
           data: { msg: '111' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
         vm.msg = 'foo11'
 
         Vue.nextTick(done)
@@ -161,7 +161,7 @@ describe('pattern', function () {
           template: '<input type="text" v-model="msg" v-validate="pattern: \'/h\'ello/\'">',
           data: { msg: '111' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
         vm.msg = 'h\'ello'
 
         Vue.nextTick(done)

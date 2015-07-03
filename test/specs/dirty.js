@@ -22,7 +22,7 @@ describe('dirty', function () {
        target: inputs, 
        data: { username: '', zip: '' }
     })
-    targetVM = vm._children[0]
+    targetVM = vm.$children[0]
 
     Vue.nextTick(done)
   })

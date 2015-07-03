@@ -21,7 +21,7 @@ describe('minLength', function () {
         target: '<input type="text" v-model="comment" v-validate="minLength: 4">',
         data: { comment: null }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
 
@@ -81,7 +81,7 @@ describe('maxLength', function () {
         target: '<input type="text" v-model="comment" v-validate="maxLength: 4">',
         data: { comment: null }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
 

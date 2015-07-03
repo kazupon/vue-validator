@@ -21,7 +21,7 @@ describe('min', function () {
         target: '<input type="text" v-model="threshold" v-validate="min: 0">',
         data: { threshold: null }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
 
@@ -94,7 +94,7 @@ describe('max', function () {
         target: '<input type="text" v-model="threshold" v-validate="max: 100">',
         data: { threshold: null }
       })
-      targetVM = vm._children[0]
+      targetVM = vm.$children[0]
     })
 
 

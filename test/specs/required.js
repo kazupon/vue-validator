@@ -23,7 +23,7 @@ describe('required', function () {
             target: '<input type="text" v-model="msg" v-validate="required">',
             data: { msg: null }
           })
-          targetVM = vm._children[0]
+          targetVM = vm.$children[0]
           vm.msg = 'hello'
 
           Vue.nextTick(done)
@@ -40,7 +40,7 @@ describe('required', function () {
             target: '<input type="text" v-model="msg" v-validate="required">',
             data: { msg: 'hello' }
           })
-          targetVM = vm._children[0]
+          targetVM = vm.$children[0]
           vm.msg = ''
 
           Vue.nextTick(done)
@@ -61,7 +61,7 @@ describe('required', function () {
             target: input,
             data: { multiSelect: [] }
           })
-          targetVM = vm._children[0]
+          targetVM = vm.$children[0]
           vm.multiSelect.push('one')
 
           Vue.nextTick(done)
@@ -80,7 +80,7 @@ describe('required', function () {
             target: input,
             data: { multiSelect: ['onw'] }
           })
-          targetVM = vm._children[0]
+          targetVM = vm.$children[0]
           vm.multiSelect.pop()
 
           Vue.nextTick(done)
@@ -101,7 +101,7 @@ describe('required', function () {
           target: '<input type="text" value="hello" v-model="msg" v-validate="required">',
           data: { msg: null }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
 
         Vue.nextTick(done)
       })
@@ -117,7 +117,7 @@ describe('required', function () {
           target: '<input type="text" value="" v-model="msg" v-validate="required">',
           data: { msg: 'hello' }
         })
-        targetVM = vm._children[0]
+        targetVM = vm.$children[0]
 
         Vue.nextTick(done)
       })

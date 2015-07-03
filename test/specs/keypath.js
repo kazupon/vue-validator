@@ -38,7 +38,7 @@ describe('model keypath', function () {
       }
     }
     vm = createInstance(options)
-    targetVM = vm._children[0]
+    targetVM = vm.$children[0]
   })
 
 
