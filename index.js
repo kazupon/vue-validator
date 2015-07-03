@@ -65,6 +65,7 @@ function install (Vue, options) {
 
       $validator._undefineValidatorToValidationScope(keypath, validator)
       $validator._deleteManagedValidator(keypath, validator)
+      $validator._undefineModelValidationScope(keypath)
 
       if (!$validator._isManagedValidator()) {
         for (var key in $validator.validation) {
