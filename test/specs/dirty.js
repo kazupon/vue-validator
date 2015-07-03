@@ -19,7 +19,7 @@ describe('dirty', function () {
     var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
       + '<input type="text" v-model="zip" v-validate="required, pattern: \'/^[0-9]{3}-[0-9]{4}$/\'"'
     vm = createInstance({
-       target: inputs, 
+       target: inputs,
        data: { username: '', zip: '' }
     })
     targetVM = vm.$children[0]

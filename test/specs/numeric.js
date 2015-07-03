@@ -79,7 +79,6 @@ describe('min', function () {
 })
 
 
-
 describe('max', function () {
   var vm, targetVM
 

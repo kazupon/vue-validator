@@ -8,7 +8,7 @@ var createInstance = require('./helper').createInstance
 
 
 describe('directive unbind', function () {
-  var vm, targetVM
+  var vm
 
   before(function () {
     Vue.use(plugin)

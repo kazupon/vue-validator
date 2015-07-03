@@ -135,7 +135,7 @@ describe('validates', function () {
     describe('regex pattern argument', function () {
       describe('not quoted', function () {
         it('should be validate', function () {
-          expect(pattern('foo', "/^[0-9a-zA-Z]+$/")).to.be(false)
+          expect(pattern('foo', '/^[0-9a-zA-Z]+$/')).to.be(false)
         })
       })
 
@@ -165,7 +165,7 @@ describe('validates', function () {
 
       describe('alternation in pattern', function () {
         it('should be validate', function () {
-          expect(pattern("foo", "'/(foo|bar)/'")).to.be(true)
+          expect(pattern('foo', "'/(foo|bar)/'")).to.be(true)
         })
       })
 

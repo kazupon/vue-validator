@@ -36,7 +36,7 @@ var wrapTemplate = exports.wrapTemplate = function (target, tag) {
 
 exports.createInstance = function (params) {
   params = params || {}
-  options = {}
+  var options = {}
 
   options.el = params.el || function () {
     var el = document.createElement('div')

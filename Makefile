@@ -4,7 +4,7 @@ SRCS = ./*.js lib/*.js test/specs/*.js test/specs/*.js
 
 
 lint:
-	@node_modules/.bin/jshint --config .jshintrc --exclude-path .jshintignore $(SRCS)
+	@node_modules/.bin/eslint --config .eslintrc $(SRCS)
 
 dist: lint node_modules
 	@./task/dist

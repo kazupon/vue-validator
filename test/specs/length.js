@@ -66,7 +66,6 @@ describe('minLength', function () {
 })
 
 
-
 describe('maxLength', function () {
   var vm, targetVM
 

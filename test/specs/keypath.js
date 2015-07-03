@@ -32,7 +32,7 @@ describe('model keypath', function () {
             first: '',
             last: ''
           },
-          address: '',
+          address: ''
         },
         zip: ''
       }

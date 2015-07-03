@@ -53,7 +53,7 @@ module.exports = function (config) {
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage']
       settings.coverageReporter = {
-        type: 'html', 
+        type: 'html',
         dir: 'coverage/'
       }
       break
@@ -61,7 +61,7 @@ module.exports = function (config) {
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage', 'coveralls']
       settings.coverageReporter = {
-        type: 'lcov', 
+        type: 'lcov',
         dir: 'coverage/'
       }
       break
