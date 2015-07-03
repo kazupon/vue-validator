@@ -108,4 +108,35 @@ describe('directive unbind', function () {
       })
     })
   })
+
+
+  describe('objectable v-model', function () {
+    beforeEach(function (done) {
+      var template = '<div v-if="enabled">'
+        + '<input type="text" v-model="obj.foo" v-validate="required">'
+        + '</div>'
+      vm = createInstance({
+        template: template,
+        data: { enabled: true, obj: { foo: '' } }
+      })
+
+      Vue.nextTick(function () {
+        vm.$set('enabled', false)
+        Vue.nextTick(function () {
+          vm.$set('enabled', true)
+          Vue.nextTick(done)
+        })
+      })
+    })
+
+    it('should be validated', function () {
+      expect(vm.validation.obj.foo.required).to.be(true)
+      expect(vm.validation.obj.foo.valid).to.be(false)
+      expect(vm.validation.obj.foo.invalid).to.be(true)
+      expect(vm.validation.obj.foo.dirty).to.be(false)
+      expect(vm.valid).to.be(false)
+      expect(vm.invalid).to.be(true)
+      expect(vm.dirty).to.be(false)
+    })
+  })
 })
