@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.1.1
+ * vue-validator v1.1.2
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -125,13 +125,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var validator = this.arg ? this.arg : this.expression
 	      var $validator = vm[componentName]
 
-	      $validator._undefineValidatorToValidationScope(keypath, validator)
 	      $validator._deleteManagedValidator(keypath, validator)
+	      $validator._undefineValidatorToValidationScope(keypath, validator)
+	      $validator._undefineModelValidationScope(keypath)
 
 	      if (!$validator._isManagedValidator()) {
-	        for (var key in $validator.validation) {
-	          $validator._undefineModelValidationScope(key)
-	        }
 	        $validator.$destroy()
 	        vm[componentName] = null
 	        delete vm[componentName]
