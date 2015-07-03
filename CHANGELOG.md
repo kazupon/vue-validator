@@ -1,6 +1,6 @@
 # v1.1.2 / 2015-07-04
 
-* Fix objectable v-model unbind error (#29) [torniker]
+* Fix objectable v-model unbind error (#29) [@torniker]
 
 # v1.1.1 / 2015-06-27
 
