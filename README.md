@@ -207,7 +207,7 @@ For example:
 ```html
 <form id="user-profile">
     name: <input type="text" v-model="name" wait-for="name-loaded" v-validate="required"><br />
-    email: <input type="text" v-model="email" wail-for="email-loaded" v-validate="email"><br />
+    email: <input type="text" v-model="email" wait-for="email-loaded" v-validate="email"><br />
     <input type="submit" value="send" v-if="valid && dirty">
 </form>
 ```
