@@ -27,8 +27,9 @@ function install (Vue, options) {
     priority: 1024,
 
     bind: function () {
+      var self = this
       var vm = this.vm
-      
+
       if (!vm[componentName]) {
         vm[componentName] = vm.$addChild({
           validator: vm.$options.validator
@@ -42,19 +43,20 @@ function install (Vue, options) {
       var validator = this.arg ? this.arg : this.expression
       var arg = this.arg ? this.expression : null
       var init = el.getAttribute('value') || vm.$get(keypath)
+      var readyEvent = el.getAttribute('wait-for')
 
-      if (!getVal($validator[validation], keypath)) {
-        $validator._defineModelValidationScope(keypath, init)
+      if (readyEvent && !$validator._isRegistedReadyEvent(keypath)) {
+        $validator._addReadyEvents(keypath, this._checkParam('wait-for'))
       }
-
-      if (!getVal($validator[validation], keypath + '.' + validator)) {
-        $validator._defineValidatorToValidationScope(keypath, validator)
-        $validator._addValidators(keypath, validator, arg)
+      
+      if (!$validator._isRegistedReadyEvent(keypath)) {
+        this._setupValidator($validator, keypath, validation, validator, arg, init)
+      } else {
+        vm.$once($validator._getReadyEvents(keypath), function (prop, val) {
+          vm.$set(prop, val)
+          self._setupValidator($validator, keypath, validation, validator, arg, val)
+        })
       }
-
-      $validator._addManagedValidator(keypath, validator)
-
-      $validator._doValidate(keypath, init, $validator.$get(keypath))
     },
 
     unbind: function () {
@@ -72,6 +74,21 @@ function install (Vue, options) {
         vm[componentName] = null
         delete vm[componentName]
       }
+    },
+
+    _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
+      if (!getVal($validator[validation], keypath)) {
+        $validator._defineModelValidationScope(keypath, init)
+      }
+
+      if (!getVal($validator[validation], [keypath, validator].join('.'))) {
+        $validator._defineValidatorToValidationScope(keypath, validator)
+        $validator._addValidators(keypath, validator, arg)
+      }
+
+      $validator._addManagedValidator(keypath, validator)
+
+      $validator._doValidate(keypath, init, $validator.$get(keypath))
     },
 
     _parseModelAttribute: function (attr) {

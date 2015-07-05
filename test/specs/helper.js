@@ -31,6 +31,7 @@ var wrapTemplate = exports.wrapTemplate = function (target, tag) {
  * @params {String} target | template
  * @params {Object} validator
  * @params {Object} data
+ * @params {Function} ready
  * @return {Object} created Vue component instance
  */
 
@@ -50,6 +51,13 @@ exports.createInstance = function (params) {
 
   options.template = wrapTemplate(params.target || params.template || '')
   options.validator = params.validator || {}
+
+  var events = ['created', 'compiled', 'ready']
+  events.forEach(function (event) {
+    if (params[event]) {
+      options[event] = params[event]
+    }
+  })
 
   var Validator = Vue.extend(options)
   return new Validator()
