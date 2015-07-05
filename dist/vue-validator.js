@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.1.2
+ * vue-validator v1.2.0
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -89,8 +89,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    priority: 1024,
 
 	    bind: function () {
+	      var self = this
 	      var vm = this.vm
-	      
+
 	      if (!vm[componentName]) {
 	        vm[componentName] = vm.$addChild({
 	          validator: vm.$options.validator
@@ -104,19 +105,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var validator = this.arg ? this.arg : this.expression
 	      var arg = this.arg ? this.expression : null
 	      var init = el.getAttribute('value') || vm.$get(keypath)
+	      var readyEvent = el.getAttribute('wait-for')
 
-	      if (!getVal($validator[validation], keypath)) {
-	        $validator._defineModelValidationScope(keypath, init)
+	      if (readyEvent && !$validator._isRegistedReadyEvent(keypath)) {
+	        $validator._addReadyEvents(keypath, this._checkParam('wait-for'))
 	      }
-
-	      if (!getVal($validator[validation], keypath + '.' + validator)) {
-	        $validator._defineValidatorToValidationScope(keypath, validator)
-	        $validator._addValidators(keypath, validator, arg)
+	      
+	      if (!$validator._isRegistedReadyEvent(keypath)) {
+	        this._setupValidator($validator, keypath, validation, validator, arg, init)
+	      } else {
+	        vm.$once($validator._getReadyEvents(keypath), function (prop, val) {
+	          vm.$set(prop, val)
+	          self._setupValidator($validator, keypath, validation, validator, arg, val)
+	        })
 	      }
-
-	      $validator._addManagedValidator(keypath, validator)
-
-	      $validator._doValidate(keypath, init, $validator.$get(keypath))
 	    },
 
 	    unbind: function () {
@@ -134,6 +136,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        vm[componentName] = null
 	        delete vm[componentName]
 	      }
+	    },
+
+	    _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
+	      if (!getVal($validator[validation], keypath)) {
+	        $validator._defineModelValidationScope(keypath, init)
+	      }
+
+	      if (!getVal($validator[validation], [keypath, validator].join('.'))) {
+	        $validator._defineValidatorToValidationScope(keypath, validator)
+	        $validator._addValidators(keypath, validator, arg)
+	      }
+
+	      $validator._addManagedValidator(keypath, validator)
+
+	      $validator._doValidate(keypath, init, $validator.$get(keypath))
 	    },
 
 	    _parseModelAttribute: function (attr) {
@@ -193,6 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      this._validatorWatchers = {}
 	      this._managedValidator = {}
+	      this._readyEvents = {}
 	    },
 
 	    _initOptions: function () {
@@ -383,7 +401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _watchModel: function (keypath, fn) {
-	      this._validatorWatchers[keypath] = 
+	      this._validatorWatchers[keypath] =
 	        this.$watch(keypath, fn, { deep: false, immediate: true })
 	    },
 
@@ -407,6 +425,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return Object.keys(this._managedValidator).length !== 0
 	    },
 
+	    _addReadyEvents: function (id, event) {
+	      this._readyEvents[id] = event
+	    },
+
+	    _getReadyEvents: function (id) {
+	      return this._readyEvents[id]
+	    },
+
+	    _isRegistedReadyEvent: function (id) {
+	      return id in this._readyEvents
+	    },
+
 	    _doValidate: function (keypath, init, val) {
 	      var self = this
 	      var validationName = this._getValidationNamespace('validation')
@@ -415,7 +445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var target = getTarget(this[validationName], keypath)
 	      target[dirtyName] = (init !== val)
 	      this._validators[keypath].forEach(function (validator) {
-	        target[validator.name] = 
+	        target[validator.name] =
 	          !self._validates[validator.name].call(self, val, validator.arg)
 	      })
 	    }
@@ -467,7 +497,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else if ((val !== null) && (typeof val === 'object')) {
 	    return Object.keys(val).length > 0
 	  } else {
-	    return !val ? false : true
+	    return !val
+	      ? false
+	      : true
 	  }
 	}
 
@@ -483,7 +515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function pattern (val, pat) {
-	  if (typeof(pat) !== 'string') { return false }
+	  if (typeof pat !== 'string') { return false }
 
 	  var quoted = stripQuotes(pat)
 	  if (!quoted) { return false }
@@ -506,7 +538,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function minLength (val, min) {
-	  return typeof val === 'string' && isInteger(min) && val.length >= parseInt(min)
+	  return typeof val === 'string' &&
+	    isInteger(min, 10) &&
+	    val.length >= parseInt(min, 10)
 	}
 
 
@@ -521,7 +555,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function maxLength (val, max) {
-	  return typeof val === 'string' && isInteger(max) && val.length <= parseInt(max)
+	  return typeof val === 'string' &&
+	    isInteger(max, 10) &&
+	    val.length <= parseInt(max, 10)
 	}
 
 

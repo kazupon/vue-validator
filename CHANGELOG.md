@@ -1,3 +1,7 @@
+# v1.2.0 / 2015-07-06
+
+* Add delay initialization of validation feature (#25)
+
 # v1.1.2 / 2015-07-04
 
 * Fix objectable v-model unbind error (#29) [@torniker]
