@@ -113,7 +113,7 @@ describe('directive unbind', function () {
   describe('objectable v-model', function () {
     beforeEach(function (done) {
       var template = '<div v-if="enabled">'
-        + '<input type="text" v-model="obj.foo" v-validate="required">'
+        + '<input type="text" v-model="obj.foo" v-validate="required, minLength: 0, maxLength: 5">'
         + '</div>'
       vm = createInstance({
         template: template,
@@ -131,6 +131,8 @@ describe('directive unbind', function () {
 
     it('should be validated', function () {
       expect(vm.validation.obj.foo.required).to.be(true)
+      expect(vm.validation.obj.foo.minLength).to.be(false)
+      expect(vm.validation.obj.foo.maxLength).to.be(false)
       expect(vm.validation.obj.foo.valid).to.be(false)
       expect(vm.validation.obj.foo.invalid).to.be(true)
       expect(vm.validation.obj.foo.dirty).to.be(false)
