@@ -74,8 +74,12 @@ module.exports = function (config) {
       settings.browsers = sauce.browsers
       settings.reporters = sauce.reporters
       break
-    default:
+    case 'browser':
       settings.browsers = ['Chrome', 'Safari', 'Firefox']
+      settings.reporters = ['progress']
+      break
+    default:
+      settings.browsers = ['PhantomJS']
       settings.reporters = ['progress']
       break
   }

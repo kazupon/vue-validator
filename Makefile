@@ -21,6 +21,9 @@ node_modules: package.json
 test: semi node_modules
 	@$(KARMA) start
 
+browser:
+	@VUE_VALIDATOR_TYPE=browser $(MAKE) test
+
 coverage:
 	@VUE_VALIDATOR_TYPE=coverage $(MAKE) test
 
