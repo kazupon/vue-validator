@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.2.0
+ * vue-validator v1.2.1
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -61,6 +61,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
+	 * Import(s)
+	 */
+
+	var validates = __webpack_require__(1)
+
+
+	/**
 	 * Export(s)
 	 */
 
@@ -76,6 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var componentName = options.component = options.component || '$validator'
 	  var directiveName = options.directive = options.directive || 'validate'
 	  var path = Vue.parsers.path
+	  var utils = Vue.util
 
 	  function getVal (obj, keypath) {
 	    var ret = null
@@ -85,25 +93,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ret
 	  }
 
+
 	  Vue.directive(directiveName, {
 	    priority: 1024,
 
 	    bind: function () {
 	      var self = this
 	      var vm = this.vm
-
-	      if (!vm[componentName]) {
-	        vm[componentName] = vm.$addChild({
-	          validator: vm.$options.validator
-	        }, Vue.extend(__webpack_require__(1)))
-	      }
-
-	      var $validator = vm[componentName]
 	      var el = this.el
-	      var validation = $validator._getValidationNamespace('validation')
+	      var $validator = vm[componentName]
 	      var keypath = this._keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
 	      var validator = this.arg ? this.arg : this.expression
 	      var arg = this.arg ? this.expression : null
+
+	      if (!this._checkDirective(validator, validates, vm.$options.validator.validates)) {
+	        utils.warn('specified invalid v-validate directive !! please check v-validator directive !!')
+	        this._ignore = true
+	        return
+	      }
+
+	      if (!$validator) {
+	        vm[componentName] = $validator = vm.$addChild({
+	          validator: vm.$options.validator
+	        }, Vue.extend(__webpack_require__(2)))
+	      }
+
+	      var validation = $validator._getValidationNamespace('validation')
 	      var init = el.getAttribute('value') || vm.$get(keypath)
 	      var readyEvent = el.getAttribute('wait-for')
 
@@ -114,28 +129,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!$validator._isRegistedReadyEvent(keypath)) {
 	        this._setupValidator($validator, keypath, validation, validator, arg, init)
 	      } else {
-	        vm.$once($validator._getReadyEvents(keypath), function (prop, val) {
-	          vm.$set(prop, val)
+	        vm.$once($validator._getReadyEvents(keypath), function (val) {
+	          vm.$set(keypath, val)
 	          self._setupValidator($validator, keypath, validation, validator, arg, val)
 	        })
 	      }
 	    },
 
 	    unbind: function () {
+	      if (this._ignore) { return }
+
 	      var vm = this.vm
 	      var keypath = this._keypath
 	      var validator = this.arg ? this.arg : this.expression
 	      var $validator = vm[componentName]
 
-	      $validator._deleteManagedValidator(keypath, validator)
-	      $validator._undefineValidatorToValidationScope(keypath, validator)
-	      $validator._undefineModelValidationScope(keypath)
+	      this._teardownValidator(vm, $validator, keypath, validator)
+	    },
 
-	      if (!$validator._isManagedValidator()) {
-	        $validator.$destroy()
-	        vm[componentName] = null
-	        delete vm[componentName]
+	    _parseModelAttribute: function (attr) {
+	      var res = Vue.parsers.directive.parse(attr)
+	      return res[0].arg ? res[0].arg : res[0].expression
+	    },
+
+	    _checkDirective: function (validator, validates, customs) {
+	      var items = Object.keys(validates)
+	      if (customs) {
+	        items = items.concat(Object.keys(customs))
 	      }
+	      return items.some(function (item) {
+	        return item === validator
+	      })
 	    },
 
 	    _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
@@ -153,9 +177,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $validator._doValidate(keypath, init, $validator.$get(keypath))
 	    },
 
-	    _parseModelAttribute: function (attr) {
-	      var res = Vue.parsers.directive.parse(attr)
-	      return res[0].arg ? res[0].arg : res[0].expression
+	    _teardownValidator: function (vm, $validator, keypath, validator) {
+	      $validator._deleteManagedValidator(keypath, validator)
+	      $validator._undefineValidatorToValidationScope(keypath, validator)
+	      $validator._undefineModelValidationScope(keypath)
+
+	      if (!$validator._isManagedValidator()) {
+	        $validator.$destroy()
+	        vm[componentName] = null
+	        delete vm[componentName]
+	      }
 	    }
 	  })
 	}
@@ -163,13 +194,175 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	/**
+	 * Fundamental validate functions
+	 */
+
+
+	/**
+	 * required
+	 *
+	 * This function validate whether the value has been filled out.
+	 *
+	 * @param val
+	 * @return {Boolean}
+	 */
+
+	function required (val) {
+	  if (Array.isArray(val)) {
+	    return val.length > 0
+	  } else if ((val !== null) && (typeof val === 'object')) {
+	    return Object.keys(val).length > 0
+	  } else {
+	    return !val
+	      ? false
+	      : true
+	  }
+	}
+
+
+	/**
+	 * pattern
+	 *
+	 * This function validate whether the value matches the regex pattern
+	 *
+	 * @param val
+	 * @param {String} pat
+	 * @return {Boolean}
+	 */
+
+	function pattern (val, pat) {
+	  if (typeof pat !== 'string') { return false }
+
+	  var quoted = stripQuotes(pat)
+	  if (!quoted) { return false }
+
+	  var match = quoted.match(new RegExp('^/(.*?)/([gimy]*)$'))
+	  if (!match) { return false }
+
+	  return new RegExp(match[1], match[2]).test(val)
+	}
+
+
+	/**
+	 * minLength
+	 *
+	 * This function validate whether the minimum length of the string.
+	 *
+	 * @param {String} val
+	 * @param {String|Number} min
+	 * @return {Boolean}
+	 */
+
+	function minLength (val, min) {
+	  return typeof val === 'string' &&
+	    isInteger(min, 10) &&
+	    val.length >= parseInt(min, 10)
+	}
+
+
+	/**
+	 * maxLength
+	 *
+	 * This function validate whether the maximum length of the string.
+	 *
+	 * @param {String} val
+	 * @param {String|Number} max
+	 * @return {Boolean}
+	 */
+
+	function maxLength (val, max) {
+	  return typeof val === 'string' &&
+	    isInteger(max, 10) &&
+	    val.length <= parseInt(max, 10)
+	}
+
+
+	/**
+	 * min
+	 *
+	 * This function validate whether the minimum value of the numberable value.
+	 *
+	 * @param {*} val
+	 * @param {*} arg minimum
+	 * @return {Boolean}
+	 */
+
+	function min (val, arg) {
+	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) >= +(arg))
+	}
+
+
+	/**
+	 * max
+	 *
+	 * This function validate whether the maximum value of the numberable value.
+	 *
+	 * @param {*} val
+	 * @param {*} arg maximum
+	 * @return {Boolean}
+	 */
+
+	function max (val, arg) {
+	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) <= +(arg))
+	}
+
+
+	/**
+	 * isInteger
+	 *
+	 * This function check whether the value of the string is integer.
+	 *
+	 * @param {String} val
+	 * @return {Boolean}
+	 * @private
+	 */
+
+	function isInteger (val) {
+	  return /^(-?[1-9]\d*|0)$/.test(val)
+	}
+
+
+	/**
+	 * Strip quotes from a string
+	 *
+	 * @param {String} str
+	 * @return {String | false}
+	 */
+
+	function stripQuotes (str) {
+	  var a = str.charCodeAt(0)
+	  var b = str.charCodeAt(str.length - 1)
+	  return a === b && (a === 0x22 || a === 0x27)
+	    ? str.slice(1, -1)
+	    : false
+	}
+
+
+	/**
+	 * export(s)
+	 */
+	module.exports = {
+	  required: required,
+	  pattern: pattern,
+	  minLength: minLength,
+	  maxLength: maxLength,
+	  min: min,
+	  max: max
+	}
+
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Import(s)
 	 */
 
-	var validates = __webpack_require__(2)
+	var validates = __webpack_require__(1)
 
 
 	/**
@@ -407,8 +600,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _unwatchModel: function (keypath) {
 	      var unwatch = this._validatorWatchers[keypath]
-	      unwatch()
-	      delete this._validatorWatchers[keypath]
+	      if (unwatch) {
+	        unwatch()
+	        delete this._validatorWatchers[keypath]
+	      }
 	    },
 	    
 	    _addManagedValidator: function (keypath, validator) {
@@ -470,168 +665,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    last = obj
 	  }
 	  return last
-	}
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	/**
-	 * Fundamental validate functions
-	 */
-
-
-	/**
-	 * required
-	 *
-	 * This function validate whether the value has been filled out.
-	 *
-	 * @param val
-	 * @return {Boolean}
-	 */
-
-	function required (val) {
-	  if (Array.isArray(val)) {
-	    return val.length > 0
-	  } else if ((val !== null) && (typeof val === 'object')) {
-	    return Object.keys(val).length > 0
-	  } else {
-	    return !val
-	      ? false
-	      : true
-	  }
-	}
-
-
-	/**
-	 * pattern
-	 *
-	 * This function validate whether the value matches the regex pattern
-	 *
-	 * @param val
-	 * @param {String} pat
-	 * @return {Boolean}
-	 */
-
-	function pattern (val, pat) {
-	  if (typeof pat !== 'string') { return false }
-
-	  var quoted = stripQuotes(pat)
-	  if (!quoted) { return false }
-
-	  var match = quoted.match(new RegExp('^/(.*?)/([gimy]*)$'))
-	  if (!match) { return false }
-
-	  return new RegExp(match[1], match[2]).test(val)
-	}
-
-
-	/**
-	 * minLength
-	 *
-	 * This function validate whether the minimum length of the string.
-	 *
-	 * @param {String} val
-	 * @param {String|Number} min
-	 * @return {Boolean}
-	 */
-
-	function minLength (val, min) {
-	  return typeof val === 'string' &&
-	    isInteger(min, 10) &&
-	    val.length >= parseInt(min, 10)
-	}
-
-
-	/**
-	 * maxLength
-	 *
-	 * This function validate whether the maximum length of the string.
-	 *
-	 * @param {String} val
-	 * @param {String|Number} max
-	 * @return {Boolean}
-	 */
-
-	function maxLength (val, max) {
-	  return typeof val === 'string' &&
-	    isInteger(max, 10) &&
-	    val.length <= parseInt(max, 10)
-	}
-
-
-	/**
-	 * min
-	 *
-	 * This function validate whether the minimum value of the numberable value.
-	 *
-	 * @param {*} val
-	 * @param {*} arg minimum
-	 * @return {Boolean}
-	 */
-
-	function min (val, arg) {
-	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) >= +(arg))
-	}
-
-
-	/**
-	 * max
-	 *
-	 * This function validate whether the maximum value of the numberable value.
-	 *
-	 * @param {*} val
-	 * @param {*} arg maximum
-	 * @return {Boolean}
-	 */
-
-	function max (val, arg) {
-	  return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) <= +(arg))
-	}
-
-
-	/**
-	 * isInteger
-	 *
-	 * This function check whether the value of the string is integer.
-	 *
-	 * @param {String} val
-	 * @return {Boolean}
-	 * @private
-	 */
-
-	function isInteger (val) {
-	  return /^(-?[1-9]\d*|0)$/.test(val)
-	}
-
-
-	/**
-	 * Strip quotes from a string
-	 *
-	 * @param {String} str
-	 * @return {String | false}
-	 */
-
-	function stripQuotes (str) {
-	  var a = str.charCodeAt(0)
-	  var b = str.charCodeAt(str.length - 1)
-	  return a === b && (a === 0x22 || a === 0x27)
-	    ? str.slice(1, -1)
-	    : false
-	}
-
-
-	/**
-	 * export(s)
-	 */
-	module.exports = {
-	  required: required,
-	  pattern: pattern,
-	  minLength: minLength,
-	  maxLength: maxLength,
-	  min: min,
-	  max: max
 	}
 
 

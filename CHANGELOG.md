@@ -1,3 +1,9 @@
+# v1.2.1 / 2015-07-09
+
+* Fix unbind error (#30)
+* Fix invalid v-validate directive
+* Change `$emit` interface for `wait-for` attribute
+
 # v1.2.0 / 2015-07-06
 
 * Add delay initialization of validation feature (#25)
