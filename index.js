@@ -1,4 +1,11 @@
 /**
+ * Import(s)
+ */
+
+var validates = require('./lib/validates')
+
+
+/**
  * Export(s)
  */
 
@@ -14,6 +21,7 @@ function install (Vue, options) {
   var componentName = options.component = options.component || '$validator'
   var directiveName = options.directive = options.directive || 'validate'
   var path = Vue.parsers.path
+  var utils = Vue.util
 
   function getVal (obj, keypath) {
     var ret = null
@@ -23,25 +31,32 @@ function install (Vue, options) {
     return ret
   }
 
+
   Vue.directive(directiveName, {
     priority: 1024,
 
     bind: function () {
       var self = this
       var vm = this.vm
+      var el = this.el
+      var $validator = vm[componentName]
+      var keypath = this._keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
+      var validator = this.arg ? this.arg : this.expression
+      var arg = this.arg ? this.expression : null
 
-      if (!vm[componentName]) {
-        vm[componentName] = vm.$addChild({
+      if (!this._checkDirective(validator, validates, vm.$options.validator.validates)) {
+        utils.warn('specified invalid v-validate directive !! please check v-validator directive !!')
+        this._ignore = true
+        return
+      }
+
+      if (!$validator) {
+        vm[componentName] = $validator = vm.$addChild({
           validator: vm.$options.validator
         }, Vue.extend(require('./lib/validator')))
       }
 
-      var $validator = vm[componentName]
-      var el = this.el
       var validation = $validator._getValidationNamespace('validation')
-      var keypath = this._keypath = this._parseModelAttribute(el.getAttribute(Vue.config.prefix + 'model'))
-      var validator = this.arg ? this.arg : this.expression
-      var arg = this.arg ? this.expression : null
       var init = el.getAttribute('value') || vm.$get(keypath)
       var readyEvent = el.getAttribute('wait-for')
 
@@ -60,20 +75,29 @@ function install (Vue, options) {
     },
 
     unbind: function () {
+      if (this._ignore) { return }
+
       var vm = this.vm
       var keypath = this._keypath
       var validator = this.arg ? this.arg : this.expression
       var $validator = vm[componentName]
 
-      $validator._deleteManagedValidator(keypath, validator)
-      $validator._undefineValidatorToValidationScope(keypath, validator)
-      $validator._undefineModelValidationScope(keypath)
+      this._teardownValidator(vm, $validator, keypath, validator)
+    },
 
-      if (!$validator._isManagedValidator()) {
-        $validator.$destroy()
-        vm[componentName] = null
-        delete vm[componentName]
+    _parseModelAttribute: function (attr) {
+      var res = Vue.parsers.directive.parse(attr)
+      return res[0].arg ? res[0].arg : res[0].expression
+    },
+
+    _checkDirective: function (validator, validates, customs) {
+      var items = Object.keys(validates)
+      if (customs) {
+        items = items.concat(Object.keys(customs))
       }
+      return items.some(function (item) {
+        return item === validator
+      })
     },
 
     _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
@@ -91,9 +115,16 @@ function install (Vue, options) {
       $validator._doValidate(keypath, init, $validator.$get(keypath))
     },
 
-    _parseModelAttribute: function (attr) {
-      var res = Vue.parsers.directive.parse(attr)
-      return res[0].arg ? res[0].arg : res[0].expression
+    _teardownValidator: function (vm, $validator, keypath, validator) {
+      $validator._deleteManagedValidator(keypath, validator)
+      $validator._undefineValidatorToValidationScope(keypath, validator)
+      $validator._undefineModelValidationScope(keypath)
+
+      if (!$validator._isManagedValidator()) {
+        $validator.$destroy()
+        vm[componentName] = null
+        delete vm[componentName]
+      }
     }
   })
 }
