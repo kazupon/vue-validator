@@ -30,8 +30,8 @@ describe('wait-for', function () {
       var params = {}
       loadData(params, function (err, data) {
         if (err) { return }
-        self.$emit('fooLoaded', 'foo', data.foo)
-        self.$emit('barLoaded', 'bar', data.bar)
+        self.$emit('fooLoaded', data.foo)
+        self.$emit('barLoaded', data.bar)
       })
     }
     var macro = function (hookPoint, hookBody) {
@@ -114,8 +114,8 @@ describe('wait-for', function () {
           var params = {}
           loadData(params, function (err, data) {
             if (err) { return }
-            self.$emit('fooLoaded', 'item.foo', data.item.foo)
-            self.$emit('barLoaded', 'item.bar', data.item.bar)
+            self.$emit('fooLoaded', data.item.foo)
+            self.$emit('barLoaded', data.item.bar)
           })
         }
       })

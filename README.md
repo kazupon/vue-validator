@@ -229,8 +229,8 @@ new Vue({
       // ...
 
       // emit the event that was specified 'wait-for' attribute
-      self.$emit('name-loaded', 'name', data.name)
-      self.$emit('email-loaded', 'email', data.email)
+      self.$emit('name-loaded', data.name)
+      self.$emit('email-loaded', data.email)
 
       // ...
     }).error(function (data, status, request) {
@@ -244,11 +244,10 @@ new Vue({
 `$emit` of interface conventions are as follows:
 
 ```javascript
-    vm.$emit( eventName, propName, propVal ) 
+    vm.$emit( eventName, propVal ) 
 ```
 
 - **eventName**: the event name that was specified with 'wait-for' attribute
-- **propName**: the property name that is initialized of validation
 - **propVal**: the property value that is initialized of validation
 
 

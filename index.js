@@ -67,8 +67,8 @@ function install (Vue, options) {
       if (!$validator._isRegistedReadyEvent(keypath)) {
         this._setupValidator($validator, keypath, validation, validator, arg, init)
       } else {
-        vm.$once($validator._getReadyEvents(keypath), function (prop, val) {
-          vm.$set(prop, val)
+        vm.$once($validator._getReadyEvents(keypath), function (val) {
+          vm.$set(keypath, val)
           self._setupValidator($validator, keypath, validation, validator, arg, val)
         })
       }
