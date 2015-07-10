@@ -50,7 +50,9 @@ exports.createInstance = function (params) {
   }
 
   options.template = wrapTemplate(params.target || params.template || '')
-  options.validator = params.validator || {}
+  if (params.validator) {
+    options.validator = params.validator
+  }
 
   var events = ['created', 'compiled', 'ready']
   events.forEach(function (event) {
