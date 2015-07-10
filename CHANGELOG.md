@@ -1,3 +1,7 @@
+# v1.2.2 / 2015-07-10
+
+* Fix validates option read access error (#32)
+
 # v1.2.1 / 2015-07-09
 
 * Fix unbind error (#30)

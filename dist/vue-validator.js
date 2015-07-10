@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.2.1
+ * vue-validator v1.2.2
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -106,7 +106,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var validator = this.arg ? this.arg : this.expression
 	      var arg = this.arg ? this.expression : null
 
-	      if (!this._checkDirective(validator, validates, vm.$options.validator.validates)) {
+	      var customs = (vm.$options.validator && vm.$options.validator.validates) || {}
+	      if (!this._checkDirective(validator, validates, customs)) {
 	        utils.warn('specified invalid v-validate directive !! please check v-validator directive !!')
 	        this._ignore = true
 	        return
@@ -153,10 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _checkDirective: function (validator, validates, customs) {
-	      var items = Object.keys(validates)
-	      if (customs) {
-	        items = items.concat(Object.keys(customs))
-	      }
+	      var items = Object.keys(validates).concat(Object.keys(customs))
 	      return items.some(function (item) {
 	        return item === validator
 	      })
