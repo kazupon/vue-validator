@@ -1,3 +1,7 @@
+# v1.3.0 / 2015-07-14
+
+* Support reactivity (#6)
+
 # v1.2.2 / 2015-07-10
 
 * Fix validates option read access error (#32)

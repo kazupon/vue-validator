@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.2.2
+ * vue-validator v1.3.0
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -98,7 +98,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    priority: 1024,
 
 	    bind: function () {
-	      var self = this
 	      var vm = this.vm
 	      var el = this.el
 	      var $validator = vm[componentName]
@@ -127,16 +126,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $validator._addReadyEvents(keypath, this._checkParam('wait-for'))
 	      }
 	      
-	      if (!$validator._isRegistedReadyEvent(keypath)) {
-	        this._setupValidator($validator, keypath, validation, validator, arg, init)
-	      } else {
+	      this._setupValidator($validator, keypath, validation, validator, arg, init)
+	    },
+
+	    update: function (val, old) {
+	      if (this._ignore) { return }
+
+	      var vm = this.vm
+	      var keypath = this._keypath
+	      var validator = this.arg ? this.arg : this.expression
+	      var $validator = vm[componentName]
+
+	      $validator._changeValidator(keypath, validator, val)
+	      if (!$validator._isRegistedReadyEvent(keypath)) { // normal
+	        $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
+	        $validator._doValidate(keypath, validator, $validator.$get(keypath))
+	      } else { // wait-for
 	        vm.$once($validator._getReadyEvents(keypath), function (val) {
+	          $validator._setInitialValue(keypath, val)
 	          vm.$set(keypath, val)
-	          self._setupValidator($validator, keypath, validation, validator, arg, val)
+	          $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
+	          $validator._doValidate(keypath, validator, $validator.$get(keypath))
 	        })
 	      }
 	    },
 
+	     
 	    unbind: function () {
 	      if (this._ignore) { return }
 
@@ -161,18 +176,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
+	      var vm = this.vm
+
 	      if (!getVal($validator[validation], keypath)) {
-	        $validator._defineModelValidationScope(keypath, init)
+	        $validator._defineModelValidationScope(keypath)
+	        $validator._setInitialValue(keypath, init)
 	      }
 
 	      if (!getVal($validator[validation], [keypath, validator].join('.'))) {
 	        $validator._defineValidatorToValidationScope(keypath, validator)
-	        $validator._addValidators(keypath, validator, arg)
+	        $validator._addValidator(keypath, validator, getVal(vm, arg) || arg)
 	      }
 
 	      $validator._addManagedValidator(keypath, validator)
+	    },
 
-	      $validator._doValidate(keypath, init, $validator.$get(keypath))
+	    _updateValidator: function () {
 	    },
 
 	    _teardownValidator: function (vm, $validator, keypath, validator) {
@@ -234,10 +253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function pattern (val, pat) {
 	  if (typeof pat !== 'string') { return false }
 
-	  var quoted = stripQuotes(pat)
-	  if (!quoted) { return false }
-
-	  var match = quoted.match(new RegExp('^/(.*?)/([gimy]*)$'))
+	  var match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'))
 	  if (!match) { return false }
 
 	  return new RegExp(match[1], match[2]).test(val)
@@ -324,22 +340,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	/**
-	 * Strip quotes from a string
-	 *
-	 * @param {String} str
-	 * @return {String | false}
-	 */
-
-	function stripQuotes (str) {
-	  var a = str.charCodeAt(0)
-	  var b = str.charCodeAt(str.length - 1)
-	  return a === b && (a === 0x22 || a === 0x27)
-	    ? str.slice(1, -1)
-	    : false
-	}
-
-
-	/**
 	 * export(s)
 	 */
 	module.exports = {
@@ -396,6 +396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _initValidationVariables: function () {
 	      this._validators = {}
 	      this._validates = {}
+	      this._initialValues = {}
 	      for (var key in validates) {
 	        this._validates[key] = validates[key]
 	      }
@@ -514,7 +515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$parent.$delete(this._getValidationNamespace('validation'))
 	    },
 
-	    _defineModelValidationScope: function (keypath, init) {
+	    _defineModelValidationScope: function (keypath) {
 	      var self = this
 	      var validationName = this._getValidationNamespace('validation')
 	      var dirtyName = this._getValidationNamespace('dirty')
@@ -552,7 +553,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._validators[keypath] = []
 
 	      this._watchModel(keypath, function (val, old) {
-	        self._doValidate(keypath, init, val)
+	        self._updateDirtyProperty(keypath, val)
+	        self._validators[keypath].forEach(function (validator) {
+	          self._doValidate(keypath, validator.name, val)
+	        })
 	      })
 	    },
 
@@ -587,8 +591,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    },
 
-	    _addValidators: function (keypath, validator, arg) {
+	    _getInitialValue: function (keypath) {
+	      return this._initValidationVariables[keypath]
+	    },
+
+	    _setInitialValue: function (keypath, val) {
+	      this._initValidationVariables[keypath] = val
+	    },
+
+	    _addValidator: function (keypath, validator, arg) {
 	      this._validators[keypath].push({ name: validator, arg: arg })
+	    },
+
+	    _changeValidator: function (keypath, validator, arg) {
+	      var validators = this._validators[keypath]
+	      var i = validators.length
+	      while (i--) {
+	        if (validators[i].name === validator) {
+	          validators[i].arg = arg
+	          break
+	        }
+	      }
+	    },
+
+	    _findValidator: function (keypath, validator) {
+	      var found = null
+	      var validators = this._validators[keypath]
+	      var i = validators.length
+	      while (i--) {
+	        if (validators[i].name === validator) {
+	          found = validators[i]
+	          break
+	        }
+	      }
+	      return found
 	    },
 
 	    _watchModel: function (keypath, fn) {
@@ -630,17 +666,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return id in this._readyEvents
 	    },
 
-	    _doValidate: function (keypath, init, val) {
-	      var self = this
+	    _updateDirtyProperty: function (keypath, val) {
 	      var validationName = this._getValidationNamespace('validation')
 	      var dirtyName = this._getValidationNamespace('dirty')
 
 	      var target = getTarget(this[validationName], keypath)
-	      target[dirtyName] = (init !== val)
-	      this._validators[keypath].forEach(function (validator) {
-	        target[validator.name] =
-	          !self._validates[validator.name].call(self, val, validator.arg)
-	      })
+	      target.$set(dirtyName, this._getInitialValue(keypath) !== val)
+	    },
+
+	    _doValidate: function (keypath, validateName, val) {
+	      var validationName = this._getValidationNamespace('validation')
+
+	      var target = getTarget(this[validationName], keypath)
+	      var validator = this._findValidator(keypath, validateName)
+	      if (validator) {
+	        target.$set(
+	          validateName,
+	          !this._validates[validateName].call(this, val, validator.arg)
+	        )
+	      }
 	    }
 	  }
 	}
