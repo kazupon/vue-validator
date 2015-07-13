@@ -192,14 +192,44 @@ In the above example, the `dirty` keep the all `v-model`.
 
 ## v-validate
 - This directive must be used together with `v-model`.
+- This directive accepts a property of viewmodel.
+- Directive params: wait-for
 
 Validate the value of `v-model`. 
 You can specify the build-in validator or custom validator to be described later.
 
-### attributes
+### Reactivity
+You can specify the property of viewmodel as validator reactive argument.
 
-#### wait-for
-Allows initialization of validation to wait for asynchronous data to be loaded.
+For Example:
+
+```html
+<form id="config-form">
+    <input type="text" v-model="threshold" v-validate="min: minValue, max: maxValue">
+</form>
+```
+
+```javascript
+new Vue({
+  data: {
+    threshold: 50,
+    minValue: 0, // for `min` validator
+    maxValue: 100 // for `max` validator
+  },
+  ready: function () {
+    // change validator argument
+    this.$set('min', -50)
+    this.$set('max', 100)
+  }
+}).$mount('#config-form')
+```
+
+> **NOTE:**
+In current version, not support {{ mustache }} expressions.
+
+
+### Lazy initialization
+when you will use `wait-for` attribute, you allows initialization of validation to wait for asynchronous data to be loaded.
 You can specify an event name that is occured by `$emit` at `created`, `compiled` or `ready` hook.
 
 For example:
