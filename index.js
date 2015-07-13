@@ -36,7 +36,6 @@ function install (Vue, options) {
     priority: 1024,
 
     bind: function () {
-      var self = this
       var vm = this.vm
       var el = this.el
       var $validator = vm[componentName]
@@ -65,16 +64,32 @@ function install (Vue, options) {
         $validator._addReadyEvents(keypath, this._checkParam('wait-for'))
       }
       
-      if (!$validator._isRegistedReadyEvent(keypath)) {
-        this._setupValidator($validator, keypath, validation, validator, arg, init)
-      } else {
+      this._setupValidator($validator, keypath, validation, validator, arg, init)
+    },
+
+    update: function (val, old) {
+      if (this._ignore) { return }
+
+      var vm = this.vm
+      var keypath = this._keypath
+      var validator = this.arg ? this.arg : this.expression
+      var $validator = vm[componentName]
+
+      $validator._changeValidator(keypath, validator, val)
+      if (!$validator._isRegistedReadyEvent(keypath)) { // normal
+        $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
+        $validator._doValidate(keypath, validator, $validator.$get(keypath))
+      } else { // wait-for
         vm.$once($validator._getReadyEvents(keypath), function (val) {
+          $validator._setInitialValue(keypath, val)
           vm.$set(keypath, val)
-          self._setupValidator($validator, keypath, validation, validator, arg, val)
+          $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
+          $validator._doValidate(keypath, validator, $validator.$get(keypath))
         })
       }
     },
 
+     
     unbind: function () {
       if (this._ignore) { return }
 
@@ -99,18 +114,22 @@ function install (Vue, options) {
     },
 
     _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
+      var vm = this.vm
+
       if (!getVal($validator[validation], keypath)) {
-        $validator._defineModelValidationScope(keypath, init)
+        $validator._defineModelValidationScope(keypath)
+        $validator._setInitialValue(keypath, init)
       }
 
       if (!getVal($validator[validation], [keypath, validator].join('.'))) {
         $validator._defineValidatorToValidationScope(keypath, validator)
-        $validator._addValidators(keypath, validator, arg)
+        $validator._addValidator(keypath, validator, getVal(vm, arg) || arg)
       }
 
       $validator._addManagedValidator(keypath, validator)
+    },
 
-      $validator._doValidate(keypath, init, $validator.$get(keypath))
+    _updateValidator: function () {
     },
 
     _teardownValidator: function (vm, $validator, keypath, validator) {

@@ -154,22 +154,5 @@ describe('pattern', function () {
         expect(targetVM.validation.msg.pattern).to.be(false)
       })
     })
-
-    describe('single quote in pattern', function () {
-      beforeEach(function (done) {
-        vm = createInstance({
-          template: '<input type="text" v-model="msg" v-validate="pattern: \'/h\'ello/\'">',
-          data: { msg: '111' }
-        })
-        targetVM = vm.$children[0]
-        vm.msg = 'h\'ello'
-
-        Vue.nextTick(done)
-      })
-
-      it('should be valid', function () {
-        expect(targetVM.validation.msg.pattern).to.be(false)
-      })
-    })
   })
 })
