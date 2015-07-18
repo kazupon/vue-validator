@@ -1,3 +1,7 @@
+# v1.3.1 / 2015-07-18
+
+* Fix dirty property bug (#36)
+
 # v1.3.0 / 2015-07-14
 
 * Support reactivity (#6)

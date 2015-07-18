@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.3.0
+ * vue-validator v1.3.1
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -464,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var self = this
 
 	      var walk = function (obj, propName, namespaces) {
-	        var ret = true
+	        var ret = false
 	        var keys = Object.keys(obj)
 	        var i = keys.length
 	        var key, last
@@ -473,10 +473,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          last = obj[key]
 	          if (!(key in namespaces) && typeof last === 'object') {
 	            ret = walk(last, propName, namespaces)
-	            if (!ret) { break }
+	            if ((propName === self._getValidationNamespace('valid') && !ret) ||
+	                (propName === self._getValidationNamespace('dirty') && ret)) {
+	              break
+	            }
 	          } else if (key === propName && typeof last !== 'object') {
 	            ret = last
-	            if (!ret) { break }
+	            if ((key === self._getValidationNamespace('valid') && !ret) ||
+	                (key === self._getValidationNamespace('dirty') && ret)) {
+	              break
+	            }
 	          }
 	        }
 	        return ret
@@ -592,11 +598,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _getInitialValue: function (keypath) {
-	      return this._initValidationVariables[keypath]
+	      return this._initialValues[keypath]
 	    },
 
 	    _setInitialValue: function (keypath, val) {
-	      this._initValidationVariables[keypath] = val
+	      this._initialValues[keypath] = val
 	    },
 
 	    _addValidator: function (keypath, validator, arg) {
