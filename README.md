@@ -175,6 +175,8 @@ In the above example, the `dirty` keep the per each `v-model`.
 ### all models
 The `dirty` keep the result of all moedls.
 
+If you has some model properties, when any one property is dirty, it return `true`.
+
 For example, you can use `dirty` as follows
 
 ```html

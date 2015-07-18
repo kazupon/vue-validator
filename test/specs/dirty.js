@@ -95,8 +95,8 @@ describe('dirty', function () {
       })
 
       describe('dirty', function () {
-        it('should be false', function () {
-          expect(targetVM.dirty).to.be(false)
+        it('should be true', function () {
+          expect(targetVM.dirty).to.be(true)
         })
       })
     })
