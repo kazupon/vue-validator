@@ -53,6 +53,12 @@ describe('validates', function () {
           expect(required(0.11)).to.be(true)
         })
       })
+
+      describe('0', function () {
+        it('should be false', function () {
+          expect(required(0)).to.be(true)
+        })
+      })
     })
 
     describe('object', function () {
