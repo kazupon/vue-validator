@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.3.1
+ * vue-validator v1.3.2
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -230,6 +230,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function required (val) {
 	  if (Array.isArray(val)) {
 	    return val.length > 0
+	  } else if (typeof val === 'number') {
+	    return true
 	  } else if ((val !== null) && (typeof val === 'object')) {
 	    return Object.keys(val).length > 0
 	  } else {

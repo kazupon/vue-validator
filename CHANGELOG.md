@@ -1,3 +1,7 @@
+# v1.3.2 / 2015-07-19
+
+* Fix `required` validator bug (#37)
+
 # v1.3.1 / 2015-07-18
 
 * Fix dirty property bug (#36)
