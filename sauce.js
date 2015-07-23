@@ -21,12 +21,12 @@ var batches = [
       base: 'SauceLabs',
       browserName: 'chrome',
       platform: 'Windows 7',
-      version: '39'
+      version: '43'
     },
     sl_firefox: {
       base: 'SauceLabs',
       browserName: 'firefox',
-      version: '33'
+      version: '39'
     },
     sl_mac_safari: {
       base: 'SauceLabs',
@@ -62,7 +62,7 @@ var batches = [
       base: 'SauceLabs',
       browserName: 'iphone',
       platform: 'OS X 10.9',
-      version: '8.1'
+      version: '7.1'
     },
     sl_android: {
       base: 'SauceLabs',
