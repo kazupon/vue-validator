@@ -1,3 +1,7 @@
+# v1.3.3 / 2015-07-23
+
+* Fix component $destroy bug (#38)
+
 # v1.3.2 / 2015-07-19
 
 * Fix `required` validator bug (#37)

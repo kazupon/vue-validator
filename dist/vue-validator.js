@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.3.2
+ * vue-validator v1.3.3
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -187,23 +187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $validator._defineValidatorToValidationScope(keypath, validator)
 	        $validator._addValidator(keypath, validator, getVal(vm, arg) || arg)
 	      }
-
-	      $validator._addManagedValidator(keypath, validator)
-	    },
-
-	    _updateValidator: function () {
 	    },
 
 	    _teardownValidator: function (vm, $validator, keypath, validator) {
-	      $validator._deleteManagedValidator(keypath, validator)
 	      $validator._undefineValidatorToValidationScope(keypath, validator)
-	      $validator._undefineModelValidationScope(keypath)
-
-	      if (!$validator._isManagedValidator()) {
-	        $validator.$destroy()
-	        vm[componentName] = null
-	        delete vm[componentName]
-	      }
+	      $validator._undefineModelValidationScope(keypath, validator)
 	    }
 	  })
 	}
@@ -385,11 +373,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defineValidationScope()
 	  },
 
-	  beforeDestroy: function () {
-	    this._undefineProperties()
-	    this._undefineValidationScope()
-	  },
-
 	  methods: {
 	    _getValidationNamespace: function (key) {
 	      return this.$options.validator.namespace[key]
@@ -403,7 +386,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._validates[key] = validates[key]
 	      }
 	      this._validatorWatchers = {}
-	      this._managedValidator = {}
 	      this._readyEvents = {}
 	    },
 
@@ -520,7 +502,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _undefineValidationScope: function () {
-	      this.$parent.$delete(this._getValidationNamespace('validation'))
+	      var validationName = this._getValidationNamespace('validation')
+	      this.$parent.$delete(validationName)
 	    },
 
 	    _defineModelValidationScope: function (keypath) {
@@ -568,17 +551,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      })
 	    },
 
-	    _undefineModelValidationScope: function (keypath) {
+	    _undefineModelValidationScope: function (keypath, validator) {
 	      if (this.$parent) {
 	        var targetPath = [this._getValidationNamespace('validation'), keypath].join('.')
 	        var target = this.$parent.$get(targetPath)
-	        if (target) {
+	        if (target && Object.keys(target).length === 3 &&
+	            this._getValidationNamespace('valid') in target &&
+	            this._getValidationNamespace('invalid') in target &&
+	            this._getValidationNamespace('dirty') in target) {
 	          this._unwatchModel(keypath)
 	          this._undefineDirtyProperty(target)
 	          this._undefineInvalidProperty(target)
 	          this._undefineValidProperty(target)
-	          var validation = this.$parent.$get(this._getValidationNamespace('validation'))
-	          validation.$delete(keypath)
+	          removeValidationProperties(
+	            this.$parent.$get(this._getValidationNamespace('validation')),
+	            keypath
+	          )
 	        }
 	      }
 	    },
@@ -648,20 +636,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    },
 	    
-	    _addManagedValidator: function (keypath, validator) {
-	      this._managedValidator[[keypath, validator].join('.')] = true
-	    },
-
-	    _deleteManagedValidator: function (keypath, validator) {
-	      var key = [keypath, validator].join('.')
-	      this._managedValidator[key] = null
-	      delete this._managedValidator[key]
-	    },
-
-	    _isManagedValidator: function () {
-	      return Object.keys(this._managedValidator).length !== 0
-	    },
-
 	    _addReadyEvents: function (id, event) {
 	      this._readyEvents[id] = event
 	    },
@@ -715,6 +689,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    last = obj
 	  }
 	  return last
+	}
+
+	/**
+	 * Remove properties from target validation
+	 *
+	 * @param {Object} validation
+	 * @param {String} keypath
+	 */
+
+	function removeValidationProperties (validation, keypath) {
+	  var keys = keypath.split('.')
+	  var key, obj
+	  while (keys.length) {
+	    key = keys.pop()
+	    if (keys.length !== 0) {
+	      obj = getTarget(validation, keys.join('.'))
+	      obj.$delete(key)
+	    } else {
+	      validation.$delete(key)
+	    }
+	  }
 	}
 
 
