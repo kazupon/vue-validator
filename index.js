@@ -125,23 +125,11 @@ function install (Vue, options) {
         $validator._defineValidatorToValidationScope(keypath, validator)
         $validator._addValidator(keypath, validator, getVal(vm, arg) || arg)
       }
-
-      $validator._addManagedValidator(keypath, validator)
-    },
-
-    _updateValidator: function () {
     },
 
     _teardownValidator: function (vm, $validator, keypath, validator) {
-      $validator._deleteManagedValidator(keypath, validator)
       $validator._undefineValidatorToValidationScope(keypath, validator)
-      $validator._undefineModelValidationScope(keypath)
-
-      if (!$validator._isManagedValidator()) {
-        $validator.$destroy()
-        vm[componentName] = null
-        delete vm[componentName]
-      }
+      $validator._undefineModelValidationScope(keypath, validator)
     }
   })
 }

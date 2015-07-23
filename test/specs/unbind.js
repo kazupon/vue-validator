@@ -16,21 +16,70 @@ describe('directive unbind', function () {
 
 
   describe('$destroy', function () {
-    beforeEach(function (done) {
-      vm = createInstance({
-        template: '<input type="text" v-model="msg" v-validate="required">',
-        data: { msg: '' }
+    describe('explicit', function () {
+      beforeEach(function (done) {
+        vm = createInstance({
+          template: '<input type="text" v-model="msg" v-validate="required">',
+          data: { msg: '' }
+        })
+
+        Vue.nextTick(done)
       })
 
-      Vue.nextTick(function () {
+      it('should not be error', function (done) {
         vm.$destroy()
         Vue.nextTick(done)
       })
     })
 
-    describe('validator instance', function () {
-      it('should not be exist', function () {
-        expect(vm).not.to.have.key('$validator')
+    describe('implicit', function () {
+      beforeEach(function (done) {
+        vm = createInstance({
+          template: '<h1>Implicit destroy</h1><component is="{{currentView}}"></component>',
+          components: {
+            component1: {
+              template: '<input type="number" v-model="percent" v-validate="min: 0" number>' +
+                '<span v-show="validation.percent.invalid">invalid</span>',
+              data: function () { return { percent: -2 } }
+            },
+            component2: {
+              template: '<p>compnent2</p>'
+            }
+          },
+          data: { currentView: 'component1' }
+        }, false)
+        
+        Vue.nextTick(done)
+      })
+
+      it('should be validated', function () {
+        expect(vm.$children[0].validation.percent.min).to.be(true)
+        expect(vm.$children[0].validation.percent.valid).to.be(false)
+        expect(vm.$children[0].validation.percent.invalid).to.be(true)
+      })
+
+      describe('switch component2', function () {
+        beforeEach(function (done) {
+          vm.$set('currentView', 'component2')
+          Vue.nextTick(done)
+        })
+
+        it('should not be exist', function () {
+          expect(vm.$children[0]).not.to.have.key('validation')
+        })
+
+        describe('switch component1', function () {
+          beforeEach(function (done) {
+            vm.$set('currentView', 'component1')
+            Vue.nextTick(done)
+          })
+
+          it('should be validated', function () {
+            expect(vm.$children[0].validation.percent.min).to.be(true)
+            expect(vm.$children[0].validation.percent.valid).to.be(false)
+            expect(vm.$children[0].validation.percent.invalid).to.be(true)
+          })
+        })
       })
     })
   })
@@ -74,12 +123,6 @@ describe('directive unbind', function () {
       beforeEach(function (done) {
         vm.enabled = false
         Vue.nextTick(done)
-      })
-
-      describe('validation property', function () {
-        it('should not be exist', function () {
-          expect(vm).not.to.have.key('validation')
-        })
       })
 
       describe('set enabled value true', function () {

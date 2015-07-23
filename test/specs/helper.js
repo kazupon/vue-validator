@@ -35,8 +35,9 @@ var wrapTemplate = exports.wrapTemplate = function (target, tag) {
  * @return {Object} created Vue component instance
  */
 
-exports.createInstance = function (params) {
+exports.createInstance = function (params, extend) {
   params = params || {}
+  extend = (extend === undefined ? true : extend)
   var options = {}
 
   options.el = params.el || function () {
@@ -50,6 +51,11 @@ exports.createInstance = function (params) {
   }
 
   options.template = wrapTemplate(params.target || params.template || '')
+
+  if (params.components) {
+    options.components = params.components
+  }
+
   if (params.validator) {
     options.validator = params.validator
   }
@@ -61,6 +67,10 @@ exports.createInstance = function (params) {
     }
   })
 
-  var Validator = Vue.extend(options)
-  return new Validator()
+  if (extend) {
+    var Ctor = Vue.extend(options)
+    return new Ctor()
+  } else {
+    return new Vue(options)
+  }
 }
