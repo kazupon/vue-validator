@@ -1,3 +1,7 @@
+# v1.4.0 / 2015-07-31
+
+* Add async validation
+
 # v1.3.3 / 2015-07-23
 
 * Fix component $destroy bug (#38)
