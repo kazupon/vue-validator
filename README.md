@@ -405,6 +405,61 @@ If so, you can use validation result of custom validator.
 > NOTE:
 Your custom validator function should return the boolean value (valid -> `true`, invalid -> `false`).
 
+## Async validation
+
+You can implement async validation.
+
+Example:
+
+```html
+<form id="user-registration">
+    username: <input type="text" v-model="username" v-validate="exist"><br />
+    <input type="submit" value="send" v-if="valid && dirty">
+    <div>
+        <span v-if="validation.username.exist">already exist username.</span>
+    </div>
+</form>
+```
+
+```javascript
+new Vue({
+  data: { username: '' },
+  validator: {
+    validates: {
+      exist: function (val) {
+        return function (resolve, reject) {
+          // server-side validation with ajax (e.g. using `fetch` case)
+          fetch('/validators/exist', {
+              method: 'post',
+              headers: {
+                  'content-type': 'application/json',
+                  'x-token': 'xxxxxxxx'
+              },
+              body: JSON.stringify({ username: val })
+          }).then(function (res) {
+              if (res.status === 200) {
+                  resolve()
+              } else if (res.status === 400) {
+                  // something todo ...
+              }
+          }).catch(function (err) {
+              // something todo ...
+              reject()
+          })
+        }
+      }
+    }
+  }
+}).$mount('#user-registration')
+```
+
+You need to implement custom validator that return function have `function (resolve, reject)` like promise (future).
+The following, those argument of the function, you need to use according to validation result.
+
+- validation result
+    - successful: `resolve`
+    - failed: `reject`
+
 
 # Options
 
