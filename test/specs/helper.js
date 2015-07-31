@@ -56,6 +56,14 @@ exports.createInstance = function (params, extend) {
     options.components = params.components
   }
 
+  if (params.computed) {
+    options.computed = params.computed
+  }
+
+  if (params.methods) {
+    options.methods = params.methods
+  }
+
   if (params.validator) {
     options.validator = params.validator
   }
