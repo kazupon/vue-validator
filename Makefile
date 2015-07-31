@@ -1,6 +1,6 @@
 KARMA = node_modules/karma/bin/karma
 MOCHA = ./node_modules/mocha/bin/_mocha
-SRCS = ./*.js lib/*.js test/specs/*.js test/specs/*.js
+SRCS = ./index.js ./karma.conf.js ./webpack.conf.js lib/*.js test/specs/*.js test/specs/*.js
 
 
 lint:
@@ -33,16 +33,16 @@ coveralls:
 e2e:
 	@$(MOCHA) -R dot ./test/e2e/registration.js
 
-sauce1:
+coolkids:
 	@VUE_VALIDATOR_TYPE=sauce SAUCE=batch1 $(MAKE) test
 	
-sauce2:
+ie:
 	@VUE_VALIDATOR_TYPE=sauce SAUCE=batch2 $(MAKE) test
 
-sauce3:
+mobile:
 	@VUE_VALIDATOR_TYPE=sauce SAUCE=batch3 $(MAKE) test
 
-sauce: sauce1 sauce2 sauce3
+sauce: coolkids ie mobile
 
 ci: coverage coveralls e2e sauce
 
