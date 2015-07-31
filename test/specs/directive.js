@@ -3,6 +3,7 @@
  */
 
 var Vue = require('../../node_modules/vue/dist/vue')
+var _ = require('../../lib/util')
 var plugin = require('../../index')
 var createInstance = require('./helper').createInstance
 
@@ -38,7 +39,10 @@ describe('directive', function () {
 
 
   describe('specify empty', function () {
+    var spy
     beforeEach(function (done) {
+      spy = sinon.spy(_, 'warn')
+
       var template = '<div v-if="enabled">'
         + '<input type="text" v-model="foo" v-validate="">'
         + '<input type="text" v-model="bar" v-validate="min: 0, max:5">'
@@ -49,6 +53,16 @@ describe('directive', function () {
       })
 
       Vue.nextTick(done)
+    })
+
+    afterEach(function () {
+      _.warn.restore()
+    })
+
+    describe('warn', function () {
+      it('should be called', function () {
+        expect(spy.called).to.be(true)
+      })
     })
 
     describe('foo', function () {

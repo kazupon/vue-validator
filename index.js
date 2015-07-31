@@ -3,6 +3,7 @@
  */
 
 var validates = require('./lib/validates')
+var _ = require('./lib/util')
 
 
 /**
@@ -21,7 +22,6 @@ function install (Vue, options) {
   var componentName = options.component = options.component || '$validator'
   var directiveName = options.directive = options.directive || 'validate'
   var path = Vue.parsers.path
-  var utils = Vue.util
 
   function getVal (obj, keypath) {
     var ret = null
@@ -33,6 +33,7 @@ function install (Vue, options) {
 
 
   Vue.directive(directiveName, {
+
     priority: 1024,
 
     bind: function () {
@@ -45,7 +46,7 @@ function install (Vue, options) {
 
       var customs = (vm.$options.validator && vm.$options.validator.validates) || {}
       if (!this._checkDirective(validator, validates, customs)) {
-        utils.warn('specified invalid v-validate directive !! please check v-validator directive !!')
+        _.warn('specified invalid v-validate directive !! please check v-validator directive !!')
         this._ignore = true
         return
       }
