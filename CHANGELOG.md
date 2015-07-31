@@ -1,3 +1,7 @@
+# v1.4.1 / 2015-07-31
+
+* Fix code bundling issue
+
 # v1.4.0 / 2015-07-31
 
 * Add async validation
