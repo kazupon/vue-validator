@@ -201,7 +201,7 @@ Validate the value of `v-model`.
 You can specify the build-in validator or custom validator to be described later.
 
 ### Reactivity
-You can specify the property of viewmodel as validator reactive argument.
+You can specify the property of viewmodel as validator reactive argument to expression of directive.
 
 For Example:
 
@@ -229,6 +229,81 @@ new Vue({
 > **NOTE:**
 In current version, not support {{ mustache }} expressions.
 
+Of course, you can specify computed properties and method that was defined `methods` in Vue instance.
+
+The following is an example that using a custom validator:
+
+```html
+<style>.error { border: solid #ff0000; }</style>
+<form id="demo">
+  <label for="response">How do you want to respond ?</label>
+  <input id="response_approve" 
+         checked="checked" 
+         name="response" 
+         type="radio" 
+         value="approve" 
+         v-model="response">
+  <label for="response_approve">approve</label>
+  <input id="response_decline" 
+         name="response" 
+         type="radio" 
+         value="decline" 
+         v-model="response">
+  <label for="response_decline">decline</label>
+  
+  <div v-show="conditionalField(response, 'approve')" 
+       v-class="error: validation.message.approve.invalid">
+    <label for="approved_message">Approved message</label>
+    <input type="text" 
+           id="approved_message" 
+           name="approved_message" 
+           v-model="message.approve" 
+           v-validate="requiredIf: conditionalField(response, 'approve'), maxLength: 100">
+  </div>
+  
+  <div v-show="conditionalField(response, 'decline')" 
+       v-class="error: validation.message.decline.invalid">
+    <label for="declined_message">Declined message</label>
+    <input type="text" 
+           id="declined_message" 
+           name="declined_message" 
+           v-model="message.decline" 
+           v-validate="requiredIf: conditionalField(response, 'decline'), maxLength: 100">
+  </div>
+      
+  <div><input type="submit" v-if="validFiled"></div>
+</form>
+```
+
+```javascript
+new Vue({
+  data: {
+    response: '',
+    message: {
+      approve: '',
+      decline: ''
+    }
+  },
+  computed: {
+    validFiled: function () {
+      return this.validation.message.approve.valid ||
+             this.validation.message.decline.valid
+    }
+  },
+  validator: {
+    validates: {
+      requiredIf: function (val, condition){
+        return val && condition
+      }
+    }
+  },
+  methods: {
+    conditionalField: function (response, type) {
+      return response === type
+    }
+  }
+}).$mount('#demo')
+```
 
 ### Lazy initialization
 when you will use `wait-for` attribute, you allows initialization of validation to wait for asynchronous data to be loaded.
