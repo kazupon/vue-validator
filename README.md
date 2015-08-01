@@ -14,16 +14,6 @@ Validator component for Vue.js
 
 # Installation
 
-## Standalone
-
-### CDN
-
-```html
-<script src="http://cdn.jsdelivr.net/vue.validator/1.4.1/vue-validator.min.js"></script>
-```
-
-### Package Manager
-
 ## npm
 ```shell
 $ npm install vue-validator
@@ -39,6 +29,12 @@ $ bower install vue-validator
 
 ```javascript
 var validator = require('vuejs/vue-validator')
+```
+
+## CDN
+
+```html
+<script src="http://cdn.jsdelivr.net/vue.validator/1.4.1/vue-validator.min.js"></script>
 ```
 
 
