@@ -49,39 +49,39 @@ module.exports = function (config) {
   }
 
   switch (process.env.VUE_VALIDATOR_TYPE) {
-    case 'coverage':
-      settings.browsers = ['PhantomJS']
-      settings.reporters = ['coverage']
-      settings.coverageReporter = {
-        type: 'html',
-        dir: 'coverage/'
-      }
-      break
-    case 'coveralls':
-      settings.browsers = ['PhantomJS']
-      settings.reporters = ['coverage', 'coveralls']
-      settings.coverageReporter = {
-        type: 'lcov',
-        dir: 'coverage/'
-      }
-      break
-    case 'sauce':
-      var batch = process.env.SAUCE || 'batch1'
-      var sauce = require('./sauce')[batch]
-      settings.sauceLabs = sauce.sauceLabs
-      settings.captureTimeout = sauce.captureTimeout
-      settings.customLaunchers = sauce.customLaunchers
-      settings.browsers = sauce.browsers
-      settings.reporters = sauce.reporters
-      break
-    case 'browser':
-      settings.browsers = ['Chrome', 'Safari', 'Firefox']
-      settings.reporters = ['progress']
-      break
-    default:
-      settings.browsers = ['PhantomJS']
-      settings.reporters = ['progress']
-      break
+  case 'coverage':
+    settings.browsers = ['PhantomJS']
+    settings.reporters = ['coverage']
+    settings.coverageReporter = {
+      type: 'html',
+      dir: 'coverage/'
+    }
+    break
+  case 'coveralls':
+    settings.browsers = ['PhantomJS']
+    settings.reporters = ['coverage', 'coveralls']
+    settings.coverageReporter = {
+      type: 'lcov',
+      dir: 'coverage/'
+    }
+    break
+  case 'sauce':
+    var batch = process.env.SAUCE || 'batch1'
+    var sauce = require('./sauce')[batch]
+    settings.sauceLabs = sauce.sauceLabs
+    settings.captureTimeout = sauce.captureTimeout
+    settings.customLaunchers = sauce.customLaunchers
+    settings.browsers = sauce.browsers
+    settings.reporters = sauce.reporters
+    break
+  case 'browser':
+    settings.browsers = ['Chrome', 'Safari', 'Firefox']
+    settings.reporters = ['progress']
+    break
+  default:
+    settings.browsers = ['PhantomJS']
+    settings.reporters = ['progress']
+    break
   }
 
   config.set(settings)
