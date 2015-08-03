@@ -22,8 +22,8 @@
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.10",
     "karma-sinon": "^1.0.4",
-    "mocha": "^1.18.2",
-    "nightmare": "^1.6.5",
+    "mocha": "^2.2.5",
+    "nightmare": "^1.8.2",
     "sinon": "^1.15.4",
     "vue": "^0.12.16",
     "webpack": "^1.4.13"
