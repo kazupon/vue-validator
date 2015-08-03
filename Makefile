@@ -12,13 +12,10 @@ dist: lint node_modules
 minify: lint node_modules
 	@./task/minify
 
-semi: lint
-	@node_modules/.bin/semi rm $(SRCS) --silent
-
 node_modules: package.json
 	@npm install
 
-test: semi node_modules
+test: lint node_modules
 	@$(KARMA) start
 
 browser:
