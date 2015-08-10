@@ -2,6 +2,7 @@
  * Import(s)
  */
 
+var assert = require('power-assert')
 var validates = require('../../lib/validates')
 var required = validates.required
 var pattern = validates.pattern
@@ -16,13 +17,13 @@ describe('validates', function () {
     describe('string', function () {
       describe('not empty', function () {
         it('should be true', function () {
-          expect(required('hello')).to.be(true)
+          assert(required('hello'))
         })
       })
 
       describe('empty', function () {
         it('should be false', function () {
-          expect(required('')).to.be(false)
+          assert(required('') === false)
         })
       })
     })
@@ -30,13 +31,13 @@ describe('validates', function () {
     describe('boolean', function () {
       describe('true', function () {
         it('should be true', function () {
-          expect(required(true)).to.be(true)
+          assert(required(true))
         })
       })
 
       describe('false', function () {
         it('should be false', function () {
-          expect(required(false)).to.be(false)
+          assert(required(false) === false)
         })
       })
     })
@@ -44,19 +45,19 @@ describe('validates', function () {
     describe('numeric', function () {
       describe('integer', function () {
         it('should be true', function () {
-          expect(required(11)).to.be(true)
+          assert(required(11))
         })
       })
 
       describe('float', function () {
         it('should be true', function () {
-          expect(required(0.11)).to.be(true)
+          assert(required(0.11))
         })
       })
 
       describe('0', function () {
-        it('should be false', function () {
-          expect(required(0)).to.be(true)
+        it('should be true', function () {
+          assert(required(0))
         })
       })
     })
@@ -64,13 +65,13 @@ describe('validates', function () {
     describe('object', function () {
       describe('empty', function () {
         it('should be false', function () {
-          expect(required({})).to.be(false)
+          assert(required({}) === false)
         })
       })
 
       describe('not empty', function () {
         it('should be true', function () {
-          expect(required({ foo: 'bar' })).to.be(true)
+          assert(required({ foo: 'bar' }))
         })
       })
     })
@@ -78,32 +79,32 @@ describe('validates', function () {
     describe('array', function () {
       describe('empty', function () {
         it('should be false', function () {
-          expect(required([])).to.be(false)
+          assert(required([]) === false)
         })
       })
 
       describe('not empty', function () {
         it('should be true', function () {
-          expect(required([1, 'foo'])).to.be(true)
+          assert(required([1, 'foo']))
         })
       })
     })
 
     describe('function', function () {
       it('should be true', function () {
-        expect(required(function () {})).to.be(true)
+        assert(required(function () {}))
       })
     })
 
     describe('undefined', function () {
       it('should be false', function () {
-        expect(required(undefined)).to.be(false)
+        assert(required(undefined) === false)
       })
     })
 
     describe('null', function () {
       it('should be false', function () {
-        expect(required(null)).to.be(false)
+        assert(required(null) === false)
       })
     })
   })
@@ -113,13 +114,13 @@ describe('validates', function () {
     describe('basic regex', function () {
       describe('valid', function () {
         it('should be true', function () {
-          expect(pattern('foo', '/^[0-9a-zA-Z]+$/')).to.be(true)
+          assert(pattern('foo', '/^[0-9a-zA-Z]+$/'))
         })
       })
 
       describe('invalid', function () {
         it('should be false', function () {
-          expect(pattern('', '/^[0-9a-zA-Z]+$/')).to.be(false)
+          assert(pattern('', '/^[0-9a-zA-Z]+$/') === false)
         })
       })
     })
@@ -127,13 +128,13 @@ describe('validates', function () {
     describe('flag regex', function () {
       describe('valid', function () {
         it('should be true', function () {
-          expect(pattern('HELLO', '/hello/i')).to.be(true)
+          assert(pattern('HELLO', '/hello/i'))
         })
       })
 
       describe('invalid', function () {
         it('should be false', function () {
-          expect(pattern('foo', '/hello/i')).to.be(false)
+          assert(pattern('foo', '/hello/i') === false)
         })
       })
     })
@@ -141,43 +142,43 @@ describe('validates', function () {
     describe('regex pattern argument', function () {
       describe('not quoted', function () {
         it('should be validate', function () {
-          expect(pattern('foo', '/^[0-9a-zA-Z]+$/')).to.be(true)
+          assert(pattern('foo', '/^[0-9a-zA-Z]+$/'))
         })
       })
 
       describe('single quoted', function () {
         it('should not be validate', function () {
-          expect(pattern('foo', "'/^[0-9a-zA-Z]+$/'")).to.be(false)
+          assert(pattern('foo', "'/^[0-9a-zA-Z]+$/'") === false)
         })
       })
 
       describe('double quoted', function () {
         it('should not be validate', function () {
-          expect(pattern('foo', '"/^[0-9a-zA-Z]+$/"')).to.be(false)
+          assert(pattern('foo', '"/^[0-9a-zA-Z]+$/"') === false)
         })
       })
 
       describe('single quote in pattern', function () {
         it('should not be validate', function () {
-          expect(pattern("f'oo", "'/f\'oo/'")).to.be(false)
+          assert(pattern("f'oo", "'/f\'oo/'") === false)
         })
       })
 
       describe('double quote in pattern', function () {
         it('should not be validate', function () {
-          expect(pattern('f"oo', '"/f\"oo/"')).to.be(false)
+          assert(pattern('f"oo', '"/f\"oo/"') === false)
         })
       })
 
       describe('alternation in pattern', function () {
         it('should be validate', function () {
-          expect(pattern('foo', '/(foo|bar)/')).to.be(true)
+          assert(pattern('foo', '/(foo|bar)/'))
         })
       })
 
       describe('object type', function () {
         it('should be validate', function () {
-          expect(pattern('foo', {})).to.be(false)
+          assert(pattern('foo', {}) === false)
         })
       })
     })
@@ -188,38 +189,38 @@ describe('validates', function () {
     describe('boundary', function () {
       describe('length - 1', function () {
         it('should be false', function () {
-          expect(minLength('aaa', '4')).to.be(false)
+          assert(minLength('aaa', '4') === false)
         })
       })
 
       describe('just length', function () {
         it('should be true', function () {
-          expect(minLength('aaaa', '4')).to.be(true)
+          assert(minLength('aaaa', '4'))
         })
       })
 
       describe('length + 1', function () {
         it('should be true', function () {
-          expect(minLength('aaaaa', '4')).to.be(true)
+          assert(minLength('aaaaa', '4'))
         })
       })
     })
 
     describe('not string', function () {
       it('should be false', function () {
-        expect(minLength(111, '4')).to.be(false)
+        assert(minLength(111, '4') === false)
       })
     })
 
     describe('not integer argument', function () {
       it('should be false', function () {
-        expect(minLength('aaaa', 'hello')).to.be(false)
+        assert(minLength('aaaa', 'hello') === false)
       })
     })
 
     describe('integer argument', function () {
       it('should be true', function () {
-        expect(minLength('aaaa', 4)).to.be(true)
+        assert(minLength('aaaa', 4))
       })
     })
   })
@@ -229,38 +230,38 @@ describe('validates', function () {
     describe('boundary', function () {
       describe('length - 1', function () {
         it('should be true', function () {
-          expect(maxLength('aaa', '4')).to.be(true)
+          assert(maxLength('aaa', '4'))
         })
       })
 
       describe('just length', function () {
         it('should be true', function () {
-          expect(maxLength('aaaa', '4')).to.be(true)
+          assert(maxLength('aaaa', '4'))
         })
       })
 
       describe('length + 1', function () {
         it('should be false', function () {
-          expect(maxLength('aaaaa', '4')).to.be(false)
+          assert(maxLength('aaaaa', '4') === false)
         })
       })
     })
 
     describe('not string', function () {
       it('should be false', function () {
-        expect(maxLength({}, '4')).to.be(false)
+        assert(maxLength({}, '4') === false)
       })
     })
 
     describe('not integer argument', function () {
       it('should be false', function () {
-        expect(maxLength('aaaa', 'hello')).to.be(false)
+        assert(maxLength('aaaa', 'hello') === false)
       })
     })
 
     describe('integer argument', function () {
       it('should be true', function () {
-        expect(maxLength('aaaa', 4)).to.be(true)
+        assert(maxLength('aaaa', 4))
       })
     })
   })
@@ -271,19 +272,19 @@ describe('validates', function () {
       describe('value type: string', function () {
         describe('value - 1', function () {
           it('should be false', function () {
-            expect(min('3', '4')).to.be(false)
+            assert(min('3', '4') === false)
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(min('4', 4)).to.be(true)
+            assert(min('4', 4))
           })
         })
 
         describe('value + 1', function () {
           it('should be true', function () {
-            expect(min('5', '4')).to.be(true)
+            assert(min('5', '4'))
           })
         })
       })
@@ -291,19 +292,19 @@ describe('validates', function () {
       describe('value type: integer', function () {
         describe('value - 1', function () {
           it('should be false', function () {
-            expect(min(3, '4')).to.be(false)
+            assert(min(3, '4') === false)
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(min(4, 4)).to.be(true)
+            assert(min(4, 4))
           })
         })
 
         describe('value + 1', function () {
           it('should be true', function () {
-            expect(min(5, '4')).to.be(true)
+            assert(min(5, '4'))
           })
         })
       })
@@ -311,19 +312,19 @@ describe('validates', function () {
       describe('value type: float', function () {
         describe('value - 0.1', function () {
           it('should be false', function () {
-            expect(min(3.9, '4')).to.be(false)
+            assert(min(3.9, '4') === false)
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(min(4.0, 4)).to.be(true)
+            assert(min(4.0, 4))
           })
         })
 
         describe('value + 0.1', function () {
           it('should be true', function () {
-            expect(min(4.1, '4')).to.be(true)
+            assert(min(4.1, '4'))
           })
         })
       })
@@ -331,13 +332,13 @@ describe('validates', function () {
 
     describe('not number', function () {
       it('should be false', function () {
-        expect(min(function () {}, '4')).to.be(false)
+        assert(min(function () {}, '4') === false)
       })
     })
 
     describe('not integer argument', function () {
       it('should be false', function () {
-        expect(min('5', 'hello')).to.be(false)
+        assert(min('5', 'hello') === false)
       })
     })
   })
@@ -348,19 +349,19 @@ describe('validates', function () {
       describe('value type: string', function () {
         describe('value - 1', function () {
           it('should be true', function () {
-            expect(max('7', '8')).to.be(true)
+            assert(max('7', '8'))
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(max('8', 8)).to.be(true)
+            assert(max('8', 8))
           })
         })
 
         describe('value + 1', function () {
           it('should be false', function () {
-            expect(max('9', '8')).to.be(false)
+            assert(max('9', '8') === false)
           })
         })
       })
@@ -368,19 +369,19 @@ describe('validates', function () {
       describe('value type: integer', function () {
         describe('value - 1', function () {
           it('should be true', function () {
-            expect(max(7, '8')).to.be(true)
+            assert(max(7, '8'))
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(max(8, 8)).to.be(true)
+            assert(max(8, 8))
           })
         })
 
         describe('value + 1', function () {
           it('should be false', function () {
-            expect(max(9, '8')).to.be(false)
+            assert(max(9, '8') === false)
           })
         })
       })
@@ -388,19 +389,19 @@ describe('validates', function () {
       describe('value type: float', function () {
         describe('value - 0.1', function () {
           it('should be true', function () {
-            expect(max(7.9, '8')).to.be(true)
+            assert(max(7.9, '8'))
           })
         })
 
         describe('just value', function () {
           it('should be true', function () {
-            expect(max(8.0, 8)).to.be(true)
+            assert(max(8.0, 8))
           })
         })
 
         describe('value + 0.1', function () {
           it('should be false', function () {
-            expect(max(8.1, '8')).to.be(false)
+            assert(max(8.1, '8') === false)
           })
         })
       })
@@ -408,13 +409,13 @@ describe('validates', function () {
 
     describe('not number', function () {
       it('should be false', function () {
-        expect(max([1, 2], '4')).to.be(false)
+        assert(max([1, 2], '4') === false)
       })
     })
 
     describe('not integer argument', function () {
       it('should be false', function () {
-        expect(max('5', 'hello')).to.be(false)
+        assert(max('5', 'hello') === false)
       })
     })
   })

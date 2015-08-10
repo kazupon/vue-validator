@@ -8,13 +8,10 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'expect', 'commonjs', 'sinon'],
+    frameworks: ['mocha', 'expect', 'sinon'],
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/vue/dist/vue.js',
-      'lib/*.js',
-      'index.js',
       'test/**/specs/*.js'
     ],
 
@@ -24,11 +21,35 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'node_modules/vue/dist/vue.js': ['commonjs'],
-      'lib/*.js': ['coverage', 'commonjs'],
-      'index.js': ['coverage', 'commonjs'],
-      'test/**/specs/*.js': ['commonjs']
+      'node_modules/vue/dist/vue.js': ['webpack', 'sourcemap'],
+      'lib/*.js': ['webpack', 'sourcemap'],
+      'index.js': ['webpack', 'sourcemap'],
+      'test/**/specs/*.js': ['webpack', 'sourcemap']
     },
+
+    webpack: {
+      module: {
+        loaders: [{
+          test: /\.js$/,
+          loader: 'webpack-espower-loader'
+        }],
+        postLoaders: [{
+          test: /\.js$/,
+          exclude: /(test|node_modules)\//,
+          loader: 'istanbul-instrumenter'
+        }]
+      },
+      devtool: 'inline-source-map'
+    },
+
+    webpackMiddleware: {
+      noInfo: true
+    },
+    
+    /*
+    plugins: [
+    ],
+    */
 
     // web server port
     port: 9876,
@@ -80,7 +101,7 @@ module.exports = function (config) {
       break
     default:
       settings.browsers = ['PhantomJS']
-      settings.reporters = ['progress']
+      settings.reporters = ['spec']
       break
   }
 
