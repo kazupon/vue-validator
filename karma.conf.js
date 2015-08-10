@@ -32,6 +32,9 @@ module.exports = function (config) {
         loaders: [{
           test: /\.js$/,
           loader: 'webpack-espower-loader'
+        }, {
+          test: /\.json$/,
+          loader: 'json'
         }],
         postLoaders: [{
           test: /\.js$/,
