@@ -52,26 +52,9 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    webpack: {
-      module: {
-        loaders: [{
-          test: /\.js$/,
-          loader: 'webpack-espower-loader'
-        }, {
-          test: /\.json$/,
-          loader: 'json'
-        }],
-        postLoaders: [{
-          test: /\.js$/,
-          exclude: /(test|node_modules)\//,
-          loader: 'istanbul-instrumenter'
-        }]
-      },
-      devtool: 'inline-source-map'
-    },
-
     webpackMiddleware: {
-      noInfo: true
+      noInfo: true,
+      quiet: true
     },
     
     // web server port
