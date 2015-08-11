@@ -8,7 +8,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'expect', 'sinon'],
+    frameworks: ['mocha', 'sinon'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -21,7 +21,6 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'node_modules/vue/dist/vue.js': ['webpack', 'sourcemap'],
       'lib/*.js': ['webpack', 'sourcemap'],
       'index.js': ['webpack', 'sourcemap'],
       'test/**/specs/*.js': ['webpack', 'sourcemap']
@@ -42,11 +41,17 @@ module.exports = function (config) {
           loader: 'istanbul-instrumenter'
         }]
       },
+      resolve: {
+        modulesDirectories: [
+          'node_modules'
+        ]
+      },
       devtool: 'inline-source-map'
     },
 
     webpackMiddleware: {
-      noInfo: true
+      noInfo: true,
+      quiet: true
     },
     
     /*
