@@ -29,5 +29,21 @@ manifests.forEach(function (file) {
     '"version": "' + version + '"'
   )
   fs.writeFileSync(file, json)
-  console.log('updated:', file)
+  console.log('manifest updated:', file)
+})
+
+var exampleManifests = [
+  'example/bower/bower.json',
+  'example/browserify/package.json',
+  'example/webpack/package.json'
+]
+exampleManifests.forEach(function (file) {
+  file = path.normalize(path.join(__dirname, '..', file))
+  var json = fs.readFileSync(file).toString()
+  json = json.replace(
+    /"vue-validator"\s*:\s*"(.+?)"/,
+    '"vue-validator": "' + version + '"'
+  )
+  fs.writeFileSync(file, json)
+  console.log('example manifest updated:', file)
 })
