@@ -3,7 +3,7 @@
  */
 
 var Nightmare = require('nightmare')
-var expect = require('expect.js')
+var assert = require('power-assert')
 var resolve = require('./helper').resolve
 
 
@@ -14,13 +14,13 @@ var resolve = require('./helper').resolve
 describe('registration', function () {
 
   var expectOK = function (ret) {
-    expect(ret).to.be.ok
+    assert(ret)
   }
   var expectTextError = function (text) {
-    expect(text).to.be.eql('(error)')
+    assert(text === '(error)')
   }
   var expectTextSuccess = function (text) {
-    expect(text).to.be.eql('(success)')
+    assert(text === '(success)')
   }
   var getUsernameStatus = function () {
     return document.querySelector('#inputUsernameStatus').innerText
