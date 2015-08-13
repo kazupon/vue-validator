@@ -1,7 +1,7 @@
 KARMA = ./node_modules/karma/bin/karma
 MOCHA = ./node_modules/mocha/bin/_mocha
 WEBPACK = ./node_modules/webpack/bin/webpack.js
-SRCS = ./index.js ./karma.conf.js ./webpack.conf.js lib/*.js test/specs/*.js test/specs/*.js
+SRCS = ./index.js ./karma.conf.js ./build/*.js lib/*.js test/specs/*.js test/specs/*.js
 
 
 lint:
