@@ -1,16 +1,15 @@
-KARMA = node_modules/karma/bin/karma
+KARMA = ./node_modules/karma/bin/karma
 MOCHA = ./node_modules/mocha/bin/_mocha
+WEBPACK = ./node_modules/webpack/bin/webpack.js
 SRCS = ./index.js ./karma.conf.js ./webpack.conf.js lib/*.js test/specs/*.js test/specs/*.js
 
 
 lint:
 	@node_modules/.bin/eslint --config .eslintrc $(SRCS)
 
-dist: lint node_modules
-	@./task/dist
-
-minify: lint node_modules
-	@./task/minify
+build: lint node_modules
+	@$(WEBPACK) --config build/webpack.dev.conf.js
+	@$(WEBPACK) --config build/webpack.prod.conf.js
 
 node_modules: package.json
 	@npm install
@@ -27,7 +26,7 @@ coverage:
 coveralls:
 	@VUE_VALIDATOR_TYPE=coveralls $(MAKE) test
 
-e2e:
+e2e: lint node_modules
 	@$(MOCHA) -R dot ./test/e2e/registration.js
 
 coolkids:
@@ -48,4 +47,4 @@ clean:
 	@rm -rf dist
 
 
-.PHONY: dist lint test coverage node_modules clean
+.PHONY: lint test coverage node_modules clean build
