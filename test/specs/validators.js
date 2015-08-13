@@ -3,16 +3,16 @@
  */
 
 var assert = require('power-assert')
-var validates = require('../../lib/validates')
-var required = validates.required
-var pattern = validates.pattern
-var minLength = validates.minLength
-var maxLength = validates.maxLength
-var min = validates.min
-var max = validates.max
+var validators = require('../../lib/validators')
+var required = validators.required
+var pattern = validators.pattern
+var minLength = validators.minLength
+var maxLength = validators.maxLength
+var min = validators.min
+var max = validators.max
 
 
-describe('validates', function () {
+describe('validators', function () {
   describe('required', function () {
     describe('string', function () {
       describe('not empty', function () {
