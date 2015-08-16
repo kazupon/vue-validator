@@ -1,3 +1,7 @@
+# v1.4.2 / 2015-08-16
+
+* Fix dirty bug (#43)
+
 # v1.4.1 / 2015-07-31
 
 * Fix code bundling issue

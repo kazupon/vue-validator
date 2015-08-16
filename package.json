@@ -1,7 +1,7 @@
 {
   "name": "vue-validator",
   "description": "Validator component for Vue.js",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "author": "kazuya kawaguchi",
   "bugs": {
     "url": "https://github.com/vuejs/vue-validator/issues"
