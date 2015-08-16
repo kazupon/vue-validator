@@ -22,6 +22,7 @@ function install (Vue, options) {
   var componentName = options.component = options.component || '$validator'
   var directiveName = options.directive = options.directive || 'validate'
   var path = Vue.parsers.path
+  var util = Vue.util
 
   function getVal (obj, keypath) {
     var ret = null
@@ -57,20 +58,27 @@ function install (Vue, options) {
         }, Vue.extend(require('./lib/validator')))
       }
 
+      var value = el.getAttribute('value')
+      if (el.getAttribute('number') !== null) {
+        value = util.toNumber(value)
+      }
+      this._init = value
+
       var validation = $validator._getValidationNamespace('validation')
-      var init = el.getAttribute('value') || vm.$get(keypath)
+      var init = value || vm.$get(keypath)
       var readyEvent = el.getAttribute('wait-for')
 
       if (readyEvent && !$validator._isRegistedReadyEvent(keypath)) {
         $validator._addReadyEvents(keypath, this._checkParam('wait-for'))
       }
       
-      this._setupValidator($validator, keypath, validation, validator, arg, init)
+      this._setupValidator($validator, keypath, validation, validator, el, arg, init)
     },
 
     update: function (val, old) {
       if (this._ignore) { return }
 
+      var self = this
       var vm = this.vm
       var keypath = this._keypath
       var validator = this.arg ? this.arg : this.expression
@@ -78,14 +86,12 @@ function install (Vue, options) {
 
       $validator._changeValidator(keypath, validator, val)
       if (!$validator._isRegistedReadyEvent(keypath)) { // normal
-        $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
-        $validator._doValidate(keypath, validator, $validator.$get(keypath))
+        this._updateValidator($validator, validator, keypath)
       } else { // wait-for
         vm.$once($validator._getReadyEvents(keypath), function (val) {
           $validator._setInitialValue(keypath, val)
           vm.$set(keypath, val)
-          $validator._updateDirtyProperty(keypath, $validator.$get(keypath))
-          $validator._doValidate(keypath, validator, $validator.$get(keypath))
+          self._updateValidator($validator, validator, keypath)
         })
       }
     },
@@ -114,18 +120,44 @@ function install (Vue, options) {
       })
     },
 
-    _setupValidator: function ($validator, keypath, validation, validator, arg, init) {
+    _setupValidator: function ($validator, keypath, validation, validator, el, arg, init) {
       var vm = this.vm
 
       if (!getVal($validator[validation], keypath)) {
         $validator._defineModelValidationScope(keypath)
-        $validator._setInitialValue(keypath, init)
+        if (el.tagName === 'INPUT' && el.type === 'radio') {
+          if (getVal(vm, keypath) === init) {
+            $validator._setInitialValue(keypath, init)
+          }
+        } else {
+          $validator._setInitialValue(keypath, init)
+        }
       }
 
       if (!getVal($validator[validation], [keypath, validator].join('.'))) {
         $validator._defineValidatorToValidationScope(keypath, validator)
         $validator._addValidator(keypath, validator, getVal(vm, arg) || arg)
       }
+    },
+
+    _updateValidator: function ($validator, validator, keypath) {
+      var value = $validator.$get(keypath)
+      var el = this.el
+
+      if (this._init) {
+        value = this._init
+        delete this._init
+      }
+
+      if (el.tagName === 'INPUT' && el.type === 'radio') {
+        if (value === $validator.$get(keypath)) {
+          $validator._updateDirtyProperty(keypath, value)
+        }
+      } else {
+        $validator._updateDirtyProperty(keypath, value)
+      }
+
+      $validator._doValidate(keypath, validator, $validator.$get(keypath))
     },
 
     _teardownValidator: function (vm, $validator, keypath, validator) {
