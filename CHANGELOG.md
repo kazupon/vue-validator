@@ -1,3 +1,7 @@
+# v1.4.3 / 2015-09-06
+
+* Fix validation data access error bug (#53)
+
 # v1.4.2 / 2015-08-16
 
 * Fix dirty bug (#43)

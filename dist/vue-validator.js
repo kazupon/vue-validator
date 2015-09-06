@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.4.2
+ * vue-validator v1.4.3
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -8,7 +8,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(factory);
+		define([], factory);
 	else if(typeof exports === 'object')
 		exports["vue-validator"] = factory();
 	else
@@ -383,6 +383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Utilties
 	 */
 
+
 	/**
 	 * warn
 	 *
@@ -400,6 +401,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
+	/**
+	 * Get target validatable object
+	 *
+	 * @param {Object} validation
+	 * @param {String} keypath
+	 * @return {Object} validatable object
+	 */
+
+	exports.getTarget = function (validation, keypath) {
+	  var last = validation
+	  var keys = keypath.split('.')
+	  var key, obj
+	  for (var i = 0; i < keys.length; i++) {
+	    key = keys[i]
+	    obj = last[key]
+	    last = obj
+	    if (!last) {
+	      break
+	    }
+	  }
+	  return last
+	}
+
 
 /***/ },
 /* 3 */
@@ -410,6 +434,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var validates = __webpack_require__(1)
+	var _ = __webpack_require__(2)
 
 
 	/**
@@ -631,7 +656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _defineValidatorToValidationScope: function (keypath, validator) {
-	      var target = getTarget(this[this._getValidationNamespace('validation')], keypath)
+	      var target = _.getTarget(this[this._getValidationNamespace('validation')], keypath)
 	      target.$add(validator, null)
 	    },
 
@@ -711,16 +736,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var validationName = this._getValidationNamespace('validation')
 	      var dirtyName = this._getValidationNamespace('dirty')
 
-	      var target = getTarget(this[validationName], keypath)
-	      target.$set(dirtyName, this._getInitialValue(keypath) !== val)
+	      var target = _.getTarget(this[validationName], keypath)
+	      if (target) {
+	        target.$set(dirtyName, this._getInitialValue(keypath) !== val)
+	      }
 	    },
 
 	    _doValidate: function (keypath, validateName, val) {
 	      var validationName = this._getValidationNamespace('validation')
 
-	      var target = getTarget(this[validationName], keypath)
+	      var target = _.getTarget(this[validationName], keypath)
 	      var validator = this._findValidator(keypath, validateName)
-	      if (validator) {
+	      if (target && validator) {
 	        this._invokeValidator(
 	          this._validates[validateName],
 	          val, validator.arg,
@@ -759,26 +786,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Get target validatable object
-	 *
-	 * @param {Object} validation
-	 * @param {String} keypath
-	 * @return {Object} validatable object
-	 */
-
-	function getTarget (validation, keypath) {
-	  var last = validation
-	  var keys = keypath.split('.')
-	  var key, obj
-	  for (var i = 0; i < keys.length; i++) {
-	    key = keys[i]
-	    obj = last[key]
-	    last = obj
-	  }
-	  return last
-	}
-
-	/**
 	 * Remove properties from target validation
 	 *
 	 * @param {Object} validation
@@ -791,7 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  while (keys.length) {
 	    key = keys.pop()
 	    if (keys.length !== 0) {
-	      obj = getTarget(validation, keys.join('.'))
+	      obj = _.getTarget(validation, keys.join('.'))
 	      obj.$delete(key)
 	    } else {
 	      validation.$delete(key)
