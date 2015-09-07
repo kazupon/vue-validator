@@ -277,7 +277,7 @@ The following is an example that using a custom validator:
            v-validate="requiredIf: conditionalField(response, 'decline'), maxLength: 100">
   </div>
       
-  <div><input type="submit" v-if="validFiled"></div>
+  <div><input type="submit" v-if="validField"></div>
 </form>
 ```
 
@@ -291,7 +291,7 @@ new Vue({
     }
   },
   computed: {
-    validFiled: function () {
+    validField: function () {
       return this.validation.message.approve.valid ||
              this.validation.message.decline.valid
     }
