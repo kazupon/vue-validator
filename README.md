@@ -204,7 +204,7 @@ In the above example, the `dirty` keep the all `v-model`.
 - Directive params: wait-for
 
 Validate the value of `v-model`. 
-You can specify the build-in validator or custom validator to be described later.
+You can specify the built-in validator or custom validator to be described later.
 
 ### Reactivity
 You can specify the property of viewmodel as validator reactive argument to expression of directive.
@@ -277,7 +277,7 @@ The following is an example that using a custom validator:
            v-validate="requiredIf: conditionalField(response, 'decline'), maxLength: 100">
   </div>
       
-  <div><input type="submit" v-if="validFiled"></div>
+  <div><input type="submit" v-if="validField"></div>
 </form>
 ```
 
@@ -291,7 +291,7 @@ new Vue({
     }
   },
   computed: {
-    validFiled: function () {
+    validField: function () {
       return this.validation.message.approve.valid ||
              this.validation.message.decline.valid
     }
@@ -366,7 +366,7 @@ new Vue({
 
 # Validators
 
-## build-in validator
+## built-in validator
 
 ### required
 For example, you can use `required` validator as follows.
