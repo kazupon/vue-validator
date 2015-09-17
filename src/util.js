@@ -11,7 +11,7 @@
  *
  */
 
-exports.warn = function (msg, err) {
+export function warn (msg, err) {
   if (window.console) {
     console.warn('[vue-validator] ' + msg)
     if (err) {

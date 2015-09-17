@@ -1,7 +1,10 @@
-.git
-.gitignore
-.DS_Store
-node_modules
+.*
+*.log
+*.swp
+*.yml
+bower.json
 coverage
-bower_components
-npm-debug.log
+config
+dist/*.map
+lib
+test
