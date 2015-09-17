@@ -25,12 +25,6 @@ $ npm install vue-validator
 $ bower install vue-validator
 ```
 
-## duo
-
-```javascript
-var validator = require('vuejs/vue-validator')
-```
-
 ## CDN
 
 ```html

@@ -1,8 +1,7 @@
-node_modules
+lib
 coverage
-components
-bower_components
-*.log
+node_modules
 .DS_Store
+*.log
 *.swp
 *~
