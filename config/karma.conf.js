@@ -52,11 +52,6 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    webpackMiddleware: {
-      noInfo: true,
-      quiet: true
-    },
-    
     // web server port
     port: 9876,
 
