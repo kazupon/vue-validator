@@ -12,17 +12,19 @@
  * @return {Boolean}
  */
 
-function required (val) {
+export function required (val) {
   if (Array.isArray(val)) {
     return val.length > 0
-  } else if (typeof val === 'number') {
+  } else if (typeof val === 'number' || typeof val === 'function') {
     return true
-  } else if ((val !== null) && (typeof val === 'object')) {
+  } else if (typeof val === 'boolean') {
+    return val
+  } else if (typeof val === 'string') {
+    return val.length > 0
+  } else if (val !== null && typeof val === 'object') {
     return Object.keys(val).length > 0
-  } else {
-    return !val
-      ? false
-      : true
+  } else if (val === null || val === undefined) {
+    return false
   }
 }
 
@@ -37,10 +39,10 @@ function required (val) {
  * @return {Boolean}
  */
 
-function pattern (val, pat) {
+export function pattern (val, pat) {
   if (typeof pat !== 'string') { return false }
 
-  var match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'))
+  let match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'))
   if (!match) { return false }
 
   return new RegExp(match[1], match[2]).test(val)
@@ -57,7 +59,7 @@ function pattern (val, pat) {
  * @return {Boolean}
  */
 
-function minLength (val, min) {
+export function minLength (val, min) {
   return typeof val === 'string' &&
     isInteger(min, 10) &&
     val.length >= parseInt(min, 10)
@@ -74,7 +76,7 @@ function minLength (val, min) {
  * @return {Boolean}
  */
 
-function maxLength (val, max) {
+export function maxLength (val, max) {
   return typeof val === 'string' &&
     isInteger(max, 10) &&
     val.length <= parseInt(max, 10)
@@ -91,7 +93,7 @@ function maxLength (val, max) {
  * @return {Boolean}
  */
 
-function min (val, arg) {
+export function min (val, arg) {
   return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) >= +(arg))
 }
 
@@ -106,7 +108,7 @@ function min (val, arg) {
  * @return {Boolean}
  */
 
-function max (val, arg) {
+export function max (val, arg) {
   return !isNaN(+(val)) && !isNaN(+(arg)) && (+(val) <= +(arg))
 }
 
@@ -121,19 +123,6 @@ function max (val, arg) {
  * @private
  */
 
-function isInteger (val) {
+export function isInteger (val) {
   return /^(-?[1-9]\d*|0)$/.test(val)
-}
-
-
-/**
- * export(s)
- */
-module.exports = {
-  required: required,
-  pattern: pattern,
-  minLength: minLength,
-  maxLength: maxLength,
-  min: min,
-  max: max
 }

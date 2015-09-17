@@ -1,63 +1,56 @@
 // Karma configuration
-// Generated on Mon Nov 10 2014 00:43:50 GMT+0900 (JST)
+// Generated on Tue Sep 08 2015 19:27:24 GMT+0900 (JST)
 
 module.exports = function (config) {
   var settings = {
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '.',
+    basePath: '',
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon'],
+    frameworks: ['mocha'],
 
     // list of files / patterns to load in the browser
     files: [
-      'test/**/specs/*.js'
+      '../test/specs/**/*.js'
     ],
 
     // list of files to exclude
-    exclude: [],
+    exclude: [
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'lib/*.js': ['webpack', 'sourcemap'],
-      'index.js': ['webpack', 'sourcemap'],
-      'test/**/specs/*.js': ['webpack', 'sourcemap']
+      '../src/**/*.js': ['webpack', 'sourcemap'],
+      '../test/**/*.js': ['webpack', 'sourcemap']
     },
 
     webpack: {
+      devtool: 'inline-source-map',
       module: {
         loaders: [{
           test: /\.js$/,
-          loader: 'webpack-espower-loader'
-        }, {
-          test: /\.json$/,
-          loader: 'json'
+          exclude: /node_modules/,
+          loader: 'babel',
+          query: {
+            plugins: ['babel-plugin-espower']
+          }
         }],
         postLoaders: [{
+          test: /\.json$/,
+          loader: 'json'
+        }, {
           test: /\.js$/,
-          exclude: /(test|node_modules)\//,
+          exclude: /test|node_modules/,
           loader: 'istanbul-instrumenter'
         }]
-      },
-      resolve: {
-        modulesDirectories: [
-          'node_modules'
-        ]
-      },
-      devtool: 'inline-source-map'
+      }
     },
 
     webpackMiddleware: {
-      noInfo: true,
-      quiet: true
+      noInfo: true
     },
-    
-    /*
-    plugins: [
-    ],
-    */
 
     // web server port
     port: 9876,
@@ -82,16 +75,18 @@ module.exports = function (config) {
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage']
       settings.coverageReporter = {
-        type: 'html',
-        dir: 'coverage/'
+        reporters: [{
+          type: 'html', dir: '../coverage'
+        }, {
+          type: 'text-summary', dir: '../coverage'
+        }]
       }
       break
     case 'coveralls':
       settings.browsers = ['PhantomJS']
       settings.reporters = ['coverage', 'coveralls']
       settings.coverageReporter = {
-        type: 'lcov',
-        dir: 'coverage/'
+        reporters: [{ type: 'lcov', dir: '../coverage' }]
       }
       break
     case 'sauce':
@@ -109,9 +104,10 @@ module.exports = function (config) {
       break
     default:
       settings.browsers = ['PhantomJS']
-      settings.reporters = ['spec']
+      settings.reporters = ['mocha']
       break
   }
+
 
   config.set(settings)
 }

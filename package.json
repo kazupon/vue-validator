@@ -2,49 +2,70 @@
   "name": "vue-validator",
   "description": "Validator component for Vue.js",
   "version": "1.4.2",
-  "author": "kazuya kawaguchi",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
   "bugs": {
     "url": "https://github.com/vuejs/vue-validator/issues"
   },
   "devDependencies": {
-    "commander": "^2.8.1",
-    "eslint": "^1.0.0",
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "babel-plugin-espower": "^1.0.0",
+    "eslint": "^1.3.1",
+    "espower-babel": "^3.3.0",
     "istanbul-instrumenter-loader": "^0.1.3",
     "json-loader": "^0.5.2",
-    "karma": "^0.13.8",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-coverage": "^0.5.0",
-    "karma-coveralls": "^0.1.4",
-    "karma-firefox-launcher": "^0.1.4",
-    "karma-mocha": "^0.1.9",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.2.6",
+    "karma-coveralls": "^1.1.2",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-phantomjs-launcher": "^0.2.1",
     "karma-safari-launcher": "^0.1.1",
-    "karma-sauce-launcher": "^0.2.10",
-    "karma-sinon": "^1.0.4",
+    "karma-sauce-launcher": "^0.2.14",
     "karma-sourcemap-loader": "^0.3.5",
-    "karma-spec-reporter": "0.0.20",
     "karma-webpack": "^1.7.0",
-    "mocha": "^2.2.5",
-    "nightmare": "^1.8.2",
-    "power-assert": "^0.11.0",
-    "sinon": "^1.15.4",
+    "mocha": "^2.3.1",
+    "nightmare": "^1.6.5",
+    "phantomjs": "^1.9.18",
+    "power-assert": "^1.0.0",
     "vue": "^0.12.0",
-    "webpack": "^1.10.5",
-    "webpack-espower-loader": "^0.1.0"
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.11.0"
   },
   "homepage": "https://github.com/vuejs/vue-validator",
   "keywords": [
     "plugin",
     "validation",
-    "vue"
+    "vue",
+    "vue.js"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/vue-validator.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/vuejs/vue-validator.git"
   },
   "scripts": {
-    "test": "make ci"
+    "browser": "VUE_VALIDATOR_TYPE=browser karma start config/karma.conf.js",
+    "build": "babel src --out-dir lib --source-maps-inline",
+    "bundle": "webpack --config config/webpack.conf.js && webpack --config config/webpack.min.conf.js",
+    "ci": "npm run coverage && npm run coveralls && npm run sauce && npm run e2e",
+    "clean": "rm -rf lib && rm -rf coverage && rm -rf dist",
+    "coolkids": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch1 karma start config/karma.conf.js",
+    "coverage": "VUE_VALIDATOR_TYPE=coverage karma start config/karma.conf.js",
+    "coveralls": "VUE_VALIDATOR_TYPE=coveralls karma start config/karma.conf.js",
+    "e2e": "webpack-dev-server --quiet -h --config config/webpack.e2e.conf.js --content-base test/e2e & mocha -t 20000 --compilers js:espower-babel/guess test/e2e/test.js && kill $! || (kill $! && exit 1)",
+    "ie": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch2 karma start config/karma.conf.js",
+    "lint": "eslint src test/specs config",
+    "mobile": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch3 karma start config/karma.conf.js",
+    "sauce": "npm run coolkids && npm run ie && npm run mobile",
+    "test": "karma start config/karma.conf.js",
+    "watch": "babel src --out-dir lib --watch --source-maps-inline"
   }
 }
