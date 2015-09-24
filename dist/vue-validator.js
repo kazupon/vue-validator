@@ -86,6 +86,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var path = Vue.parsers.path
 	  var util = Vue.util
 
+
+	  // custom validators merge strategy setting
+	  Vue.config.optionMergeStrategies.validator = function (parent, child, vm, k) {
+	    var validatorOptions = { validates: {}, namespace: {} }
+	    if (!parent && !child) {
+	      return validatorOptions
+	    } else if (!parent && child) {
+	      util.extend(validatorOptions['validates'], child['validates'])
+	      util.extend(validatorOptions['namespace'], child['namespace'])
+	      return validatorOptions
+	    } else if (parent && !child) {
+	      util.extend(validatorOptions['validates'], parent['validates'])
+	      util.extend(validatorOptions['namespace'], parent['namespace'])
+	      return validatorOptions
+	    } else if (parent && child) {
+	      var key
+	      if ('validates' in parent) {
+	        util.extend(validatorOptions['validates'], parent['validates'])
+	      }
+	      if ('namespace' in parent) {
+	        util.extend(validatorOptions['namespace'], parent['namespace'])
+	      }
+	      if ('validates' in child) {
+	        for (key in child['validates']) {
+	          if ('validates' in parent && !parent['validates'].hasOwnProperty(key)) {
+	            validatorOptions['validates'][key] = child['validates'][key]
+	          }
+	        }
+	      }
+	      if ('namespace' in child) {
+	        for (key in child['namespace']) {
+	          if ('namespace' in parent && !parent['namespace'].hasOwnProperty(key)) {
+	            validatorOptions['namespace'][key] = child['namespace'][key]
+	          }
+	        }
+	      }
+	      return validatorOptions
+	    } else {
+	      _.warn('unexpected validator option merge strategy')
+	      return validatorOptions
+	    }
+	  }
+
+
 	  function getVal (obj, keypath) {
 	    var ret = null
 	    try {
@@ -107,17 +151,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var validator = this.arg ? this.arg : this.expression
 	      var arg = this.arg ? this.expression : null
 
-	      var customs = (vm.$options.validator && vm.$options.validator.validates) || {}
-	      if (!this._checkDirective(validator, validates, customs)) {
-	        _.warn('specified invalid v-validate directive !! please check v-validator directive !!')
+	      var customs = _.getCustomValidators(vm.$options)
+	      if (!this._checkValidator(validator, validates, customs)) {
+	        _.warn("specified invalid '"
+	          + validator + "' validator at v-validate directive !! please check '"
+	          + validator + "' validator !!")
 	        this._ignore = true
 	        return
 	      }
 
 	      if (!$validator) {
-	        vm[componentName] = $validator = vm.$addChild({
-	          validator: vm.$options.validator
-	        }, Vue.extend(__webpack_require__(3)))
+	        vm[componentName] = $validator = vm.$addChild(
+	          {}, // null option
+	          Vue.extend(__webpack_require__(3))
+	        )
 	      }
 
 	      var value = el.getAttribute('value')
@@ -175,7 +222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return res[0].arg ? res[0].arg : res[0].expression
 	    },
 
-	    _checkDirective: function (validator, validates, customs) {
+	    _checkValidator: function (validator, validates, customs) {
 	      var items = Object.keys(validates).concat(Object.keys(customs))
 	      return items.some(function (item) {
 	        return item === validator
@@ -424,6 +471,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return last
 	}
 
+	/**
+	 * Get custom validators
+	 *
+	 * @param {Object} options
+	 * @return {Object}
+	 */
+
+	exports.getCustomValidators = function (options) {
+	  var opts = options
+	  var validators = {}
+	  var key
+	  var context
+	  do {
+	    if (opts['validator'] && opts['validator']['validates']) {
+	      for (key in opts['validator']['validates']) {
+	        if (!validators.hasOwnProperty(key)) {
+	          validators[key] = opts['validator']['validates'][key]
+	        }
+	      }
+	    }
+	    context = opts._context || opts._parent
+	    if (context) {
+	      opts = context.$options
+	    }
+	  } while (context || opts._parent)
+	  return validators
+	}
+
 
 /***/ },
 /* 3 */
@@ -459,7 +534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  methods: {
 	    _getValidationNamespace: function (key) {
-	      return this.$options.validator.namespace[key]
+	      return this._namespace[key]
 	    },
 
 	    _initValidationVariables: function () {
@@ -474,16 +549,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    _initOptions: function () {
-	      var validator = this.$options.validator = this.$options.validator || {}
-	      var namespace = validator.namespace = validator.namespace || {}
-	      namespace.validation = namespace.validation || 'validation'
-	      namespace.valid = namespace.valid || 'valid'
-	      namespace.invalid = namespace.invalid || 'invalid'
-	      namespace.dirty = namespace.dirty || 'dirty'
+	      this._namespace = getCustomNamespace(this.$options)
+	      this._namespace.validation = this._namespace.validation || 'validation'
+	      this._namespace.valid = this._namespace.valid || 'valid'
+	      this._namespace.invalid = this._namespace.invalid || 'invalid'
+	      this._namespace.dirty = this._namespace.dirty || 'dirty'
 	    },
 
 	    _mixinCustomValidates: function () {
-	      var customs = this.$options.validator.validates
+	      var customs = _.getCustomValidators(this.$options)
 	      for (var key in customs) {
 	        this._validates[key] = customs[key]
 	      }
@@ -559,9 +633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._defineValidProperty(this.$parent, function () {
 	        var validationName = self._getValidationNamespace('validation')
 	        var validName = self._getValidationNamespace('valid')
-	        var namespaces = self.$options.validator.namespace
-
-	        return walk(this[validationName], validName, namespaces)
+	        return walk(this[validationName], validName, self._namespace)
 	      })
 
 	      this._defineInvalidProperty(this.$parent)
@@ -569,9 +641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._defineDirtyProperty(this.$parent, function () {
 	        var validationName = self._getValidationNamespace('validation')
 	        var dirtyName = self._getValidationNamespace('dirty')
-	        var namespaces = self.$options.validator.namespace
-
-	        return walk(this[validationName], dirtyName, namespaces)
+	        return walk(this[validationName], dirtyName, self._namespace)
 	      })
 	    },
 
@@ -804,6 +874,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	      validation.$delete(key)
 	    }
 	  }
+	}
+
+	/**
+	 * Get custom namespace
+	 *
+	 * @param {Object} options
+	 * @return {Object}
+	 */
+
+	function getCustomNamespace (options) {
+	  var namespace = {}
+	  var key
+	  var context
+	  do {
+	    if (options['validator'] && options['validator']['namespace']) {
+	      for (key in options['validator']['namespace']) {
+	        if (!namespace.hasOwnProperty(key)) {
+	          namespace[key] = options['validator']['namespace'][key]
+	        }
+	      }
+	    }
+	    context = options._context || options._parent
+	    if (context) {
+	      options = context.$options
+	    }
+	  } while (context || options._parent)
+	  return namespace
 	}
 
 

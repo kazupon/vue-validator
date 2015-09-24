@@ -24,6 +24,50 @@ function install (Vue, options) {
   var path = Vue.parsers.path
   var util = Vue.util
 
+
+  // custom validators merge strategy setting
+  Vue.config.optionMergeStrategies.validator = function (parent, child, vm, k) {
+    var validatorOptions = { validates: {}, namespace: {} }
+    if (!parent && !child) {
+      return validatorOptions
+    } else if (!parent && child) {
+      util.extend(validatorOptions['validates'], child['validates'])
+      util.extend(validatorOptions['namespace'], child['namespace'])
+      return validatorOptions
+    } else if (parent && !child) {
+      util.extend(validatorOptions['validates'], parent['validates'])
+      util.extend(validatorOptions['namespace'], parent['namespace'])
+      return validatorOptions
+    } else if (parent && child) {
+      var key
+      if ('validates' in parent) {
+        util.extend(validatorOptions['validates'], parent['validates'])
+      }
+      if ('namespace' in parent) {
+        util.extend(validatorOptions['namespace'], parent['namespace'])
+      }
+      if ('validates' in child) {
+        for (key in child['validates']) {
+          if ('validates' in parent && !parent['validates'].hasOwnProperty(key)) {
+            validatorOptions['validates'][key] = child['validates'][key]
+          }
+        }
+      }
+      if ('namespace' in child) {
+        for (key in child['namespace']) {
+          if ('namespace' in parent && !parent['namespace'].hasOwnProperty(key)) {
+            validatorOptions['namespace'][key] = child['namespace'][key]
+          }
+        }
+      }
+      return validatorOptions
+    } else {
+      _.warn('unexpected validator option merge strategy')
+      return validatorOptions
+    }
+  }
+
+
   function getVal (obj, keypath) {
     var ret = null
     try {
@@ -45,17 +89,20 @@ function install (Vue, options) {
       var validator = this.arg ? this.arg : this.expression
       var arg = this.arg ? this.expression : null
 
-      var customs = (vm.$options.validator && vm.$options.validator.validates) || {}
-      if (!this._checkDirective(validator, validates, customs)) {
-        _.warn('specified invalid v-validate directive !! please check v-validator directive !!')
+      var customs = _.getCustomValidators(vm.$options)
+      if (!this._checkValidator(validator, validates, customs)) {
+        _.warn("specified invalid '"
+          + validator + "' validator at v-validate directive !! please check '"
+          + validator + "' validator !!")
         this._ignore = true
         return
       }
 
       if (!$validator) {
-        vm[componentName] = $validator = vm.$addChild({
-          validator: vm.$options.validator
-        }, Vue.extend(require('./lib/validator')))
+        vm[componentName] = $validator = vm.$addChild(
+          {}, // null option
+          Vue.extend(require('./lib/validator'))
+        )
       }
 
       var value = el.getAttribute('value')
@@ -113,7 +160,7 @@ function install (Vue, options) {
       return res[0].arg ? res[0].arg : res[0].expression
     },
 
-    _checkDirective: function (validator, validates, customs) {
+    _checkValidator: function (validator, validates, customs) {
       var items = Object.keys(validates).concat(Object.keys(customs))
       return items.some(function (item) {
         return item === validator
