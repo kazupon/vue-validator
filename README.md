@@ -28,7 +28,7 @@ $ bower install vue-validator
 ## CDN
 
 ```html
-<script src="http://cdn.jsdelivr.net/vue.validator/1.4.2/vue-validator.min.js"></script>
+<script src="http://cdn.jsdelivr.net/vue.validator/1.4.3/vue-validator.min.js"></script>
 ```
 
 
