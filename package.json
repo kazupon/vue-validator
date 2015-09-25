@@ -1,7 +1,7 @@
 {
   "name": "vue-validator",
   "description": "Validator component for Vue.js",
-  "version": "1.4.3",
+  "version": "2.0.0-alpha",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
@@ -34,7 +34,7 @@
     "nightmare": "^2.0.5",
     "phantomjs": "^1.9.18",
     "power-assert": "^1.0.0",
-    "vue": "^0.12.15",
+    "vue": "yyx990803/vue#1.0.0-beta",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.11.0"
   },
