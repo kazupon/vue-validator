@@ -1,3 +1,7 @@
+# v1.4.4 / 2015-09-26
+
+* Fix validator configration options passing (#55, #57)
+
 # v1.4.3 / 2015-09-06
 
 * Fix validation data access error bug (#53)

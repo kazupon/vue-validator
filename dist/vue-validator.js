@@ -1,6 +1,6 @@
-/*!
- * vue-validator v1.4.3
- * (c) 2015 kazuya kawaguchi
+/**
+ * vue-validator v1.4.4
+ * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
