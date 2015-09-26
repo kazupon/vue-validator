@@ -1,4 +1,6 @@
-import * as validators from './validators'
+import util, { warn } from './util'
+import Asset from './asset'
+
 
 /**
  * VueValidator class
@@ -14,27 +16,12 @@ export default class VueValidator {
    */
 
   static install (Vue, options = {}) {
-    Vue.options.validators = validators
-    VueValidator.Vue = Vue
-  }
-
-  /**
-   * assets
-   *
-   * @param {String} id
-   * @param {Function} definition
-   * @return {Function} validator
-   */
-  static assets (id, definition) {
-    let asset = null
-    let Vue = VueValidator.Vue
-
-    if (!definition) {
-      asset = Vue.util.resolveAsset(Vue.options, 'validators', id)
-    } else {
-      Vue.options.validators[id] = definition
+    if (VueValidator.installed) {
+      warn('already installed.')
+      return
     }
 
-    return asset
+    Asset(Vue)
+    util.Vue = Vue
   }
 }

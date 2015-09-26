@@ -2,6 +2,10 @@
  * Utilties
  */
 
+// export default for holding the Vue reference
+const exports = {}
+export default exports
+
 
 /**
  * warn
