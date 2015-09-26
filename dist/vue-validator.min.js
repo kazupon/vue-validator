@@ -1,5 +1,5 @@
 /**
- * vue-validator v1.4.3
+ * vue-validator v1.4.4
  * (c) 2014-2015 kazuya kawaguchi
  * Released under the MIT License.
  */
