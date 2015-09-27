@@ -123,6 +123,6 @@ export function max (val, arg) {
  * @private
  */
 
-export function isInteger (val) {
+function isInteger (val) {
   return /^(-?[1-9]\d*|0)$/.test(val)
 }
