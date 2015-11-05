@@ -9,7 +9,9 @@ Validator component for Vue.js
 
 
 # Requirements
-- Vue.js ^`0.12.0`
+- Vue.js ^`0.12`
+
+> NOTE: vue-validator v2.0 for Vue.js ^1.0, **WIP**
 
 
 # Installation
