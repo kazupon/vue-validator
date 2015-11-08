@@ -50,7 +50,7 @@ export function pattern (val, pat) {
 
 
 /**
- * minLength
+ * minlength
  *
  * This function validate whether the minimum length of the string.
  *
@@ -59,7 +59,7 @@ export function pattern (val, pat) {
  * @return {Boolean}
  */
 
-export function minLength (val, min) {
+export function minlength (val, min) {
   return typeof val === 'string' &&
     isInteger(min, 10) &&
     val.length >= parseInt(min, 10)
@@ -67,7 +67,7 @@ export function minLength (val, min) {
 
 
 /**
- * maxLength
+ * maxlength
  *
  * This function validate whether the maximum length of the string.
  *
@@ -76,7 +76,7 @@ export function minLength (val, min) {
  * @return {Boolean}
  */
 
-export function maxLength (val, max) {
+export function maxlength (val, max) {
   return typeof val === 'string' &&
     isInteger(max, 10) &&
     val.length <= parseInt(max, 10)

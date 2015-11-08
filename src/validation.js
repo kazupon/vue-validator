@@ -1,4 +1,4 @@
-import util, { warn } from './util'
+import util, { warn, each } from './util'
 
 
 /**
@@ -7,59 +7,87 @@ import util, { warn } from './util'
 
 export default class Validation {
 
-  constructor (name, value, el) {
-    this.name = name
-    this.value = value
-    this.el = el
+  constructor (dir) {
+    this.model = dir.arg
+    this.el = dir.el
+    this.dir = dir
+    this.init = dir.el.value
     this.touched = false
     this.dirty = false
     this.modified = false
-    this.validates = Object.create(null)
+    this.validates = this._buildValidates(dir)
 
-    //let keys = Object.keys(dir.vm.$options.validators)
-    //for (let key of keys) {
-    //  this._validators[key] = util.Vue.util.resolveAsset(dir.vm.$options, 'validators', key)
-    //}
+    console.log('Validation', this)
   }
 
-  addValidator ({ name, fn, constraint } = {}) {
-    console.log('addValidator', name, fn, constraint)
-    // TODO: check argument (name, fn)
+  _buildValidates (dir, arg = null) {
+    const resolveAsset = util.Vue.util.resolveAsset
+    const camelize = util.Vue.util.camelize
 
-    this._validators[name] = { fn, constraint }
-    console.log('addValidator', this._validators[name])
-  }
+    let ret = Object.create(null)
+    let validates = dir.modifiers
 
-  updateValidator ({ name, fn, constraint } = {}) {
-    // TODO: check argument (name, fn)
-    let validator = this._validators[name]
-    if (fn) {
-      validator.fn = fn
+    for (let validate in validates) {
+      let fn = resolveAsset(dir.vm.$options, 'validators', camelize(validate))
+      if (fn) {
+        ret[validate] = { arg: arg, fn: fn }
+      }
     }
-    if (constraint) {
-      validator.constraint = constraint
+
+    return ret
+  }
+
+  updateValidate (name, arg, fn) {
+    if (this.validates[name]) {
+      this.validates[name].arg = arg
+      if (fn) {
+        this.validates[name].fn = fn
+      }
     }
   }
 
   listener (e) {
-    console.log('input event', e.type, this.el.value)
-
     if (e.relatedTarget && 
       (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
       return
     }
 
     if (e.type === 'blur') {
-      console.log('blur event !!', this)
       this.touched = true
     }
 
-    //if (this.el.value != this.value) {
-    //  this.dirty = true;
-    //}
-    this.validate()
+    if (!this.dirty && this.el.value !== this.init) {
+      this.dirty = true;
+    }
+
+    this.modified = (this.el.value !== this.init)
+
+    this.dir.validator.validate()
   }
 
   validate () {
+    const extend = util.Vue.util.extend
+    let ret = {}
+    let valid = true
+
+    each(this.validates, (descriptor, name) => {
+      let res = descriptor.fn(this.el.value, descriptor.arg)
+      if (!res) {
+        valid = false
+      }
+      ret[name] = !res
+    }, this)
+
+    extend(ret, {
+      valid: valid,
+      invalid: !valid,
+      touched: this.touched,
+      untouched: !this.touched,
+      dirty: this.dirty,
+      pristine: !this.dirty,
+      modified: this.modified
+    })
+
+    return ret
   }
 }

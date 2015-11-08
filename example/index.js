@@ -14,7 +14,12 @@ let vm = new Vue({
     msg: 'this is vue-validator v2 prototyping example (on designing phase)',
     visibleValidator: false,
     visibleTemplate: false,
-    max: 1
+    max: 1,
+    obj: {
+      max: 2,
+      min: 0,
+      required: true
+    }
   },
   destroyed () {
     console.log('destroyed', this)
@@ -29,11 +34,8 @@ let vm = new Vue({
     onClick () {
       console.log('call onClick')
       this.max++
+      this.obj.max++
       this.$validator1.a++
     }
   }
 })
-
-//setTimeout(() => {
-//  vm.$destroy()
-//}, 2000)

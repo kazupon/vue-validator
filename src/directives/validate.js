@@ -1,4 +1,4 @@
-import { attr, warn } from '../util'
+import { warn, each } from '../util'
 import Validation from '../validation'
 
 
@@ -8,32 +8,56 @@ export default function (Vue) {
 
   Vue.directive('validate', {
     bind () {
-      console.log('validate:bind', this)
+      console.log('validate:bind', this, this.arg)
 
-      let el = this.el
       let vm = this.vm
+      let validatorName = vm.$options._validator
+      if (!validatorName) {
+        // TODO: should be implemented error message
+        _.warn('TODO: should be implemented error message')
+        return
+      }
 
-      console.log('model', this.arg)
+      let validator = this.validator = this.vm._validatorMaps[validatorName]
+      let validation = this.validation = new Validation(this)
+      validator.addValidation(validation)
 
-      this.validation = this.createValidation(this.fieldName, el.value, el)
-
-      //_.on(el, 'blur', this._validation.listener.bind(this._validation))
+      this.on('blur', this.validation.listener.bind(this.validation))
       this.on('input', this.validation.listener.bind(this.validation))
     },
 
-    createValidation (field, value, el) {
-      let validation = new Validation(field, value, el)
-      return validation
+    update (value, old) {
+      console.log('validate:update', this.arg, value, old, typeof value, this)
+      if (!value) {
+        return
+      }
+
+      if (_.isPlainObject(value)) {
+        this.handleObject(value)
+      } else {
+        this.handleSingle(value)
+      }
+
+      this.validator.validate(this.validation)
     },
 
-    update (value, old) {
-      console.log('validate:update', value, old, this, this.validator, this.validation)
+    handleSingle (value) {
+      let validateKey = Object.keys(this.validation.validates)[0]
+      this.validation.updateValidate(validateKey, value)
+    },
+
+    handleObject (value) {
+      each(value, (val, key) => {
+        this.validation.updateValidate(key, val)
+      }, this)
     },
 
     unbind () {
       console.log('validate:unbind', this)
 
-      if (this.validation) {
+      if (this.validator && this.validation) {
+        this.validator.removeValidation(this.validation)
+        this.validator = null
         this.validation = null
       }
     }

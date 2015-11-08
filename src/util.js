@@ -25,6 +25,28 @@ export function warn (msg, err) {
 }
 
 /**
+ * each
+ *
+ * @param {Array|Object} target
+ * @param {Function} iterator
+ * @param {Object} [context]
+ */
+
+export function each (target, iterator, context) {
+  if (Array.isArray(target)) {
+    for (let i = 0; i < target.length; i++) {
+      iterator.call(context || target[i], target[i], i)
+    }
+  } else if (exports.Vue.util.isPlainObject(target)) {
+    for (let key in target) {
+      if (key in target) {
+        iterator.call(context || target[key], target[key], key)
+      }
+    }
+  }
+}
+
+/**
  * pull
  *
  * @param {Array} arr
@@ -33,7 +55,7 @@ export function warn (msg, err) {
  */
 
 export function pull (arr, item) {
-  let index = arr.indexOf(item)
+  let index = exports.Vue.util.indexOf(arr, item)
   return ~index ? arr.splice(index, 1) : null
 }
 
