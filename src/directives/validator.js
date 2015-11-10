@@ -8,7 +8,13 @@ export default function (Vue) {
   const vIf = Vue.directive('if')
 
   Vue.elementDirective('validator', {
-    params: ['name'],
+    params: ['name', 'groups'],
+
+    paramWatchers: {
+      groups: (val, old) => {
+        console.log('paramWatchers#groups', val, old)
+      } 
+    },
 
     bind () {
       console.log('validator:bind', this)
@@ -26,10 +32,19 @@ export default function (Vue) {
         return
       }
 
-      let validator = this.validator = new Validator(validatorName, this)
-      _.defineReactive(this.vm, validatorName, validator.scope)
+      let groups = []
+      if (this.params.groups) {
+        if (_.isArray(this.params.groups)) {
+          groups = this.params.groups
+        } else if (!_.isPlainObject(this.params.groups) && 
+            typeof this.params.groups === 'string') {
+          groups.push(this.params.groups)
+        }
+      }
+
+      let validator = this.validator = new Validator(validatorName, this, groups)
+      validator.enableReactive()
       validator.setupScope()
-      this.vm._validatorMaps[validatorName] = validator
 
       this.anchor = _.createAnchor('vue-validator')
       _.replace(this.el, this.anchor)
@@ -51,12 +66,9 @@ export default function (Vue) {
 
       vIf.unbind.call(this)
 
-      if (this.vm._validatorMaps[this.validatorName]) {
-        this.vm._validatorMaps[this.validatorName] = null
-      }
+      this.validator.disableReactive()
 
       if (this.validatorName) {
-        this.vm[this.validatorName] = null
         this.validatorName = null
         this.validator = null
       }

@@ -11,16 +11,16 @@
       <label for="checkbox1">visible validator</label>
       <input type="checkbox" id="checkbox2" v-model="visibleTemplate">
       <label for="checkbox2">visible template tag</label>
-      <validator v-if="visibleValidator" name="validator1">
+      <validator v-if="visibleValidator" :groups="[group1,group2]" name="validator1">
         <a href="javascript:void(0);" @click="onClick">Incremental</a>
         <form novalidate>
-          <input type="text" name="field1" v-validate:model1.required>
-          <input type="text" name="field2" v-validate:model2.maxlength="2">
-          <input type="text" name="field3" v-validate:model3.min="max">
-          <input type="text" name="field4" number v-validate:model4.max.min.required="{ min: 1, max: max }">
-          <input type="text" name="field5" v-validate:model5.max.min.required="obj">
+          <input type="text" name="field1" group="group1" v-validate:model1.required>
+          <input type="text" name="field2" group="group1" v-validate:model2.maxlength="2">
+          <input type="text" name="field3" group="group2" v-validate:model3.min="max">
+          <input type="text" name="field4" group="group2" number v-validate:model4.max.min.required="{ min: 1, max: max }">
+          <input type="text" name="field5" group="group2" v-validate:model5.max.min.required="obj">
           <template v-if="visibleTemplate">
-            <input type="text" name="field6" v-validate:model6.pattern="{ pattern: '/hoge/' }">
+            <input type="text" name="field6" group="group2" v-validate:model6.pattern="{ pattern: '/hoge/' }">
             <pre>$validator1 in template: {{$validator1 | json}}</pre>
           </template>
         </form>

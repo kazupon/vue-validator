@@ -7,6 +7,8 @@ export default function (Vue) {
   const _ = Vue.util
 
   Vue.directive('validate', {
+    params: ['group'],
+
     bind () {
       console.log('validate:bind', this, this.arg)
 
@@ -21,6 +23,10 @@ export default function (Vue) {
       let validator = this.validator = this.vm._validatorMaps[validatorName]
       let validation = this.validation = new Validation(this)
       validator.addValidation(validation)
+
+      if (this.params.group) {
+        validator.addGroupValidation(this.params.group, validation)
+      }
 
       this.on('blur', this.validation.listener.bind(this.validation))
       this.on('input', this.validation.listener.bind(this.validation))
@@ -56,6 +62,9 @@ export default function (Vue) {
       console.log('validate:unbind', this)
 
       if (this.validator && this.validation) {
+        if (this.params.group) {
+          this.validator.removeGroupValidation(this.params.group, this.validation)
+        }
         this.validator.removeValidation(this.validation)
         this.validator = null
         this.validation = null

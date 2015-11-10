@@ -14,6 +14,8 @@ let vm = new Vue({
     msg: 'this is vue-validator v2 prototyping example (on designing phase)',
     visibleValidator: false,
     visibleTemplate: false,
+    group1: 'group1',
+    group2: 'group2',
     max: 1,
     obj: {
       max: 2,
@@ -39,3 +41,13 @@ let vm = new Vue({
     }
   }
 })
+
+/*
+let inc = 2
+let offset = 10
+setInterval(() => {
+  inc++
+  vm.group1 = 'group' + inc
+  vm.group2 = 'group' + (inc + offset)
+}, 1000)
+*/
