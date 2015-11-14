@@ -2,6 +2,12 @@ import Vue from 'vue'
 import VueValidator from '../src/index'
 
 Vue.use(VueValidator)
+
+Vue.validator('mymax', (val, arg) => {
+  console.log('validator mymax:', val, arg)
+  return arg > 10
+})
+
 Vue.component('comp', {
   template: '<div><p>my component</p></div>' +
     '<pre>{{$validator1 | json}}</pre>',
@@ -38,6 +44,13 @@ let vm = new Vue({
       this.max++
       this.obj.max++
       this.$validator1.a++
+      return 'return onclick'
+    },
+    onValid (e) {
+      console.log('call onValid')
+    },
+    onInvalid (e) {
+      console.log('call onInvalid')
     }
   }
 })

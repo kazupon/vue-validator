@@ -1,4 +1,4 @@
-import util, { warn, each } from './util'
+import util, { warn, each, trigger } from './util'
 
 
 /**
@@ -47,6 +47,7 @@ export default class Validation {
   }
 
   listener (e) {
+    console.log('input event', e.type)
     if (e.relatedTarget && 
       (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
       return
@@ -77,6 +78,8 @@ export default class Validation {
       }
       ret[name] = !res
     }, this)
+
+    trigger(this.el, valid ? 'valid' : 'invalid')
 
     extend(ret, {
       valid: valid,
