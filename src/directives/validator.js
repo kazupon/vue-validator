@@ -10,15 +10,7 @@ export default function (Vue) {
   Vue.elementDirective('validator', {
     params: ['name', 'groups'],
 
-    paramWatchers: {
-      groups: (val, old) => {
-        console.log('paramWatchers#groups', val, old)
-      } 
-    },
-
     bind () {
-      console.log('validator:bind', this)
-
       if (!this.params.name) {
         // TODO: should be implemented validator:bind name params nothing error'
         _.warn('TODO: should be implemented validator:bind name params nothing error')
@@ -62,8 +54,6 @@ export default function (Vue) {
     },
 
     unbind () {
-      console.log('validator:unbind', this)
-
       vIf.unbind.call(this)
 
       this.validator.disableReactive()
