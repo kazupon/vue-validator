@@ -1,5 +1,5 @@
 import assert from 'power-assert'
-import { required, pattern, minLength, maxLength, min, max } from '../../src/validators'
+import { required, pattern, minlength, maxlength, min, max } from '../../src/validators'
 
 
 describe('validators', () => {
@@ -175,83 +175,83 @@ describe('validators', () => {
   })
 
 
-  describe('minLength', () => {
+  describe('minlength', () => {
     describe('boundary', () => {
       describe('length - 1', () => {
         it('should be false', () => {
-          assert(minLength('aaa', '4') === false)
+          assert(minlength('aaa', '4') === false)
         })
       })
 
       describe('just length', () => {
         it('should be true', () => {
-          assert(minLength('aaaa', '4'))
+          assert(minlength('aaaa', '4'))
         })
       })
 
       describe('length + 1', () => {
         it('should be true', () => {
-          assert(minLength('aaaaa', '4'))
+          assert(minlength('aaaaa', '4'))
         })
       })
     })
 
     describe('not string', () => {
       it('should be false', () => {
-        assert(minLength(111, '4') === false)
+        assert(minlength(111, '4') === false)
       })
     })
 
     describe('not integer argument', () => {
       it('should be false', () => {
-        assert(minLength('aaaa', 'hello') === false)
+        assert(minlength('aaaa', 'hello') === false)
       })
     })
 
     describe('integer argument', () => {
       it('should be true', () => {
-        assert(minLength('aaaa', 4))
+        assert(minlength('aaaa', 4))
       })
     })
   })
 
 
-  describe('maxLength', () => {
+  describe('maxlength', () => {
     describe('boundary', () => {
       describe('length - 1', () => {
         it('should be true', () => {
-          assert(maxLength('aaa', '4'))
+          assert(maxlength('aaa', '4'))
         })
       })
 
       describe('just length', () => {
         it('should be true', () => {
-          assert(maxLength('aaaa', '4'))
+          assert(maxlength('aaaa', '4'))
         })
       })
 
       describe('length + 1', () => {
         it('should be false', () => {
-          assert(maxLength('aaaaa', '4') === false)
+          assert(maxlength('aaaaa', '4') === false)
         })
       })
     })
 
     describe('not string', () => {
       it('should be false', () => {
-        assert(maxLength({}, '4') === false)
+        assert(maxlength({}, '4') === false)
       })
     })
 
     describe('not integer argument', () => {
       it('should be false', () => {
-        assert(maxLength('aaaa', 'hello') === false)
+        assert(maxlength('aaaa', 'hello') === false)
       })
     })
 
     describe('integer argument', () => {
       it('should be true', () => {
-        assert(maxLength('aaaa', 4))
+        assert(maxlength('aaaa', 4))
       })
     })
   })
