@@ -5,17 +5,14 @@ import VueValidator from '../../src/index'
 
 
 describe('asset', () => {
+  let el
+
   beforeEach(() => {
-    let el = document.createElement('div')
-    el.setAttribute('id', 'app')
-    document.body.appendChild(el)
+    el = document.createElement('div')
     Vue.use(VueValidator)
   })
 
   afterEach(() => {
-    while (document.body.firstChild) {
-      document.body.removeChild(document.body.firstChild)
-    }
     VueValidator.installed = false
   })
 
@@ -50,7 +47,7 @@ describe('asset', () => {
           validators: { custom2: custom2 }
         }
         let vm = new Vue({
-          el: '#app',
+          el: el,
           components: { myComponent: component },
           template: '<my-component msg="hello" v-ref:component></my-component>',
           validators: { custom1: custom1 }
@@ -77,7 +74,7 @@ describe('asset', () => {
           validators: { custom: custom }
         })
         let vm = new Vue({
-          el: '#app',
+          el: el,
           components: { item: Component },
           template: '<item v-for="item in items"></item>',
           data: {
