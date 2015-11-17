@@ -10,6 +10,8 @@ export default class Validator {
   constructor (name, dir, groups) {
     this.name = name
     this.scope = { a: 1 } // TODO: change to Object.create(null)
+    //this.scope = Object.create(null)
+    //this.scope.a = 1
 
     this._dir = dir
     this._validations = []
@@ -66,7 +68,7 @@ export default class Validator {
 
     each(this._groups, (name) => {
       let validations = this._groupValidations[name]
-      let group = {} // TODO: change to Object.create(null)
+      let group = Object.create(null)
       util.Vue.util.set(this.scope, name, group)
       this._defineProperties(validations, group)
     }, this)
@@ -99,9 +101,11 @@ export default class Validator {
 
     each(validations, (validation, index) => {
       if (ret === !condition) { return }
-      let target = this.scope[validation.model]
-      if (target[property] === !condition) {
-        ret = !condition
+      if (Object.prototype.hasOwnProperty.call(this.scope, validation.model)) {
+        var target = this.scope[validation.model]
+        if (target && target[property] === !condition) {
+          ret = !condition
+        }
       }
     }, this)
 
