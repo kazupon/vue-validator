@@ -12,7 +12,8 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../test/specs/**/*.js'
+      //'../test/specs/**/*.js'
+      '../test/specs/index.js'
     ],
 
     // list of files to exclude

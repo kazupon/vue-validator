@@ -1,7 +1,6 @@
 import assert from 'power-assert'
 import Vue from 'vue'
 import * as validators from '../../src/validators'
-import VueValidator from '../../src/index'
 
 
 describe('asset', () => {
@@ -9,11 +8,6 @@ describe('asset', () => {
 
   beforeEach(() => {
     el = document.createElement('div')
-    Vue.use(VueValidator)
-  })
-
-  afterEach(() => {
-    VueValidator.installed = false
   })
 
 
