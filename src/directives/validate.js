@@ -28,8 +28,8 @@ export default function (Vue) {
         validator.addGroupValidation(this.params.group, validation)
       }
 
-      this.on('blur', this.validation.listener.bind(this.validation))
-      this.on('input', this.validation.listener.bind(this.validation))
+      this.on('blur', _.bind(this.validation.listener, this.validation))
+      this.on('input', _.bind(this.validation.listener, this.validation))
     },
 
     update (value, old) {
