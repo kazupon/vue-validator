@@ -34,7 +34,7 @@
     "nightmare": "^2.0.5",
     "phantomjs": "^1.9.18",
     "power-assert": "^1.0.0",
-    "vue": "^1.0.0",
+    "vue": "^1.0.8",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.11.0"
   },
