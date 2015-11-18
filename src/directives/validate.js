@@ -32,7 +32,7 @@ export default function (Vue) {
     },
 
     update (value, old) {
-      //console.log('validate:update', this.arg, value, old, typeof value, this)
+      //console.log('validate:update', this.arg, value, old, typeof value, JSON.stringify(value))
       if (!value) {
         return
       }
@@ -53,7 +53,13 @@ export default function (Vue) {
 
     handleObject (value) {
       each(value, (val, key) => {
-        this.validation.updateValidate(key, val)
+        if (_.isPlainObject(val)) {
+          if ('rule' in val) {
+            this.validation.updateValidate(key, val.rule)
+          }
+        } else {
+          this.validation.updateValidate(key, val)
+        }
       }, this)
     },
 

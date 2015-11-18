@@ -42,31 +42,78 @@ describe('syntax', () => {
     })
 
     context('binding', () => {
-      beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" value="0" v-validate:field1.max="number">' +
-          '</form>' +
-          '</validator>'
-        vm = new Vue({
-          el: el,
-          data: { number: 10 }
+      context('primitive', () => {
+        beforeEach((done) => {
+          el.innerHTML = 
+            '<validator name="validator1">' +
+            '<form novalidate>' +
+            '<input type="text" value="0" v-validate:field1.max="number">' +
+            '</form>' +
+            '</validator>'
+          vm = new Vue({
+            el: el,
+            data: { number: 10 }
+          })
+          vm.$nextTick(done)
         })
-        vm.$nextTick(done)
+
+        it('should be validated', (done) => {
+          // default
+          assert(vm.$validator1.field1.max === false)
+
+          // change input value
+          let input = el.getElementsByTagName('input')[0]
+          input.value = '11'
+          trigger(input, 'input')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.field1.max === true)
+            done()
+          })
+        })
       })
 
-      it('should be validated', (done) => {
-        // default
-        assert(vm.$validator1.field1.max === false)
+      context('function', () => {
+        beforeEach((done) => {
+          el.innerHTML = 
+            '<validator name="validator1">' +
+            '<form novalidate>' +
+            '<input type="text" value="5" v-validate:field1.max="getMax(condition)">' +
+            '</form>' +
+            '</validator>'
+          vm = new Vue({
+            el: el,
+            data: { condition: '' },
+            methods: {
+              getMax (condition) {
+                let ret = 0
+                switch (condition) {
+                  case 'condition1':
+                    ret = 5
+                    break
+                  default:
+                    ret = 10
+                    break
+                }
+                return ret
+              }
+            }
+          })
+          vm.$nextTick(done)
+        })
 
-        // change input value
-        let input = el.getElementsByTagName('input')[0]
-        input.value = '11'
-        trigger(input, 'input')
-        vm.$nextTick(() => {
-          assert(vm.$validator1.field1.max === true)
-          done()
+        it('should be validated', (done) => {
+          // default
+          assert(vm.$validator1.field1.max === false)
+
+          // change input value
+          let input = el.getElementsByTagName('input')[0]
+          vm.condition = 'condition1'
+          input.value = '11'
+          trigger(input, 'input')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.field1.max === true)
+            done()
+          })
         })
       })
     })
@@ -118,7 +165,7 @@ describe('syntax', () => {
           el.innerHTML = 
             '<validator name="validator1">' +
             '<form novalidate>' +
-            '<input type="text" value="3" v-validate:field1.minlength.maxlength="{ minlength: { rule: 2 }, maxlength: { rule: 5 } }">' +
+            '<input type="text" value="foo" v-validate:field1.minlength.maxlength="{ minlength: { rule: 2 }, maxlength: { rule: 5 } }">' +
             '</form>' +
             '</validator>'
           vm = new Vue({
@@ -127,8 +174,27 @@ describe('syntax', () => {
           vm.$nextTick(done)
         })
         
-        it.skip('should be validated', () => {
-          // TODO:
+        it('should be validated', () => {
+          // default
+          assert(vm.$validator1.field1.minlength === false)
+          assert(vm.$validator1.field1.maxlength === false)
+
+          // change input value
+          let input = el.getElementsByTagName('input')[0]
+          input.value = 'hi'
+          trigger(input, 'input')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.field1.minlength === true)
+            assert(vm.$validator1.field1.maxlength === false)
+
+            input.value = 'hi kazupon'
+            trigger(input, 'input')
+            vm.$nextTick(() => {
+              assert(vm.$validator1.field1.minlength === false)
+              assert(vm.$validator1.field1.maxlength === true)
+              done()
+            })
+          })
         })
       })
     })
