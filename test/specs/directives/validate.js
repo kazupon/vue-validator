@@ -24,7 +24,6 @@ describe('validate directive', () => {
     })
 
     it('field scope should be assigned', () => {
-      console.log(JSON.stringify(vm.$validator1))
       assert(vm.$validator1.field1 !== undefined)
       assert(vm.$validator1.field1.required !== undefined)
       assert(vm.$validator1.field1.valid !== undefined)

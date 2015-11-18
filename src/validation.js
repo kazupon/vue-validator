@@ -16,8 +16,6 @@ export default class Validation {
     this.dirty = false
     this.modified = false
     this.validates = this._buildValidates(dir)
-
-    console.log('Validation', this)
   }
 
   _buildValidates (dir, arg = null) {
@@ -47,7 +45,7 @@ export default class Validation {
   }
 
   listener (e) {
-    console.log('input event', e.type)
+    //console.log('input event', e.type)
     if (e.relatedTarget && 
       (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
       return
