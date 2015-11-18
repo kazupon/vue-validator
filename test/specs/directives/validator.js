@@ -32,11 +32,15 @@ describe('validator element directive', () => {
 
 
   describe('invalid warn', () => {
-    context.skip('not specify name attribute', () => {
-      // TODO:
+    context('not specify name attribute', () => {
+      it.skip('should be called warn', () => {
+        // TODO:
+      })
     })
     context.skip('not exist validator map object in vm instance', () => {
-      // TODO:
+      it.skip('should be called warn', () => {
+        // TODO:
+      })
     })
   })
 
