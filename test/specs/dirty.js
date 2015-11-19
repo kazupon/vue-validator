@@ -47,7 +47,7 @@ describe('dirty', () => {
       it('field2.dirty should be false', () => {
         assert(vm.$validator1.field2.dirty === false)
       })
-      it('top level dirty should be false', () => {
+      it('top level dirty should be true', () => {
         assert(vm.$validator1.dirty === true)
       })
 
@@ -64,7 +64,7 @@ describe('dirty', () => {
         it('field2.dirty should be false', () => {
           assert(vm.$validator1.field2.dirty === false)
         })
-        it('top level dirty should be false', () => {
+        it('top level dirty should be true', () => {
           assert(vm.$validator1.dirty === true)
         })
       })
