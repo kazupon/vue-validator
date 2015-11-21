@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { trigger } from '../../src/util'
 
 
-describe('dirty', () => {
+describe('modified', () => {
   let el, vm
 
   beforeEach((done) => {
@@ -22,14 +22,14 @@ describe('dirty', () => {
   })
 
   context('default', () => {
-    it('field1.dirty should be false', () => {
-      assert(vm.$validator1.field1.dirty === false)
+    it('field1.modified should be false', () => {
+      assert(vm.$validator1.field1.modified === false)
     })
-    it('field2.dirty should be false', () => {
-      assert(vm.$validator1.field2.dirty === false)
+    it('field2.modified should be false', () => {
+      assert(vm.$validator1.field2.modified === false)
     })
-    it('top level dirty should be false', () => {
-      assert(vm.$validator1.dirty === false)
+    it('top level modified should be false', () => {
+      assert(vm.$validator1.modified === false)
     })
 
     context('input value', () => {
@@ -41,14 +41,14 @@ describe('dirty', () => {
         vm.$nextTick(done)
       })
 
-      it('field1.dirty should be true', () => {
-        assert(vm.$validator1.field1.dirty === true)
+      it('field1.modified should be true', () => {
+        assert(vm.$validator1.field1.modified === true)
       })
-      it('field2.dirty should be false', () => {
-        assert(vm.$validator1.field2.dirty === false)
+      it('field2.modified should be false', () => {
+        assert(vm.$validator1.field2.modified === false)
       })
-      it('top level dirty should be true', () => {
-        assert(vm.$validator1.dirty === true)
+      it('top level modified should be false', () => {
+        assert(vm.$validator1.modified === true)
       })
 
       context('back to default value', () => {
@@ -58,14 +58,14 @@ describe('dirty', () => {
           vm.$nextTick(done)
         })
 
-        it('field1.dirty should be true', () => {
-          assert(vm.$validator1.field1.dirty === true)
+        it('field1.modified should be false', () => {
+          assert(vm.$validator1.field1.modified === false)
         })
-        it('field2.dirty should be false', () => {
-          assert(vm.$validator1.field2.dirty === false)
+        it('field2.modified should be false', () => {
+          assert(vm.$validator1.field2.modified === false)
         })
-        it('top level dirty should be true', () => {
-          assert(vm.$validator1.dirty === true)
+        it('top level modified should be false', () => {
+          assert(vm.$validator1.modified === false)
         })
       })
     })

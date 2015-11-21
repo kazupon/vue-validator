@@ -1,8 +1,0 @@
-{
-  "name": "vue-validator",
-  "repo": "vuejs/vue-validator",
-  "version": "1.4.4",
-  "description": "Validator component for Vue.js",
-  "main": "index.js",
-  "license": "MIT"
-}

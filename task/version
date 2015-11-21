@@ -20,7 +20,7 @@ if (!version) {
   return process.exit(0)
 }
 
-var manifests = ['package.json', 'bower.json', 'component.json']
+var manifests = ['package.json', 'bower.json']
 manifests.forEach(function (file) {
   file = path.normalize(path.join(__dirname, '..', file))
   var json = fs.readFileSync(file).toString()

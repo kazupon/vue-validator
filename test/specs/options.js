@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { trigger } from '../../src/util'
 
 
-describe('async', () => {
+describe('options', () => {
   let el, vm
 
   beforeEach(() => {

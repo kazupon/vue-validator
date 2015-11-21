@@ -7,26 +7,28 @@
   "authors": [
     "kazuya kawaguchi <kawakazu80@gmail.com>"
   ],
+  "moduleType": [
+    "globals",
+    "node",
+    "amd"
+  ],
   "keywords": [
+    "vue.js",
     "vue",
     "validation",
     "plugin"
   ],
   "license": "MIT",
   "ignore": [
-    ".*",
     "**/.*",
     "node_modules",
-    "components",
+    "config",
     "bower_components",
-    "example",
-    "task",
+    "lib",
     "test",
-    "tests",
-    "Makefile",
-    "LICENSE",
     "*.js",
     "*.json",
+    "*.yml",
     "*.md"
   ]
 }

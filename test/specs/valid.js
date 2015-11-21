@@ -1,103 +1,72 @@
-/**
- * Import(s)
- */
-
-var Vue = require('../../node_modules/vue/dist/vue')
-var plugin = require('../../index')
-var createInstance = require('./helper').createInstance
+import assert from 'power-assert'
+import Vue from 'vue'
+import { trigger } from '../../src/util'
 
 
-describe('valid', function () {
-  var vm, targetVM
+describe('valid', () => {
+  let el, vm
 
-  before(function () {
-    Vue.use(plugin)
+  beforeEach((done) => {
+    el = document.createElement('div')
+    el.innerHTML = 
+      '<validator name="validator1">' +
+      '<form novalidate>' +
+      '<input type="text" v-validate:field1.required.maxlength="{ maxlength: 3 }">' +
+      '<input type="text" value="foo" v-validate:field2.required.minlength="{ minlength: 1 }">' +
+      '</form>' +
+      '</validator>'
+    vm = new Vue({
+      el: el
+    })
+    vm.$nextTick(done)
   })
 
-
-  beforeEach(function (done) {
-    var inputs = '<input type="text" v-model="username" v-validate="required, minLength: 4, maxLength: 16">'
-      + '<input type="text" v-model="zip" v-validate="required, pattern: \'/^[0-9]{3}-[0-9]{4}$/\'"'
-    vm = createInstance({
-       target: inputs, data: { username: '', zip: '' }
+  context('default', () => {
+    it('field1.valid should be false', () => {
+      assert(vm.$validator1.field1.valid === false)
     })
-    targetVM = vm.$children[0]
+    it('field2.valid should be true', () => {
+      assert(vm.$validator1.field2.valid === true)
+    })
+    it('top level valid should be false', () => {
+      assert(vm.$validator1.valid === false)
+    })
 
-    Vue.nextTick(done)
-  })
-
-  
-  describe('init instance', function () {
-    describe('validation.username.valid', function () {
-      it('should be false', function () {
-        expect(targetVM.validation.username.valid).to.be(false)
+    context('input value', () => {
+      let field1
+      beforeEach((done) => {
+        field1 = el.getElementsByTagName('input')[0]
+        field1.value = 'hi'
+        trigger(field1, 'input')
+        vm.$nextTick(done)
       })
-    })
 
-    describe('validation.zip.valid', function () {
-      it('should be false', function () {
-        expect(targetVM.validation.zip.valid).to.be(false)
+      it('field1.valid should be true', () => {
+        assert(vm.$validator1.field1.valid === true)
       })
-    })
-
-    describe('valid', function () {
-      it('should be false', function () {
-        expect(targetVM.valid).to.be(false)
+      it('field2.valid should be true', () => {
+        assert(vm.$validator1.field2.valid === true)
       })
-    })
-  })
-
-
-  describe('pass username validation', function () {
-    beforeEach(function (done) {
-      vm.username = 'kazupon'
-
-      Vue.nextTick(done)
-    })
-
-    describe('validation.username.valid', function () {
-      it('should be true', function () {
-        expect(targetVM.validation.username.valid).to.be(true)
+      it('top level valid should be true', () => {
+        assert(vm.$validator1.valid === true)
       })
-    })
 
-    describe('validation.zip.valid', function () {
-      it('should be false', function () {
-        expect(targetVM.validation.zip.valid).to.be(false)
-      })
-    })
+      context('back to default value', () => {
+        beforeEach((done) => {
+          field1.value = ''
+          trigger(field1, 'input')
+          vm.$nextTick(done)
+        })
 
-    describe('valid', function () {
-      it('should be false', function () {
-        expect(targetVM.valid).to.be(false)
-      })
-    })
-  })
-
-
-  describe('pass username and zip validation', function () {
-    beforeEach(function (done) {
-      vm.username = 'kazupon'
-      vm.zip = '111-2222'
-      
-      Vue.nextTick(done)
-    })
-
-    describe('validation.username.valid', function () {
-      it('should be true', function () {
-        expect(targetVM.validation.username.valid).to.be(true)
-      })
-    })
-
-    describe('validation.zip.valid', function () {
-      it('should be true', function () {
-        expect(targetVM.validation.zip.valid).to.be(true)
-      })
-    })
-
-    describe('valid', function () {
-      it('should be true', function () {
-        expect(targetVM.valid).to.be(true)
+        it('field1.valid should be false', () => {
+          assert(vm.$validator1.field1.valid === false)
+        })
+        it('field2.valid should be true', () => {
+          assert(vm.$validator1.field2.valid === true)
+        })
+        it('top level valid should be false', () => {
+          assert(vm.$validator1.valid === false)
+        })
       })
     })
   })
