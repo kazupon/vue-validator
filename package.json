@@ -61,7 +61,7 @@
     "coolkids": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch1 karma start config/karma.conf.js",
     "coverage": "VUE_VALIDATOR_TYPE=coverage karma start config/karma.conf.js",
     "coveralls": "VUE_VALIDATOR_TYPE=coveralls karma start config/karma.conf.js",
-    "dev": "webpack-dev-server --inline --quite --hot --config config/webpack.dev.conf.js --content-base example",
+    "dev": "webpack-dev-server --inline --quite --hot --config config/webpack.dev.conf.js --content-base ./",
     "dist": "npm run build && npm run bundle",
     "e2e": "webpack-dev-server --quiet -h --config config/webpack.e2e.conf.js --content-base test/e2e & mocha -t 20000 --compilers js:espower-babel/guess test/e2e/test.js && kill $! || (kill $! && exit 1)",
     "ie": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch2 karma start config/karma.conf.js",
