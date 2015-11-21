@@ -2,7 +2,7 @@
   "name": "vue-validator",
   "main": "dist/vue-validator.js",
   "description": "Validator component for Vue.js",
-  "version": "1.4.4",
+  "version": "2.0.0-alpha.1",
   "homepage": "https://github.com/vuejs/vue-validator",
   "authors": [
     "kazuya kawaguchi <kawakazu80@gmail.com>"

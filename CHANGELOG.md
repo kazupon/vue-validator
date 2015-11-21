@@ -1,3 +1,7 @@
+# 2.0.0-alpha.1 / 2015-11-22
+
+* Release for Vue 1.0
+
 # v1.4.4 / 2015-09-26
 
 * Fix validator configration options passing (#55, #57)
