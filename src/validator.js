@@ -9,7 +9,7 @@ export default class Validator {
 
   constructor (name, dir, groups) {
     this.name = name
-    this.scope = { a: 1 } // TODO: change to Object.create(null)
+    this.scope = {} // TODO: change to Object.create(null)
     //this.scope = Object.create(null)
     //this.scope.a = 1
 
