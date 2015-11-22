@@ -53,7 +53,7 @@ Install the plugin with `Vue.use`, we can use `validator` element directive and 
     <input type="text" v-validate:username.required>
     <input type="text" v-validate:comment.maxlength="256">
     <div>
-      <span v-show="$validation1.comment.maxlength">Rquired your name.</span>
+      <span v-show="$validation1.username.required">Rquired your name.</span>
       <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
     </div>
     <input type="submit" value="send" v-if="$validation1.valid">
@@ -141,14 +141,14 @@ The below is example that using literal of string value:
       <span v-if="$validation.zip.pattern">Invalid format of your zip code.</span>
     </div>
   </form>
-</validation>
+</validator>
 ```
 
 ### Object
 The below is example that using object literal:
 
 ```html
-<validator name="validator1">
+<validator name="validation">
   <form novalidate>
     ID: <input type="text" v-validate:id.minlength.maxlength="{ minlength: 3, maxlength: 16 }"><br />
     <div>
@@ -175,7 +175,7 @@ new Vue({
 ```
 ```html
 <div id="app">
-  <validator name="validator">
+  <validator name="validation">
     <form novalidate>
       ID: <input type="text" v-validate:id.minlength.maxlength="rules"><br />
       <div>
@@ -238,7 +238,7 @@ You can register your custom validator with using `Vue.validator`. the below the
 
 ```javascript
 // register custom validator
-Vue.validate('email', {
+Vue.validate('email', function (val) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
 
@@ -271,7 +271,7 @@ new Vue({
 - server-side validation error applying
 - more tests !!
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
-- some chores (bebel6, switch ci ...)
+- some chores (babel6, switch circle ci ...)
 
 
 # Contributing
