@@ -23,12 +23,6 @@ If you have some feedback, we are welcome in [Vue.js Discussion](http://forum.vu
 $ npm install vue-validator
 ```
 
-## bower
-
-```shell
-$ bower install vue-validator
-```
-
 ## CDN
 
 ```html
