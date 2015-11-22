@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.1
+ * vue-validator v2.0.0-alpha.2
  * (c) 2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -774,7 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Validator);
 
 	    this.name = name;
-	    this.scope = { a: 1 }; // TODO: change to Object.create(null)
+	    this.scope = {}; // TODO: change to Object.create(null)
 	    //this.scope = Object.create(null)
 	    //this.scope.a = 1
 

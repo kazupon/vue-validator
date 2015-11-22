@@ -1,3 +1,23 @@
+<a name="2.0.0-alpha.2"></a>
+# 2.0.0-alpha.2 (2015-11-22)
+
+
+### docs
+
+* docs(README): fix typo ([5c7cb78](https://github.com/vuejs/vue-validator/commit/5c7cb78))
+
+### fix
+
+* fix(validator): remove test property from validation scope ([3e862dd](https://github.com/vuejs/vue-validator/commit/3e862dd))
+
+
+### BREAKING CHANGE
+
+* bower: not support `bower` package manager ([28f87ea](https://github.com/vuejs/vue-validator/commit/28f87ea))
+
+I think that bower is dead.
+
+
 # 2.0.0-alpha.1 / 2015-11-22
 
 * Release for Vue 1.0
