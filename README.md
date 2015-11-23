@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/vuejs/vue-validator.svg?branch=dev)](https://travis-ci.org/vuejs/vue-validator)
 [![Coverage Status](https://coveralls.io/repos/vuejs/vue-validator/badge.svg?branch=dev&service=github)](https://coveralls.io/github/vuejs/vue-validator?branch=dev)
 [![Sauce Test Status](https://saucelabs.com/buildstatus/vuejs-validator)](https://saucelabs.com/u/vuejs-validator)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 
 Validator component for Vue.js
