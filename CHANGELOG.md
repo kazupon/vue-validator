@@ -1,3 +1,29 @@
+<a name="2.0.0-alpha.4"></a>
+# 2.0.0-alpha.4 (2015-11-23)
+
+
+### chore
+
+* chore(npm): add commitizen config ([bf23fc3](https://github.com/vuejs/vue-validator/commit/bf23fc3))
+* chore(READEME): modify baduge urls ([0cc7b0e](https://github.com/vuejs/vue-validator/commit/0cc7b0e))
+* chore(sauce): remove unnecessary sauce setting ([edf8383](https://github.com/vuejs/vue-validator/commit/edf8383))
+* chore(travis): change node version ([8c7845c](https://github.com/vuejs/vue-validator/commit/8c7845c))
+
+### docs
+
+* docs(README): add commitizen badge ([1f3399e](https://github.com/vuejs/vue-validator/commit/1f3399e))
+* docs(spec): This is the spec ([6da4e9a](https://github.com/vuejs/vue-validator/commit/6da4e9a))
+
+### feat
+
+* feat(install): support automatically install for standalone ([d8fb356](https://github.com/vuejs/vue-validator/commit/d8fb356))
+
+### fix
+
+* fix(lint): resolve eslint error ([72c3d1b](https://github.com/vuejs/vue-validator/commit/72c3d1b))
+
+
+
 <a name="2.0.0-alpha.3"></a>
 # 2.0.0-alpha.3 (2015-11-23)
 

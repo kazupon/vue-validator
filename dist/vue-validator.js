@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.3
+ * vue-validator v2.0.0-alpha.4
  * (c) 2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -111,6 +111,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  (0, _directivesValidate2['default'])(Vue);
 	}
 
+	if (typeof window !== 'undefined' && window.Vue) {
+	  window.Vue.use(install);
+	}
 	module.exports = exports['default'];
 
 /***/ },
