@@ -26,7 +26,7 @@ $ npm install vue-validator
 ## CDN
 
 ```html
-<script src="http://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.1/vue-validator.min.js"></script>
+<script src="http://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.3/vue-validator.min.js"></script>
 ```
 
 

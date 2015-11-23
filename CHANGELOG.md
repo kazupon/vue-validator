@@ -1,3 +1,18 @@
+<a name="2.0.0-alpha.3"></a>
+# 2.0.0-alpha.3 (2015-11-23)
+
+
+### chore
+
+* chore(lint): fix eslint errors ([0e58704](https://github.com/vuejs/vue-validator/commit/0e58704))
+* chore(npm): update npm-scripts ([8c866d1](https://github.com/vuejs/vue-validator/commit/8c866d1))
+
+### fix
+
+* fix(override): occured error when using plugin ([3d9fe74](https://github.com/vuejs/vue-validator/commit/3d9fe74)), closes [#92](https://github.com/vuejs/vue-validator/issues/92)
+
+
+
 <a name="2.0.0-alpha.2"></a>
 # 2.0.0-alpha.2 (2015-11-22)
 
