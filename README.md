@@ -176,7 +176,7 @@ new Vue({
   data: {
     rules: {
       minlength: 3,
-      manlength: 16
+      maxlength: 16
     }
   }
 })
