@@ -29,12 +29,14 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.14",
+    "karma-sinon": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.1",
     "nightmare": "^2.0.5",
     "phantomjs": "^1.9.18",
     "power-assert": "^1.0.0",
+    "sinon": "^1.17.2",
     "vue": "^1.0.8",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.11.0"
@@ -68,8 +70,8 @@
     "lint": "eslint src test/specs",
     "mobile": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch3 karma start config/karma.conf.js",
     "sauce": "npm run coolkids && npm run ie && npm run mobile",
-    "unit": "karma start config/karma.conf.js",
     "test": "npm run ci",
+    "unit": "karma start config/karma.conf.js",
     "watch": "babel src --out-dir lib --watch --source-maps-inline"
   }
 }

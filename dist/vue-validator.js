@@ -88,10 +88,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _directivesValidator2 = _interopRequireDefault(_directivesValidator);
 
-	var _validation = __webpack_require__(6);
-
-	var _validation2 = _interopRequireDefault(_validation);
-
 	/**
 	 * Install
 	 *
@@ -405,17 +401,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _util = __webpack_require__(1);
-
-	exports['default'] = function (Vue) {
+	exports["default"] = function (Vue) {
 
 	  // override _init
 	  var init = Vue.prototype._init;
@@ -429,12 +423,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // override _destroy
 	  var destroy = Vue.prototype._destroy;
 	  Vue.prototype._destroy = function () {
+	    destroy.apply(this, arguments);
 	    this._validatorMaps = null;
-	    destroy.call(this);
 	  };
 	};
 
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
 /* 5 */
@@ -462,12 +456,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    params: ['group'],
 
 	    bind: function bind() {
-	      //console.log('validate:bind', this, this.arg)
 	      var vm = this.vm;
 	      var validatorName = vm.$options._validator;
 	      if (!validatorName) {
 	        // TODO: should be implemented error message
-	        _.warn('TODO: should be implemented error message');
+	        (0, _util.warn)('TODO: should be implemented error message');
 	        return;
 	      }
 
@@ -484,7 +477,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    update: function update(value, old) {
-	      //console.log('validate:update', this.arg, value, old, typeof value, JSON.stringify(value))
 	      if (!value) {
 	        return;
 	      }
@@ -518,7 +510,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    unbind: function unbind() {
-	      //console.log('validate:unbind', this)
 	      if (this.validator && this.validation) {
 	        if (this.params.group) {
 	          this.validator.removeGroupValidation(this.params.group, this.validation);
@@ -604,7 +595,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'listener',
 	    value: function listener(e) {
-	      //console.log('input event', e.type)
 	      if (e.relatedTarget && (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
 	        return;
 	      }
@@ -689,14 +679,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    bind: function bind() {
 	      if (!this.params.name) {
 	        // TODO: should be implemented validator:bind name params nothing error'
-	        _.warn('TODO: should be implemented validator:bind name params nothing error');
+	        (0, _util.warn)('TODO: should be implemented validator:bind name params nothing error');
 	        return;
 	      }
 
 	      var validatorName = this.validatorName = '$' + this.params.name;
 	      if (!this.vm._validatorMaps) {
 	        // TODO: should be implemented error message'
-	        _.warn('TODO: should be implemented error message');
+	        (0, _util.warn)('TODO: should be implemented error message');
 	        return;
 	      }
 
@@ -775,8 +765,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.name = name;
 	    this.scope = {}; // TODO: change to Object.create(null)
-	    //this.scope = Object.create(null)
-	    //this.scope.a = 1
+	    /*
+	    this.scope = Object.create(null)
+	    this.scope.a = 1
+	    */
 
 	    this._dir = dir;
 	    this._validations = [];

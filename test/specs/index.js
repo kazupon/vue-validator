@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueValidator from '../../src/index'
 
+require('./validators')
+require('./override')
+
 Vue.use(VueValidator)
 
-require('./validators.js')
 require('./asset')
 require('./directives/validator')
 require('./directives/validate')
