@@ -1,7 +1,7 @@
 # vue-validator
 
-[![Build Status](https://travis-ci.org/vuejs/vue-validator.svg?branch=dev%2Flatest)](https://travis-ci.org/vuejs/vue-validator)
-[![Coverage Status](https://coveralls.io/repos/vuejs/vue-validator/badge.svg?branch=dev%2Flatest&service=github)](https://coveralls.io/github/vuejs/vue-validator?branch=dev%2Flatest)
+[![Build Status](https://travis-ci.org/vuejs/vue-validator.svg?branch=dev)](https://travis-ci.org/vuejs/vue-validator)
+[![Coverage Status](https://coveralls.io/repos/vuejs/vue-validator/badge.svg?branch=dev&service=github)](https://coveralls.io/github/vuejs/vue-validator?branch=dev)
 [![Sauce Test Status](https://saucelabs.com/buildstatus/vuejs-validator)](https://saucelabs.com/u/vuejs-validator)
 
 
