@@ -10,12 +10,11 @@ export default function (Vue) {
     params: ['group'],
 
     bind () {
-      //console.log('validate:bind', this, this.arg)
       let vm = this.vm
       let validatorName = vm.$options._validator
       if (!validatorName) {
         // TODO: should be implemented error message
-        _.warn('TODO: should be implemented error message')
+        warn('TODO: should be implemented error message')
         return
       }
 
@@ -32,7 +31,6 @@ export default function (Vue) {
     },
 
     update (value, old) {
-      //console.log('validate:update', this.arg, value, old, typeof value, JSON.stringify(value))
       if (!value) {
         return
       }
@@ -64,7 +62,6 @@ export default function (Vue) {
     },
 
     unbind () {
-      //console.log('validate:unbind', this)
       if (this.validator && this.validation) {
         if (this.params.group) {
           this.validator.removeGroupValidation(this.params.group, this.validation)

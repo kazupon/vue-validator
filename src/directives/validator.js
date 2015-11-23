@@ -1,4 +1,4 @@
-import { warn, attr } from '../util'
+import { warn } from '../util'
 import Validator from '../validator'
 
 
@@ -13,14 +13,14 @@ export default function (Vue) {
     bind () {
       if (!this.params.name) {
         // TODO: should be implemented validator:bind name params nothing error'
-        _.warn('TODO: should be implemented validator:bind name params nothing error')
+        warn('TODO: should be implemented validator:bind name params nothing error')
         return
       }
 
       let validatorName = this.validatorName = '$' + this.params.name
       if (!this.vm._validatorMaps) {
         // TODO: should be implemented error message'
-        _.warn('TODO: should be implemented error message')
+        warn('TODO: should be implemented error message')
         return
       }
 

@@ -174,14 +174,14 @@ describe('syntax', () => {
           vm.$nextTick(done)
         })
         
-        it('should be validated', () => {
+        it('should be validated', (done) => {
           // default
           assert(vm.$validator1.field1.minlength === false)
           assert(vm.$validator1.field1.maxlength === false)
 
           // change input value
           let input = el.getElementsByTagName('input')[0]
-          input.value = 'hi'
+          input.value = 'h'
           trigger(input, 'input')
           vm.$nextTick(() => {
             assert(vm.$validator1.field1.minlength === true)
@@ -207,10 +207,10 @@ describe('syntax', () => {
           '<input type="text" v-validate:field1.required.pattern="rules">' +
           '</form>' +
           '</validator>'
-          vm = new Vue({
-            el: el,
-            data: { rules: { required: true, pattern: '/foo/' } }
-          })
+        vm = new Vue({
+          el: el,
+          data: { rules: { required: true, pattern: '/foo/' } }
+        })
         vm.$nextTick(done)
       })
 

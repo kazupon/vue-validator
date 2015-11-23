@@ -1,6 +1,3 @@
-import { warn } from './util'
-
-
 export default function (Vue) {
 
   // override _init

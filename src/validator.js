@@ -1,4 +1,4 @@
-import util, { warn, each, pull } from './util'
+import util, { each, pull } from './util'
 
 
 /**
@@ -10,8 +10,10 @@ export default class Validator {
   constructor (name, dir, groups) {
     this.name = name
     this.scope = {} // TODO: change to Object.create(null)
-    //this.scope = Object.create(null)
-    //this.scope.a = 1
+    /*
+    this.scope = Object.create(null)
+    this.scope.a = 1
+    */
 
     this._dir = dir
     this._validations = []

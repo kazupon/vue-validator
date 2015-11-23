@@ -21,6 +21,7 @@ describe('event', () => {
         el: el,
         methods: {
           onValid () {
+            assert(true)
             done()
           }
         }
@@ -43,6 +44,7 @@ describe('event', () => {
         el: el,
         methods: {
           onInValid () {
+            assert(true)
             done()
           }
         }

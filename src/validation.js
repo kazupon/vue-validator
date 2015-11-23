@@ -1,4 +1,4 @@
-import util, { warn, each, trigger } from './util'
+import util, { each, trigger } from './util'
 
 
 /**
@@ -45,7 +45,6 @@ export default class Validation {
   }
 
   listener (e) {
-    //console.log('input event', e.type)
     if (e.relatedTarget && 
       (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
       return
@@ -56,7 +55,7 @@ export default class Validation {
     }
 
     if (!this.dirty && this.el.value !== this.init) {
-      this.dirty = true;
+      this.dirty = true
     }
 
     this.modified = (this.el.value !== this.init)
