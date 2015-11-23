@@ -56,7 +56,7 @@
     "browser": "VUE_VALIDATOR_TYPE=browser karma start config/karma.conf.js",
     "build": "babel src --out-dir lib --source-maps-inline",
     "bundle": "webpack --config config/webpack.conf.js && webpack --config config/webpack.min.conf.js",
-    "ci": "npm run coverage && npm run coveralls && npm run sauce && npm run e2e",
+    "ci": "npm run lint && npm run coverage && npm run coveralls && npm run sauce",
     "clean": "rm -rf lib && rm -rf coverage && rm -rf dist",
     "coolkids": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch1 karma start config/karma.conf.js",
     "coverage": "VUE_VALIDATOR_TYPE=coverage karma start config/karma.conf.js",
@@ -68,7 +68,8 @@
     "lint": "eslint src test/specs config",
     "mobile": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch3 karma start config/karma.conf.js",
     "sauce": "npm run coolkids && npm run ie && npm run mobile",
-    "test": "karma start config/karma.conf.js",
+    "unit": "karma start config/karma.conf.js",
+    "test": "npm run ci",
     "watch": "babel src --out-dir lib --watch --source-maps-inline"
   }
 }
