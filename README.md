@@ -22,38 +22,51 @@ If you have some feedback, we are welcome in [Vue.js Discussion](http://forum.vu
 ## npm
 ```shell
 $ npm install vue-validator
+# dev branch
+$ npm install vuejs/vue-validator#dev
 ```
 
-## CDN
+When used in CommonJS, you must explicitly install the router via `Vue.use()`:
+```javascript
+var Vue = require('vue')
+var VueValidator = require('vue-validator')
 
+Vue.use(VueValidator)
+```
+
+You don't need to do this when using the standalone build because it installs itself automatically.
+
+## CDN
+jsdelivr
 ```html
-<script src="http://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.3/vue-validator.min.js"></script>
+<script src="http://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.4/vue-validator.min.js"></script>
 ```
 
 
 # Usage
 
 ```javascript
-var Vue = require('vue')
-var validator = require('vue-validator')
-
-Vue.use(validator)
+new Vue({
+  el: '#app'
+})
 ```
 
-Install the plugin with `Vue.use`, we can use `validator` element directive and `v-validate` directive. The following is an example:
+We can use `validator` element directive and `v-validate` directive. The following is an example:
 
 ```html
-<validator name="validation1">
-  <form novalidate>
-    <input type="text" v-validate:username.required>
-    <input type="text" v-validate:comment.maxlength="256">
-    <div>
-      <span v-show="$validation1.username.required">Rquired your name.</span>
-      <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
-    </div>
-    <input type="submit" value="send" v-if="$validation1.valid">
-  </form>
-</validator>
+<div id="app">
+  <validator name="validation1">
+    <form novalidate>
+      <input type="text" v-validate:username.required>
+      <input type="text" v-validate:comment.maxlength="256">
+      <div>
+        <span v-show="$validation1.username.required">Rquired your name.</span>
+        <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
+      </div>
+      <input type="submit" value="send" v-if="$validation1.valid">
+    </form>
+  </validator>
+</div>
 ```
 
 The validation results keep to validation scope as defined with vue-validator. In above case, the validation results keep to `$validation1` scope (prefixed with `$`) which was specified with `name` attribute of `validator` element directive.

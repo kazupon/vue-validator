@@ -25,3 +25,7 @@ export default function install (Vue, options = {}) {
   Validator(Vue)
   Validate(Vue)
 }
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(install)
+}
