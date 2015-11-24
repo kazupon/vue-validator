@@ -10,7 +10,7 @@ Validator component for Vue.js
 
 
 # Requirements
-- Vue.js `1.0.8`+
+- Vue.js `1.0.10`+
 
 ## NOTE
 vue-validator is still alpha verison. Maybe, There are some breaking change. 
@@ -83,6 +83,12 @@ The structure of validation results that was kept to validation scope is the bel
              .dirty
              .pristine
              .modified
+             .messages.field1.validator1
+                             ...
+                             .validatorX
+                      .field2.validator1
+                             ...
+                             .validatorX
              .field1.validator1
                     ...
                     .validatorX
@@ -93,6 +99,9 @@ The structure of validation results that was kept to validation scope is the bel
                     .dirty
                     .pristine
                     .modified
+                    .messages.validator1
+                             ...
+                             .validatorX
              ...
              .fieldX.validator1
                     ...
@@ -104,6 +113,9 @@ The structure of validation results that was kept to validation scope is the bel
                     .dirty
                     .pristine
                     .modified
+                    .messages.validator1
+                             ...
+                             .validatorX
 ```
 
 The various top-level properties has been defined in the validation scope, and the each field validation result has been defined as field namespace.
@@ -116,7 +128,7 @@ The various top-level properties has been defined in the validation scope, and t
 - `modified`: whether field value is modified. if field value was changed from **initial** value, return `true`, else return `false`.
 - `dirty`: whether field value was changed at least **once**. if so, return `true`, else return `false`.
 - `pristine`: reverse of `dirty`.
-- `errors`: WIP
+- `messages`: if invalid field exist, return error message wrapped with object, else `undefined`.
 
 ## Top level validation properties
 - `valid`: whether **all** fields is valid. if so, then return `true`, else return `false`.
@@ -126,7 +138,7 @@ The various top-level properties has been defined in the validation scope, and t
 - `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
 - `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
 - `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
-- `errors`: WIP
+- `errors`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
 
 
 # Validator syntax
@@ -197,7 +209,6 @@ new Vue({
 
 In addition to the above data scope example, you can specify also the computed property or methods.
 
-
 # Grouping
 You can grouping validation results. the below example:
 
@@ -215,6 +226,29 @@ You can grouping validation results. the below example:
 </validator>
 ```
 
+# Messages
+You can specify error message that can get the validation scope.
+
+```html
+<validator name="validation1">
+  username: <input type="text" v-validate:username.required="{
+    required: { rule: true, message: 'required you name !!' }
+  }"><br />
+  password: <input type="text" v-validate:password.required.minlength="{
+    required: { rule: true, message: 'required you password !!' },
+    minlength: { rule: 8, messsage: 'your password short too !!' }
+  }"/><br />
+  <div class="errors">
+    <ul>
+      <li v-for="obj in $validation1.messages">
+        <div class="{{$key}}" v-for="msg in obj">
+          <p>{{$key}}: {{msg}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</validator>
+```
 
 # Event
 You can handle the `valid` event and `invalid` event. the below example:
