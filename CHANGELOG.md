@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.5"></a>
+# [2.0.0-alpha.5](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2015-11-24)
+
+
+### Features
+
+* **messages:** support messages validation property ([34564ec](https://github.com/vuejs/vue-validator/commit/34564ec))
+
+
+
 <a name="2.0.0-alpha.4"></a>
 # 2.0.0-alpha.4 (2015-11-23)
 

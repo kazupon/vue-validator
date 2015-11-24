@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.4
+ * vue-validator v2.0.0-alpha.5
  * (c) 2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -131,6 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports.warn = warn;
+	exports.empty = empty;
 	exports.each = each;
 	exports.pull = pull;
 	exports.attr = attr;
@@ -156,6 +157,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * empty
+	 *
+	 * @param {Array|Object} target
+	 * @return {Boolean}
+	 */
+
+	function empty(target) {
+	  if (target === null) {
+	    return true;
+	  }
+
+	  if (Array.isArray(target)) {
+	    if (target.length > 0) {
+	      return false;
+	    }
+	    if (target.length === 0) {
+	      return true;
+	    }
+	  } else if (_exports.Vue.util.isPlainObject(target)) {
+	    for (var key in target) {
+	      if (_exports.Vue.util.hasOwn(target, key)) {
+	        return false;
+	      }
+	    }
+	  }
+
+	  return true;
+	}
+
+	/**
 	 * each
 	 *
 	 * @param {Array|Object} target
@@ -169,8 +200,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      iterator.call(context || target[i], target[i], i);
 	    }
 	  } else if (_exports.Vue.util.isPlainObject(target)) {
+	    var hasOwn = _exports.Vue.util.hasOwn;
 	    for (var key in target) {
-	      if (key in target) {
+	      if (hasOwn(target, key)) {
 	        iterator.call(context || target[key], target[key], key);
 	      }
 	    }
@@ -504,7 +536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      (0, _util.each)(value, function (val, key) {
 	        if (_.isPlainObject(val)) {
 	          if ('rule' in val) {
-	            _this.validation.updateValidate(key, val.rule);
+	            _this.validation.updateValidate(key, val.rule, 'message' in val ? val.message : null);
 	          }
 	        } else {
 	          _this.validation.updateValidate(key, val);
@@ -587,9 +619,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'updateValidate',
-	    value: function updateValidate(name, arg, fn) {
+	    value: function updateValidate(name, arg, msg, fn) {
 	      if (this.validates[name]) {
 	        this.validates[name].arg = arg;
+	        if (msg) {
+	          this.validates[name].msg = msg;
+	        }
 	        if (fn) {
 	          this.validates[name].fn = fn;
 	        }
@@ -620,20 +655,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 
 	      var extend = _util2['default'].Vue.util.extend;
-	      var ret = {};
+	      var ret = Object.create(null);
+	      var messages = Object.create(null);
 	      var valid = true;
 
 	      (0, _util.each)(this.validates, function (descriptor, name) {
 	        var res = descriptor.fn(_this.el.value, descriptor.arg);
 	        if (!res) {
 	          valid = false;
+	          var msg = descriptor.msg;
+	          if (msg) {
+	            messages[name] = typeof msg === 'function' ? msg() : msg;
+	          }
 	        }
 	        ret[name] = !res;
 	      }, this);
 
 	      (0, _util.trigger)(this.el, valid ? 'valid' : 'invalid');
 
-	      extend(ret, {
+	      var props = {
 	        valid: valid,
 	        invalid: !valid,
 	        touched: this.touched,
@@ -641,7 +681,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        dirty: this.dirty,
 	        pristine: !this.dirty,
 	        modified: this.modified
-	      });
+	      };
+	      if (!(0, _util.empty)(messages)) {
+	        props.messages = messages;
+	      }
+	      extend(ret, props);
 
 	      return ret;
 	    }
@@ -767,17 +811,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Validator);
 
 	    this.name = name;
-	    this.scope = {}; // TODO: change to Object.create(null)
-	    /*
-	    this.scope = Object.create(null)
-	    this.scope.a = 1
-	    */
-
+	    this.scope = Object.create(null);
 	    this._dir = dir;
 	    this._validations = [];
 	    this._groups = groups;
-
 	    this._groupValidations = Object.create(null);
+
 	    (0, _util.each)(groups, function (group) {
 	      _this._groupValidations[group] = [];
 	    }, this);
@@ -803,7 +842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'removeValidation',
 	    value: function removeValidation(validation) {
-	      _util2['default'].Vue.util['delete'](this.scope, validation.model);
+	      _util2['default'].Vue.util.del(this.scope, validation.model);
 	      (0, _util.pull)(this._validations, validation);
 	    }
 	  }, {
@@ -860,7 +899,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        untouched: { fn: this._defineUntouched, arg: target },
 	        modified: { fn: this._defineModified, arg: validations },
 	        dirty: { fn: this._defineDirty, arg: validations },
-	        pristine: { fn: this._definePristine, arg: target }
+	        pristine: { fn: this._definePristine, arg: target },
+	        messages: { fn: this._defineMessages, arg: validations }
 	      }, function (descriptor, name) {
 	        Object.defineProperty(target, name, {
 	          enumerable: true,
@@ -876,13 +916,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _walkValidations(validations, property, condition) {
 	      var _this5 = this;
 
+	      var hasOwn = _util2['default'].Vue.util.hasOwn;
 	      var ret = condition;
 
 	      (0, _util.each)(validations, function (validation, index) {
 	        if (ret === !condition) {
 	          return;
 	        }
-	        if (Object.prototype.hasOwnProperty.call(_this5.scope, validation.model)) {
+	        if (hasOwn(_this5.scope, validation.model)) {
 	          var target = _this5.scope[validation.model];
 	          if (target && target[property] === !condition) {
 	            ret = !condition;
@@ -926,6 +967,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_definePristine',
 	    value: function _definePristine(scope) {
 	      return !scope.dirty;
+	    }
+	  }, {
+	    key: '_defineMessages',
+	    value: function _defineMessages(validations) {
+	      var _this6 = this;
+
+	      var extend = _util2['default'].Vue.util.extend;
+	      var hasOwn = _util2['default'].Vue.util.hasOwn;
+	      var ret = Object.create(null);
+
+	      (0, _util.each)(validations, function (validation, index) {
+	        if (hasOwn(_this6.scope, validation.model)) {
+	          var target = _this6.scope[validation.model];
+	          if (target && !(0, _util.empty)(target['messages'])) {
+	            ret[validation.model] = extend(Object.create(null), target['messages']);
+	          }
+	        }
+	      }, this);
+
+	      return (0, _util.empty)(ret) ? undefined : ret;
 	    }
 	  }]);
 
