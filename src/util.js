@@ -25,6 +25,28 @@ export function warn (msg, err) {
 }
 
 /**
+ * empty
+ *
+ * @param {Array|Object} target
+ * @return {Boolean}
+ */
+
+export function empty (target) {
+  if (target === null) { return true }
+
+  if (Array.isArray(target)) {
+    if (target.length > 0) { return false }
+    if (target.length === 0) { return true }
+  } else if (exports.Vue.util.isPlainObject(target)) {
+    for (let key in target) {
+      if (exports.Vue.util.hasOwn(target, key)) { return false }
+    }
+  }
+
+  return true
+}
+
+/**
  * each
  *
  * @param {Array|Object} target
@@ -38,8 +60,9 @@ export function each (target, iterator, context) {
       iterator.call(context || target[i], target[i], i)
     }
   } else if (exports.Vue.util.isPlainObject(target)) {
+    const hasOwn = exports.Vue.util.hasOwn
     for (let key in target) {
-      if (key in target) {
+      if (hasOwn(target, key)) {
         iterator.call(context || target[key], target[key], key)
       }
     }

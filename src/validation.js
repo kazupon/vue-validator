@@ -1,4 +1,4 @@
-import util, { each, trigger } from './util'
+import util, { empty, each, trigger } from './util'
 
 
 /**
@@ -35,9 +35,12 @@ export default class Validation {
     return ret
   }
 
-  updateValidate (name, arg, fn) {
+  updateValidate (name, arg, msg, fn) {
     if (this.validates[name]) {
       this.validates[name].arg = arg
+      if (msg) {
+        this.validates[name].msg = msg
+      }
       if (fn) {
         this.validates[name].fn = fn
       }
@@ -65,20 +68,25 @@ export default class Validation {
 
   validate () {
     const extend = util.Vue.util.extend
-    let ret = {}
+    let ret = Object.create(null)
+    let messages = Object.create(null)
     let valid = true
 
     each(this.validates, (descriptor, name) => {
       let res = descriptor.fn(this.el.value, descriptor.arg)
       if (!res) {
         valid = false
+        let msg = descriptor.msg
+        if (msg) {
+          messages[name] = typeof msg === 'function' ? msg() : msg
+        }
       }
       ret[name] = !res
     }, this)
 
     trigger(this.el, valid ? 'valid' : 'invalid')
 
-    extend(ret, {
+    let props = {
       valid: valid,
       invalid: !valid,
       touched: this.touched,
@@ -86,7 +94,11 @@ export default class Validation {
       dirty: this.dirty,
       pristine: !this.dirty,
       modified: this.modified
-    })
+    }
+    if (!empty(messages)) {
+      props.messages = messages
+    }
+    extend(ret, props)
 
     return ret
   }

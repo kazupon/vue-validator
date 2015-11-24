@@ -53,7 +53,7 @@ export default function (Vue) {
       each(value, (val, key) => {
         if (_.isPlainObject(val)) {
           if ('rule' in val) {
-            this.validation.updateValidate(key, val.rule)
+            this.validation.updateValidate(key, val.rule, ('message' in val ? val.message : null))
           }
         } else {
           this.validation.updateValidate(key, val)

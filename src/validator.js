@@ -1,4 +1,4 @@
-import util, { each, pull } from './util'
+import util, { empty, each, pull } from './util'
 
 
 /**
@@ -9,17 +9,12 @@ export default class Validator {
 
   constructor (name, dir, groups) {
     this.name = name
-    this.scope = {} // TODO: change to Object.create(null)
-    /*
     this.scope = Object.create(null)
-    this.scope.a = 1
-    */
-
     this._dir = dir
     this._validations = []
     this._groups = groups
-
     this._groupValidations = Object.create(null)
+
     each(groups, (group) => {
       this._groupValidations[group] = []
     }, this)
@@ -40,7 +35,7 @@ export default class Validator {
   }
 
   removeValidation (validation) {
-    util.Vue.util.delete(this.scope, validation.model)
+    util.Vue.util.del(this.scope, validation.model)
     pull(this._validations, validation)
   }
 
@@ -86,7 +81,8 @@ export default class Validator {
       untouched: { fn: this._defineUntouched, arg: target },
       modified: { fn: this._defineModified, arg: validations },
       dirty: { fn: this._defineDirty, arg: validations },
-      pristine: { fn: this._definePristine, arg: target }
+      pristine: { fn: this._definePristine, arg: target },
+      messages: { fn: this._defineMessages, arg: validations }
     }, (descriptor, name) => {
       Object.defineProperty(target, name, {
         enumerable: true,
@@ -99,11 +95,12 @@ export default class Validator {
   }
 
   _walkValidations (validations, property, condition) {
+    const hasOwn = util.Vue.util.hasOwn
     let ret = condition
 
     each(validations, (validation, index) => {
       if (ret === !condition) { return }
-      if (Object.prototype.hasOwnProperty.call(this.scope, validation.model)) {
+      if (hasOwn(this.scope, validation.model)) {
         var target = this.scope[validation.model]
         if (target && target[property] === !condition) {
           ret = !condition
@@ -140,5 +137,22 @@ export default class Validator {
 
   _definePristine (scope) {
     return !scope.dirty
+  }
+
+  _defineMessages (validations) {
+    const extend = util.Vue.util.extend
+    const hasOwn = util.Vue.util.hasOwn
+    let ret = Object.create(null)
+
+    each(validations, (validation, index) => {
+      if (hasOwn(this.scope, validation.model)) {
+        let target = this.scope[validation.model]
+        if (target && !empty(target['messages'])) {
+          ret[validation.model] = extend(Object.create(null), target['messages'])
+        }
+      }
+    }, this)
+
+    return empty(ret) ? undefined : ret
   }
 }
