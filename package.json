@@ -43,7 +43,7 @@
     "phantomjs": "^1.9.18",
     "power-assert": "^1.0.0",
     "sinon": "^1.17.2",
-    "vue": "^1.0.8",
+    "vue": "^1.0.10",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.11.0"
   },
