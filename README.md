@@ -61,7 +61,7 @@ We can use `validator` element directive and `v-validate` directive. The followi
       <input type="text" v-validate:username.required>
       <input type="text" v-validate:comment.maxlength="256">
       <div>
-        <span v-show="$validation1.username.required">Rquired your name.</span>
+        <span v-show="$validation1.username.required">Required your name.</span>
         <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
       </div>
       <input type="submit" value="send" v-if="$validation1.valid">
