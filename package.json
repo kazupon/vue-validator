@@ -37,10 +37,10 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.14",
-    "karma-sinon": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.4",
+    "mocha-loader": "^0.7.1",
     "nightmare": "^2.0.5",
     "phantomjs": "^1.9.18",
     "power-assert": "^1.2.0",
@@ -71,7 +71,7 @@
   "main": "dist/vue-validator.common.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vuejs/vue-validator.git"
+    "url": "git+https://github.com/vuejs/vue-validator.git"
   },
   "scripts": {
     "browser": "VUE_VALIDATOR_TYPE=browser karma start config/karma.conf.js",
@@ -82,6 +82,7 @@
     "coverage": "VUE_VALIDATOR_TYPE=coverage karma start config/karma.conf.js",
     "coveralls": "VUE_VALIDATOR_TYPE=coveralls karma start config/karma.conf.js",
     "dev": "webpack-dev-server --quite --config config/webpack.dev.conf.js --host 0.0.0.0",
+    "dev-test": "webpack-dev-server --quiet --config config/webpack.test.conf.js --host 0.0.0.0",
     "e2e": "webpack-dev-server --quiet -h --config config/webpack.e2e.conf.js --content-base test/e2e & mocha -t 20000 --compilers js:espower-babel/guess test/e2e/test.js && kill $! || (kill $! && exit 1)",
     "ie": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch2 karma start config/karma.conf.js",
     "lint": "eslint src test/specs",

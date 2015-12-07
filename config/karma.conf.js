@@ -8,7 +8,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon'],
+    frameworks: ['mocha'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -28,6 +28,9 @@ module.exports = function (config) {
     webpack: {
       devtool: 'source-map',
       module: {
+        noParse: [
+          /node_modules\/sinon\//,
+        ],
         loaders: [{
           test: /\.js$/,
           exclude: /node_modules|vue\/dist/,
@@ -47,6 +50,11 @@ module.exports = function (config) {
           exclude: /test|node_modules|vue\/dist/,
           loader: 'istanbul-instrumenter'
         }]
+      },
+      resolve: {
+        alias: {
+          sinon: 'sinon/pkg/sinon.js'
+        }
       }
     },
 
