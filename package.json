@@ -1,7 +1,7 @@
 {
   "name": "vue-validator",
   "description": "Validator component for Vue.js",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.6",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
