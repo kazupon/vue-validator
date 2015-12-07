@@ -9,6 +9,11 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
+    preLoaders: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: 'eslint-loader'
+    }],
     loaders: [{
       test: /\.js$/,
       exclude: /node_modules|vue\/dist/,
