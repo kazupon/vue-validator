@@ -6,14 +6,14 @@ import Validator from './directives/validator'
 
 
 /**
- * Install
+ * plugin
  *
  * @param {Function} Vue
  * @param {Object} options
  */
 
-export default function install (Vue, options = {}) {
-  if (install.installed) {
+function plugin (Vue, options = {}) {
+  if (plugin.installed) {
     warn('already installed.')
     return
   }
@@ -26,6 +26,10 @@ export default function install (Vue, options = {}) {
   Validate(Vue)
 }
 
+plugin.version = '2.0.0-alpha.5'
+
+export default plugin
+
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(install)
+  window.Vue.use(plugin)
 }
