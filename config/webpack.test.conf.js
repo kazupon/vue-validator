@@ -10,7 +10,7 @@ module.exports = {
   devtool: 'source-map',
   module: {
     noParse: [
-      /node_modules\/sinon\//,
+      /node_modules\/sinon\//
     ],
     preLoaders: [{
       test: /\.js$/,

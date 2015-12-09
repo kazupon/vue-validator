@@ -29,7 +29,7 @@ module.exports = function (config) {
       devtool: 'source-map',
       module: {
         noParse: [
-          /node_modules\/sinon\//,
+          /node_modules\/sinon\//
         ],
         loaders: [{
           test: /\.js$/,
