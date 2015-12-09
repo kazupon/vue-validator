@@ -1,46 +1,38 @@
-/**
- * Import(s)
- */
-
-var Nightmare = require('nightmare')
-var assert = require('power-assert')
-var resolve = require('./helper').resolve
+import assert from 'power-assert'
+import Nightmare from 'nightmare'
+const url = 'http://localhost:' + (process.env.PORT || 8080)
 
 
-/**
- * Test(s)
- */
+describe('registration', () => {
 
-describe('registration', function () {
-
-  var expectOK = function (ret) {
+  let expectOK = (ret) => {
     assert(ret)
   }
-  var expectTextError = function (text) {
+  let expectTextError = (text) => {
     assert(text === '(error)')
   }
-  var expectTextSuccess = function (text) {
+  let expectTextSuccess = (text) => {
     assert(text === '(success)')
   }
-  var getUsernameStatus = function () {
+  let getUsernameStatus = () => {
     return document.querySelector('#inputUsernameStatus').innerText
   }
-  var getEmailStatus = function () {
+  let getEmailStatus = () => {
     return document.querySelector('#inputEmailStatus').innerText
   }
-  var getConfirmEmailStatus = function () {
+  let getConfirmEmailStatus = () => {
     return document.querySelector('#inputConfirmEmailStatus').innerText
   }
-  var getPasswordStatus = function () {
+  let getPasswordStatus = () => {
     return document.querySelector('#inputPasswordStatus').innerText
   }
 
   describe('first loaded page', function () {
     this.timeout(20000)
 
-    it('should be invalid', function (done) {
+    it('should be invalid', (done) => {
       new Nightmare()
-        .goto(resolve('./registration.html'))
+        .goto(url)
         .exists('#username .has-error', expectOK)
         .exists('#inputUsernameIcon .glyphicon-remove', expectOK)
         .evaluate(getUsernameStatus, expectTextError)
@@ -62,9 +54,9 @@ describe('registration', function () {
   describe('input valid username', function () {
     this.timeout(20000)
 
-    it('should be valid', function (done) {
+    it('should be valid', (done) => {
       new Nightmare()
-        .goto(resolve('./registration.html'))
+        .goto(url)
         .type('#inputUsername', 'kazupon')
         .wait('#inputUsername')
         .exists('#username .has-success', expectOK) // success
@@ -88,9 +80,9 @@ describe('registration', function () {
   describe('input valid email', function () {
     this.timeout(20000)
 
-    it('should be valid', function (done) {
+    it('should be valid', (done) => {
       new Nightmare()
-        .goto(resolve('./registration.html'))
+        .goto(url)
         .type('#inputEmail', 'foo@domain.com')
         .wait('#inputEmail')
         .exists('#username .has-error', expectOK)
@@ -114,9 +106,9 @@ describe('registration', function () {
   describe('input valid confirm email', function () {
     this.timeout(20000)
 
-    it('should be valid', function (done) {
+    it('should be valid', (done) => {
       new Nightmare()
-        .goto(resolve('./registration.html'))
+        .goto(url)
         .type('#inputEmail', 'foo@domain.com')
         .wait('#inputEmail')
         .type('#inputConfirmEmail', 'foo@domain.com')
@@ -142,7 +134,7 @@ describe('registration', function () {
   describe('input valid password', function () {
     this.timeout(20000)
 
-    it('should be valid', function (done) {
+    it('should be valid', (done) => {
       new Nightmare()
         .goto(resolve('./registration.html'))
         .type('#inputPassword', 'xxxxxxxxx')
@@ -168,9 +160,9 @@ describe('registration', function () {
   describe('input valid fileds', function () {
     this.timeout(20000)
 
-    it('join button should be enabled', function (done) {
+    it('join button should be enabled', (done) => {
       new Nightmare()
-        .goto(resolve('./registration.html'))
+        .goto(url)
         .type('#inputUsername', 'kazupon')
         .wait('#inputUsername')
         .type('#inputEmail', 'foo@domain.com')
