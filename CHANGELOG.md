@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.7"></a>
+# [2.0.0-alpha.7](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2015-12-10)
+
+
+### Features
+
+* **syntax:** support array syntax on v-validate expression ([bf33bb4](https://github.com/vuejs/vue-validator/commit/bf33bb4))
+
+
+
 <a name="2.0.0-alpha.6"></a>
 # [2.0.0-alpha.6](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.6...v2.0.0-alpha.6) (2015-12-07)
 

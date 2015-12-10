@@ -770,7 +770,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.5';
+plugin.version = '2.0.0-alpha.7';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

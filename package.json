@@ -78,7 +78,7 @@
     "browser": "VUE_VALIDATOR_TYPE=browser karma start config/karma.conf.js",
     "build": "node config/build.js",
     "ci": "npm run lint && npm run coverage && npm run coveralls && npm run sauce",
-    "clean": "rm -rf lib && rm -rf coverage && rm -rf dist",
+    "clean": "rm -rf coverage && rm -rf dist/*.*",
     "coolkids": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch1 karma start config/karma.conf.js",
     "coverage": "VUE_VALIDATOR_TYPE=coverage karma start config/karma.conf.js",
     "coveralls": "VUE_VALIDATOR_TYPE=coveralls karma start config/karma.conf.js",
