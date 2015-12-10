@@ -37,14 +37,17 @@ export default function (Vue) {
 
       if (_.isPlainObject(value)) {
         this.handleObject(value)
+      } else if (Array.isArray(value)) {
+        this.handleArray(value)
       }
 
       this.validator.validate(this.validation)
     },
 
-    handleSingle (value) {
-      let validateKey = Object.keys(this.validation.validates)[0]
-      this.validation.updateValidate(validateKey, value)
+    handleArray (value) {
+      each(value, (val) => {
+        this.validation.setValidation(val)
+      }, this)
     },
 
     handleObject (value) {

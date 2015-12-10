@@ -40,6 +40,37 @@ describe('syntax', () => {
     })
   })
 
+  
+  context('array', () => {
+    beforeEach((done) => {
+      el.innerHTML = 
+        '<validator name="validator1">' +
+        '<form novalidate>' +
+        '<input type="text" v-validate:field1="[\'required\']">' +
+        '</form>' +
+        '</validator>'
+      vm = new Vue({
+        el: el
+      })
+      vm.$nextTick(done)
+    })
+
+    it('should be validated', (done) => {
+      // default
+      assert(vm.$validator1.field1.required === true)
+
+      // change input value
+      let input = el.getElementsByTagName('input')[0]
+      input.value = 'foo'
+      trigger(input, 'input')
+      vm.$nextTick(() => {
+        assert(vm.$validator1.field1.required === false)
+        done()
+      })
+    })
+  })
+
+
   context('strict', () => {
     beforeEach((done) => {
       el.innerHTML = 
@@ -77,6 +108,7 @@ describe('syntax', () => {
       })
     })
   })
+
 
   context('binding', () => {
     context('primitive', () => {
