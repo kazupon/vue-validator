@@ -58,8 +58,8 @@ We can use `validator` element directive and `v-validate` directive. The followi
 <div id="app">
   <validator name="validation1">
     <form novalidate>
-      <input type="text" v-validate:username.required>
-      <input type="text" v-validate:comment.maxlength="256">
+      <input type="text" v-validate:username="['required']">
+      <input type="text" v-validate:comment="{ maxlength: 256 }">
       <div>
         <span v-show="$validation1.username.required">Required your name.</span>
         <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
@@ -139,31 +139,34 @@ The various top-level properties has been defined in the validation scope, and t
 - `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
 - `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
 - `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
-- `errors`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
+- `messages`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
 
 
 # Validator syntax
 `v-validate` directive syntax the below:
 
 ```
-    v-validate:field.[validator]+[="primitive literal | object literal | binding"]
+    v-validate:field="array literal | object literal | binding"
 ```
 
 ## Literal
 
-### Primitive
-The below is example that using literal of string value:
+### Array
+The below is example that using array literal:
 
 ```html
 <validator name="validation">
   <form novalidate>
-    Zip: <input type="text" v-validate:zip.pattern="'/^[0-9]{3}-[0-9]{4}$/'"><br />
+    Zip: <input type="text" v-validate:zip="['required']"><br />
     <div>
-      <span v-if="$validation.zip.pattern">Invalid format of your zip code.</span>
+      <span v-if="$validation.zip.required">Required zip code.</span>
     </div>
   </form>
 </validator>
 ```
+
+Like the `required`, if you don't need to specify the rule, you should use it.
+
 
 ### Object
 The below is example that using object literal:
@@ -171,13 +174,29 @@ The below is example that using object literal:
 ```html
 <validator name="validation">
   <form novalidate>
-    ID: <input type="text" v-validate:id.minlength.maxlength="{ minlength: 3, maxlength: 16 }"><br />
+    ID: <input type="text" v-validate:id="{ required: true, minlength: 3, maxlength: 16 }"><br />
     <div>
+      <span v-if="$validation.id.required">Required Your ID.</span>
       <span v-if="$validation.id.minlength">Your ID is too short.</span>
       <span v-if="$validation.id.maxlength">Your ID is too long.</span>
     </div>
   </form>
 </validator>
+```
+
+You can specify the rule value on the object literal. Like the `required`, you can specify the **dummy rule** value on the literal object.
+
+And also, you can specify strict object as the below:
+
+```html
+<validator name="validation">
+  <form novalidate>
+    ID: <input type="text" v-validate:id="{ minlength: { rule: 3 }, maxlength: { rule: 16 } }"><br />
+    <div>
+      <span v-if="$validation.id.minlength">Your ID is too short.</span>
+      <span v-if="$validation.id.maxlength">Your ID is too long.</span>
+    </div>
+  </form>
 ```
 
 ## Binding
@@ -198,7 +217,7 @@ new Vue({
 <div id="app">
   <validator name="validation">
     <form novalidate>
-      ID: <input type="text" v-validate:id.minlength.maxlength="rules"><br />
+      ID: <input type="text" v-validate:id="rules"><br />
       <div>
         <span v-if="$validation.id.minlength">Your ID is too short.</span>
         <span v-if="$validation.id.maxlength">Your ID is too long.</span>
@@ -215,9 +234,9 @@ You can grouping validation results. the below example:
 
 ```html
 <validator name="validation1" :groups="['user', 'password']">
-  username: <input type="text" group="user" v-validate:username.required><br />
-  password: <input type="text" group="password" v-validate:password1.required.minlength="{ minlength: 8 }"/><br />
-  password (confirm): <input type="text" group="password" v-validate:password2.required.minlength="{ minlength: 8 }"/>
+  username: <input type="text" group="user" v-validate:username="['required']"><br />
+  password: <input type="text" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
+  password (confirm): <input type="text" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
   <div class="user">
     <span v-if="$validation1.username.required">Required your name.</span>
   </div>
@@ -232,10 +251,10 @@ You can specify error message that can get the validation scope.
 
 ```html
 <validator name="validation1">
-  username: <input type="text" v-validate:username.required="{
+  username: <input type="text" v-validate:username="{
     required: { rule: true, message: 'required you name !!' }
   }"><br />
-  password: <input type="text" v-validate:password.required.minlength="{
+  password: <input type="text" v-validate:password="{
     required: { rule: true, message: 'required you password !!' },
     minlength: { rule: 8, messsage: 'your password short too !!' }
   }"/><br />
@@ -270,7 +289,7 @@ new Vue({
 ```html
 <div id="app">
   <validator name="validation1">
-    comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment.required/>
+    comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment="[required]"/>
   </validator>
 </div>
 ```
@@ -295,7 +314,7 @@ new Vue({
 ```html
 <div id="app">
   <validator name="validation1">
-    address: <input type="text" v-validate:address.email><br />
+    address: <input type="text" v-validate:address=['email']><br />
     <div>
       <span v-if="$validation1.address.email">invalid your email address format.</span>
     </div>
@@ -308,7 +327,6 @@ new Vue({
 
 # TODO
 - async validation
-- errors properties
 - validate timing customize with options
 - local asset registration (`compontents` asset-like)
 - server-side validation error applying
