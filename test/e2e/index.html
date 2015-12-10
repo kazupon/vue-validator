@@ -24,7 +24,7 @@
                      id="inputUsername" 
                      placeholder="Username" 
                      aria-describedby="inputUsernameStatus" 
-                     v-validate:username.required.maxlength="{ required: true, maxlength: 16 }">
+                     v-validate:username="{ required: true, maxlength: 16 }">
               <span id="inputUsernameIcon" 
                     class="glyphicon form-control-feedback" 
                     aria-hidden="true" 
@@ -45,7 +45,7 @@
                      id="inputEmail" 
                      placeholder="Email" 
                      aria-describedby="inputEmailStatus" 
-                     v-validate:email.required.email>
+                     v-validate:email="['required', 'email']">
               <span id="inputEmailIcon" 
                     class="glyphicon form-control-feedback" 
                     aria-hidden="true" 
@@ -66,7 +66,7 @@
                      id="inputConfirmEmail" 
                      placeholder="Confirm email" 
                      aria-describedby="inputConfirmEmailStatus" 
-                     v-validate:confirmEmail.required.email.same="{ required: true, email: true, same: 'email' }">
+                     v-validate:confirmEmail="{ required: true, email: true, same: 'email' }">
               <span id="inputConfirmEmailIcon" 
                     class="glyphicon form-control-feedback" 
                     aria-hidden="true" 
@@ -87,7 +87,7 @@
                      id="inputPassword" 
                      placeholder="Password" 
                      aria-describedby="inputPasswordStatus" 
-                     v-validate:password.required.minlength.maxlength="{ required: true, minlength: 8, maxlength: 16 }">
+                     v-validate:password="{ required: true, minlength: 8, maxlength: 16 }">
               <span id="inputPasswordIcon" 
                     class="glyphicon form-control-feedback" 
                     aria-hidden="true" 
