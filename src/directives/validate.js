@@ -37,8 +37,6 @@ export default function (Vue) {
 
       if (_.isPlainObject(value)) {
         this.handleObject(value)
-      } else {
-        this.handleSingle(value)
       }
 
       this.validator.validate(this.validation)
@@ -53,10 +51,11 @@ export default function (Vue) {
       each(value, (val, key) => {
         if (_.isPlainObject(val)) {
           if ('rule' in val) {
-            this.validation.updateValidate(key, val.rule, ('message' in val ? val.message : null))
+            let msg = 'message' in val ? val.message : null
+            this.validation.setValidation(key, val.rule, msg)
           }
         } else {
-          this.validation.updateValidate(key, val)
+          this.validation.setValidation(key, val)
         }
       }, this)
     },

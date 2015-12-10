@@ -16,7 +16,7 @@ describe('validate directive', () => {
         el: el,
         template: '<validator name="validator1">' +
           '<form novalidate>' +
-          '<input type="text" v-validate:field1.required>' +
+          '<input type="text" v-validate:field1="{ required: true }">' +
           '</form>' +
           '</validator>'
       })
@@ -46,7 +46,7 @@ describe('validate directive', () => {
         },
         template: '<validator name="validator1">' +
           '<form novalidate>' +
-          '<input type="text" v-show="hidden" v-validate:field1.min.max="{ min: 0, max: 10 }">' +
+          '<input type="text" v-show="hidden" v-validate:field1="{ min: 0, max: 10 }">' +
           '</form>' +
           '</validator>'
       })
@@ -123,7 +123,7 @@ describe('validate directive', () => {
         },
         template: '<validator name="validator1">' +
           '<form novalidate>' +
-          '<input type="text" v-if="hidden" v-validate:field1.minlength.maxlength="{ minlength: 0, maxlength: 10 }">' +
+          '<input type="text" v-if="hidden" v-validate:field1="{ minlength: 0, maxlength: 10 }">' +
           '</form>' +
           '</validator>'
       })

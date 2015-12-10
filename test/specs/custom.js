@@ -20,7 +20,7 @@ describe('custom', () => {
       el.innerHTML = 
         '<validator name="validator1">' +
         '<form novalidate>' +
-        '<input type="text" value="hi" v-validate:field1.numeric>' +
+        '<input type="text" value="hi" v-validate:field1="{ numeric: true }">' +
         '</form>' +
         '</validator>'
       vm = new Vue({

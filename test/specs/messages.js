@@ -9,13 +9,13 @@ describe('messages', () => {
   beforeEach((done) => {
     el = document.createElement('div')
     el.innerHTML = 
-      '<validator :groups="[\'group1\', \'group2\']"name="validation">' +
-      '<input type="text" group="group1" v-validate:field1.pattern="field1">' +
-      '<input type="text" group="group1" v-validate:field2.required="field2">' +
-      '<input type="text" group="group2" v-validate:field3.max="field3">' +
-      '<input type="text" group="group2" v-validate:field4.maxlength="field4">' +
-      '<input type="text" group="group1" value="0" v-validate:field5.min="{ min: { rule :1, message: message1 } }">' +
-      '<input type="text" group="group2" value="h" v-validate:field6.minlength="{ minlength: { rule: 4, message: onMessage2 } }">' +
+      '<validator :groups="[\'group1\', \'group2\']" name="validation">' +
+      '<input type="text" group="group1" v-validate:field1="field1">' +
+      '<input type="text" group="group1" v-validate:field2="field2">' +
+      '<input type="text" group="group2" v-validate:field3="field3">' +
+      '<input type="text" group="group2" v-validate:field4="field4">' +
+      '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">' +
+      '<input type="text" group="group2" value="h" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">' +
       '<ul><li v-for="msg in $validation.messages">' +
       '<div v-for="val in msg"><p>{{$key}}:{{val}}</p></div>' +
       '</li></ul>' +

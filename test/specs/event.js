@@ -15,7 +15,7 @@ describe('event', () => {
     it('should be occured event', (done) => {
       el.innerHTML = 
         '<validator name="validator1">' +
-        '<input type="text" @valid="onValid" v-validate:field1.required>' +
+        '<input type="text" @valid="onValid" v-validate:field1="{ required: true }">' +
         '</validator>'
       vm = new Vue({
         el: el,
@@ -38,7 +38,7 @@ describe('event', () => {
     it('should be occured event', (done) => {
       el.innerHTML = 
         '<validator name="validator1">' +
-        '<input type="text" value="hello" @invalid="onInValid" v-validate:field1.required>' +
+        '<input type="text" value="hello" @invalid="onInValid" v-validate:field1="{ required: true }">' +
         '</validator>'
       vm = new Vue({
         el: el,
