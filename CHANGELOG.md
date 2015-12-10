@@ -1,3 +1,31 @@
+<a name="2.0.0-alpha.7"></a>
+# [2.0.0-alpha.7](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2015-12-10)
+
+
+### Features
+
+* **syntax:** support array syntax on v-validate expression ([bf33bb4](https://github.com/vuejs/vue-validator/commit/bf33bb4))
+
+
+
+<a name="2.0.0-alpha.6"></a>
+# [2.0.0-alpha.6](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.6...v2.0.0-alpha.6) (2015-12-07)
+
+
+### Performances
+
+* **bundle**: more compact the vue-validator
+  about 20% smaller build with rollupjs.
+
+  - before
+    - vue-validator.min.js 11701
+    - vue-validator.js 26180
+  - after
+    - vue-validator.min.js 9309
+    - vue-validator.js 20713
+
+
+
 <a name="2.0.0-alpha.5"></a>
 # [2.0.0-alpha.5](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2015-11-24)
 

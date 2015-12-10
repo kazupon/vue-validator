@@ -15,35 +15,25 @@ export default class Validation {
     this.touched = false
     this.dirty = false
     this.modified = false
-    this.validates = this._buildValidates(dir)
+    this.validators = Object.create(null)
   }
 
-  _buildValidates (dir, arg = null) {
+  setValidation (name, arg, msg, fn) {
     const resolveAsset = util.Vue.util.resolveAsset
-    const camelize = util.Vue.util.camelize
 
-    let ret = Object.create(null)
-    let validates = dir.modifiers
-
-    for (let validate in validates) {
-      let fn = resolveAsset(dir.vm.$options, 'validators', camelize(validate))
-      if (fn) {
-        ret[validate] = { arg: arg, fn: fn }
-      }
+    let validator = this.validators[name]
+    if (!validator) {
+      validator = this.validators[name] = {}
+      validator.fn = resolveAsset(this.dir.vm.$options, 'validators', name)
+    }
+    
+    validator.arg = arg
+    if (msg) {
+      validator.msg = msg
     }
 
-    return ret
-  }
-
-  updateValidate (name, arg, msg, fn) {
-    if (this.validates[name]) {
-      this.validates[name].arg = arg
-      if (msg) {
-        this.validates[name].msg = msg
-      }
-      if (fn) {
-        this.validates[name].fn = fn
-      }
+    if (fn) {
+      validator.fn = fn
     }
   }
 
@@ -72,8 +62,8 @@ export default class Validation {
     let messages = Object.create(null)
     let valid = true
 
-    each(this.validates, (descriptor, name) => {
-      let res = descriptor.fn(this.el.value, descriptor.arg)
+    each(this.validators, (descriptor, name) => {
+      let res = descriptor.fn.call(this.dir.vm, this.el.value, descriptor.arg)
       if (!res) {
         valid = false
         let msg = descriptor.msg

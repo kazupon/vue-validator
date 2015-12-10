@@ -10,10 +10,10 @@ describe('multiple', () => {
     el = document.createElement('div')
     el.innerHTML = 
       '<validator name="validator1">' +
-      '<input type="text" v-validate:field1.required>' +
+      '<input type="text" v-validate:field1="{ required: true }">' +
       '</validator>' +
       '<validator name="validator2">' +
-      '<input type="text" v-validate:field1.required>' +
+      '<input type="text" v-validate:field1="{ required: true }">' +
       '</validator>' 
     vm = new Vue({
       el: el

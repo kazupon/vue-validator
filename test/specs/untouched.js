@@ -11,8 +11,8 @@ describe('ununtouched', () => {
     el.innerHTML = 
       '<validator name="validator1">' +
       '<form novalidate>' +
-      '<input type="text" v-validate:field1.required>' +
-      '<input type="text" v-validate:field2.required>' +
+      '<input type="text" v-validate:field1="{ required: true }">' +
+      '<input type="text" v-validate:field2="{ required: true }">' +
       '</form>' +
       '</validator>'
     vm = new Vue({

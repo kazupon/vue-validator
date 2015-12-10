@@ -11,8 +11,8 @@ describe('valid', () => {
     el.innerHTML = 
       '<validator name="validator1">' +
       '<form novalidate>' +
-      '<input type="text" v-validate:field1.required.maxlength="{ maxlength: 3 }">' +
-      '<input type="text" value="foo" v-validate:field2.required.minlength="{ minlength: 1 }">' +
+      '<input type="text" v-validate:field1="{ required: true, maxlength: 3 }">' +
+      '<input type="text" value="foo" v-validate:field2="{ required: true, minlength: 1 }">' +
       '</form>' +
       '</validator>'
     vm = new Vue({

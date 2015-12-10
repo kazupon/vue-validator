@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>registration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+      body { padding-top: 50px; padding-bottom: 50px; }
+    </style>
+    <script src="./js/jquery-2.1.3.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="registration" class="container">
+      <validator name="validation">
+        <form class="form-horizontal" role="form">
+          <div id="username" 
+               class="form-group has-feedback" 
+               :class="{ 'has-success': $validation.username.valid, 'has-error': $validation.username.invalid }">
+            <label for="inputUsername" class="col-sm-2 control-label">Username</label>
+            <div class="col-sm-10">
+              <input type="text" 
+                     class="form-control" 
+                     id="inputUsername" 
+                     placeholder="Username" 
+                     aria-describedby="inputUsernameStatus" 
+                     v-validate:username="{ required: true, maxlength: 16 }">
+              <span id="inputUsernameIcon" 
+                    class="glyphicon form-control-feedback" 
+                    aria-hidden="true" 
+                    :class="{ 'glyphicon-remove': $validation.username.invalid, 'glyphicon-ok': $validation.username.valid }">
+              </span>
+              <span id="inputUsernameStatus" class="sr-only">
+                {{ $validation.username.valid ? '(success)' : '(error)' }}
+              </span>
+            </div>
+          </div>
+          <div id="email" 
+               class="form-group has-feedback" 
+               :class="{ 'has-success': $validation.email.valid, 'has-error': $validation.email.invalid }">
+            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" 
+                     class="form-control" 
+                     id="inputEmail" 
+                     placeholder="Email" 
+                     aria-describedby="inputEmailStatus" 
+                     v-validate:email="['required', 'email']">
+              <span id="inputEmailIcon" 
+                    class="glyphicon form-control-feedback" 
+                    aria-hidden="true" 
+                    :class="{ 'glyphicon-remove': $validation.email.invalid, 'glyphicon-ok': $validation.email.valid }">
+              </span>
+              <span id="inputEmailStatus" class="sr-only">
+                {{ $validation.email.valid ? '(success)' : '(error)' }}
+              </span>
+            </div>
+          </div>
+          <div id="confirmEmail" 
+               class="form-group has-feedback" 
+               :class="{ 'has-success': $validation.confirmEmail.valid, 'has-error': $validation.confirmEmail.invalid }">
+            <label for="inputConfirmEmail" class="col-sm-2 control-label">Confirm Email</label>
+            <div class="col-sm-10">
+              <input type="text" 
+                     class="form-control" 
+                     id="inputConfirmEmail" 
+                     placeholder="Confirm email" 
+                     aria-describedby="inputConfirmEmailStatus" 
+                     v-validate:confirmEmail="{ required: true, email: true, same: 'email' }">
+              <span id="inputConfirmEmailIcon" 
+                    class="glyphicon form-control-feedback" 
+                    aria-hidden="true" 
+                    :class="{ 'glyphicon-remove': $validation.confirmEmail.invalid, 'glyphicon-ok': $validation.confirmEmail.valid }">
+              </span>
+              <span id="inputConfirmEmailStatus" class="sr-only">
+                {{ $validation.confirmEmail.valid ? '(success)' : '(error)' }}
+              </span>
+            </div>
+          </div>
+          <div id="password" 
+               class="form-group has-feedback" 
+               :class="{ 'has-success': $validation.password.valid, 'has-error': $validation.password.invalid }">
+            <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" 
+                     class="form-control" 
+                     id="inputPassword" 
+                     placeholder="Password" 
+                     aria-describedby="inputPasswordStatus" 
+                     v-validate:password="{ required: true, minlength: 8, maxlength: 16 }">
+              <span id="inputPasswordIcon" 
+                    class="glyphicon form-control-feedback" 
+                    aria-hidden="true" 
+                    :class="{ 'glyphicon-remove': $validation.password.invalid, 'glyphicon-ok': $validation.password.valid }">
+              </span>
+              <span id="inputPasswordStatus" class="sr-only">
+                {{ $validation.password.valid ? '(success)' : '(error)' }}
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" 
+                      class="btn btn-large btn-primary btn-block" 
+                      :class="{ disabled: $validation.invalid }">Join</button>
+            </div>
+          </div>
+        </form>
+      </validator>
+    </div>
+    <script src="e2e.js"></script>
+  </body>
+</html>

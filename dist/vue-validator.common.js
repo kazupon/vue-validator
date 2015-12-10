@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.6
+ * vue-validator v2.0.0-alpha.7
  * (c) 2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -334,40 +334,27 @@ var Validation = (function () {
     this.touched = false;
     this.dirty = false;
     this.modified = false;
-    this.validates = this._buildValidates(dir);
+    this.validators = Object.create(null);
   }
 
   babelHelpers.createClass(Validation, [{
-    key: '_buildValidates',
-    value: function _buildValidates(dir) {
-      var arg = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
+    key: 'setValidation',
+    value: function setValidation(name, arg, msg, fn) {
       var resolveAsset = exports$1.Vue.util.resolveAsset;
-      var camelize = exports$1.Vue.util.camelize;
 
-      var ret = Object.create(null);
-      var validates = dir.modifiers;
-
-      for (var validate in validates) {
-        var fn = resolveAsset(dir.vm.$options, 'validators', camelize(validate));
-        if (fn) {
-          ret[validate] = { arg: arg, fn: fn };
-        }
+      var validator = this.validators[name];
+      if (!validator) {
+        validator = this.validators[name] = {};
+        validator.fn = resolveAsset(this.dir.vm.$options, 'validators', name);
       }
 
-      return ret;
-    }
-  }, {
-    key: 'updateValidate',
-    value: function updateValidate(name, arg, msg, fn) {
-      if (this.validates[name]) {
-        this.validates[name].arg = arg;
-        if (msg) {
-          this.validates[name].msg = msg;
-        }
-        if (fn) {
-          this.validates[name].fn = fn;
-        }
+      validator.arg = arg;
+      if (msg) {
+        validator.msg = msg;
+      }
+
+      if (fn) {
+        validator.fn = fn;
       }
     }
   }, {
@@ -399,8 +386,8 @@ var Validation = (function () {
       var messages = Object.create(null);
       var valid = true;
 
-      each(this.validates, function (descriptor, name) {
-        var res = descriptor.fn(_this.el.value, descriptor.arg);
+      each(this.validators, function (descriptor, name) {
+        var res = descriptor.fn.call(_this.dir.vm, _this.el.value, descriptor.arg);
         if (!res) {
           valid = false;
           var msg = descriptor.msg;
@@ -467,26 +454,30 @@ function Validate (Vue) {
 
       if (_.isPlainObject(value)) {
         this.handleObject(value);
-      } else {
-        this.handleSingle(value);
+      } else if (Array.isArray(value)) {
+        this.handleArray(value);
       }
 
       this.validator.validate(this.validation);
     },
-    handleSingle: function handleSingle(value) {
-      var validateKey = Object.keys(this.validation.validates)[0];
-      this.validation.updateValidate(validateKey, value);
+    handleArray: function handleArray(value) {
+      var _this = this;
+
+      each(value, function (val) {
+        _this.validation.setValidation(val);
+      }, this);
     },
     handleObject: function handleObject(value) {
-      var _this = this;
+      var _this2 = this;
 
       each(value, function (val, key) {
         if (_.isPlainObject(val)) {
           if ('rule' in val) {
-            _this.validation.updateValidate(key, val.rule, 'message' in val ? val.message : null);
+            var msg = 'message' in val ? val.message : null;
+            _this2.validation.setValidation(key, val.rule, msg);
           }
         } else {
-          _this.validation.updateValidate(key, val);
+          _this2.validation.setValidation(key, val);
         }
       }, this);
     },
@@ -779,7 +770,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.5';
+plugin.version = '2.0.0-alpha.7';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
