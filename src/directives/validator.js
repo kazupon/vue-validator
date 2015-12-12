@@ -6,9 +6,10 @@ export default function (Vue) {
   const _ = Vue.util
   const FragmentFactory = Vue.FragmentFactory
   const vIf = Vue.directive('if')
+  const bind = Vue.util.bind
 
   Vue.elementDirective('validator', {
-    params: ['name', 'groups'],
+    params: ['name', 'groups', 'lazy'],
 
     bind () {
       if (!this.params.name) {
@@ -38,13 +39,20 @@ export default function (Vue) {
       validator.enableReactive()
       validator.setupScope()
 
+      validator.waitFor(bind(() => {
+        this.render(validator, validatorName)
+        validator.validate()
+      }, this))
+
+      if (!this.params.lazy) {
+        this.vm.$activateValidator()
+      }
+    },
+    
+    render (validator, validatorName) {
       this.anchor = _.createAnchor('vue-validator')
       _.replace(this.el, this.anchor)
       this.insert(validatorName)
-
-      this.vm.$on('hook:compiled', () => {
-        validator.validate()
-      })
     },
 
     insert (name) {

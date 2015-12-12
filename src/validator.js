@@ -71,6 +71,16 @@ export default class Validator {
     }, this)
   }
 
+  waitFor (cb) {
+    let vm = this._dir.vm
+    let method = '$activateValidator'
+
+    this._dir.vm[method] = () => {
+      cb()
+      vm[method] = null
+    }
+  }
+
   _defineProperties (validations, target) {
     const bind = util.Vue.util.bind
 
