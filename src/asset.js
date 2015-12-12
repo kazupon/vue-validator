@@ -7,7 +7,9 @@ export default function (Vue) {
   Vue.config._assetTypes.push('validator')
 
   // set global validators asset
-  Vue.options.validators = validators
+  let assets = Object.create(null)
+  Vue.util.extend(assets, validators)
+  Vue.options.validators = assets
 
   // set option merge strategy
   let strats = Vue.config.optionMergeStrategies
