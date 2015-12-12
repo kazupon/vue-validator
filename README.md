@@ -282,6 +282,7 @@ new Vue({
 
 In addition to the above data scope example, you can specify also the computed property or methods.
 
+
 # Grouping
 You can grouping validation results. the below example:
 
@@ -298,6 +299,7 @@ You can grouping validation results. the below example:
   </div>
 </validator>
 ```
+
 
 # Messages
 You can specify error message that can get the validation scope.
@@ -323,6 +325,7 @@ You can specify error message that can get the validation scope.
 </validator>
 ```
 
+
 # Event
 You can handle the `valid` event and `invalid` event. the below example:
 
@@ -346,6 +349,61 @@ new Vue({
   </validator>
 </div>
 ```
+
+
+# Lazy initialization
+When you will use `lazy` attribute on `validator` element directive, you allows initialization (compilation) of `validator` element directive to wait for asynchronous data to be loaded.
+
+The below component example:
+
+```html
+<!-- comment component -->
+<div>
+  <h1>Preview</h1>
+  <p>{{comment}}</p>
+  <validator lazy name="validation1">
+    <input type="text" :value="comment" v-validate:comment="{ required: true, maxlength: 256 }"/>
+    <span v-if="$validation1.comment.required">Required your comment</span>
+    <span v-if="$validation1.comment.maxlength">Too long comment !!</span>
+    <button type="button" value="save" @click="onSave" v-if="valid">
+  </validator>
+</div>
+```
+
+```javascript
+Vue.component('comment', {
+  props: {
+    id: Number,
+  },
+  data: function () {
+    return { comment: '' }
+  },
+  activate: function () {
+    var resource = this.$resource('/comments/:id');
+    resource.get({ id: this.id }, function (comment, stat, req) {
+      this.commont =  comment.body
+
+      // activate validator
+      this.$activateValidator()
+
+    }.bind(this)).error(function (data, stat, req) {
+      // handle error ...
+    })
+  },
+  methods: {
+    onSave: function () {
+      var resource = this.$resource('/comments/:id');
+      resource.save({ id: this.id }, { body: this.comment }, function (data, stat, req) {
+        // handle success
+      }).error(function (data, sta, req) {
+        // handle error
+      })
+    }
+  }
+})
+```
+
+As above example, When asynchronous data loading finished, you need to call `$activateValidator` meta method.
 
 
 # Custom validator with Assets
@@ -385,7 +443,6 @@ new Vue({
 - server-side validation error applying
 - more tests !!
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
-- some chores (babel6, switch circle ci ...)
 
 
 # Contributing
