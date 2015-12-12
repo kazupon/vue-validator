@@ -8,7 +8,9 @@ import util, { empty, each, trigger } from './util'
 export default class Validation {
 
   constructor (dir) {
-    this.model = dir.arg
+    const camelize = util.Vue.util.camelize
+
+    this.model = camelize(dir.arg)
     this.el = dir.el
     this.dir = dir
     this.init = dir.el.value

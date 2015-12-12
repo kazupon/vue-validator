@@ -218,4 +218,30 @@ describe('syntax', () => {
       })
     })
   })
+
+  context('kebab-case', () => {
+    beforeEach((done) => {
+      el.innerHTML = 
+        '<validator name="validator1">' +
+        '<form novalidate>' +
+        '<input type="text" v-validate:my-property="[\'required\']">' +
+        '</form>' +
+        '</validator>'
+      vm = new Vue({ el: el })
+      vm.$nextTick(done)
+    })
+
+    it('should be converted caml-case', (done) => {
+      assert(vm.$validator1.myProperty !== undefined)
+      assert(vm.$validator1.myProperty.required === true)
+
+      let input = el.getElementsByTagName('input')[0]
+      input.value = 'foo'
+      trigger(input, 'input')
+      vm.$nextTick(() => {
+        assert(vm.$validator1.myProperty.required === false)
+        done()
+      })
+    })
+  })
 })
