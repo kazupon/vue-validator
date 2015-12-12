@@ -157,6 +157,51 @@ The various top-level properties has been defined in the validation scope, and t
     v-validate:field="array literal | object literal | binding"
 ```
 
+## Field
+The vue-validator version 2.0-alpha or earlier, validation result had been kept per `v-model`. In 2.0-alpha later, use the argument of `v-validate` directive instead of `v-model`.
+
+~v1.4.4:
+```html
+<form novalidate>
+  <input type="text" v-model="comment" v-validate="minLength: 16, maxLength: 128">
+  <div>
+    <span v-show="validation.comment.minLength">Your comment is too short.</span>
+    <span v-show="validation.comment.maxLength">Your comment is too long.</span>
+  </div>
+  <input type="submit" value="send" v-if="valid">
+</form>
+```
+
+v2.0-alpha later:
+```html
+<validator name="validation">
+  <form novalidate>
+    <input type="text" v-validate:comment="{ minlength: 16, maxLlngth: 128 }">
+    <div>
+      <span v-show="$validation.comment.minlength">Your comment is too short.</span>
+      <span v-show="$validation.comment.maxlength">Your comment is too long.</span>
+    </div>
+    <input type="submit" value="send" v-if="valid">
+  </form>
+</validator>
+```
+
+### caml-case property
+As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case at the argument of `v-validate`.
+
+below the example:
+
+```html
+<validator name="validation">
+  <form novalidate>
+    <input type="text" v-validate:user-name="{ minlength: 16 }">
+    <div>
+      <span v-if="$validation.userName.minlength">Your user name is too short.</span>
+    </div>
+  </form>
+</validator>
+```
+
 ## Literal
 
 ### Array
