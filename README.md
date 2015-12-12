@@ -21,10 +21,18 @@ If you have some feedback, we are welcome in [Vue.js Discussion](http://forum.vu
 # Installation
 
 ## npm
+
+### stable version
 ```shell
 $ npm install vue-validator
-# dev branch
-$ npm install vuejs/vue-validator#dev
+```
+
+### development version
+```shell
+git clone https://github.com/vuejs/vue-validator.git node_modules/vue-validator
+cd node_modules/vue-validator
+npm install
+npm run build
 ```
 
 When used in CommonJS, you must explicitly install the router via `Vue.use()`:
