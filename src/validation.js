@@ -20,22 +20,16 @@ export default class Validation {
     this.validators = Object.create(null)
   }
 
-  setValidation (name, arg, msg, fn) {
-    const resolveAsset = util.Vue.util.resolveAsset
-
+  setValidation (name, arg, msg) {
     let validator = this.validators[name]
     if (!validator) {
       validator = this.validators[name] = {}
-      validator.fn = resolveAsset(this.dir.vm.$options, 'validators', name)
+      validator.name = name
     }
     
     validator.arg = arg
     if (msg) {
       validator.msg = msg
-    }
-
-    if (fn) {
-      validator.fn = fn
     }
   }
 
@@ -65,7 +59,8 @@ export default class Validation {
     let valid = true
 
     each(this.validators, (descriptor, name) => {
-      let res = descriptor.fn.call(this.dir.vm, this.el.value, descriptor.arg)
+      let validator = this._resolveValidator(name)
+      let res = validator.call(this.dir.vm, this.el.value, descriptor.arg)
       if (!res) {
         valid = false
         let msg = descriptor.msg
@@ -93,5 +88,10 @@ export default class Validation {
     extend(ret, props)
 
     return ret
+  }
+
+  _resolveValidator (name) {
+    const resolveAsset = util.Vue.util.resolveAsset
+    return resolveAsset(this.dir.vm.$options, 'validators', name)
   }
 }
