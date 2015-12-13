@@ -10,8 +10,17 @@ var banner = require('./banner')
 // update main file
 var main = fs
   .readFileSync('src/index.js', 'utf-8')
-  .replace(/plugin\.version = '[\d\.]+'/, "plugin.version = '" + pack.version + "'")
+  .replace(/plugin\.version = '[\d\.]+-alpha\.\d'/, "plugin.version = '" + pack.version + "'")
 fs.writeFileSync('src/index.js', main)
+
+// update README
+var readme = fs
+  .readFileSync('README.md', 'utf-8')
+  .replace(
+    /\<script src=\"https\:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+-alpha\.\d\/vue-validator\.min\.js\"\>\<\/script\>/,
+    '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
+  )
+fs.writeFileSync('README.md', readme)
 
 // CommonJS build.
 // this is used as the "main" field in package.json
