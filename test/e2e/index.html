@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <style>
       body { padding-top: 50px; padding-bottom: 50px; }
+      [v-cloak] { display:none }
     </style>
     <script src="./js/jquery-2.1.3.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
@@ -13,7 +14,7 @@
   <body>
     <div id="registration" class="container">
       <validator name="validation">
-        <form class="form-horizontal" role="form">
+        <form class="form-horizontal" role="form" v-cloak>
           <div id="username" 
                class="form-group has-feedback" 
                :class="{ 'has-success': $validation.username.valid, 'has-error': $validation.username.invalid }">
@@ -45,6 +46,7 @@
                      id="inputEmail" 
                      placeholder="Email" 
                      aria-describedby="inputEmailStatus" 
+                     v-model="email" 
                      v-validate:email="['required', 'email']">
               <span id="inputEmailIcon" 
                     class="glyphicon form-control-feedback" 
@@ -66,7 +68,7 @@
                      id="inputConfirmEmail" 
                      placeholder="Confirm email" 
                      aria-describedby="inputConfirmEmailStatus" 
-                     v-validate:confirmEmail="{ required: true, email: true, same: 'email' }">
+                     v-validate:confirm-email="{ required: true, email: true, same: 'email' }">
               <span id="inputConfirmEmailIcon" 
                     class="glyphicon form-control-feedback" 
                     aria-hidden="true" 

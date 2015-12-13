@@ -30,8 +30,8 @@ describe('registration', () => {
   describe('first loaded page', function () {
     this.timeout(20000)
 
-    it('should be invalid', (done) => {
-      new Nightmare()
+    it('should be invalid', function* () {
+      yield Nightmare()
         .goto(url)
         .exists('#username .has-error', expectOK)
         .exists('#inputUsernameIcon .glyphicon-remove', expectOK)
@@ -46,7 +46,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-remove', expectOK)
         .evaluate(getPasswordStatus, expectTextError)
         .exists('button[type="submit"] .disabled', expectOK)
-        .run(done)
+        .end()
     })
   })
 
@@ -54,8 +54,8 @@ describe('registration', () => {
   describe('input valid username', function () {
     this.timeout(20000)
 
-    it('should be valid', (done) => {
-      new Nightmare()
+    it('should be valid', function* () {
+      yield Nightmare()
         .goto(url)
         .type('#inputUsername', 'kazupon')
         .wait('#inputUsername')
@@ -72,7 +72,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-remove', expectOK)
         .evaluate(getPasswordStatus, expectTextError)
         .exists('button[type="submit"] .disabled', expectOK)
-        .run(done)
+        .end()
     })
   })
 
@@ -80,8 +80,8 @@ describe('registration', () => {
   describe('input valid email', function () {
     this.timeout(20000)
 
-    it('should be valid', (done) => {
-      new Nightmare()
+    it('should be valid', function* () {
+      yield Nightmare()
         .goto(url)
         .type('#inputEmail', 'foo@domain.com')
         .wait('#inputEmail')
@@ -98,7 +98,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-remove', expectOK)
         .evaluate(getPasswordStatus, expectTextError)
         .exists('button[type="submit"] .disabled', expectOK)
-        .run(done)
+        .end()
     })
   })
 
@@ -106,8 +106,8 @@ describe('registration', () => {
   describe('input valid confirm email', function () {
     this.timeout(20000)
 
-    it('should be valid', (done) => {
-      new Nightmare()
+    it('should be valid', function* () {
+      yield Nightmare()
         .goto(url)
         .type('#inputEmail', 'foo@domain.com')
         .wait('#inputEmail')
@@ -126,7 +126,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-remove', expectOK)
         .evaluate(getPasswordStatus, expectTextError)
         .exists('button[type="submit"] .disabled', expectOK)
-        .run(done)
+        .end()
     })
   })
 
@@ -134,8 +134,8 @@ describe('registration', () => {
   describe('input valid password', function () {
     this.timeout(20000)
 
-    it('should be valid', (done) => {
-      new Nightmare()
+    it('should be valid', function* () {
+      yield Nightmare()
         .goto(resolve('./registration.html'))
         .type('#inputPassword', 'xxxxxxxxx')
         .wait('#inputPassword')
@@ -152,7 +152,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-ok', expectOK) // ok
         .evaluate(getPasswordStatus, expectTextSuccess) // success
         .exists('button[type="submit"] .disabled', expectOK)
-        .run(done)
+        .end()
     })
   })
 
@@ -160,8 +160,8 @@ describe('registration', () => {
   describe('input valid fileds', function () {
     this.timeout(20000)
 
-    it('join button should be enabled', (done) => {
-      new Nightmare()
+    it('join button should be enabled', function* () {
+      yield Nightmare()
         .goto(url)
         .type('#inputUsername', 'kazupon')
         .wait('#inputUsername')
@@ -184,7 +184,7 @@ describe('registration', () => {
         .exists('#inputPassword .glyphicon-ok', expectOK)
         .evaluate(getPasswordStatus, expectTextSuccess)
         .exists('button[type="submit"]', expectOK) // enabled
-        .run(done)
+        .end()
     })
   })
 })

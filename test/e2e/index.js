@@ -8,8 +8,8 @@ Vue.validator('email', (val) => {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
 
-Vue.validator('same', (val, prop) => {
-  return val == this.$get(prop)
+Vue.validator('same', function (val, prop) {
+  return val === this.$get(prop)
 })
 
 new Vue({
