@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.7
+ * vue-validator v2.0.0-alpha.8
  * (c) 2015 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -276,7 +276,9 @@ function Asset (Vue) {
   Vue.config._assetTypes.push('validator');
 
   // set global validators asset
-  Vue.options.validators = validators;
+  var assets = Object.create(null);
+  Vue.util.extend(assets, validators);
+  Vue.options.validators = assets;
 
   // set option merge strategy
   var strats = Vue.config.optionMergeStrategies;
@@ -327,7 +329,9 @@ var Validation = (function () {
   function Validation(dir) {
     babelHelpers.classCallCheck(this, Validation);
 
-    this.model = dir.arg;
+    var camelize = exports$1.Vue.util.camelize;
+
+    this.model = camelize(dir.arg);
     this.el = dir.el;
     this.dir = dir;
     this.init = dir.el.value;
@@ -339,22 +343,16 @@ var Validation = (function () {
 
   babelHelpers.createClass(Validation, [{
     key: 'setValidation',
-    value: function setValidation(name, arg, msg, fn) {
-      var resolveAsset = exports$1.Vue.util.resolveAsset;
-
+    value: function setValidation(name, arg, msg) {
       var validator = this.validators[name];
       if (!validator) {
         validator = this.validators[name] = {};
-        validator.fn = resolveAsset(this.dir.vm.$options, 'validators', name);
+        validator.name = name;
       }
 
       validator.arg = arg;
       if (msg) {
         validator.msg = msg;
-      }
-
-      if (fn) {
-        validator.fn = fn;
       }
     }
   }, {
@@ -387,7 +385,8 @@ var Validation = (function () {
       var valid = true;
 
       each(this.validators, function (descriptor, name) {
-        var res = descriptor.fn.call(_this.dir.vm, _this.el.value, descriptor.arg);
+        var validator = _this._resolveValidator(name);
+        var res = validator.call(_this.dir.vm, _this.el.value, descriptor.arg);
         if (!res) {
           valid = false;
           var msg = descriptor.msg;
@@ -415,6 +414,12 @@ var Validation = (function () {
       extend(ret, props);
 
       return ret;
+    }
+  }, {
+    key: '_resolveValidator',
+    value: function _resolveValidator(name) {
+      var resolveAsset = exports$1.Vue.util.resolveAsset;
+      return resolveAsset(this.dir.vm.$options, 'validators', name);
     }
   }]);
   return Validation;
@@ -580,6 +585,17 @@ var Validator$1 = (function () {
       }, this);
     }
   }, {
+    key: 'waitFor',
+    value: function waitFor(cb) {
+      var vm = this._dir.vm;
+      var method = '$activateValidator';
+
+      this._dir.vm[method] = function () {
+        cb();
+        vm[method] = null;
+      };
+    }
+  }, {
     key: '_defineProperties',
     value: function _defineProperties(validations, target) {
       var _this4 = this;
@@ -690,11 +706,14 @@ function Validator (Vue) {
   var _ = Vue.util;
   var FragmentFactory = Vue.FragmentFactory;
   var vIf = Vue.directive('if');
+  var _bind = Vue.util.bind;
 
   Vue.elementDirective('validator', {
-    params: ['name', 'groups'],
+    params: ['name', 'groups', 'lazy'],
 
     bind: function bind() {
+      var _this = this;
+
       if (!this.params.name) {
         // TODO: should be implemented validator:bind name params nothing error'
         warn('TODO: should be implemented validator:bind name params nothing error');
@@ -721,13 +740,19 @@ function Validator (Vue) {
       validator.enableReactive();
       validator.setupScope();
 
+      validator.waitFor(_bind(function () {
+        _this.render(validator, validatorName);
+        validator.validate();
+      }, this));
+
+      if (!this.params.lazy) {
+        this.vm.$activateValidator();
+      }
+    },
+    render: function render(validator, validatorName) {
       this.anchor = _.createAnchor('vue-validator');
       _.replace(this.el, this.anchor);
       this.insert(validatorName);
-
-      this.vm.$on('hook:compiled', function () {
-        validator.validate();
-      });
     },
     insert: function insert(name) {
       _.extend(this.vm.$options, { _validator: name });
@@ -770,7 +795,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.7';
+plugin.version = '2.0.0-alpha.8';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

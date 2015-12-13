@@ -1,3 +1,18 @@
+<a name="2.0.0-alpha.8"></a>
+# [2.0.0-alpha.8](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.7...v2.0.0-alpha.8) (2015-12-13)
+
+
+### Bug Fixes
+
+* **asset:** fix cannot register validator issue ([dce7e96](https://github.com/vuejs/vue-validator/commit/dce7e96)), closes [#108](https://github.com/vuejs/vue-validator/issues/108)
+
+### Features
+
+* **lazy:** support lazy initialization ([f5c24c9](https://github.com/vuejs/vue-validator/commit/f5c24c9)), closes [#25](https://github.com/vuejs/vue-validator/issues/25)
+* **validation:** support kebab-case ([b26a108](https://github.com/vuejs/vue-validator/commit/b26a108)), closes [#102](https://github.com/vuejs/vue-validator/issues/102)
+
+
+
 <a name="2.0.0-alpha.7"></a>
 # [2.0.0-alpha.7](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2015-12-10)
 
