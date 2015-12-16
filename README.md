@@ -411,7 +411,7 @@ You can register your custom validator with using `Vue.validator`. the below the
 
 ```javascript
 // register custom validator
-Vue.validate('email', function (val) {
+Vue.validator('email', function (val) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
 
@@ -433,7 +433,7 @@ new Vue({
 </div>
 ```
 
-> **MEMO:** `Vue.validate` asset is extended by vue-validator.
+> **MEMO:** `Vue.validator` asset is extended by vue-validator.
 
 
 # TODO
