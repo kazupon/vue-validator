@@ -406,7 +406,7 @@ Vue.component('comment', {
 As above example, When asynchronous data loading finished, you need to call `$activateValidator` meta method.
 
 
-# Custom validator with Assets
+# Custom validator
 You can register your custom validator with using `Vue.validator`. the below the exmpale:
 
 ```javascript
@@ -433,7 +433,7 @@ new Vue({
 </div>
 ```
 
-> **MEMO:** `Vue.validator` asset is extended by vue-validator.
+> **MEMO:** `Vue.validator` asset has been extend from asset managment system of Vue.js.
 
 
 # TODO
