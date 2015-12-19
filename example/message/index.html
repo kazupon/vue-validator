@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>message example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        username: <input type="text" v-validate:username="{
+          required: { rule: true, message: 'required you name !!' }
+        }"><br />
+        password: <input type="text" v-validate:password="{
+          required: { rule: true, message: 'required you password !!' },
+          minlength: { rule: 8, message: 'your password short too !!' }
+        }"/><br />
+        <div class="errors">
+          <ul>
+            <li v-for="obj in $validation1.messages">
+              <div class="{{$key}}" v-for="msg in obj">
+                <p>{{$key}}: {{msg}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app'
+      })
+    </script>
+  </body>
+</html>

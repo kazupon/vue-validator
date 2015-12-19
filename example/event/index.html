@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>event example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment="['required']"/>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        methods: {
+          onValid: function () {
+            console.log('occured valid event')
+          },
+          onInvalid: function () {
+            console.log('occured invalid event')
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

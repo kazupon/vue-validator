@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>grouping example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1" :groups="['user', 'password']">
+        username: <input type="text" group="user" v-validate:username="['required']"><br />
+        password: <input type="text" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
+        password (confirm): <input type="text" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
+        <div class="user">
+          <span v-if="$validation1.user.invalid">Invalid yourname !!</span>
+        </div>
+        <div class="password">
+          <span v-if="$validation1.password.invalid">Invalid password input !!</span>
+        </div>
+        <pre>{{ $validation1 | json }}</pre>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app'
+      })
+    </script>
+  </body>
+</html>
