@@ -292,7 +292,7 @@ You can grouping validation results. the below example:
   password: <input type="text" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
   password (confirm): <input type="text" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
   <div class="user">
-    <span v-if="$validation1.username.required">Required your name.</span>
+    <span v-if="$validation1.user.invalid">Invalid yourname !!</span>
   </div>
   <div class="password">
     <span v-if="$validation1.password.invalid">Invalid password input !!</span>
@@ -301,7 +301,7 @@ You can grouping validation results. the below example:
 ```
 
 
-# Messages
+# Message
 You can specify error message that can get the validation scope.
 
 ```html
@@ -311,7 +311,7 @@ You can specify error message that can get the validation scope.
   }"><br />
   password: <input type="text" v-validate:password="{
     required: { rule: true, message: 'required you password !!' },
-    minlength: { rule: 8, messsage: 'your password short too !!' }
+    minlength: { rule: 8, message: 'your password short too !!' }
   }"/><br />
   <div class="errors">
     <ul>
@@ -378,16 +378,18 @@ Vue.component('comment', {
   data: function () {
     return { comment: '' }
   },
-  activate: function () {
+  activate: function (done) {
     var resource = this.$resource('/comments/:id');
     resource.get({ id: this.id }, function (comment, stat, req) {
       this.commont =  comment.body
 
       // activate validator
       this.$activateValidator()
+      done()
 
     }.bind(this)).error(function (data, stat, req) {
       // handle error ...
+      done()
     })
   },
   methods: {
