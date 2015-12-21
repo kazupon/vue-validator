@@ -10,7 +10,7 @@ export default class Validation {
   constructor (dir) {
     const camelize = util.Vue.util.camelize
 
-    this.model = camelize(dir.arg)
+    this.field = camelize(dir.arg)
     this.el = dir.el
     this.dir = dir
     this.init = dir.el.value
@@ -85,7 +85,7 @@ export default class Validation {
           valid = false
           if (msg) {
             messages[name] = typeof msg === 'function' 
-              ? msg.call(this.dir.vm, this.model, descriptor.arg) 
+              ? msg.call(this.dir.vm, this.field, descriptor.arg) 
               : msg
           }
         }

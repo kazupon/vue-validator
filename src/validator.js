@@ -35,7 +35,7 @@ export default class Validator {
   }
 
   removeValidation (validation) {
-    util.Vue.util.del(this.scope, validation.model)
+    util.Vue.util.del(this.scope, validation.field)
     pull(this._validations, validation)
   }
 
@@ -56,7 +56,7 @@ export default class Validator {
   validate (validation) {
     each(this._validations, (validation, index) => {
       let res = validation.validate()
-      util.Vue.util.set(this.scope, validation.model, res)
+      util.Vue.util.set(this.scope, validation.field, res)
     }, this)
   }
 
@@ -110,8 +110,8 @@ export default class Validator {
 
     each(validations, (validation, index) => {
       if (ret === !condition) { return }
-      if (hasOwn(this.scope, validation.model)) {
-        var target = this.scope[validation.model]
+      if (hasOwn(this.scope, validation.field)) {
+        var target = this.scope[validation.field]
         if (target && target[property] === !condition) {
           ret = !condition
         }
@@ -155,10 +155,10 @@ export default class Validator {
     let ret = Object.create(null)
 
     each(validations, (validation, index) => {
-      if (hasOwn(this.scope, validation.model)) {
-        let target = this.scope[validation.model]
+      if (hasOwn(this.scope, validation.field)) {
+        let target = this.scope[validation.field]
         if (target && !empty(target['messages'])) {
-          ret[validation.model] = extend(Object.create(null), target['messages'])
+          ret[validation.field] = extend(Object.create(null), target['messages'])
         }
       }
     }, this)
