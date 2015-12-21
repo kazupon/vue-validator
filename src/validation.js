@@ -53,22 +53,44 @@ export default class Validation {
   }
 
   validate () {
-    const extend = util.Vue.util.extend
-    let ret = Object.create(null)
+    const _ = util.Vue.util
+
+    let results = Object.create(null)
     let messages = Object.create(null)
     let valid = true
 
     each(this.validators, (descriptor, name) => {
-      let validator = this._resolveValidator(name)
-      let res = validator.call(this.dir.vm, this.el.value, descriptor.arg)
-      if (!res) {
-        valid = false
-        let msg = descriptor.msg
-        if (msg) {
-          messages[name] = typeof msg === 'function' ? msg() : msg
+      let asset = this._resolveValidator(name)
+      let validator = null
+      let msg = null
+
+      if (_.isPlainObject(asset)) {
+        if (asset.check && typeof asset.check === 'function') {
+          validator = asset.check
         }
+        if (asset.message) {
+          msg = asset.message
+        }
+      } else if (typeof asset === 'function') {
+        validator = asset
       }
-      ret[name] = !res
+
+      if (descriptor.msg) {
+        msg = descriptor.msg
+      }
+
+      if (validator) {
+        let ret = validator.call(this.dir.vm, this.el.value, descriptor.arg)
+        if (!ret) {
+          valid = false
+          if (msg) {
+            messages[name] = typeof msg === 'function' 
+              ? msg.call(this.dir.vm, this.model, descriptor.arg) 
+              : msg
+          }
+        }
+        results[name] = !ret
+      }
     }, this)
 
     trigger(this.el, valid ? 'valid' : 'invalid')
@@ -85,9 +107,9 @@ export default class Validation {
     if (!empty(messages)) {
       props.messages = messages
     }
-    extend(ret, props)
+    _.extend(results, props)
 
-    return ret
+    return results
   }
 
   _resolveValidator (name) {

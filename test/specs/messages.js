@@ -15,7 +15,7 @@ describe('messages', () => {
       '<input type="text" group="group2" v-validate:field3="field3">' +
       '<input type="text" group="group2" v-validate:field4="field4">' +
       '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">' +
-      '<input type="text" group="group2" value="h" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">' +
+      '<input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">' +
       '<ul><li v-for="msg in $validation.messages">' +
       '<div v-for="val in msg"><p>{{$key}}:{{val}}</p></div>' +
       '</li></ul>' +
@@ -34,8 +34,8 @@ describe('messages', () => {
         }
       },
       methods: {
-        onMessage2 () {
-          return 'field6 short too'
+        onMessage2 (field) {
+          return 'field6 short too ' + field
         }
       }
     })
@@ -64,7 +64,7 @@ describe('messages', () => {
         assert(vm.$validation.field3.messages.max === vm.field3.max.message)
         assert(vm.$validation.field4.messages.maxlength === vm.field4.maxlength.message)
         assert(vm.$validation.field5.messages.min === vm.message1)
-        assert(vm.$validation.field6.messages.minlength === vm.onMessage2())
+        assert(vm.$validation.field6.messages.minlength === vm.onMessage2('field6'))
       })
     })
 
@@ -75,7 +75,7 @@ describe('messages', () => {
         assert(vm.$validation.messages.field3.max === vm.field3.max.message)
         assert(vm.$validation.messages.field4.maxlength === vm.field4.maxlength.message)
         assert(vm.$validation.messages.field5.min === vm.message1)
-        assert(vm.$validation.messages.field6.minlength === vm.onMessage2())
+        assert(vm.$validation.messages.field6.minlength === vm.onMessage2('field6'))
       })
     })
 
@@ -86,7 +86,7 @@ describe('messages', () => {
         assert(vm.$validation.group1.messages.field5.min === vm.message1)
         assert(vm.$validation.group2.messages.field3.max === vm.field3.max.message)
         assert(vm.$validation.group2.messages.field4.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.group2.messages.field6.minlength === vm.onMessage2())
+        assert(vm.$validation.group2.messages.field6.minlength === vm.onMessage2('field6'))
       })
     })
   })
