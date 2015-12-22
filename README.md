@@ -409,6 +409,8 @@ As above example, When asynchronous data loading finished, you need to call `$ac
 
 
 # Custom validator
+
+## Registration
 You can register your custom validator with using `Vue.validator`. the below the exmpale:
 
 ```javascript
@@ -436,6 +438,54 @@ new Vue({
 ```
 
 > **MEMO:** `Vue.validator` asset has been extend from asset managment system of Vue.js.
+
+
+## Global error message
+You can register global error message together with custom validator. the below the exmpale:
+
+```javascript
+// global error message with plain string
+Vue.validator('numeric', {
+  message: 'invalid numeric value',
+  check: function (val) {
+    return /^[-+]?[0-9]+$/.test(val)
+  }
+})
+
+// global error message with function
+Vue.validator('url', {
+  message: function (field) {
+    return 'invalid "' + field + '" url format field'
+  },
+  check: function (val) {
+    return /^(http\:\/\/|https\:\/\/)(.{4,})$/.test(val)
+  }
+})
+
+// build-in validator customizable
+var required = Vue.validator('required')
+Vue.validator('required', {
+  message: function (field) {
+    return 'required "' + field + '" field'
+  },
+  check: required,
+})
+```
+
+```html
+<div id="app">
+  <validator name="validation1">
+    username: <input type="text" v-validate:username=['required']><br />
+    age: <input type="text" v-validate:age=['numeric']><br />
+    site: <input type="text" v-validate:site=['url']><br />
+    <div>
+      <p v-if="$validation1.username.required">{{ $validation1.username.messages.required }}</p>
+      <p v-if="$validation1.age.numeric">{{ $validation1.age.messages.numeric }}</p>
+      <p v-if="$validation1.site.url">{{ $validation1.site.messages.url }}</p>
+    </div>
+  <validator>
+</div>
+```
 
 
 # TODO
