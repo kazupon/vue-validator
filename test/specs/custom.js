@@ -130,7 +130,7 @@ describe('custom', () => {
         let required = {
           message (field) {
             return 'required ' + field
-          },
+          }
         }
         required.check = org
         Vue.validator('required', required)
