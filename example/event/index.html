@@ -3,24 +3,34 @@
   <head>
     <meta charset="utf-8">
     <title>event example</title>
-    <script src="../../node_modules/vue/dist/vue.js"></script>
-    <script src="../../dist/vue-validator.js"></script>
+    <script src="../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../dist/vue-validator.min.js"></script>
   </head>
   <body>
     <div id="app">
       <validator name="validation1">
         comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment="['required']"/>
+        <div>
+          <p>{{occuredValid}}</p>
+          <p>{{occuredInvalid}}</p>
+        </div>
       </validator>
     </div>
     <script>
       new Vue({
         el: '#app',
+        data: {
+          occuredValid: '',
+          occuredInvalid: ''
+        },
         methods: {
           onValid: function () {
-            console.log('occured valid event')
+            this.occuredValid = 'occured valid event'
+            this.occuredInvalid = ''
           },
           onInvalid: function () {
-            console.log('occured invalid event')
+            this.occuredInvalid = 'occured invalid event'
+            this.occuredValid = ''
           }
         }
       })
