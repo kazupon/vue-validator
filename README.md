@@ -66,8 +66,8 @@ We can use `validator` element directive and `v-validate` directive. The followi
 <div id="app">
   <validator name="validation1">
     <form novalidate>
-      <input type="text" v-validate:username="['required']">
-      <input type="text" v-validate:comment="{ maxlength: 256 }">
+      username: <input type="text" v-validate:username="['required']"><br />
+      comment: <input type="text" v-validate:comment="{ maxlength: 256 }"><br />
       <div>
         <span v-show="$validation1.username.required">Required your name.</span>
         <span v-show="$validation1.comment.maxlength">Your comment is too long.</span>
@@ -331,13 +331,20 @@ You can handle the `valid` event and `invalid` event. the below example:
 
 ```javascript
 new Vue({
-  el: '#app',
-  methods: {
-    onValid: function () {
-      console.log('occured valid event')
+    el: '#app',
+    data: {
+      occuredValid: '',
+      occuredInvalid: ''
     },
-    onInvalid: function () {
-      console.log('occured invalid event')
+    methods: {
+      onValid: function () {
+        this.occuredValid = 'occured valid event'
+        this.occuredInvalid = ''
+      },
+      onInvalid: function () {
+        this.occuredInvalid = 'occured invalid event'
+        this.occuredValid = ''
+      }
     }
   }
 })
@@ -346,6 +353,10 @@ new Vue({
 <div id="app">
   <validator name="validation1">
     comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment="[required]"/>
+    <div>
+      <p>{{occuredValid}}</p>
+      <p>{{occuredInvalid}}</p>
+    </div>
   </validator>
 </div>
 ```
