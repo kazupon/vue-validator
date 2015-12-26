@@ -1,5 +1,4 @@
 import { warn, each } from '../util'
-import Validation from '../validation'
 
 
 export default function (Vue) {
@@ -19,15 +18,16 @@ export default function (Vue) {
       }
 
       let validator = this.validator = this.vm._validatorMaps[validatorName]
-      let validation = this.validation = new Validation(this)
-      validator.addValidation(validation)
+
+      let field = this.field = _.camelize(this.arg)
+      let validation = this.validation = validator.addValidation(field, vm, this.el)
 
       if (this.params.group) {
-        validator.addGroupValidation(this.params.group, validation)
+        validator.addGroupValidation(this.params.group, this.field)
       }
 
-      this.on('blur', _.bind(this.validation.listener, this.validation))
-      this.on('input', _.bind(this.validation.listener, this.validation))
+      this.on('blur', _.bind(validation.listener, validation))
+      this.on('input', _.bind(validation.listener, validation))
     },
 
     update (value, old) {
@@ -66,9 +66,10 @@ export default function (Vue) {
     unbind () {
       if (this.validator && this.validation) {
         if (this.params.group) {
-          this.validator.removeGroupValidation(this.params.group, this.validation)
+          this.validator.removeGroupValidation(this.params.group, this.field)
         }
-        this.validator.removeValidation(this.validation)
+
+        this.validator.removeValidation(this.field)
         this.validator = null
         this.validation = null
       }

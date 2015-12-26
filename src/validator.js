@@ -1,4 +1,5 @@
 import util, { empty, each, pull } from './util'
+import Validation from './validation'
 
 
 /**
@@ -9,9 +10,10 @@ export default class Validator {
 
   constructor (name, dir, groups) {
     this.name = name
-    this.scope = Object.create(null)
+
+    this._scope = Object.create(null)
     this._dir = dir
-    this._validations = []
+    this._validations = Object.create(null)
     this._groups = groups
     this._groupValidations = Object.create(null)
 
@@ -21,7 +23,7 @@ export default class Validator {
   }
 
   enableReactive () {
-    util.Vue.util.defineReactive(this._dir.vm, this.name, this.scope)
+    util.Vue.util.defineReactive(this._dir.vm, this.name, this._scope)
     this._dir.vm._validatorMaps[this.name] = this
   }
 
@@ -30,23 +32,27 @@ export default class Validator {
     this._dir.vm[this.name] = null
   }
 
-  addValidation (validation) {
-    this._validations.push(validation)
+  addValidation (field, vm, el) {
+    let validation = this._validations[field] = new Validation(field, vm, el, this)
+    return validation
   }
 
-  removeValidation (validation) {
-    util.Vue.util.del(this.scope, validation.field)
-    pull(this._validations, validation)
+  removeValidation (field) {
+    let validation = this._validations[field]
+    util.Vue.util.del(this._scope, validation.field)
+    this._validations[field] = null
   }
 
-  addGroupValidation (group, validation) {
+  addGroupValidation (group, field) {
+    let validation = this._validations[field]
     let validations = this._groupValidations[group]
     if (validations) {
       validations.push(validation)
     }
   }
 
-  removeGroupValidation (group, validation) {
+  removeGroupValidation (group, field) {
+    let validation = this._validations[field]
     let validations = this._groupValidations[group]
     if (validations) {
       pull(validations, validation)
@@ -54,19 +60,19 @@ export default class Validator {
   }
 
   validate (validation) {
-    each(this._validations, (validation, index) => {
+    each(this._validations, (validation, key) => {
       let res = validation.validate()
-      util.Vue.util.set(this.scope, validation.field, res)
+      util.Vue.util.set(this._scope, validation.field, res)
     }, this)
   }
 
   setupScope () {
-    this._defineProperties(this._validations, this.scope)
+    this._defineProperties(this._validations, this._scope)
 
     each(this._groups, (name) => {
       let validations = this._groupValidations[name]
       let group = Object.create(null)
-      util.Vue.util.set(this.scope, name, group)
+      util.Vue.util.set(this._scope, name, group)
       this._defineProperties(validations, group)
     }, this)
   }
@@ -108,10 +114,10 @@ export default class Validator {
     const hasOwn = util.Vue.util.hasOwn
     let ret = condition
 
-    each(validations, (validation, index) => {
+    each(validations, (validation, key) => {
       if (ret === !condition) { return }
-      if (hasOwn(this.scope, validation.field)) {
-        var target = this.scope[validation.field]
+      if (hasOwn(this._scope, validation.field)) {
+        var target = this._scope[validation.field]
         if (target && target[property] === !condition) {
           ret = !condition
         }
@@ -154,9 +160,9 @@ export default class Validator {
     const hasOwn = util.Vue.util.hasOwn
     let ret = Object.create(null)
 
-    each(validations, (validation, index) => {
-      if (hasOwn(this.scope, validation.field)) {
-        let target = this.scope[validation.field]
+    each(validations, (validation, key) => {
+      if (hasOwn(this._scope, validation.field)) {
+        let target = this._scope[validation.field]
         if (target && !empty(target['messages'])) {
           ret[validation.field] = extend(Object.create(null), target['messages'])
         }

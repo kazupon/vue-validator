@@ -7,23 +7,24 @@ import util, { empty, each, trigger } from './util'
 
 export default class Validation {
 
-  constructor (dir) {
-    const camelize = util.Vue.util.camelize
-
-    this.field = camelize(dir.arg)
-    this.el = dir.el
-    this.dir = dir
-    this.init = dir.el.value
+  constructor (field, vm, el, validator) {
+    this.field = field
     this.touched = false
     this.dirty = false
     this.modified = false
-    this.validators = Object.create(null)
+
+    this._validator = validator
+    this._vm = vm
+    this._el = el
+    this._init = el.value
+    this._value = el.value
+    this._validators = Object.create(null)
   }
 
   setValidation (name, arg, msg) {
-    let validator = this.validators[name]
+    let validator = this._validators[name]
     if (!validator) {
-      validator = this.validators[name] = {}
+      validator = this._validators[name] = {}
       validator.name = name
     }
     
@@ -43,13 +44,15 @@ export default class Validation {
       this.touched = true
     }
 
-    if (!this.dirty && this.el.value !== this.init) {
+    this._value = e.target.value
+
+    if (!this.dirty && this._value !== this._init) {
       this.dirty = true
     }
 
-    this.modified = (this.el.value !== this.init)
+    this.modified = (this._value !== this._init)
 
-    this.dir.validator.validate()
+    this._validator.validate()
   }
 
   validate () {
@@ -59,7 +62,7 @@ export default class Validation {
     let messages = Object.create(null)
     let valid = true
 
-    each(this.validators, (descriptor, name) => {
+    each(this._validators, (descriptor, name) => {
       let asset = this._resolveValidator(name)
       let validator = null
       let msg = null
@@ -80,12 +83,12 @@ export default class Validation {
       }
 
       if (validator) {
-        let ret = validator.call(this.dir.vm, this.el.value, descriptor.arg)
+        let ret = validator.call(this._vm, this._el.value, descriptor.arg)
         if (!ret) {
           valid = false
           if (msg) {
             messages[name] = typeof msg === 'function' 
-              ? msg.call(this.dir.vm, this.field, descriptor.arg) 
+              ? msg.call(this._vm, this.field, descriptor.arg) 
               : msg
           }
         }
@@ -93,7 +96,7 @@ export default class Validation {
       }
     }, this)
 
-    trigger(this.el, valid ? 'valid' : 'invalid')
+    trigger(this._el, valid ? 'valid' : 'invalid')
 
     let props = {
       valid: valid,
@@ -114,6 +117,6 @@ export default class Validation {
 
   _resolveValidator (name) {
     const resolveAsset = util.Vue.util.resolveAsset
-    return resolveAsset(this.dir.vm.$options, 'validators', name)
+    return resolveAsset(this._vm.$options, 'validators', name)
   }
 }
