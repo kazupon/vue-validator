@@ -20,14 +20,23 @@ export default function (Vue) {
       let validator = this.validator = this.vm._validatorMaps[validatorName]
 
       let field = this.field = _.camelize(this.arg)
-      let validation = this.validation = validator.addValidation(field, vm, this.el)
+      if (this.el.type === 'checkbox') {
+        this.validation = validator.manageMultipleValidation(field, vm, this.el)
+      } else {
+        this.validation = validator.addValidation(field, vm, this.el)
+      }
+      let validation = this.validation
 
       if (this.params.group) {
         validator.addGroupValidation(this.params.group, this.field)
       }
 
       this.on('blur', _.bind(validation.listener, validation))
-      this.on('input', _.bind(validation.listener, validation))
+      if (this.el.type === 'checkbox') {
+        this.on('change', _.bind(validation.listener, validation))
+      } else {
+        this.on('input', _.bind(validation.listener, validation))
+      }
     },
 
     update (value, old) {
@@ -69,7 +78,11 @@ export default function (Vue) {
           this.validator.removeGroupValidation(this.params.group, this.field)
         }
 
-        this.validator.removeValidation(this.field)
+        if (this.el.type === 'checkbox') {
+          this.validator.unmanageMultipleValidation(this.field, this.el)
+        } else {
+          this.validator.removeValidation(this.field)
+        }
         this.validator = null
         this.validation = null
       }

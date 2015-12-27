@@ -1,5 +1,6 @@
 import util, { empty, each, pull } from './util'
 import Validation from './validation'
+import MultipleValidation from './multiple_validation'
 
 
 /**
@@ -14,6 +15,7 @@ export default class Validator {
     this._scope = Object.create(null)
     this._dir = dir
     this._validations = Object.create(null)
+    this._multipleValidations = Object.create(null)
     this._groups = groups
     this._groupValidations = Object.create(null)
 
@@ -43,16 +45,46 @@ export default class Validator {
     this._validations[field] = null
   }
 
+  manageMultipleValidation (field, vm, el) {
+    let validationSet = this._multipleValidations[field]
+    if (!validationSet) {
+      let validation = new MultipleValidation(field, vm, el, this)
+      validationSet = { validation: validation, elements: 1 }
+      this._multipleValidations[field] = validationSet
+      this._defineProperties(this._multipleValidations[field].validation, this._scope)
+    } else {
+      validationSet.elements++
+      validationSet.validation.mamageElement(el)
+    }
+    return validationSet.validation
+  }
+
+  unmanageMultipleValidation (field, el) {
+    let validationSet = this._multipleValidations[field]
+    if (validationSet) {
+      validationSet.elements--
+      validationSet.validation.unmanageElement(el)
+      if (validationSet.elements === 0) {
+        util.Vue.util.del(this._scope, field)
+        this._multipleValidations[field] = null
+      }
+    }
+  }
+
   addGroupValidation (group, field) {
-    let validation = this._validations[field]
+    const indexOf = util.Vue.util.indexOf
+
+    let validation = this._validations[field] || this._multipleValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
-      validations.push(validation)
+      if (!~indexOf(validations, validation)) {
+        validations.push(validation)
+      }
     }
   }
 
   removeGroupValidation (group, field) {
-    let validation = this._validations[field]
+    let validation = this._validations[field] || this._multipleValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
       pull(validations, validation)
@@ -62,7 +94,12 @@ export default class Validator {
   validate (validation) {
     each(this._validations, (validation, key) => {
       let res = validation.validate()
-      util.Vue.util.set(this._scope, validation.field, res)
+      util.Vue.util.set(this._scope, key, res)
+    }, this)
+
+    each(this._multipleValidations, (dataset, key) => {
+      let res = dataset.validation.validate()
+      util.Vue.util.set(this._scope, key, res)
     }, this)
   }
 
