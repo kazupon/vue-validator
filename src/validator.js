@@ -54,7 +54,7 @@ export default class Validator {
       this._defineProperties(this._multipleValidations[field].validation, this._scope)
     } else {
       validationSet.elements++
-      validationSet.validation.mamageElement(el)
+      validationSet.validation.manageElement(el)
     }
     return validationSet.validation
   }

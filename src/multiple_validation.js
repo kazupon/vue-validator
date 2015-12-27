@@ -15,7 +15,7 @@ export default class MultipleValidation extends Validation {
     this._inits = [{ el: el, init: el.checked, value: el.value }]
   }
 
-  mamageElement (el) {
+  manageElement (el) {
     let item = {
       el: el,
       init: el.checked,
