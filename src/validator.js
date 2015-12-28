@@ -40,8 +40,7 @@ export default class Validator {
   }
 
   removeValidation (field) {
-    let validation = this._validations[field]
-    util.Vue.util.del(this._scope, validation.field)
+    util.Vue.delete(this._scope, field)
     this._validations[field] = null
   }
 
@@ -49,13 +48,13 @@ export default class Validator {
     let validationSet = this._multipleValidations[field]
     if (!validationSet) {
       let validation = new MultipleValidation(field, vm, el, this)
-      validationSet = { validation: validation, elements: 1 }
+      validationSet = { validation: validation, elements: 0 }
       this._multipleValidations[field] = validationSet
       this._defineProperties(this._multipleValidations[field].validation, this._scope)
-    } else {
-      validationSet.elements++
-      validationSet.validation.manageElement(el)
     }
+
+    validationSet.elements++
+    validationSet.validation.manageElement(el)
     return validationSet.validation
   }
 
@@ -65,7 +64,7 @@ export default class Validator {
       validationSet.elements--
       validationSet.validation.unmanageElement(el)
       if (validationSet.elements === 0) {
-        util.Vue.util.del(this._scope, field)
+        util.Vue.delete(this._scope, field)
         this._multipleValidations[field] = null
       }
     }
@@ -94,12 +93,12 @@ export default class Validator {
   validate (validation) {
     each(this._validations, (validation, key) => {
       let res = validation.validate()
-      util.Vue.util.set(this._scope, key, res)
+      util.Vue.set(this._scope, key, res)
     }, this)
 
     each(this._multipleValidations, (dataset, key) => {
       let res = dataset.validation.validate()
-      util.Vue.util.set(this._scope, key, res)
+      util.Vue.set(this._scope, key, res)
     }, this)
   }
 
@@ -109,7 +108,7 @@ export default class Validator {
     each(this._groups, (name) => {
       let validations = this._groupValidations[name]
       let group = Object.create(null)
-      util.Vue.util.set(this._scope, name, group)
+      util.Vue.set(this._scope, name, group)
       this._defineProperties(validations, group)
     }, this)
   }

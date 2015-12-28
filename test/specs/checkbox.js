@@ -11,7 +11,7 @@ describe('checkbox', () => {
   })
 
 
-  context('single', () => {
+  describe('single', () => {
     beforeEach((done) => {
       el.innerHTML = 
         '<validator name="validator1">' +
@@ -56,7 +56,7 @@ describe('checkbox', () => {
   })
 
 
-  context('multiple', () => {
+  describe('multiple', () => {
     beforeEach((done) => {
       el.innerHTML = 
         '<validator name="validator1">' +
@@ -134,7 +134,7 @@ describe('checkbox', () => {
   })
 
 
-  context('complex', () => {
+  describe('complex', () => {
     beforeEach((done) => {
       el.innerHTML = 
         '<validator :groups="[\'group1\',\'group2\'] "name="validator1">' +
@@ -243,65 +243,123 @@ describe('checkbox', () => {
   })
 
 
-  context('v-if', () => {
-    beforeEach((done) => {
-      el.innerHTML = 
-        '<validator name="validator1">' +
-        '<form novalidate>' +
-        '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">' +
-        '<input type="checkbox" v-if="enabled" checked value="bar" v-validate:field1>' +
-        '</form>' +
-        '</validator>'
-      vm = new Vue({
-        el: el,
-        data: {
-          enabled: true
-        }
+  describe('v-if', () => {
+    context('a part', () => {
+      beforeEach((done) => {
+        el.innerHTML = 
+          '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">' +
+          '<input type="checkbox" v-if="enabled" checked value="bar" v-validate:field1>' +
+          '</form>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: {
+            enabled: true
+          }
+        })
+        vm.$nextTick(done)
       })
-      vm.$nextTick(done)
-    })
 
-    it('should be validated', (done) => {
-      // default
-      assert(vm.$validator1.field1.required === false)
-      assert(vm.$validator1.field1.valid === true)
-      assert(vm.$validator1.field1.touched === false)
-      assert(vm.$validator1.field1.dirty === false)
-
-      vm.$set('enabled', false)
-      vm.$nextTick(() => {
-        assert(vm.$validator1.field1.required === true)
-        assert(vm.$validator1.field1.valid === false)
+      it('should be validated', (done) => {
+        // default
+        assert(vm.$validator1.field1.required === false)
+        assert(vm.$validator1.field1.valid === true)
         assert(vm.$validator1.field1.touched === false)
         assert(vm.$validator1.field1.dirty === false)
 
-        let checkbox1 = el.getElementsByTagName('input')[0]
-        checkbox1.checked = true
-        trigger(checkbox1, 'change')
-        trigger(checkbox1, 'blur')
-
+        vm.$set('enabled', false)
         vm.$nextTick(() => {
-          assert(vm.$validator1.field1.required === false)
-          assert(vm.$validator1.field1.valid === true)
-          assert(vm.$validator1.field1.touched === true)
-          assert(vm.$validator1.field1.dirty === true)
+          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field1.dirty === false)
 
-          vm.$set('enabled', true)
+          let checkbox1 = el.getElementsByTagName('input')[0]
+          checkbox1.checked = true
+          trigger(checkbox1, 'change')
+          trigger(checkbox1, 'blur')
+
           vm.$nextTick(() => {
             assert(vm.$validator1.field1.required === false)
             assert(vm.$validator1.field1.valid === true)
             assert(vm.$validator1.field1.touched === true)
             assert(vm.$validator1.field1.dirty === true)
 
-            let checkbox2 = el.getElementsByTagName('input')[1]
-            checkbox2.checked = false
-            trigger(checkbox2, 'blur')
-            trigger(checkbox2, 'change')
+            vm.$set('enabled', true)
             vm.$nextTick(() => {
               assert(vm.$validator1.field1.required === false)
               assert(vm.$validator1.field1.valid === true)
               assert(vm.$validator1.field1.touched === true)
               assert(vm.$validator1.field1.dirty === true)
+
+              let checkbox2 = el.getElementsByTagName('input')[1]
+              checkbox2.checked = false
+              trigger(checkbox2, 'blur')
+              trigger(checkbox2, 'change')
+              vm.$nextTick(() => {
+                assert(vm.$validator1.field1.required === false)
+                assert(vm.$validator1.field1.valid === true)
+                assert(vm.$validator1.field1.touched === true)
+                assert(vm.$validator1.field1.dirty === true)
+                done()
+              })
+            })
+          })
+        })
+      })
+    })
+
+    context('all', () => {
+      beforeEach((done) => {
+        el.innerHTML = 
+          '<validator name="validator1">' +
+          '<form novalidate v-if="enabled">' +
+          '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">' +
+          '<input type="checkbox" checked value="bar" v-validate:field1>' +
+          '</form>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: {
+            enabled: true
+          }
+        })
+        vm.$nextTick(done)
+      })
+
+      it('should be validated', (done) => {
+        // default
+        assert(vm.$validator1.field1.required === false)
+        assert(vm.$validator1.field1.valid === true)
+        assert(vm.$validator1.field1.touched === false)
+        assert(vm.$validator1.field1.dirty === false)
+
+        // uncheckd checkbox
+        let checkbox2 = el.getElementsByTagName('input')[1]
+        checkbox2.checked = false
+        trigger(checkbox2, 'change')
+        trigger(checkbox2, 'blur')
+        vm.$nextTick(() => {
+          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.touched === true)
+          assert(vm.$validator1.field1.dirty === true)
+
+          // set enabled property
+          vm.$set('enabled', false)
+          vm.$nextTick(() => {
+            assert(vm.$validator1.field1 === undefined)
+
+            // set enabled property
+            vm.$set('enabled', true)
+            vm.$nextTick(() => {
+              assert(vm.$validator1.field1.required === false)
+              assert(vm.$validator1.field1.valid === true)
+              assert(vm.$validator1.field1.touched === false)
+              assert(vm.$validator1.field1.dirty === false)
+
               done()
             })
           })

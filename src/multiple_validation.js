@@ -12,7 +12,7 @@ export default class MultipleValidation extends Validation {
     super(field, vm, el, validator)
 
     this._init = el.checked
-    this._inits = [{ el: el, init: el.checked, value: el.value }]
+    this._inits = []
   }
 
   manageElement (el) {
@@ -22,6 +22,7 @@ export default class MultipleValidation extends Validation {
       value: el.value
     }
     this._inits.push(item)
+    this._validator.validate()
   }
 
   unmanageElement (el) {
@@ -59,7 +60,7 @@ export default class MultipleValidation extends Validation {
 
   _checkModified (target) {
     if (this._inits.length === 0) {
-      return this._init !== target.checked
+      return target.checked
     } else {
       let modified = false
       each(this._inits, (item, index) => {
@@ -133,7 +134,7 @@ export default class MultipleValidation extends Validation {
 
   _getValue () {
     if (this._inits.length === 0) {
-      return this._inits[0].checked
+      return this._init
     } else {
       let vals = []
       each(this._inits, (item, index) => {
