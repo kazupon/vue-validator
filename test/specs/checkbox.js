@@ -31,6 +31,11 @@ describe('checkbox', () => {
       assert(vm.$validator1.field1.valid === false)
       assert(vm.$validator1.field1.touched === false)
       assert(vm.$validator1.field1.dirty === false)
+      assert(vm.$validator1.field1.modified === false)
+      assert(vm.$validator1.valid === false)
+      assert(vm.$validator1.touched === false)
+      assert(vm.$validator1.dirty === false)
+      assert(vm.$validator1.modified === false)
 
       // checked checkbox
       let checkbox = el.getElementsByTagName('input')[0]
@@ -41,6 +46,11 @@ describe('checkbox', () => {
         assert(vm.$validator1.field1.valid === true)
         assert(vm.$validator1.field1.touched === false)
         assert(vm.$validator1.field1.dirty === true)
+        assert(vm.$validator1.field1.modified === true)
+        assert(vm.$validator1.valid === true)
+        assert(vm.$validator1.touched === false)
+        assert(vm.$validator1.dirty === true)
+        assert(vm.$validator1.modified === true)
 
         // move focus
         trigger(checkbox, 'blur')
@@ -49,6 +59,11 @@ describe('checkbox', () => {
           assert(vm.$validator1.field1.valid === true)
           assert(vm.$validator1.field1.touched === true)
           assert(vm.$validator1.field1.dirty === true)
+          assert(vm.$validator1.field1.modified === true)
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.touched === true)
+          assert(vm.$validator1.dirty === true)
+          assert(vm.$validator1.modified === true)
           done()
         })
       })

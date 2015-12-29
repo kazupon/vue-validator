@@ -75,8 +75,8 @@ export default class MultipleValidation extends Validation {
   validate () {
     const _ = util.Vue.util
 
-    let results = Object.create(null)
-    let messages = Object.create(null)
+    let results = {}
+    let messages = {}
     let valid = true
 
     each(this._validators, (descriptor, name) => {

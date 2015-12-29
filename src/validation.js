@@ -18,7 +18,7 @@ export default class Validation {
     this._el = el
     this._init = el.value
     this._value = el.value
-    this._validators = Object.create(null)
+    this._validators = {}
   }
 
   setValidation (name, arg, msg) {
@@ -58,8 +58,8 @@ export default class Validation {
   validate () {
     const _ = util.Vue.util
 
-    let results = Object.create(null)
-    let messages = Object.create(null)
+    let results = {}
+    let messages = {}
     let valid = true
 
     each(this._validators, (descriptor, name) => {

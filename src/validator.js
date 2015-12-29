@@ -12,12 +12,12 @@ export default class Validator {
   constructor (name, dir, groups) {
     this.name = name
 
-    this._scope = Object.create(null)
+    this._scope = {}
     this._dir = dir
-    this._validations = Object.create(null)
-    this._multipleValidations = Object.create(null)
+    this._validations = {}
+    this._multipleValidations = {}
     this._groups = groups
-    this._groupValidations = Object.create(null)
+    this._groupValidations = {}
 
     each(groups, (group) => {
       this._groupValidations[group] = []
@@ -32,6 +32,19 @@ export default class Validator {
   disableReactive () {
     this._dir.vm._validatorMaps[this.name] = null
     this._dir.vm[this.name] = null
+  }
+
+  // TODO: should be improved performance (use cache)
+  get validations () {
+    const extend = util.Vue.util.extend
+    let ret = {}
+    extend(ret, this._validations)
+
+    each(this._multipleValidations, (dataset, key) => {
+      ret[key] = dataset.validation
+    }, this)
+
+    return ret
   }
 
   addValidation (field, vm, el) {
@@ -50,7 +63,6 @@ export default class Validator {
       let validation = new MultipleValidation(field, vm, el, this)
       validationSet = { validation: validation, elements: 0 }
       this._multipleValidations[field] = validationSet
-      this._defineProperties(this._multipleValidations[field].validation, this._scope)
     }
 
     validationSet.elements++
@@ -103,13 +115,17 @@ export default class Validator {
   }
 
   setupScope () {
-    this._defineProperties(this._validations, this._scope)
+    const bind = util.Vue.util.bind
+
+    let validationsGetter = bind(() => { return this.validations }, this)
+    let scopeGetter = bind(() => { return this._scope }, this)
+    this._defineProperties(validationsGetter, scopeGetter)
 
     each(this._groups, (name) => {
       let validations = this._groupValidations[name]
-      let group = Object.create(null)
+      let group = {}
       util.Vue.set(this._scope, name, group)
-      this._defineProperties(validations, group)
+      this._defineProperties(() => { return validations }, () => { return group })
     }, this)
   }
 
@@ -123,20 +139,20 @@ export default class Validator {
     }
   }
 
-  _defineProperties (validations, target) {
+  _defineProperties (validationsGetter, targetGetter) {
     const bind = util.Vue.util.bind
 
     each({
-      valid: { fn: this._defineValid, arg: validations },
-      invalid: { fn: this._defineInvalid, arg: target },
-      touched: { fn: this._defineTouched, arg: validations },
-      untouched: { fn: this._defineUntouched, arg: target },
-      modified: { fn: this._defineModified, arg: validations },
-      dirty: { fn: this._defineDirty, arg: validations },
-      pristine: { fn: this._definePristine, arg: target },
-      messages: { fn: this._defineMessages, arg: validations }
+      valid: { fn: this._defineValid, arg: validationsGetter },
+      invalid: { fn: this._defineInvalid, arg: targetGetter },
+      touched: { fn: this._defineTouched, arg: validationsGetter },
+      untouched: { fn: this._defineUntouched, arg: targetGetter },
+      modified: { fn: this._defineModified, arg: validationsGetter },
+      dirty: { fn: this._defineDirty, arg: validationsGetter },
+      pristine: { fn: this._definePristine, arg: targetGetter },
+      messages: { fn: this._defineMessages, arg: validationsGetter }
     }, (descriptor, name) => {
-      Object.defineProperty(target, name, {
+      Object.defineProperty(targetGetter(), name, {
         enumerable: true,
         configurable: true,
         get: () => {
@@ -163,44 +179,44 @@ export default class Validator {
     return ret
   }
 
-  _defineValid (validations) {
-    return this._walkValidations(validations, 'valid', true)
+  _defineValid (validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'valid', true)
   }
 
-  _defineInvalid (scope) {
-    return !scope.valid
+  _defineInvalid (scopeGetter) {
+    return !scopeGetter().valid
   }
 
-  _defineTouched (validations) {
-    return this._walkValidations(validations, 'touched', false)
+  _defineTouched (validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'touched', false)
   }
 
-  _defineUntouched (scope) {
-    return !scope.touched
+  _defineUntouched (scopeGetter) {
+    return !scopeGetter().touched
   }
 
-  _defineModified (validations) {
-    return this._walkValidations(validations, 'modified', false)
+  _defineModified (validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'modified', false)
   }
 
-  _defineDirty (validations) {
-    return this._walkValidations(validations, 'dirty', false)
+  _defineDirty (validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'dirty', false)
   }
 
-  _definePristine (scope) {
-    return !scope.dirty
+  _definePristine (scopeGetter) {
+    return !scopeGetter().dirty
   }
 
-  _defineMessages (validations) {
+  _defineMessages (validationsGetter) {
     const extend = util.Vue.util.extend
     const hasOwn = util.Vue.util.hasOwn
-    let ret = Object.create(null)
+    let ret = {}
 
-    each(validations, (validation, key) => {
+    each(validationsGetter(), (validation, key) => {
       if (hasOwn(this._scope, validation.field)) {
         let target = this._scope[validation.field]
         if (target && !empty(target['messages'])) {
-          ret[validation.field] = extend(Object.create(null), target['messages'])
+          ret[validation.field] = extend({}, target['messages'])
         }
       }
     }, this)
