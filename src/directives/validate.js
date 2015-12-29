@@ -22,6 +22,8 @@ export default function (Vue) {
       let field = this.field = _.camelize(this.arg)
       if (this.el.type === 'checkbox') {
         this.validation = validator.manageMultipleValidation(field, vm, this.el)
+      } else if (this.el.type === 'radio') {
+        this.validation = validator.manageRadioValidation(field, vm, this.el)
       } else {
         this.validation = validator.addValidation(field, vm, this.el)
       }
@@ -32,7 +34,7 @@ export default function (Vue) {
       }
 
       this.on('blur', _.bind(validation.listener, validation))
-      if (this.el.type === 'checkbox') {
+      if (this.el.type === 'checkbox' || this.el.type === 'radio') {
         this.on('change', _.bind(validation.listener, validation))
       } else {
         this.on('input', _.bind(validation.listener, validation))
@@ -80,6 +82,8 @@ export default function (Vue) {
 
         if (this.el.type === 'checkbox') {
           this.validator.unmanageMultipleValidation(this.field, this.el)
+        } else if (this.el.type === 'radio') {
+          this.validator.unmanageRadioValidation(this.field, this.el)
         } else {
           this.validator.removeValidation(this.field)
         }
