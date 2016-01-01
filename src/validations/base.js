@@ -1,11 +1,11 @@
-import util, { empty, each, trigger } from './util'
+import util, { empty, each, trigger } from '../util'
 
 
 /**
- * Validation class
+ * BaseValidation class
  */
 
-export default class Validation {
+export default class BaseValidation {
 
   constructor (field, vm, el, validator) {
     this.field = field
@@ -16,9 +16,13 @@ export default class Validation {
     this._validator = validator
     this._vm = vm
     this._el = el
-    this._init = el.value
+    this._init = this._getValue(el)
     this._value = el.value
     this._validators = {}
+  }
+
+  _getValue (el) {
+    return el.value
   }
 
   setValidation (name, arg, msg) {
@@ -44,15 +48,17 @@ export default class Validation {
       this.touched = true
     }
 
-    this._value = e.target.value
-
-    if (!this.dirty && this._value !== this._init) {
+    if (!this.dirty && this._checkModified(e.target)) {
       this.dirty = true
     }
 
-    this.modified = (this._value !== this._init)
+    this.modified = this._checkModified(e.target)
 
     this._validator.validate()
+  }
+
+  _checkModified (target) {
+    return this._init !== this._getValue(target)
   }
 
   validate () {
@@ -83,7 +89,7 @@ export default class Validation {
       }
 
       if (validator) {
-        let ret = validator.call(this._vm, this._el.value, descriptor.arg)
+        let ret = validator.call(this._vm, this._getValue(this._el), descriptor.arg)
         if (!ret) {
           valid = false
           if (msg) {
@@ -96,7 +102,7 @@ export default class Validation {
       }
     }, this)
 
-    trigger(this._el, valid ? 'valid' : 'invalid')
+    this._fireEvent(this._el, valid)
 
     let props = {
       valid: valid,
@@ -113,6 +119,10 @@ export default class Validation {
     _.extend(results, props)
 
     return results
+  }
+
+  _fireEvent (el, valid) {
+    trigger(el, valid ? 'valid' : 'invalid')
   }
 
   _resolveValidator (name) {

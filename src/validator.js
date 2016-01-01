@@ -1,8 +1,8 @@
 import util, { empty, each, pull } from './util'
-import Validation from './validation'
-import MultipleValidation from './multiple_validation'
-import RadioValidation from './radio'
-import SelectValidation from './select'
+import BaseValidation from './validations/base'
+import CheckboxValidation from './validations/checkbox'
+import RadioValidation from './validations/radio'
+import SelectValidation from './validations/select'
 
 
 /**
@@ -17,7 +17,7 @@ export default class Validator {
     this._scope = {}
     this._dir = dir
     this._validations = {}
-    this._multipleValidations = {}
+    this._checkboxValidations = {}
     this._radioValidations = {}
     this._groups = groups
     this._groupValidations = {}
@@ -44,7 +44,7 @@ export default class Validator {
     let ret = {}
     extend(ret, this._validations)
 
-    each(this._multipleValidations, (dataset, key) => {
+    each(this._checkboxValidations, (dataset, key) => {
       ret[key] = dataset.validation
     }, this)
 
@@ -55,27 +55,39 @@ export default class Validator {
     return ret
   }
 
-  addValidation (field, vm, el) {
+  manageValidation (field, vm, el) {
     let validation = null
+
     if (el.tagName === 'SELECT') {
       validation = this._validations[field] = new SelectValidation(field, vm, el, this)
+    } else if (el.type === 'checkbox') {
+      validation = this._manageCheckboxValidation(field, vm, el)
+    } else if (el.type === 'radio') {
+      validation = this._manageRadioValidation(field, vm, el)
     } else {
-      validation = this._validations[field] = new Validation(field, vm, el, this)
+      validation = this._validations[field] = new BaseValidation(field, vm, el, this)
     }
+
     return validation
   }
 
-  removeValidation (field) {
-    util.Vue.delete(this._scope, field)
-    this._validations[field] = null
+  unmanageValidation (field, el) {
+    if (el.type === 'checkbox') {
+      this._unmanageCheckboxValidation(field, el)
+    } else if (el.type === 'radio') {
+      this._unmanageRadioValidation(field, el)
+    } else {
+      util.Vue.delete(this._scope, field)
+      this._validations[field] = null
+    }
   }
 
-  manageMultipleValidation (field, vm, el) {
-    let validationSet = this._multipleValidations[field]
+  _manageCheckboxValidation (field, vm, el) {
+    let validationSet = this._checkboxValidations[field]
     if (!validationSet) {
-      let validation = new MultipleValidation(field, vm, el, this)
+      let validation = new CheckboxValidation(field, vm, el, this)
       validationSet = { validation: validation, elements: 0 }
-      this._multipleValidations[field] = validationSet
+      this._checkboxValidations[field] = validationSet
     }
 
     validationSet.elements++
@@ -83,19 +95,19 @@ export default class Validator {
     return validationSet.validation
   }
 
-  unmanageMultipleValidation (field, el) {
-    let validationSet = this._multipleValidations[field]
+  _unmanageCheckboxValidation (field, el) {
+    let validationSet = this._checkboxValidations[field]
     if (validationSet) {
       validationSet.elements--
       validationSet.validation.unmanageElement(el)
       if (validationSet.elements === 0) {
         util.Vue.delete(this._scope, field)
-        this._multipleValidations[field] = null
+        this._checkboxValidations[field] = null
       }
     }
   }
 
-  manageRadioValidation (field, vm, el) {
+  _manageRadioValidation (field, vm, el) {
     let validationSet = this._radioValidations[field]
     if (!validationSet) {
       let validation = new RadioValidation(field, vm, el, this)
@@ -108,7 +120,7 @@ export default class Validator {
     return validationSet.validation
   }
 
-  unmanageRadioValidation (field, el) {
+  _unmanageRadioValidation (field, el) {
     let validationSet = this._radioValidations[field]
     if (validationSet) {
       validationSet.elements--
@@ -123,7 +135,7 @@ export default class Validator {
   addGroupValidation (group, field) {
     const indexOf = util.Vue.util.indexOf
 
-    let validation = this._validations[field] || this._multipleValidations[field].validation || this._radioValidations[field].validation
+    let validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
       if (!~indexOf(validations, validation)) {
@@ -133,7 +145,7 @@ export default class Validator {
   }
 
   removeGroupValidation (group, field) {
-    let validation = this._validations[field] || this._multipleValidations[field].validation || this._radioValidations[field].validation
+    let validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
       pull(validations, validation)
@@ -146,7 +158,7 @@ export default class Validator {
       util.Vue.set(this._scope, key, res)
     }, this)
 
-    each(this._multipleValidations, (dataset, key) => {
+    each(this._checkboxValidations, (dataset, key) => {
       let res = dataset.validation.validate()
       util.Vue.set(this._scope, key, res)
     }, this)

@@ -20,14 +20,7 @@ export default function (Vue) {
       let validator = this.validator = this.vm._validatorMaps[validatorName]
 
       let field = this.field = _.camelize(this.arg)
-      if (this.el.type === 'checkbox') {
-        this.validation = validator.manageMultipleValidation(field, vm, this.el)
-      } else if (this.el.type === 'radio') {
-        this.validation = validator.manageRadioValidation(field, vm, this.el)
-      } else {
-        this.validation = validator.addValidation(field, vm, this.el)
-      }
-      let validation = this.validation
+      let validation = this.validation = validator.manageValidation(field, vm, this.el)
 
       if (this.params.group) {
         validator.addGroupValidation(this.params.group, this.field)
@@ -80,13 +73,7 @@ export default function (Vue) {
           this.validator.removeGroupValidation(this.params.group, this.field)
         }
 
-        if (this.el.type === 'checkbox') {
-          this.validator.unmanageMultipleValidation(this.field, this.el)
-        } else if (this.el.type === 'radio') {
-          this.validator.unmanageRadioValidation(this.field, this.el)
-        } else {
-          this.validator.removeValidation(this.field)
-        }
+        this.validator.unmanageValidation(this.field, this.el)
         this.validator = null
         this.validation = null
       }
