@@ -48,7 +48,7 @@ You don't need to do this when using the standalone build because it installs it
 ## CDN
 jsdelivr
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.8/vue-validator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.9/vue-validator.min.js"></script>
 ```
 
 

@@ -1,3 +1,16 @@
+<a name="2.0.0-alpha.9"></a>
+# [2.0.0-alpha.9](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.8...v2.0.0-alpha.9) (2016-01-01)
+
+
+### Features
+
+* **checkbox:** support checkbox validation ([7f46bad](https://github.com/vuejs/vue-validator/commit/7f46bad))
+* **custom:** support global error message ([c75480f](https://github.com/vuejs/vue-validator/commit/c75480f))
+* **radio:** support radio button validaton ([848f3f5](https://github.com/vuejs/vue-validator/commit/848f3f5))
+* **select:** support select validation ([42284f6](https://github.com/vuejs/vue-validator/commit/42284f6))
+
+
+
 <a name="2.0.0-alpha.8"></a>
 # [2.0.0-alpha.8](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.7...v2.0.0-alpha.8) (2015-12-13)
 
