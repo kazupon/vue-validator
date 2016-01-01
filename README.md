@@ -283,6 +283,133 @@ new Vue({
 In addition to the above data scope example, you can specify also the computed property or methods.
 
 
+# Checkbox
+You can validate checkbox. the below example:
+
+```html
+<div id="app">
+  <validator name="validation1">
+    <form novalidate>
+      <h1>Survey</h1>
+      <fieldset>
+        <legend>Which do you like fruit ?</legend>
+        <input id="apple" type="checkbox" value="apple" v-validate:fruits="{
+          required: { rule: true, message: requiredErrorMsg },
+          minlength: { rule: 1, message: minlengthErrorMsg },
+          maxlength: { rule: 2, message: maxlengthErrorMsg }
+        }">
+        <label for="apple">Apple</label>
+        <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+        <label for="orange">Orage</label>
+        <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+        <label for="grape">Grape</label>
+        <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+        <label for="banana">Banana</label>
+        <ul class="errors">
+          <li v-for="msg in $validation1.fruits.messages">
+            <p>{{msg}}</p>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+  </validator>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#app',
+  computed: {
+    requiredErrorMsg: function () {
+      return 'Required fruit !!'
+    },
+    minlengthErrorMsg: function () {
+      return 'Please chose at least 1 fruit !!'
+    },
+    maxlengthErrorMsg: function () {
+      return 'Please chose at most 2 fruits !!'
+    }
+  }
+})
+```
+
+
+# Radio Button
+You can validate radio button. the below example:
+
+```html
+<div id="app">
+  <validator name="validation1">
+    <form novalidate>
+      <h1>Survey</h1>
+      <fieldset>
+        <legend>Which do you like fruit ?</legend>
+        <input id="apple" type="radio" name="fruit" value="apple" v-validate:fruits="{
+          required: { rule: true, message: requiredErrorMsg }
+        }">
+        <label for="apple">Apple</label>
+        <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
+        <label for="orange">Orage</label>
+        <input id="grape" type="radio" name="fruit" value="grage" v-validate:fruits>
+        <label for="grape">Grape</label>
+        <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
+        <label for="banana">Banana</label>
+        <ul class="errors">
+          <li v-for="msg in $validation1.fruits.messages">
+            <p>{{msg}}</p>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+  </validator>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#app',
+  computed: {
+    requiredErrorMsg: function () {
+      return 'Required fruit !!'
+    }
+  }
+})
+```
+
+
+# Selectbox
+You can validate Selectbox. the below example:
+
+```html
+<div id="app">
+  <validator name="validation1">
+    <form novalidate>
+      <select v-validate:lang="{ required: true }">
+        <option value="">----- select your favorite programming language -----</option>
+        <option value="javascript">JavaScript</option>
+        <option value="ruby">Ruby</option>
+        <option value="python">Python</option>
+        <option value="perl">Perl</option>
+        <option value="lua">Lua</option>
+        <option value="go">Go</option>
+        <option value="rust">Rust</option>
+        <option value="elixir">Elixir</option>
+        <option value="c">C</option>
+        <option value="none">Not a nothing here</option>
+      </select>
+      <div class="errors">
+        <p v-if="$validation1.lang.required">Required !!</p>
+      </div>
+    </form>
+  </validator>
+</div>
+```
+
+```javascript
+new Vue({ el: '#app' })
+```
+
+
 # Grouping
 You can grouping validation results. the below example:
 
