@@ -2,6 +2,7 @@ import util, { empty, each, pull } from './util'
 import Validation from './validation'
 import MultipleValidation from './multiple_validation'
 import RadioValidation from './radio'
+import SelectValidation from './select'
 
 
 /**
@@ -55,7 +56,12 @@ export default class Validator {
   }
 
   addValidation (field, vm, el) {
-    let validation = this._validations[field] = new Validation(field, vm, el, this)
+    let validation = null
+    if (el.tagName === 'SELECT') {
+      validation = this._validations[field] = new SelectValidation(field, vm, el, this)
+    } else {
+      validation = this._validations[field] = new Validation(field, vm, el, this)
+    }
     return validation
   }
 

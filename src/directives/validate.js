@@ -34,7 +34,7 @@ export default function (Vue) {
       }
 
       this.on('blur', _.bind(validation.listener, validation))
-      if (this.el.type === 'checkbox' || this.el.type === 'radio') {
+      if (this.el.type === 'checkbox' || this.el.type === 'radio' || this.el.tagName === 'SELECT') {
         this.on('change', _.bind(validation.listener, validation))
       } else {
         this.on('input', _.bind(validation.listener, validation))
