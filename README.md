@@ -176,7 +176,7 @@ v2.0-alpha later:
 ```html
 <validator name="validation">
   <form novalidate>
-    <input type="text" v-validate:comment="{ minlength: 16, maxLlngth: 128 }">
+    <input type="text" v-validate:comment="{ minlength: 16, maxlength: 128 }">
     <div>
       <span v-show="$validation.comment.minlength">Your comment is too short.</span>
       <span v-show="$validation.comment.maxlength">Your comment is too long.</span>
