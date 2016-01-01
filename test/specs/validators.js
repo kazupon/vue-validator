@@ -78,6 +78,24 @@ describe('validators', () => {
           assert(required([1, 'foo']))
         })
       })
+
+      describe('include empty string', () => {
+        it('should be false', () => {
+          assert(required([1, '']) === false)
+        })
+      })
+
+      describe('include null', () => {
+        it('should be false', () => {
+          assert(required([1, null]) === false)
+        })
+      })
+
+      describe('include undefined', () => {
+        it('should be false', () => {
+          assert(required([1, '2', undefined]) === false)
+        })
+      })
     })
 
     describe('function', () => {
@@ -202,28 +220,6 @@ describe('validators', () => {
       describe('boundary', () => {
         describe('length - 1', () => {
           it('should be false', () => {
-            assert(minlength(['a'], '4') === false)
-          })
-        })
-
-        describe('just length', () => {
-          it('should be true', () => {
-            assert(minlength(['a', 'b', 'c', 1], '4'))
-          })
-        })
-
-        describe('length + 1', () => {
-          it('should be true', () => {
-            assert(minlength([1, 2, 3, 4, 5], '4'))
-          })
-        })
-      })
-    })
-
-    describe('array', () => {
-      describe('boundary', () => {
-        describe('length - 1', () => {
-          it('should be false', () => {
             assert(minlength(['a', 'b', 'c'], '4') === false)
           })
         })
@@ -306,7 +302,6 @@ describe('validators', () => {
         })
       })
     })
-
 
     describe('not support type', () => {
       it('should be false', () => {

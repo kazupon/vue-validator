@@ -14,6 +14,18 @@
 
 export function required (val) {
   if (Array.isArray(val)) {
+    if (val.length !== 0) {
+      let valid = true
+      for (let i = 0, l = val.length; i < l; i++) {
+        valid = required(val[i])
+        if (!valid) {
+          break
+        }
+      }
+      return valid
+    } else {
+      return false
+    }
     return val.length > 0
   } else if (typeof val === 'number' || typeof val === 'function') {
     return true
