@@ -53,10 +53,8 @@ describe('radio', () => {
       assert(vm.$validator1.dirty === false)
       assert(vm.$validator1.modified === false)
 
-      let radio1 = el.getElementsByTagName('input')[0]
       let radio2 = el.getElementsByTagName('input')[1]
       let radio3 = el.getElementsByTagName('input')[2]
-      let radio4 = el.getElementsByTagName('input')[3]
 
       // change
       radio2.checked = true
