@@ -135,7 +135,9 @@ export default class Validator {
   addGroupValidation (group, field) {
     const indexOf = util.Vue.util.indexOf
 
-    let validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation
+    let validation = this._validations[field] 
+      || this._checkboxValidations[field].validation 
+      || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
       if (!~indexOf(validations, validation)) {
@@ -145,7 +147,9 @@ export default class Validator {
   }
 
   removeGroupValidation (group, field) {
-    let validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation
+    let validation = this._validations[field] 
+      || this._checkboxValidations[field].validation 
+      || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
     if (validations) {
       pull(validations, validation)
