@@ -49,12 +49,14 @@ var batches = [
       browserName: 'internet explorer',
       platform: 'Windows 8.1',
       version: '11'
-    }/*,
+    }
+    /*
     sl_edge: {
       base: 'SauceLabs',
       platform: 'Windows 10',
       browserName: 'microsoftedge'
-    }*/
+    }
+    */
   },
   // mobile
   {
