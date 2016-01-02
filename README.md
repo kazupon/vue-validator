@@ -14,8 +14,8 @@ Validator component for Vue.js
 - Vue.js `1.0.10`+
 
 ## NOTE
-vue-validator is still alpha verison. Maybe, There are some breaking change. 
-If you have some feedback, we are welcome in [Vue.js Discussion](http://forum.vuejs.org) :smiley_cat:
+vue-validator is still in its alpha verison. There may be some breaking changes. 
+If you have some feedback, you're welcome in [Vue.js Discussion](http://forum.vuejs.org) :smiley_cat:
 
 
 # Installation
@@ -43,7 +43,7 @@ var VueValidator = require('vue-validator')
 Vue.use(VueValidator)
 ```
 
-You don't need to do this when using the standalone build because it installs itself automatically.
+You don't need to do this when using the standalone build, as it installs itself automatically.
 
 ## CDN
 jsdelivr
@@ -60,7 +60,7 @@ new Vue({
 })
 ```
 
-We can use `validator` element directive and `v-validate` directive. The following is an example:
+We can use the `validator` element directive and `v-validate` directive, as follows:
 
 ```html
 <div id="app">
@@ -78,11 +78,12 @@ We can use `validator` element directive and `v-validate` directive. The followi
 </div>
 ```
 
-The validation results keep to validation scope as defined with vue-validator. In above case, the validation results keep to `$validation1` scope (prefixed with `$`) which was specified with `name` attribute of `validator` element directive.
+The validation results are scoped to the validator element. In above case, the validation results keep to `$validation1` scope (prefixed with `$`), specified by the `name` attribute of the `validator` element.
 
 
 # Validation result structure
-The structure of validation results that was kept to validation scope is the below:
+
+Validation results can be accessed in this structure:
 
 ```
   $validation.valid
@@ -127,15 +128,15 @@ The structure of validation results that was kept to validation scope is the bel
                              .validatorX
 ```
 
-The various top-level properties has been defined in the validation scope, and the each field validation result has been defined as field namespace.
+The various top-level properties are in the validation scope, and each field validation result in its own respective scopes.
 
 ## Field validation properties
-- `valid`: whether field is valid. if it's valid, then return `true`, else return `false`.
+- `valid`: whether field is valid; if it's valid, then return `true`, else return `false`.
 - `invalid`: reverse of `valid`.
 - `touched`: whether field is touched. if field was focused, return `true`, else return `false`.
 - `untouched`: reverse of `touched`.
-- `modified`: whether field value is modified. if field value was changed from **initial** value, return `true`, else return `false`.
-- `dirty`: whether field value was changed at least **once**. if so, return `true`, else return `false`.
+- `modified`: whether field value is modified; if field value was changed from **initial** value, return `true`, else return `false`.
+- `dirty`: whether field value was changed at least **once**; if so, return `true`, else return `false`.
 - `pristine`: reverse of `dirty`.
 - `messages`: if invalid field exist, return error message wrapped with object, else `undefined`.
 
@@ -158,7 +159,7 @@ The various top-level properties has been defined in the validation scope, and t
 ```
 
 ## Field
-The vue-validator version 2.0-alpha or earlier, validation result had been kept per `v-model`. In 2.0-alpha later, use the argument of `v-validate` directive instead of `v-model`.
+In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. In 2.0-alpha and later, use the `v-validate` directive instead.
 
 ~v1.4.4:
 ```html
@@ -187,9 +188,7 @@ v2.0-alpha later:
 ```
 
 ### caml-case property
-As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case at the argument of `v-validate`.
-
-below the example:
+As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case for `v-validate` models:
 
 ```html
 <validator name="validation">
@@ -205,31 +204,31 @@ below the example:
 ## Literal
 
 ### Array
-The below is example that using array literal:
+The below example uses an array literal:
 
 ```html
 <validator name="validation">
   <form novalidate>
     Zip: <input type="text" v-validate:zip="['required']"><br />
     <div>
-      <span v-if="$validation.zip.required">Required zip code.</span>
+      <span v-if="$validation.zip.required">Zip code is required.</span>
     </div>
   </form>
 </validator>
 ```
 
-Like the `required`, if you don't need to specify the rule, you should use it.
+Since `requred` doesn't need to specify any additional rules, this syntax is preferred.
 
 
 ### Object
-The below is example that using object literal:
+The below example uses an object literal:
 
 ```html
 <validator name="validation">
   <form novalidate>
     ID: <input type="text" v-validate:id="{ required: true, minlength: 3, maxlength: 16 }"><br />
     <div>
-      <span v-if="$validation.id.required">Required Your ID.</span>
+      <span v-if="$validation.id.required">ID is requred.</span>
       <span v-if="$validation.id.minlength">Your ID is too short.</span>
       <span v-if="$validation.id.maxlength">Your ID is too long.</span>
     </div>
@@ -237,9 +236,9 @@ The below is example that using object literal:
 </validator>
 ```
 
-You can specify the rule value on the object literal. Like the `required`, you can specify the **dummy rule** value on the literal object.
+Object literals allow you to provide rule values. For `requred`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
 
-And also, you can specify strict object as the below:
+Alternatively, you can specify a strict object as follows:
 
 ```html
 <validator name="validation">
@@ -253,7 +252,7 @@ And also, you can specify strict object as the below:
 ```
 
 ## Binding
-The below is example that using binding:
+The below example uses live binding:
 
 ```javascript
 new Vue({
@@ -280,11 +279,12 @@ new Vue({
 </div>
 ```
 
-In addition to the above data scope example, you can specify also the computed property or methods.
+You can also use computed properties or methods to retrieve rule sets, instead of a set data property.
 
 
 # Checkbox
-You can validate checkbox. the below example:
+
+Checkbox validation supports lengths:
 
 ```html
 <div id="app">
@@ -335,7 +335,6 @@ new Vue({
 
 
 # Radio Button
-You can validate radio button. the below example:
 
 ```html
 <div id="app">
@@ -378,7 +377,6 @@ new Vue({
 
 
 # Selectbox
-You can validate Selectbox. the below example:
 
 ```html
 <div id="app">
@@ -411,7 +409,8 @@ new Vue({ el: '#app' })
 
 
 # Grouping
-You can grouping validation results. the below example:
+
+The vue binding syntax can group inputs together:
 
 ```html
 <validator name="validation1" :groups="['user', 'password']">
@@ -429,7 +428,8 @@ You can grouping validation results. the below example:
 
 
 # Message
-You can specify error message that can get the validation scope.
+
+Error messages can be stored directly in the validation rules, rather than relying on `v-show` or `v-if`:
 
 ```html
 <validator name="validation1">
@@ -452,9 +452,11 @@ You can specify error message that can get the validation scope.
 </validator>
 ```
 
+Data property or computed properties can help reduce clutter, rather than using inline rule sets.
 
 # Event
-You can handle the `valid` event and `invalid` event. the below example:
+
+The new `valid` and `invalid` events can be bound using regular vue event bindings:
 
 ```javascript
 new Vue({
@@ -490,9 +492,10 @@ new Vue({
 
 
 # Lazy initialization
-When you will use `lazy` attribute on `validator` element directive, you allows initialization (compilation) of `validator` element directive to wait for asynchronous data to be loaded.
 
-The below component example:
+The `lazy` attribute on the `validator` element will delay initialization of the validator until `$activateValidator()` is called. This is useful for data that must first be loaded in asynchronously, preventing the validator from reporting invalid data until ready.
+
+The following example waits for the comment contents to be loaded before evaluating; without `lazy`, the component would show errors until the data loads in.
 
 ```html
 <!-- comment component -->
@@ -543,13 +546,12 @@ Vue.component('comment', {
 })
 ```
 
-As above example, When asynchronous data loading finished, you need to call `$activateValidator` meta method.
-
-
 # Custom validator
 
 ## Registration
 You can register your custom validator with using `Vue.validator`. the below the exmpale:
+
+Cursom validators are registered to `Vue.validator` using a callback function; return true upon passing.
 
 ```javascript
 // register custom validator
@@ -575,11 +577,12 @@ new Vue({
 </div>
 ```
 
-> **MEMO:** `Vue.validator` asset has been extend from asset managment system of Vue.js.
+> **MEMO:** `Vue.validator` asset is extended from Vue.js' asset managment system.
 
 
 ## Global error message
-You can register global error message together with custom validator. the below the exmpale:
+
+Custom validators may have default error messages attached:
 
 ```javascript
 // global error message with plain string
