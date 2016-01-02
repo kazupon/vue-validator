@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - "5.1"
-before_install:
-  - npm install -g phantomjs
-env:
-  global:
-    - secure: QijRPcIZg79++pWlZUNs2bovaOtof7lsHp+WvE40X4ozUIvtbJezBRVwz85HjSEP3X89C8vBO716hV43Cud6UxpKhxolWMiy0Y+tZ+8YFP8L/8aEgV2OFyX8qE01c0VQLwqrRmFp0lR5ttMpz6fizBFAwWvx+d5J+op0P7opHMI=
-    - secure: uuYDoES+0qqh2/AiiDrcj+DrlR1OLTJkuNnyWUS4Ff2vEUOAZGz+p6oqe9KvkAy1mI6hHH/GbEBc467Ql678VIHiKP3JrCXQkB6TMpswImpoRCj/FesdRkI810vC0Mr4MoOqNfuCt6D19P6IxhxMvJkK4LDrzyHM+GHCORiYn5c=
