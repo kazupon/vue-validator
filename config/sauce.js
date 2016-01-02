@@ -3,7 +3,7 @@ var pack = require('../package.json')
 var sauceConfig = {
   testName: pack.name + ' unit tests',
   recordScreenshots: false,
-  build: process.env.TRAVIS_JOB_ID || Date.now()
+  build: process.env.CIRCLE_BUILD_NUM || Date.now()
 }
 
 /**
@@ -49,15 +49,20 @@ var batches = [
       browserName: 'internet explorer',
       platform: 'Windows 8.1',
       version: '11'
-    }
+    }/*,
+    sl_edge: {
+      base: 'SauceLabs',
+      platform: 'Windows 10',
+      browserName: 'microsoftedge'
+    }*/
   },
   // mobile
   {
     sl_ios_safari: {
       base: 'SauceLabs',
       browserName: 'iphone',
-      platform: 'OS X 10.10',
-      version: '8.1'
+      platform: 'OS X 10.9',
+      version: '7.1'
     },
     sl_android: {
       base: 'SauceLabs',
