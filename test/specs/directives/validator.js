@@ -45,6 +45,35 @@ describe('validator element directive', () => {
   })
 
 
+  describe('name attribute', () => {
+    context('kebab-case', () => {
+      beforeEach(() => {
+        vm = new Vue({
+          el: el,
+          template: '<validator name="my-validator"></validator>'
+        })
+      })
+
+      it('should be assigned with caml-case', () => {
+        assert(vm.$myValidator !== undefined)
+      })
+    })
+
+    context('caml-case', () => {
+      beforeEach(() => {
+        vm = new Vue({
+          el: el,
+          template: '<validator name="myValidator"></validator>'
+        })
+      })
+
+      it('should be assigned with caml-case', () => {
+        assert(vm.$myValidator !== undefined)
+      })
+    })
+  })
+
+
   describe('groups attribute', () => {
     context('plain string', () => {
       beforeEach(() => {

@@ -7,6 +7,7 @@ export default function (Vue) {
   const FragmentFactory = Vue.FragmentFactory
   const vIf = Vue.directive('if')
   const bind = Vue.util.bind
+  const camelize = Vue.util.camelize
 
   Vue.elementDirective('validator', {
     params: ['name', 'groups', 'lazy'],
@@ -18,7 +19,7 @@ export default function (Vue) {
         return
       }
 
-      let validatorName = this.validatorName = '$' + this.params.name
+      let validatorName = this.validatorName = '$' + camelize(this.params.name)
       if (!this.vm._validatorMaps) {
         // TODO: should be implemented error message'
         warn('TODO: should be implemented error message')
