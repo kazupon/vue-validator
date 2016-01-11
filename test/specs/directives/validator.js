@@ -1,6 +1,6 @@
 import assert from 'power-assert'
 import Vue from 'vue'
-import { trigger } from '../../../src/util'
+import { trigger, pull } from '../../../src/util'
 
 
 describe('validator element directive', () => {
@@ -257,46 +257,47 @@ describe('validator element directive', () => {
   describe('v-for', () => {
     beforeEach((done) => {
       el.innerHTML = '<ul><li v-for="task in tasks">' + 
+        '<button :id="del + $index" @click="onDelete(task)">delete</button>' + 
         '<validator :name="\'validator\' + $index">' +
         '<form novalidate>' + 
         '<input type="text" :value="task.name" v-validate:name="{ required: true, minlength: calculate($index) }">' +
         '</form>' +
         '</validator>' +
-        '<pre>{{$validator0|json}}</pre>' +
-        '<pre>{{$validator1|json}}</pre>' +
-        '<pre>{{$validator2|json}}</pre>' +
         '</li></ul>' + 
-        '<button @click="onAdd">add</button>'
+        '<button id="add" @click="onAdd">add</button>'
       vm = new Vue({
         el: el,
         data: {
           counter: 2,
           tasks: [{
-            name: 'task1', priority: 1
+            id: 1, name: 'task1'
           }, {
-            name: 'task2', priority: 2
+            id: 2, name: 'task2'
           }]
         },
         methods: {
-          getValidator (index) {
-            return 
-          },
           calculate (index) {
             return (index + 1) * 4
           },
-          add (name, priority) {
-            this.tasks.push({ name: name, priority })
+          add (id, name) {
+            this.tasks.push({ id: id, name: name })
+          },
+          delete (item) {
+            pull(this.tasks, item)
           },
           onAdd () {
-            let priority = this.counter++
-            this.add('task' + priority, priority)
+            let id = this.counter++
+            this.add(id, 'task' + id)
+          },
+          onDelete (item) {
+            this.delete(item)
           }
         }
       })
       vm.$nextTick(done)
     })
 
-    context('initial render', () => {
+    describe('initial assignment', () => {
       it('should be assigned', (done) => {
         // default
         assert(vm.$validator0.name.required === false)
@@ -320,17 +321,51 @@ describe('validator element directive', () => {
       })
     })
 
-    context('dynamic render', () => {
-      beforeEach((done) => {
-        let button = el.getElementsByTagName('button')[0]
-        trigger(button, 'click')
-        vm.$nextTick(done)
+    describe('dynamic assignment', () => {
+      context('add', () => {
+        beforeEach((done) => {
+          let add = el.getElementsByTagName('button')[2]
+          trigger(add, 'click')
+          vm.$nextTick(done)
+        })
+
+        it('should be assigned', (done) => {
+          assert(vm.$validator2.name.required === false)
+          assert(vm.$validator2.name.minlength === true)
+          done()
+        })
       })
 
-      it('should be assigned', (done) => {
-        assert(vm.$validator2.name.required === false)
-        assert(vm.$validator2.name.minlength === true)
-        done()
+      context('delete', () => {
+        beforeEach((done) => {
+          let delete1 = el.getElementsByTagName('button')[0]
+          let delete2 = el.getElementsByTagName('button')[1]
+          trigger(delete1, 'click')
+          trigger(delete2, 'click')
+          vm.$nextTick(done)
+        })
+
+        it('should not be assigned', () => {
+          assert(vm.$validator0 === null)
+          assert(vm.$validator1 === null)
+        })
+
+        context('add', () => {
+          beforeEach((done) => {
+            let add = el.getElementsByTagName('button')[0]
+            trigger(add, 'click')
+            trigger(add, 'click')
+            vm.$nextTick(done)
+          })
+
+          it('should be assigned', (done) => {
+            assert(vm.$validator0.name.required === false)
+            assert(vm.$validator0.name.minlength === false)
+            assert(vm.$validator1.name.required === false)
+            assert(vm.$validator1.name.minlength === true)
+            done()
+          })
+        })
       })
     })
   })
