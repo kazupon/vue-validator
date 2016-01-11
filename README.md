@@ -54,6 +54,10 @@ jsdelivr
 # Usage
 
 ```javascript
+// NOTE: You need to set the `warnExpressionErrors` property value to `false`
+//       See the https://github.com/vuejs/vue-validator/issues/111
+Vue.config.warnExpressionErrors = false
+
 new Vue({
   el: '#app'
 })
