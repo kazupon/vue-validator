@@ -6,7 +6,7 @@ export default function (Vue) {
   const _ = Vue.util
 
   Vue.directive('validate', {
-    params: ['group'],
+    params: ['group', 'validation-name'],
 
     bind () {
       let vm = this.vm
@@ -19,7 +19,7 @@ export default function (Vue) {
 
       let validator = this.validator = this.vm._validatorMaps[validatorName]
 
-      let field = this.field = _.camelize(this.arg)
+      let field = this.field = _.camelize(this.arg ? this.arg : this.params.validationName)
       let validation = this.validation = validator.manageValidation(field, vm, this.el)
 
       if (this.params.group) {
