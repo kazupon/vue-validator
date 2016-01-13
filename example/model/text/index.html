@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>v-model validation example for textbox</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        <form novalidate>
+          message: <input type="text" v-model="msg" v-validate:message="{ required: true, minlength: 8 }"><br />
+          <div>
+            <p v-if="$validation1.message.required">Required your message.</p>
+            <p v-if="$validation1.message.minlength">Too short message.</p>
+          </div>
+          <pre>$data: {{ $data | json }}</pre>
+        </form>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          msg: 'hello'
+        }
+      })
+    </script>
+  </body>
+</html>

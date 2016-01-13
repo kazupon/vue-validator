@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>v-model validation example for checkbox</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+    <style>
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        <form novalidate>
+          <h1>Survey</h1>
+          <fieldset>
+            <legend>Which do you like fruit ?</legend>
+            <input id="apple" type="checkbox" value="apple" v-model="selected" v-validate:fruits="{
+              required: { rule: true, message: requiredErrorMsg },
+              minlength: { rule: 1, message: minlengthErrorMsg },
+              maxlength: { rule: 2, message: maxlengthErrorMsg }
+            }">
+            <label for="apple">Apple</label>
+            <input id="orange" type="checkbox" value="orange" v-model="selected" v-validate:fruits>
+            <label for="orange">Orage</label>
+            <input id="grape" type="checkbox" value="grage" v-model="selected" v-validate:fruits>
+            <label for="grape">Grape</label>
+            <input id="banana" type="checkbox" value="banana" v-model="selected" v-validate:fruits>
+            <label for="banana">Banana</label>
+            <ul class="errors">
+              <li v-for="msg in $validation1.fruits.messages">
+                <p>{{msg}}</p>
+              </li>
+            </ul>
+            <pre>$data: {{ $data | json }}</pre>
+          </fieldset>
+        </form>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: { selected: [] },
+        computed: {
+          requiredErrorMsg: function () {
+            return 'Required fruit !!'
+          },
+          minlengthErrorMsg: function () {
+            return 'Please chose at least 1 fruit !!'
+          },
+          maxlengthErrorMsg: function () {
+            return 'Please chose at most 2 fruits !!'
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
