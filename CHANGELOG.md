@@ -1,3 +1,17 @@
+<a name="2.0.0-alpha.10"></a>
+# [2.0.0-alpha.10](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2016-01-13)
+
+### Bug Fixes
+
+* **util:** fix Firefox dispatchEvent bug ([e2bd08f](https://github.com/vuejs/vue-validator/commit/e2bd08f)), closes [#132](https://github.com/vuejs/vue-validator/issues/132)
+
+### Features
+
+* **validate:** support v-model validation ([0859cd4](https://github.com/vuejs/vue-validator/commit/0859cd4)), closes [#94](https://github.com/vuejs/vue-validator/issues/94)
+* **validator:** support camelizable name attribute ([c812cea](https://github.com/vuejs/vue-validator/commit/c812cea)), closes [#118](https://github.com/vuejs/vue-validator/issues/118)
+
+
+
 <a name="2.0.0-alpha.9"></a>
 # [2.0.0-alpha.9](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.8...v2.0.0-alpha.9) (2016-01-01)
 

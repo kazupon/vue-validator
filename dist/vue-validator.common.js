@@ -1,23 +1,21 @@
 /*!
- * vue-validator v2.0.0-alpha.9
+ * vue-validator v2.0.0-alpha.10
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
 'use strict';
 
-var babelHelpers = {};
-
-babelHelpers.typeof = function (obj) {
+function babelHelpers_typeof (obj) {
   return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
 };
 
-babelHelpers.classCallCheck = function (instance, Constructor) {
+function babelHelpers_classCallCheck (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 };
 
-babelHelpers.createClass = (function () {
+var babelHelpers_createClass = (function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -35,7 +33,7 @@ babelHelpers.createClass = (function () {
   };
 })();
 
-babelHelpers.inherits = function (subClass, superClass) {
+function babelHelpers_inherits (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
   }
@@ -51,7 +49,7 @@ babelHelpers.inherits = function (subClass, superClass) {
   if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 };
 
-babelHelpers.possibleConstructorReturn = function (self, call) {
+function babelHelpers_possibleConstructorReturn (self, call) {
   if (!self) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
@@ -59,7 +57,6 @@ babelHelpers.possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
-babelHelpers;
 /**
  * Utilties
  */
@@ -150,6 +147,18 @@ function pull(arr, item) {
 }
 
 /**
+ * attr
+ *
+ * @param {Element} el
+ * @param {String} name
+ * @return {String|null}
+ */
+
+function attr(el, name) {
+  return el ? el.getAttribute(name) : null;
+}
+
+/**
  * trigger
  *
  * @param {Element} el
@@ -159,7 +168,11 @@ function pull(arr, item) {
 function trigger(el, event) {
   var e = document.createEvent('HTMLEvents');
   e.initEvent(event, true, false);
-  el.dispatchEvent(e);
+  // Due to Firefox bug, events fired on disabled
+  // non-attached form controls can throw errors
+  try {
+    el.dispatchEvent(e);
+  } catch (e) {}
 }
 
 /**
@@ -196,7 +209,7 @@ function required(val) {
     return val;
   } else if (typeof val === 'string') {
     return val.length > 0;
-  } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers.typeof(val)) === 'object') {
+  } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers_typeof(val)) === 'object') {
     return Object.keys(val).length > 0;
   } else if (val === null || val === undefined) {
     return false;
@@ -372,8 +385,10 @@ function Override (Vue) {
 function Validate (Vue) {
 
   var _ = Vue.util;
+  var vModel = Vue.directive('model');
 
   Vue.directive('validate', {
+    priority: vModel.priority + 1,
     params: ['group'],
 
     bind: function bind() {
@@ -394,11 +409,14 @@ function Validate (Vue) {
         validator.addGroupValidation(this.params.group, this.field);
       }
 
+      var model = attr(this.el, 'v-model');
       this.on('blur', _.bind(validation.listener, validation));
-      if (this.el.type === 'checkbox' || this.el.type === 'radio' || this.el.tagName === 'SELECT') {
+      if ((this.el.type === 'checkbox' || this.el.type === 'radio' || this.el.tagName === 'SELECT') && !model) {
         this.on('change', _.bind(validation.listener, validation));
       } else {
-        this.on('input', _.bind(validation.listener, validation));
+        if (!model) {
+          this.on('input', _.bind(validation.listener, validation));
+        }
       }
     },
     update: function update(value, old) {
@@ -455,7 +473,7 @@ function Validate (Vue) {
 
 var BaseValidation = (function () {
   function BaseValidation(field, vm, el, validator) {
-    babelHelpers.classCallCheck(this, BaseValidation);
+    babelHelpers_classCallCheck(this, BaseValidation);
 
     this.field = field;
     this.touched = false;
@@ -470,10 +488,35 @@ var BaseValidation = (function () {
     this._validators = {};
   }
 
-  babelHelpers.createClass(BaseValidation, [{
+  babelHelpers_createClass(BaseValidation, [{
     key: '_getValue',
     value: function _getValue(el) {
       return el.value;
+    }
+  }, {
+    key: 'manageElement',
+    value: function manageElement(el) {
+      var _this = this;
+
+      var _ = exports$1.Vue.util;
+
+      var model = attr(el, 'v-model');
+      if (model) {
+        el.value = this._vm.$get(model);
+        this._unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          if (val !== old) {
+            el.value = val;
+            _this.handleValidate(el);
+          }
+        }, this));
+      }
+    }
+  }, {
+    key: 'unmanageElement',
+    value: function unmanageElement(el) {
+      if (this._unwatch) {
+        this._unwatch();
+      }
     }
   }, {
     key: 'setValidation',
@@ -496,15 +539,20 @@ var BaseValidation = (function () {
         return;
       }
 
-      if (e.type === 'blur') {
+      this.handleValidate(e.target, e.type);
+    }
+  }, {
+    key: 'handleValidate',
+    value: function handleValidate(el, type) {
+      if (type && type === 'blur') {
         this.touched = true;
       }
 
-      if (!this.dirty && this._checkModified(e.target)) {
+      if (!this.dirty && this._checkModified(el)) {
         this.dirty = true;
       }
 
-      this.modified = this._checkModified(e.target);
+      this.modified = this._checkModified(el);
 
       this._validator.validate();
     }
@@ -516,7 +564,7 @@ var BaseValidation = (function () {
   }, {
     key: 'validate',
     value: function validate() {
-      var _this = this;
+      var _this2 = this;
 
       var _ = exports$1.Vue.util;
 
@@ -525,7 +573,7 @@ var BaseValidation = (function () {
       var valid = true;
 
       each(this._validators, function (descriptor, name) {
-        var asset = _this._resolveValidator(name);
+        var asset = _this2._resolveValidator(name);
         var validator = null;
         var msg = null;
 
@@ -545,11 +593,11 @@ var BaseValidation = (function () {
         }
 
         if (validator) {
-          var ret = validator.call(_this._vm, _this._getValue(_this._el), descriptor.arg);
+          var ret = validator.call(_this2._vm, _this2._getValue(_this2._el), descriptor.arg);
           if (!ret) {
             valid = false;
             if (msg) {
-              messages[name] = typeof msg === 'function' ? msg.call(_this._vm, _this.field, descriptor.arg) : msg;
+              messages[name] = typeof msg === 'function' ? msg.call(_this2._vm, _this2.field, descriptor.arg) : msg;
             }
           }
           results[name] = !ret;
@@ -590,210 +638,22 @@ var BaseValidation = (function () {
 })();
 
 /**
- * RadioValidation class
- */
-
-var RadioValidation = (function (_BaseValidation) {
-  babelHelpers.inherits(RadioValidation, _BaseValidation);
-
-  function RadioValidation(field, vm, el, validator) {
-    babelHelpers.classCallCheck(this, RadioValidation);
-
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(RadioValidation).call(this, field, vm, el, validator));
-
-    _this._inits = [];
-    return _this;
-  }
-
-  babelHelpers.createClass(RadioValidation, [{
-    key: 'manageElement',
-    value: function manageElement(el) {
-      var item = {
-        el: el,
-        init: el.checked,
-        value: el.value
-      };
-      this._inits.push(item);
-      this._validator.validate();
-    }
-  }, {
-    key: 'unmanageElement',
-    value: function unmanageElement(el) {
-      var found = -1;
-      each(this._inits, function (item, index) {
-        if (item.el === el) {
-          found = index;
-        }
-      });
-      if (found === -1) {
-        return false;
-      }
-
-      this._inits.splice(found, 1);
-      this._validator.validate();
-      return true;
-    }
-  }, {
-    key: '_getValue',
-    value: function _getValue(el) {
-      var _this2 = this;
-
-      if (!this._inits || this._inits.length === 0) {
-        return el.checked;
-      } else {
-        var _ret = (function () {
-          var vals = [];
-          each(_this2._inits, function (item, index) {
-            if (item.el.checked) {
-              vals.push(item.el.value);
-            }
-          });
-          return {
-            v: vals
-          };
-        })();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
-      }
-    }
-  }, {
-    key: '_checkModified',
-    value: function _checkModified(target) {
-      var _this3 = this;
-
-      if (this._inits.length === 0) {
-        return this._init !== target.checked;
-      } else {
-        var _ret2 = (function () {
-          var modified = false;
-          each(_this3._inits, function (item, index) {
-            if (!modified) {
-              modified = item.init !== item.el.checked;
-            }
-          });
-          return {
-            v: modified
-          };
-        })();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
-      }
-    }
-  }]);
-  return RadioValidation;
-})(BaseValidation);
-
-/**
- * CheckboxValidation class
- */
-
-var CheckboxValidation = (function (_BaseValidation) {
-  babelHelpers.inherits(CheckboxValidation, _BaseValidation);
-
-  function CheckboxValidation(field, vm, el, validator) {
-    babelHelpers.classCallCheck(this, CheckboxValidation);
-
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxValidation).call(this, field, vm, el, validator));
-
-    _this._inits = [];
-    return _this;
-  }
-
-  babelHelpers.createClass(CheckboxValidation, [{
-    key: 'manageElement',
-    value: function manageElement(el) {
-      var item = {
-        el: el,
-        init: el.checked,
-        value: el.value
-      };
-      this._inits.push(item);
-      this._validator.validate();
-    }
-  }, {
-    key: 'unmanageElement',
-    value: function unmanageElement(el) {
-      var found = -1;
-      each(this._inits, function (item, index) {
-        if (item.el === el) {
-          found = index;
-        }
-      });
-      if (found === -1) {
-        return false;
-      }
-
-      this._inits.splice(found, 1);
-      this._validator.validate();
-      return true;
-    }
-  }, {
-    key: '_getValue',
-    value: function _getValue(el) {
-      var _this2 = this;
-
-      if (!this._inits || this._inits.length === 0) {
-        return el.checked;
-      } else {
-        var _ret = (function () {
-          var vals = [];
-          each(_this2._inits, function (item, index) {
-            if (item.el.checked) {
-              vals.push(item.el.value);
-            }
-          });
-          return {
-            v: vals
-          };
-        })();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
-      }
-    }
-  }, {
-    key: '_checkModified',
-    value: function _checkModified(target) {
-      var _this3 = this;
-
-      if (this._inits.length === 0) {
-        return this._init !== target.checked;
-      } else {
-        var _ret2 = (function () {
-          var modified = false;
-          each(_this3._inits, function (item, index) {
-            if (!modified) {
-              modified = item.init !== item.el.checked;
-            }
-          });
-          return {
-            v: modified
-          };
-        })();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
-      }
-    }
-  }]);
-  return CheckboxValidation;
-})(BaseValidation);
-
-/**
  * SelectValidation class
  */
 
 var SelectValidation = (function (_BaseValidation) {
-  babelHelpers.inherits(SelectValidation, _BaseValidation);
+  babelHelpers_inherits(SelectValidation, _BaseValidation);
 
   function SelectValidation(field, vm, el, validator) {
-    babelHelpers.classCallCheck(this, SelectValidation);
+    babelHelpers_classCallCheck(this, SelectValidation);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(SelectValidation).call(this, field, vm, el, validator));
+    var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(SelectValidation).call(this, field, vm, el, validator));
 
     _this._multiple = _this._el.hasAttribute('multiple');
     return _this;
   }
 
-  babelHelpers.createClass(SelectValidation, [{
+  babelHelpers_createClass(SelectValidation, [{
     key: '_getValue',
     value: function _getValue(el) {
       var ret = [];
@@ -808,18 +668,330 @@ var SelectValidation = (function (_BaseValidation) {
       return ret;
     }
   }, {
+    key: '_setOption',
+    value: function _setOption(values, el) {
+      for (var i = 0, l = values.length; i < l; i++) {
+        var value = values[i];
+        for (var j = 0, m = el.options.length; j < m; j++) {
+          var option = el.options[j];
+          if (!option.disabled && option.value === value && (!option.hasAttribute('selected') || !option.selected)) {
+            option.selected = true;
+          }
+        }
+      }
+    }
+  }, {
+    key: 'manageElement',
+    value: function manageElement(el) {
+      var _this2 = this;
+
+      var _ = exports$1.Vue.util;
+
+      var model = attr(el, 'v-model');
+      if (model) {
+        var value = this._vm.$get(model);
+        var values = !Array.isArray(value) ? [value] : value;
+        this._setOption(values, el);
+        this._unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          var values1 = !Array.isArray(val) ? [val] : val;
+          var values2 = !Array.isArray(old) ? [old] : old;
+          if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
+            _this2._setOption(values1, el);
+            _this2.handleValidate(el);
+          }
+        }, this));
+      }
+    }
+  }, {
+    key: 'unmanageElement',
+    value: function unmanageElement(el) {
+      if (this._unwatch) {
+        this._unwatch();
+      }
+    }
+  }, {
     key: '_checkModified',
     value: function _checkModified(target) {
-      var values = this._getValue(target).sort();
+      var values = this._getValue(target).slice().sort();
       if (this._init.length !== values.length) {
         return true;
       } else {
-        var inits = this._init.sort();
+        var inits = this._init.slice().sort();
         return inits.toString() !== values.toString();
       }
     }
   }]);
   return SelectValidation;
+})(BaseValidation);
+
+/**
+ * RadioValidation class
+ */
+
+var RadioValidation = (function (_BaseValidation) {
+  babelHelpers_inherits(RadioValidation, _BaseValidation);
+
+  function RadioValidation(field, vm, el, validator) {
+    babelHelpers_classCallCheck(this, RadioValidation);
+
+    var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(RadioValidation).call(this, field, vm, el, validator));
+
+    _this._inits = [];
+    return _this;
+  }
+
+  babelHelpers_createClass(RadioValidation, [{
+    key: '_addItem',
+    value: function _addItem(el) {
+      var item = {
+        el: el,
+        init: el.checked,
+        value: el.value
+      };
+      this._inits.push(item);
+      return item;
+    }
+  }, {
+    key: '_setChecked',
+    value: function _setChecked(value, el, item) {
+      if (el.value === value) {
+        el.checked = true;
+        this._init = el.checked;
+        item.init = el.checked;
+        item.value = value;
+      }
+    }
+  }, {
+    key: 'manageElement',
+    value: function manageElement(el) {
+      var _this2 = this;
+
+      var _ = exports$1.Vue.util;
+
+      var item = this._addItem(el);
+      var model = item.model = attr(el, 'v-model');
+      if (model) {
+        var value = this._vm.$get(model);
+        this._setChecked(value, el, item);
+        item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          if (val !== old) {
+            if (el.value === val) {
+              el.checked = val;
+            }
+            _this2.handleValidate(el);
+          }
+        }, this));
+      } else {
+        this._validator.validate();
+      }
+    }
+  }, {
+    key: 'unmanageElement',
+    value: function unmanageElement(el) {
+      var found = -1;
+      each(this._inits, function (item, index) {
+        if (item.el === el) {
+          found = index;
+        }
+      });
+      if (found === -1) {
+        return;
+      }
+
+      this._inits.splice(found, 1);
+      this._validator.validate();
+    }
+  }, {
+    key: '_getValue',
+    value: function _getValue(el) {
+      var _this3 = this;
+
+      if (!this._inits || this._inits.length === 0) {
+        return el.checked;
+      } else {
+        var _ret = (function () {
+          var vals = [];
+          each(_this3._inits, function (item, index) {
+            if (item.el.checked) {
+              vals.push(item.el.value);
+            }
+          });
+          return {
+            v: vals
+          };
+        })();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers_typeof(_ret)) === "object") return _ret.v;
+      }
+    }
+  }, {
+    key: '_checkModified',
+    value: function _checkModified(target) {
+      var _this4 = this;
+
+      if (this._inits.length === 0) {
+        return this._init !== target.checked;
+      } else {
+        var _ret2 = (function () {
+          var modified = false;
+          each(_this4._inits, function (item, index) {
+            if (!modified) {
+              modified = item.init !== item.el.checked;
+            }
+          });
+          return {
+            v: modified
+          };
+        })();
+
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers_typeof(_ret2)) === "object") return _ret2.v;
+      }
+    }
+  }]);
+  return RadioValidation;
+})(BaseValidation);
+
+/**
+ * CheckboxValidation class
+ */
+
+var CheckboxValidation = (function (_BaseValidation) {
+  babelHelpers_inherits(CheckboxValidation, _BaseValidation);
+
+  function CheckboxValidation(field, vm, el, validator) {
+    babelHelpers_classCallCheck(this, CheckboxValidation);
+
+    var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxValidation).call(this, field, vm, el, validator));
+
+    _this._inits = [];
+    return _this;
+  }
+
+  babelHelpers_createClass(CheckboxValidation, [{
+    key: '_addItem',
+    value: function _addItem(el) {
+      var item = {
+        el: el,
+        init: el.checked,
+        value: el.value
+      };
+      this._inits.push(item);
+      return item;
+    }
+  }, {
+    key: '_setChecked',
+    value: function _setChecked(values, el) {
+      for (var i = 0, l = values.length; i < l; i++) {
+        var value = values[i];
+        if (!el.disabled && el.value === value && !el.checked) {
+          el.checked = true;
+        }
+      }
+    }
+  }, {
+    key: 'manageElement',
+    value: function manageElement(el) {
+      var _this2 = this;
+
+      var _ = exports$1.Vue.util;
+
+      var item = this._addItem(el);
+      var model = item.model = attr(el, 'v-model');
+      if (model) {
+        var value = this._vm.$get(model);
+        if (Array.isArray(value)) {
+          this._setChecked(value, item.el);
+          item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+            if (val !== old) {
+              _this2._setChecked(val, item.el);
+              _this2.handleValidate(item.el);
+            }
+          }, this));
+        } else {
+          el.checked = value;
+          this._init = el.checked;
+          item.init = el.checked;
+          item.value = el.value;
+          item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+            if (val !== old) {
+              el.checked = val;
+              _this2.handleValidate(el);
+            }
+          }, this));
+        }
+      } else {
+        this._validator.validate();
+      }
+    }
+  }, {
+    key: 'unmanageElement',
+    value: function unmanageElement(el) {
+      var found = -1;
+      each(this._inits, function (item, index) {
+        if (item.el === el) {
+          found = index;
+          if (item.unwatch && item.model) {
+            item.unwatch();
+            item.unwatch = null;
+            item.model = null;
+          }
+        }
+      });
+      if (found === -1) {
+        return;
+      }
+
+      this._inits.splice(found, 1);
+      this._validator.validate();
+    }
+  }, {
+    key: '_getValue',
+    value: function _getValue(el) {
+      var _this3 = this;
+
+      if (!this._inits || this._inits.length === 0) {
+        return el.checked;
+      } else {
+        var _ret = (function () {
+          var vals = [];
+          each(_this3._inits, function (item, index) {
+            if (item.el.checked) {
+              vals.push(item.el.value);
+            }
+          });
+          return {
+            v: vals
+          };
+        })();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers_typeof(_ret)) === "object") return _ret.v;
+      }
+    }
+  }, {
+    key: '_checkModified',
+    value: function _checkModified(target) {
+      var _this4 = this;
+
+      if (this._inits.length === 0) {
+        return this._init !== target.checked;
+      } else {
+        var _ret2 = (function () {
+          var modified = false;
+          each(_this4._inits, function (item, index) {
+            if (!modified) {
+              modified = item.init !== item.el.checked;
+            }
+          });
+          return {
+            v: modified
+          };
+        })();
+
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers_typeof(_ret2)) === "object") return _ret2.v;
+      }
+    }
+  }]);
+  return CheckboxValidation;
 })(BaseValidation);
 
 /**
@@ -830,7 +1002,7 @@ var Validator$1 = (function () {
   function Validator(name, dir, groups) {
     var _this = this;
 
-    babelHelpers.classCallCheck(this, Validator);
+    babelHelpers_classCallCheck(this, Validator);
 
     this.name = name;
 
@@ -847,7 +1019,7 @@ var Validator$1 = (function () {
     }, this);
   }
 
-  babelHelpers.createClass(Validator, [{
+  babelHelpers_createClass(Validator, [{
     key: 'enableReactive',
     value: function enableReactive() {
       exports$1.Vue.util.defineReactive(this._dir.vm, this.name, this._scope);
@@ -868,13 +1040,13 @@ var Validator$1 = (function () {
       var validation = null;
 
       if (el.tagName === 'SELECT') {
-        validation = this._validations[field] = new SelectValidation(field, vm, el, this);
+        validation = this._manageSelectValidation(field, vm, el);
       } else if (el.type === 'checkbox') {
         validation = this._manageCheckboxValidation(field, vm, el);
       } else if (el.type === 'radio') {
         validation = this._manageRadioValidation(field, vm, el);
       } else {
-        validation = this._validations[field] = new BaseValidation(field, vm, el, this);
+        validation = this._manageBaseValidation(field, vm, el);
       }
 
       return validation;
@@ -886,7 +1058,25 @@ var Validator$1 = (function () {
         this._unmanageCheckboxValidation(field, el);
       } else if (el.type === 'radio') {
         this._unmanageRadioValidation(field, el);
+      } else if (el.tagName === 'SELECT') {
+        this._unmanageSelectValidation(field, el);
       } else {
+        this._unmanageBaseValidation(field, el);
+      }
+    }
+  }, {
+    key: '_manageBaseValidation',
+    value: function _manageBaseValidation(field, vm, el) {
+      var validation = this._validations[field] = new BaseValidation(field, vm, el, this);
+      validation.manageElement(el);
+      return validation;
+    }
+  }, {
+    key: '_unmanageBaseValidation',
+    value: function _unmanageBaseValidation(field, el) {
+      var validation = this._validations[field];
+      if (validation) {
+        validation.unmanageElement(el);
         exports$1.Vue.delete(this._scope, field);
         this._validations[field] = null;
       }
@@ -943,6 +1133,23 @@ var Validator$1 = (function () {
           exports$1.Vue.delete(this._scope, field);
           this._radioValidations[field] = null;
         }
+      }
+    }
+  }, {
+    key: '_manageSelectValidation',
+    value: function _manageSelectValidation(field, vm, el) {
+      var validation = this._validations[field] = new SelectValidation(field, vm, el, this);
+      validation.manageElement(el);
+      return validation;
+    }
+  }, {
+    key: '_unmanageSelectValidation',
+    value: function _unmanageSelectValidation(field, el) {
+      var validation = this._validations[field];
+      if (validation) {
+        validation.unmanageElement(el);
+        exports$1.Vue.delete(this._scope, field);
+        this._validations[field] = null;
       }
     }
   }, {
@@ -1154,6 +1361,7 @@ function Validator (Vue) {
   var FragmentFactory = Vue.FragmentFactory;
   var vIf = Vue.directive('if');
   var _bind = Vue.util.bind;
+  var camelize = Vue.util.camelize;
 
   Vue.elementDirective('validator', {
     params: ['name', 'groups', 'lazy'],
@@ -1167,7 +1375,7 @@ function Validator (Vue) {
         return;
       }
 
-      var validatorName = this.validatorName = '$' + this.params.name;
+      var validatorName = this.validatorName = '$' + camelize(this.params.name);
       if (!this.vm._validatorMaps) {
         // TODO: should be implemented error message'
         warn('TODO: should be implemented error message');
@@ -1242,7 +1450,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.9';
+plugin.version = '2.0.0-alpha.10';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
