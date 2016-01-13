@@ -106,7 +106,5 @@ export function trigger (el, event) {
   e.initEvent(event, true, false)
   // Due to Firefox bug, events fired on disabled
   // non-attached form controls can throw errors
-  try {
-    el.dispatchEvent(e)
-  } catch(e) {}
+  try { el.dispatchEvent(e) } catch (e) {}
 }
