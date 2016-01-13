@@ -59,13 +59,13 @@ export default class Validator {
     let validation = null
 
     if (el.tagName === 'SELECT') {
-      validation = this._validations[field] = new SelectValidation(field, vm, el, this)
+      validation = this._manageSelectValidation(field, vm, el)
     } else if (el.type === 'checkbox') {
       validation = this._manageCheckboxValidation(field, vm, el)
     } else if (el.type === 'radio') {
       validation = this._manageRadioValidation(field, vm, el)
     } else {
-      validation = this._validations[field] = new BaseValidation(field, vm, el, this)
+      validation = this._manageBaseValidation(field, vm, el)
     }
 
     return validation
@@ -76,7 +76,23 @@ export default class Validator {
       this._unmanageCheckboxValidation(field, el)
     } else if (el.type === 'radio') {
       this._unmanageRadioValidation(field, el)
+    } else if (el.tagName === 'SELECT') {
+      this._unmanageSelectValidation(field, el)
     } else {
+      this._unmanageBaseValidation(field, el)
+    }
+  }
+
+  _manageBaseValidation (field, vm, el) {
+    let validation = this._validations[field] = new BaseValidation(field, vm, el, this)
+    validation.manageElement(el)
+    return validation
+  }
+
+  _unmanageBaseValidation (field, el) {
+    let validation = this._validations[field]
+    if (validation) {
+      validation.unmanageElement(el)
       util.Vue.delete(this._scope, field)
       this._validations[field] = null
     }
@@ -129,6 +145,21 @@ export default class Validator {
         util.Vue.delete(this._scope, field)
         this._radioValidations[field] = null
       }
+    }
+  }
+
+  _manageSelectValidation (field, vm, el) {
+    let validation = this._validations[field] = new SelectValidation(field, vm, el, this)
+    validation.manageElement(el)
+    return validation
+  }
+
+  _unmanageSelectValidation (field, el) {
+    let validation = this._validations[field]
+    if (validation) {
+      validation.unmanageElement(el)
+      util.Vue.delete(this._scope, field)
+      this._validations[field] = null
     }
   }
 

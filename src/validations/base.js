@@ -1,4 +1,4 @@
-import util, { empty, each, trigger } from '../util'
+import util, { empty, each, attr, trigger } from '../util'
 
 
 /**
@@ -25,6 +25,27 @@ export default class BaseValidation {
     return el.value
   }
 
+  manageElement (el) {
+    const _ = util.Vue.util
+
+    let model = attr(el, 'v-model')
+    if (model) {
+      el.value = this._vm.$get(model)
+      this._unwatch = this._vm.$watch(model, _.bind((val, old) => {
+        if (val !== old) {
+          el.value = val
+          this.handleValidate(el)
+        }
+      }, this))
+    }
+  }
+
+  unmanageElement (el) {
+    if (this._unwatch) {
+      this._unwatch()
+    }
+  }
+
   setValidation (name, arg, msg) {
     let validator = this._validators[name]
     if (!validator) {
@@ -44,15 +65,19 @@ export default class BaseValidation {
       return
     }
 
-    if (e.type === 'blur') {
+    this.handleValidate(e.target, e.type)
+  }
+
+  handleValidate (el, type) {
+    if (type && type === 'blur') {
       this.touched = true
     }
 
-    if (!this.dirty && this._checkModified(e.target)) {
+    if (!this.dirty && this._checkModified(el)) {
       this.dirty = true
     }
 
-    this.modified = this._checkModified(e.target)
+    this.modified = this._checkModified(el)
 
     this._validator.validate()
   }
@@ -129,4 +154,5 @@ export default class BaseValidation {
     const resolveAsset = util.Vue.util.resolveAsset
     return resolveAsset(this._vm.$options, 'validators', name)
   }
+
 }

@@ -1,11 +1,13 @@
-import { warn, each } from '../util'
+import { warn, attr, each } from '../util'
 
 
 export default function (Vue) {
   
   const _ = Vue.util
+  const vModel = Vue.directive('model')
 
   Vue.directive('validate', {
+    priority: vModel.priority + 1,
     params: ['group'],
 
     bind () {
@@ -26,13 +28,16 @@ export default function (Vue) {
         validator.addGroupValidation(this.params.group, this.field)
       }
 
+      let model = attr(this.el, 'v-model')
       this.on('blur', _.bind(validation.listener, validation))
-      if (this.el.type === 'checkbox' 
+      if ((this.el.type === 'checkbox' 
           || this.el.type === 'radio' 
-          || this.el.tagName === 'SELECT') {
+          || this.el.tagName === 'SELECT') && !model) {
         this.on('change', _.bind(validation.listener, validation))
       } else {
-        this.on('input', _.bind(validation.listener, validation))
+        if (!model) {
+          this.on('input', _.bind(validation.listener, validation))
+        }
       }
     },
 

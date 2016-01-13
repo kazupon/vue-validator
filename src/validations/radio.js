@@ -1,4 +1,4 @@
-import { each } from '../util'
+import util, { each, attr } from '../util'
 import BaseValidation from './base'
 
 
@@ -14,14 +14,44 @@ export default class RadioValidation extends BaseValidation {
     this._inits = []
   }
 
-  manageElement (el) {
+  _addItem (el) {
     let item = {
       el: el,
       init: el.checked,
       value: el.value
     }
     this._inits.push(item)
-    this._validator.validate()
+    return item
+  }
+
+  _setChecked (value, el, item) {
+    if (el.value === value) {
+      el.checked = true
+      this._init = el.checked
+      item.init = el.checked
+      item.value = value
+    }
+  }
+
+  manageElement (el) {
+    const _ = util.Vue.util
+
+    let item = this._addItem(el)
+    let model = item.model = attr(el, 'v-model')
+    if (model) {
+      let value = this._vm.$get(model)
+      this._setChecked(value, el, item)
+      item.unwatch = this._vm.$watch(model, _.bind((val, old) => {
+        if (val !== old) {
+          if (el.value === val) {
+            el.checked = val
+          }
+          this.handleValidate(el)
+        }
+      }, this))
+    } else {
+      this._validator.validate()
+    }
   }
 
   unmanageElement (el) {
@@ -31,11 +61,10 @@ export default class RadioValidation extends BaseValidation {
         found = index
       }
     })
-    if (found === -1) { return false }
+    if (found === -1) { return }
 
     this._inits.splice(found, 1)
     this._validator.validate()
-    return true
   }
 
   _getValue (el) {
