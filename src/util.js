@@ -104,5 +104,9 @@ export function attr (el, name) {
 export function trigger (el, event) {
   let e = document.createEvent('HTMLEvents')
   e.initEvent(event, true, false)
-  el.dispatchEvent(e)
+  // Due to Firefox bug, events fired on disabled
+  // non-attached form controls can throw errors
+  try {
+    el.dispatchEvent(e)
+  } catch(e) {}
 }
