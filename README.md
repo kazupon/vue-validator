@@ -158,7 +158,7 @@ The various top-level properties are in the validation scope, and each field val
 `v-validate` directive syntax the below:
 
 ```
-    v-validate:field="array literal | object literal | binding"
+    v-validate[:field]="array literal | object literal | binding"
 ```
 
 ## Field
@@ -190,7 +190,7 @@ v2.0-alpha later:
 </validator>
 ```
 
-### caml-case property
+### Caml-case property
 As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case for `v-validate` models:
 
 ```html
@@ -203,6 +203,45 @@ As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-c
   </form>
 </validator>
 ```
+
+### Attribute
+You can specify the field name to `field` params attribute. This is useful when you need to define the form elements:
+
+```html
+<div id="app">
+  <validator name="validation">
+    <form novalidate>
+      <p class="validate-field" v-for="field in fields">
+      <label :for="field.id">{{field.label}}</label>
+      <input type="text" :id="field.id" :placeholder="field.placeholder" field="{{field.name}}" v-validate="field.validate">
+      </p>
+      <pre>{{ $validation | json }}</pre>
+    </form>
+  </validator>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#app',
+  data: {
+    fields: [{
+      id: 'username',
+      label: 'username',
+      name: 'username',
+      placeholder: 'input your username',
+      validate: { required: true, maxlength: 16 }
+    }, {
+      id: 'message',
+      label: 'message',
+      name: 'message',
+      placeholder: 'input your message',
+      validate: { required: true, minlength: 8 }
+    }]
+  }
+})
+```
+
 
 ## Literal
 
