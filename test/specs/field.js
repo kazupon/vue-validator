@@ -38,7 +38,6 @@ describe('field', () => {
       assert(vm.$validator1.touched === false)
 
       let field1 = el.getElementsByTagName('input')[0]
-      let field2 = el.getElementsByTagName('input')[1]
       field1.value = 'hi'
       trigger(field1, 'input')
       trigger(field1, 'blur')
