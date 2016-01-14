@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>field attribute example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation">
+        <form novalidate>
+          <p class="validate-field" v-for="field in fields">
+          <label :for="field.id">{{field.label}}</label>
+          <input type="text" :id="field.id" :placeholder="field.placeholder" field="{{field.name}}" v-validate="field.validate">
+          </p>
+          <pre>{{ $validation | json }}</pre>
+        </form>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          fields: [{
+            id: 'username',
+            label: 'username',
+            name: 'username',
+            placeholder: 'input your username',
+            validate: { required: true, maxlength: 16 }
+          }, {
+            id: 'message',
+            label: 'message',
+            name: 'message',
+            placeholder: 'input your message',
+            validate: { required: true, minlength: 8 }
+          }]
+        }
+      })
+    </script>
+  </body>
+</html>
