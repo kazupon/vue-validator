@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.11"></a>
+# [2.0.0-alpha.11](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2016-01-14)
+
+
+### Features
+
+* **validate:** support field attribute ([4fbaf3a](https://github.com/vuejs/vue-validator/commit/4fbaf3a)), closes [#46](https://github.com/vuejs/vue-validator/issues/46) [#129](https://github.com/vuejs/vue-validator/issues/129)
+
+
+
 <a name="2.0.0-alpha.10"></a>
 # [2.0.0-alpha.10](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2016-01-13)
 

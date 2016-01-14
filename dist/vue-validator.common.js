@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.10
+ * vue-validator v2.0.0-alpha.11
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -389,7 +389,7 @@ function Validate (Vue) {
 
   Vue.directive('validate', {
     priority: vModel.priority + 1,
-    params: ['group'],
+    params: ['group', 'field'],
 
     bind: function bind() {
       var vm = this.vm;
@@ -402,7 +402,7 @@ function Validate (Vue) {
 
       var validator = this.validator = this.vm._validatorMaps[validatorName];
 
-      var field = this.field = _.camelize(this.arg);
+      var field = this.field = _.camelize(this.arg ? this.arg : this.params.field);
       var validation = this.validation = validator.manageValidation(field, vm, this.el);
 
       if (this.params.group) {
