@@ -205,7 +205,7 @@ As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-c
 ```
 
 ### Attribute
-You can specify the field name to `field` params attribute. This is useful when you need to define the form elements:
+You can specify the field name to `field` params attribute. This is useful when you need to define the validatable form elements dynamically:
 
 ```html
 <div id="app">
