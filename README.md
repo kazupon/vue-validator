@@ -207,6 +207,8 @@ As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-c
 ### Attribute
 You can specify the field name to `field` params attribute. This is useful when you need to define the validatable form elements dynamically:
 
+> NOTE: the field part of `v-validate` is optional, when you use `field` params attribute
+
 ```html
 <div id="app">
   <validator name="validation">
