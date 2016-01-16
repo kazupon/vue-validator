@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>custom validator registration example</title>
+    <title>custom validator global registration example</title>
     <script src="../../../node_modules/vue/dist/vue.min.js"></script>
     <script src="../../../dist/vue-validator.min.js"></script>
   </head>
@@ -12,7 +12,7 @@
         <form novalidate>
           Email: <input type="text" v-validate:address="['email']">
           <div>
-            <span v-show="$validation1.address.email">Invalid your mail address format.</span>
+            <p v-show="$validation1.address.email">Invalid your mail address format.</p>
           </div>
           <input type="submit" value="send" v-if="$validation1.valid">
         </form>
