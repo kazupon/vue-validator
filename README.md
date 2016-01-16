@@ -619,10 +619,12 @@ Vue.component('comment', {
 
 # Custom validator
 
-## Registration
+## Glocal registration
 You can register your custom validator with using `Vue.validator`. the below the exmpale:
 
 Cursom validators are registered to `Vue.validator` using a callback function; return true upon passing.
+
+> **NOTE:** `Vue.validator` asset is extended from Vue.js' asset managment system.
 
 ```javascript
 // register custom validator
@@ -642,45 +644,36 @@ new Vue({
   <validator name="validation1">
     address: <input type="text" v-validate:address=['email']><br />
     <div>
-      <span v-if="$validation1.address.email">invalid your email address format.</span>
+      <p v-show="$validation1.address.email">Invalid your mail address format.</p>
     </div>
   <validator>
 </div>
 ```
 
-> **MEMO:** `Vue.validator` asset is extended from Vue.js' asset managment system.
+## Local Registration
+You can register your custom validator for component. the below the exmpale:
 
-
-## Global error message
-
-Custom validators may have default error messages attached:
+Cursom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
 
 ```javascript
-// global error message with plain string
-Vue.validator('numeric', {
-  message: 'invalid numeric value',
-  check: function (val) {
-    return /^[-+]?[0-9]+$/.test(val)
-  }
+// `email` custom validator is global registration
+Vue.validator('email', function (val) {
+  return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
 
-// global error message with function
-Vue.validator('url', {
-  message: function (field) {
-    return 'invalid "' + field + '" url format field'
+new Vue({
+  el: '#app',
+  validators: { // `numeric` and `url` custom validator is local registration
+    numeric: function (val) {
+      return /^[-+]?[0-9]+$/.test(val)
+    },
+    url: function (val) {
+      return /^(http\:\/\/|https\:\/\/)(.{4,})$/.test(val)
+    }
   },
-  check: function (val) {
-    return /^(http\:\/\/|https\:\/\/)(.{4,})$/.test(val)
+  data: {
+    email: ''
   }
-})
-
-// build-in validator customizable
-var required = Vue.validator('required')
-Vue.validator('required', {
-  message: function (field) {
-    return 'required "' + field + '" field'
-  },
-  check: required,
 })
 ```
 
@@ -688,10 +681,74 @@ Vue.validator('required', {
 <div id="app">
   <validator name="validation1">
     username: <input type="text" v-validate:username=['required']><br />
+    email: <input type="text" v-validate:address="['email']"><br />
+    age: <input type="text" v-validate:age=['numeric']><br />
+    site: <input type="text" v-validate:site=['url']><br />
+    <div>
+      <p v-if="$validation1.username.required">required username</p>
+      <p v-if="$validation1.address.email">invalid email address</p>
+      <p v-if="$validation1.age.numeric">invalid age value</p>
+      <p v-if="$validation1.site.url">invalid site uril format</p>
+    </div>
+  <validator>
+</div>
+```
+
+## Error message
+
+Custom validators may have default error messages attached:
+
+```javascript
+// `email` custom validator global registration
+Vue.validator('email', {
+  message: 'invalid email address', // error message with plain string
+  check: function (val) { // define validator
+    return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+  }
+})
+
+// build-in `required` validator customization
+Vue.validator('required', {
+  message: function (field) { // error message with function
+    return 'required "' + field + '" field'
+  },
+  check: Vue.validator('required') // re-use validator logic
+})
+
+new Vue({
+  el: '#app',
+  validators: {
+    numeric: { // `numeric` custom validator local registration
+      message: 'invalid numeric value',
+      check: function (val) {
+        return /^[-+]?[0-9]+$/.test(val)
+      }
+    },
+    url: { // `url` custom validator local registration
+      message: function (field) {
+        return 'invalid "' + field + '" url format field'
+      },
+      check: function (val) {
+        return /^(http\:\/\/|https\:\/\/)(.{4,})$/.test(val)
+      }
+    }
+  },
+  data: {
+    email: ''
+  }
+})
+```
+
+```html
+<div id="app">
+  <validator name="validation1">
+    username: <input type="text" v-validate:username=['required']><br />
+    email: <input type="text" v-validate:address="['email']"><br />
     age: <input type="text" v-validate:age=['numeric']><br />
     site: <input type="text" v-validate:site=['url']><br />
     <div>
       <p v-if="$validation1.username.required">{{ $validation1.username.messages.required }}</p>
+      <p v-if="$validation1.address.email">{{ $validation1.address.messages.email }}</p>
       <p v-if="$validation1.age.numeric">{{ $validation1.age.messages.numeric }}</p>
       <p v-if="$validation1.site.url">{{ $validation1.site.messages.url }}</p>
     </div>
@@ -703,7 +760,6 @@ Vue.validator('required', {
 # TODO
 - async validation
 - validate timing customize with options
-- local asset registration (`compontents` asset-like)
 - server-side validation error applying
 - more tests !!
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
