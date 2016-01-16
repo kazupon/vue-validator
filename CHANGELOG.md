@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.12"></a>
+# [2.0.0-alpha.12](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.11...v2.0.0-alpha.12) (2016-01-16)
+
+
+### Bug Fixes
+
+* **validate:** expression evaluating error ([f918e39](https://github.com/vuejs/vue-validator/commit/f918e39)), closes [#35](https://github.com/vuejs/vue-validator/issues/35) [#103](https://github.com/vuejs/vue-validator/issues/103) [#111](https://github.com/vuejs/vue-validator/issues/111)
+
+
+
 <a name="2.0.0-alpha.11"></a>
 # [2.0.0-alpha.11](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2016-01-14)
 

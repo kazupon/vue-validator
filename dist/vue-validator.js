@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.11
+ * vue-validator v2.0.0-alpha.12
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -389,10 +389,11 @@
   function Validate (Vue) {
 
     var _ = Vue.util;
-    var vModel = Vue.directive('model');
+    var vIf = Vue.directive('if');
+    Vue.compiler.terminalDirectives.push('validate');
 
     Vue.directive('validate', {
-      priority: vModel.priority + 1,
+      priority: vIf.priority + 1,
       params: ['group', 'field'],
 
       bind: function bind() {
