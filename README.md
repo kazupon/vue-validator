@@ -619,7 +619,7 @@ Vue.component('comment', {
 
 # Custom validator
 
-## Glocal registration
+## Global registration
 You can register your custom validator with using `Vue.validator`. the below the exmpale:
 
 Cursom validators are registered to `Vue.validator` using a callback function; return true upon passing.
@@ -650,7 +650,7 @@ new Vue({
 </div>
 ```
 
-## Local Registration
+## Local registration
 You can register your custom validator for component. the below the exmpale:
 
 Cursom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
