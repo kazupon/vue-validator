@@ -10,7 +10,7 @@ Validator component for Vue.js
 
 
 # Requirements
-- Vue.js `1.0.10`+
+- Vue.js `1.0.14`+
 
 ## NOTE
 vue-validator is still in its alpha verison. There may be some breaking changes. 
@@ -54,10 +54,6 @@ jsdelivr
 # Usage
 
 ```javascript
-// NOTE: You need to set the `warnExpressionErrors` property value to `false`
-//       See the https://github.com/vuejs/vue-validator/issues/111
-Vue.config.warnExpressionErrors = false
-
 new Vue({
   el: '#app'
 })

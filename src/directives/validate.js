@@ -4,10 +4,11 @@ import { warn, attr, each } from '../util'
 export default function (Vue) {
   
   const _ = Vue.util
-  const vModel = Vue.directive('model')
+  const vIf = Vue.directive('if')
+  Vue.compiler.terminalDirectives.push('validate')
 
   Vue.directive('validate', {
-    priority: vModel.priority + 1,
+    priority: vIf.priority + 1,
     params: ['group', 'field'],
 
     bind () {

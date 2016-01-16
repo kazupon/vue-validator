@@ -38,6 +38,36 @@ describe('validate directive', () => {
   })
 
 
+  describe('expression evaluate error', () => {
+    // TODO: should be tested with spy library (we try to use sinon.js, however it not work ... )
+    it('should not be called warn', (done) => {
+      el.innerHTML = 
+        '<validator name="validator">' +
+        '<form novalidate>' +
+        '<input type="text" v-validate:field1="{ required: true }">' +
+        '<p>field1 value: {{ $validator.field1.valid }}</p>' + 
+        '<div v-for="index in indexes">' + 
+        '<input type="text" :field="\'field\' + index" v-validate="{ minlength: 4 }">' + 
+        '<p>field{{index}} valid: {{ $validator[\'field\' + index].valid }}</p>' + 
+        '<span v-if="$validator[\'field\' + index].valid"> valid !!</span>' + 
+        '</div>' +
+        '<input type="submit" v-if="$validator.valid">' + 
+        '</form>' +
+        '</validator>'
+      vm = new Vue({
+        el: el,
+        data: {
+          indexes: [2, 3]
+        }
+      })
+      vm.$nextTick(() => {
+        assert(true)
+        done()
+      })
+    })
+  })
+
+
   describe('v-show', () => {
     beforeEach(() => {
       vm = new Vue({
