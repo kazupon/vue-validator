@@ -2,19 +2,26 @@ import * as validators from './validators'
 
 
 export default function (Vue) {
-
-  // register validator asset
-  Vue.config._assetTypes.push('validator')
+  const extend = Vue.util.extend
 
   // set global validators asset
   let assets = Object.create(null)
-  Vue.util.extend(assets, validators)
+  extend(assets, validators)
   Vue.options.validators = assets
 
   // set option merge strategy
   let strats = Vue.config.optionMergeStrategies
   if (strats) {
-    strats.validators = strats.methods
+    strats.validators = (parent, child) => {
+      if (!child) { return parent }
+      if (!parent) { return child }
+      const ret = Object.create(null)
+      extend(ret, parent)
+      for (let key in child) {
+        ret[key] = child[key]
+      }
+      return ret
+    }
   }
 
   /**

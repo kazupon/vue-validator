@@ -20,10 +20,60 @@ describe('asset', () => {
   })
 
   describe('custom validator', () => {
-    it('should be registered', () => {
-      let validator = (val, ...args) => { return false }
-      Vue.validator('custom', validator)
-      assert(Vue.validator('custom') === validator)
+    context('global', () => {
+      it('should be registered', () => {
+        let validator = (val, ...args) => { return false }
+        Vue.validator('custom', validator)
+        assert(Vue.validator('custom') === validator)
+      })
+    })
+
+    context('local', () => {
+      let el1
+      let el2
+      let globalCount = 0
+      let localCount = 0
+      beforeEach((done) => {
+        let template = '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<input type="text" v-validate:field1="{ custom11: true }">' +
+          '</form>' +
+          '</validator>'
+        el1 = document.createElement('div')
+        el1.innerHTML = template
+        el2 = document.createElement('div')
+        el2.innerHTML = template
+        let global = (val, ...args) => { 
+          globalCount++
+          return false
+        }
+        Vue.validator('custom11', global)
+        let local = (val, ...args) => {
+          localCount++
+          return true
+        }
+        let vm1 = new Vue({
+          el: el1
+        })
+        vm1.$nextTick(() => {
+          let vm2 = new Vue({
+            el: el2,
+            validators: { custom11: local }
+          })
+          vm2.$nextTick(() => {
+            let el3 = document.createElement('div')
+            el3.innerHTML = template
+            new Vue({
+              el: el3
+            })
+            done()
+          })
+        })
+      })
+
+      it('should be registered', () => {
+        assert(globalCount > localCount)
+      })
     })
   })
 
