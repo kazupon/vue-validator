@@ -7,7 +7,7 @@ import util, { empty, each, attr, trigger } from '../util'
 
 export default class BaseValidation {
 
-  constructor (field, vm, el, validator) {
+  constructor (field, vm, el, scope, validator) {
     this.field = field
     this.touched = false
     this.dirty = false
@@ -16,6 +16,7 @@ export default class BaseValidation {
     this._validator = validator
     this._vm = vm
     this._el = el
+    this._forScope = scope
     this._init = this._getValue(el)
     this._value = el.value
     this._validators = {}
@@ -25,13 +26,18 @@ export default class BaseValidation {
     return el.value
   }
 
+  _getScope () {
+    return this._forScope || this._vm
+  }
+
   manageElement (el) {
     const _ = util.Vue.util
 
+    let scope = this._getScope()
     let model = attr(el, 'v-model')
     if (model) {
-      el.value = this._vm.$get(model)
-      this._unwatch = this._vm.$watch(model, _.bind((val, old) => {
+      el.value = scope.$get(model) || ''
+      this._unwatch = scope.$watch(model, _.bind((val, old) => {
         if (val !== old) {
           el.value = val
           this.handleValidate(el)

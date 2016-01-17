@@ -55,17 +55,17 @@ export default class Validator {
     return ret
   }
 
-  manageValidation (field, vm, el) {
+  manageValidation (field, vm, el, scope) {
     let validation = null
 
     if (el.tagName === 'SELECT') {
-      validation = this._manageSelectValidation(field, vm, el)
+      validation = this._manageSelectValidation(field, vm, el, scope)
     } else if (el.type === 'checkbox') {
-      validation = this._manageCheckboxValidation(field, vm, el)
+      validation = this._manageCheckboxValidation(field, vm, el, scope)
     } else if (el.type === 'radio') {
-      validation = this._manageRadioValidation(field, vm, el)
+      validation = this._manageRadioValidation(field, vm, el, scope)
     } else {
-      validation = this._manageBaseValidation(field, vm, el)
+      validation = this._manageBaseValidation(field, vm, el, scope)
     }
 
     return validation
@@ -83,8 +83,8 @@ export default class Validator {
     }
   }
 
-  _manageBaseValidation (field, vm, el) {
-    let validation = this._validations[field] = new BaseValidation(field, vm, el, this)
+  _manageBaseValidation (field, vm, el, scope) {
+    let validation = this._validations[field] = new BaseValidation(field, vm, el, scope, this)
     validation.manageElement(el)
     return validation
   }
@@ -98,10 +98,10 @@ export default class Validator {
     }
   }
 
-  _manageCheckboxValidation (field, vm, el) {
+  _manageCheckboxValidation (field, vm, el, scope) {
     let validationSet = this._checkboxValidations[field]
     if (!validationSet) {
-      let validation = new CheckboxValidation(field, vm, el, this)
+      let validation = new CheckboxValidation(field, vm, el, scope, this)
       validationSet = { validation: validation, elements: 0 }
       this._checkboxValidations[field] = validationSet
     }
@@ -123,10 +123,10 @@ export default class Validator {
     }
   }
 
-  _manageRadioValidation (field, vm, el) {
+  _manageRadioValidation (field, vm, el, scope) {
     let validationSet = this._radioValidations[field]
     if (!validationSet) {
-      let validation = new RadioValidation(field, vm, el, this)
+      let validation = new RadioValidation(field, vm, el, scope, this)
       validationSet = { validation: validation, elements: 0 }
       this._radioValidations[field] = validationSet
     }
@@ -148,8 +148,8 @@ export default class Validator {
     }
   }
 
-  _manageSelectValidation (field, vm, el) {
-    let validation = this._validations[field] = new SelectValidation(field, vm, el, this)
+  _manageSelectValidation (field, vm, el, scope) {
+    let validation = this._validations[field] = new SelectValidation(field, vm, el, scope, this)
     validation.manageElement(el)
     return validation
   }

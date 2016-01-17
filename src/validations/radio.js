@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class RadioValidation extends BaseValidation {
 
-  constructor (field, vm, el, validator) {
-    super(field, vm, el, validator)
+  constructor (field, vm, el, scope, validator) {
+    super(field, vm, el, scope, validator)
 
     this._inits = []
   }
@@ -37,11 +37,12 @@ export default class RadioValidation extends BaseValidation {
     const _ = util.Vue.util
 
     let item = this._addItem(el)
+    let scope = this._getScope()
     let model = item.model = attr(el, 'v-model')
     if (model) {
-      let value = this._vm.$get(model)
+      let value = scope.$get(model)
       this._setChecked(value, el, item)
-      item.unwatch = this._vm.$watch(model, _.bind((val, old) => {
+      item.unwatch = scope.$watch(model, _.bind((val, old) => {
         if (val !== old) {
           if (el.value === val) {
             el.checked = val

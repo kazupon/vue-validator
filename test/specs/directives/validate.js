@@ -1,12 +1,13 @@
 import assert from 'power-assert'
 import Vue from 'vue'
-import { trigger } from '../../../src/util'
+import { trigger, each } from '../../../src/util'
 
 
 describe('validate directive', () => {
   let vm, el
 
   beforeEach(() => {
+    Vue.config.debug = true
     el = document.createElement('div')
   })
 
@@ -590,6 +591,64 @@ describe('validate directive', () => {
               done()
             })
           })
+        })
+      })
+    })
+
+    describe('v-for', () => {
+      beforeEach((done) => {
+        el.innerHTML = 
+          '<validator name="validator">' +
+          '<form novalidate>' +
+          '<div v-for="item in items">' + 
+          '<input type="text" :field="\'name\' + ($index + 1)" v-model="item.name" v-validate="{ required: true }">' + 
+          '</div>' +
+          '<input type="submit" v-if="$validator.valid">' + 
+          '</form>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: { items: [{}, {}] }
+        })
+        vm.$nextTick(done)
+      })
+
+      it('should be validated', (done) => {
+        const fields = ['name1', 'name2']
+        each(fields, (field) => {
+          assert(vm.$validator[field].required === true)
+          assert(vm.$validator[field].valid === false)
+          assert(vm.$validator[field].touched === false)
+          assert(vm.$validator[field].dirty === false)
+          assert(vm.$validator[field].modified === false)
+        })
+        assert(vm.$validator.valid === false)
+        assert(vm.$validator.touched === false)
+        assert(vm.$validator.dirty === false)
+        assert(vm.$validator.modified === false)
+
+        let name1 = el.getElementsByTagName('input')[0]
+        let name2 = el.getElementsByTagName('input')[1]
+        name1.value = 'hi'
+        name2.value = 'hello'
+        each([name1, name2], (input) => {
+          trigger(input, 'input')
+          trigger(input, 'blur')
+        })
+        vm.$nextTick(() => {
+          each(fields, (field) => {
+            assert(vm.$validator[field].required === false)
+            assert(vm.$validator[field].valid === true)
+            assert(vm.$validator[field].touched === true)
+            assert(vm.$validator[field].dirty === true)
+            assert(vm.$validator[field].modified === true)
+          })
+          assert(vm.$validator.valid === true)
+          assert(vm.$validator.touched === true)
+          assert(vm.$validator.dirty === true)
+          assert(vm.$validator.modified === true)
+
+          done()
         })
       })
     })

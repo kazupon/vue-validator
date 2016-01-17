@@ -23,7 +23,7 @@ export default function (Vue) {
       let validator = this.validator = this.vm._validatorMaps[validatorName]
 
       let field = this.field = _.camelize(this.arg ? this.arg : this.params.field)
-      let validation = this.validation = validator.manageValidation(field, vm, this.el)
+      let validation = this.validation = validator.manageValidation(field, vm, this.el, this._scope)
 
       if (this.params.group) {
         validator.addGroupValidation(this.params.group, this.field)

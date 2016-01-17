@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class CheckboxValidation extends BaseValidation {
 
-  constructor (field, vm, el, validator) {
-    super(field, vm, el, validator)
+  constructor (field, vm, el, scope, validator) {
+    super(field, vm, el, scope, validator)
 
     this._inits = []
   }
@@ -37,23 +37,24 @@ export default class CheckboxValidation extends BaseValidation {
     const _ = util.Vue.util
 
     let item = this._addItem(el)
+    let scope = this._getScope()
     let model = item.model = attr(el, 'v-model')
     if (model) {
-      let value = this._vm.$get(model)
+      let value = scope.$get(model)
       if (Array.isArray(value)) {
         this._setChecked(value, item.el)
-        item.unwatch = this._vm.$watch(model, _.bind((val, old) => {
+        item.unwatch = scope.$watch(model, _.bind((val, old) => {
           if (val !== old) {
             this._setChecked(val, item.el)
             this.handleValidate(item.el)
           }
         }, this))
       } else {
-        el.checked = value
+        el.checked = value || false
         this._init = el.checked
         item.init = el.checked
         item.value = el.value
-        item.unwatch = this._vm.$watch(model, _.bind((val, old) => {
+        item.unwatch = scope.$watch(model, _.bind((val, old) => {
           if (val !== old) {
             el.checked = val
             this.handleValidate(el)

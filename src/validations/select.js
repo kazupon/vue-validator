@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class SelectValidation extends BaseValidation {
 
-  constructor (field, vm, el, validator) {
-    super(field, vm, el, validator)
+  constructor (field, vm, el, scope, validator) {
+    super(field, vm, el, scope, validator)
 
     this._multiple = this._el.hasAttribute('multiple')
   }
@@ -43,12 +43,13 @@ export default class SelectValidation extends BaseValidation {
   manageElement (el) {
     const _ = util.Vue.util
 
+    let scope = this._getScope()
     let model = attr(el, 'v-model')
     if (model) {
-      let value = this._vm.$get(model)
+      let value = scope.$get(model)
       let values = !Array.isArray(value) ? [value] : value
       this._setOption(values, el)
-      this._unwatch = this._vm.$watch(model, _.bind((val, old) => {
+      this._unwatch = scope.$watch(model, _.bind((val, old) => {
         let values1 = !Array.isArray(val) ? [val] : val
         let values2 = !Array.isArray(old) ? [old] : old
         if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
