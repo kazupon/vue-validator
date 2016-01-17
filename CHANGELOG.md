@@ -1,3 +1,17 @@
+<a name="2.0.0-alpha.13"></a>
+# [2.0.0-alpha.13](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.12...v2.0.0-alpha.13) (2016-01-17)
+
+
+### Bug Fixes
+
+* **validate:** read property access error when use v-model and v-for ([e7c7714](https://github.com/vuejs/vue-validator/commit/e7c7714)), closes [#137](https://github.com/vuejs/vue-validator/issues/137)
+
+### Features
+
+* **custom:** support local registration ([74b1631](https://github.com/vuejs/vue-validator/commit/74b1631)), closes [#125](https://github.com/vuejs/vue-validator/issues/125)
+
+
+
 <a name="2.0.0-alpha.12"></a>
 # [2.0.0-alpha.12](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.11...v2.0.0-alpha.12) (2016-01-16)
 

@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.12
+ * vue-validator v2.0.0-alpha.13
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -336,19 +336,30 @@
   });
 
   function Asset (Vue) {
-
-    // register validator asset
-    Vue.config._assetTypes.push('validator');
+    var extend = Vue.util.extend;
 
     // set global validators asset
     var assets = Object.create(null);
-    Vue.util.extend(assets, validators);
+    extend(assets, validators);
     Vue.options.validators = assets;
 
     // set option merge strategy
     var strats = Vue.config.optionMergeStrategies;
     if (strats) {
-      strats.validators = strats.methods;
+      strats.validators = function (parent, child) {
+        if (!child) {
+          return parent;
+        }
+        if (!parent) {
+          return child;
+        }
+        var ret = Object.create(null);
+        extend(ret, parent);
+        for (var key in child) {
+          ret[key] = child[key];
+        }
+        return ret;
+      };
     }
 
     /**
@@ -408,7 +419,7 @@
         var validator = this.validator = this.vm._validatorMaps[validatorName];
 
         var field = this.field = _.camelize(this.arg ? this.arg : this.params.field);
-        var validation = this.validation = validator.manageValidation(field, vm, this.el);
+        var validation = this.validation = validator.manageValidation(field, vm, this.el, this._scope);
 
         if (this.params.group) {
           validator.addGroupValidation(this.params.group, this.field);
@@ -477,7 +488,7 @@
    */
 
   var BaseValidation = (function () {
-    function BaseValidation(field, vm, el, validator) {
+    function BaseValidation(field, vm, el, scope, validator) {
       babelHelpers_classCallCheck(this, BaseValidation);
 
       this.field = field;
@@ -488,6 +499,7 @@
       this._validator = validator;
       this._vm = vm;
       this._el = el;
+      this._forScope = scope;
       this._init = this._getValue(el);
       this._value = el.value;
       this._validators = {};
@@ -499,16 +511,22 @@
         return el.value;
       }
     }, {
+      key: '_getScope',
+      value: function _getScope() {
+        return this._forScope || this._vm;
+      }
+    }, {
       key: 'manageElement',
       value: function manageElement(el) {
         var _this = this;
 
         var _ = exports$1.Vue.util;
 
+        var scope = this._getScope();
         var model = attr(el, 'v-model');
         if (model) {
-          el.value = this._vm.$get(model);
-          this._unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          el.value = scope.$get(model) || '';
+          this._unwatch = scope.$watch(model, _.bind(function (val, old) {
             if (val !== old) {
               el.value = val;
               _this.handleValidate(el);
@@ -649,10 +667,10 @@
   var SelectValidation = (function (_BaseValidation) {
     babelHelpers_inherits(SelectValidation, _BaseValidation);
 
-    function SelectValidation(field, vm, el, validator) {
+    function SelectValidation(field, vm, el, scope, validator) {
       babelHelpers_classCallCheck(this, SelectValidation);
 
-      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(SelectValidation).call(this, field, vm, el, validator));
+      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(SelectValidation).call(this, field, vm, el, scope, validator));
 
       _this._multiple = _this._el.hasAttribute('multiple');
       return _this;
@@ -692,12 +710,13 @@
 
         var _ = exports$1.Vue.util;
 
+        var scope = this._getScope();
         var model = attr(el, 'v-model');
         if (model) {
-          var value = this._vm.$get(model);
+          var value = scope.$get(model);
           var values = !Array.isArray(value) ? [value] : value;
           this._setOption(values, el);
-          this._unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          this._unwatch = scope.$watch(model, _.bind(function (val, old) {
             var values1 = !Array.isArray(val) ? [val] : val;
             var values2 = !Array.isArray(old) ? [old] : old;
             if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
@@ -736,10 +755,10 @@
   var RadioValidation = (function (_BaseValidation) {
     babelHelpers_inherits(RadioValidation, _BaseValidation);
 
-    function RadioValidation(field, vm, el, validator) {
+    function RadioValidation(field, vm, el, scope, validator) {
       babelHelpers_classCallCheck(this, RadioValidation);
 
-      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(RadioValidation).call(this, field, vm, el, validator));
+      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(RadioValidation).call(this, field, vm, el, scope, validator));
 
       _this._inits = [];
       return _this;
@@ -774,11 +793,12 @@
         var _ = exports$1.Vue.util;
 
         var item = this._addItem(el);
+        var scope = this._getScope();
         var model = item.model = attr(el, 'v-model');
         if (model) {
-          var value = this._vm.$get(model);
+          var value = scope.$get(model);
           this._setChecked(value, el, item);
-          item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+          item.unwatch = scope.$watch(model, _.bind(function (val, old) {
             if (val !== old) {
               if (el.value === val) {
                 el.checked = val;
@@ -863,10 +883,10 @@
   var CheckboxValidation = (function (_BaseValidation) {
     babelHelpers_inherits(CheckboxValidation, _BaseValidation);
 
-    function CheckboxValidation(field, vm, el, validator) {
+    function CheckboxValidation(field, vm, el, scope, validator) {
       babelHelpers_classCallCheck(this, CheckboxValidation);
 
-      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxValidation).call(this, field, vm, el, validator));
+      var _this = babelHelpers_possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxValidation).call(this, field, vm, el, scope, validator));
 
       _this._inits = [];
       return _this;
@@ -901,23 +921,24 @@
         var _ = exports$1.Vue.util;
 
         var item = this._addItem(el);
+        var scope = this._getScope();
         var model = item.model = attr(el, 'v-model');
         if (model) {
-          var value = this._vm.$get(model);
+          var value = scope.$get(model);
           if (Array.isArray(value)) {
             this._setChecked(value, item.el);
-            item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+            item.unwatch = scope.$watch(model, _.bind(function (val, old) {
               if (val !== old) {
                 _this2._setChecked(val, item.el);
                 _this2.handleValidate(item.el);
               }
             }, this));
           } else {
-            el.checked = value;
+            el.checked = value || false;
             this._init = el.checked;
             item.init = el.checked;
             item.value = el.value;
-            item.unwatch = this._vm.$watch(model, _.bind(function (val, old) {
+            item.unwatch = scope.$watch(model, _.bind(function (val, old) {
               if (val !== old) {
                 el.checked = val;
                 _this2.handleValidate(el);
@@ -1041,17 +1062,17 @@
 
     }, {
       key: 'manageValidation',
-      value: function manageValidation(field, vm, el) {
+      value: function manageValidation(field, vm, el, scope) {
         var validation = null;
 
         if (el.tagName === 'SELECT') {
-          validation = this._manageSelectValidation(field, vm, el);
+          validation = this._manageSelectValidation(field, vm, el, scope);
         } else if (el.type === 'checkbox') {
-          validation = this._manageCheckboxValidation(field, vm, el);
+          validation = this._manageCheckboxValidation(field, vm, el, scope);
         } else if (el.type === 'radio') {
-          validation = this._manageRadioValidation(field, vm, el);
+          validation = this._manageRadioValidation(field, vm, el, scope);
         } else {
-          validation = this._manageBaseValidation(field, vm, el);
+          validation = this._manageBaseValidation(field, vm, el, scope);
         }
 
         return validation;
@@ -1071,8 +1092,8 @@
       }
     }, {
       key: '_manageBaseValidation',
-      value: function _manageBaseValidation(field, vm, el) {
-        var validation = this._validations[field] = new BaseValidation(field, vm, el, this);
+      value: function _manageBaseValidation(field, vm, el, scope) {
+        var validation = this._validations[field] = new BaseValidation(field, vm, el, scope, this);
         validation.manageElement(el);
         return validation;
       }
@@ -1088,10 +1109,10 @@
       }
     }, {
       key: '_manageCheckboxValidation',
-      value: function _manageCheckboxValidation(field, vm, el) {
+      value: function _manageCheckboxValidation(field, vm, el, scope) {
         var validationSet = this._checkboxValidations[field];
         if (!validationSet) {
-          var validation = new CheckboxValidation(field, vm, el, this);
+          var validation = new CheckboxValidation(field, vm, el, scope, this);
           validationSet = { validation: validation, elements: 0 };
           this._checkboxValidations[field] = validationSet;
         }
@@ -1115,10 +1136,10 @@
       }
     }, {
       key: '_manageRadioValidation',
-      value: function _manageRadioValidation(field, vm, el) {
+      value: function _manageRadioValidation(field, vm, el, scope) {
         var validationSet = this._radioValidations[field];
         if (!validationSet) {
-          var validation = new RadioValidation(field, vm, el, this);
+          var validation = new RadioValidation(field, vm, el, scope, this);
           validationSet = { validation: validation, elements: 0 };
           this._radioValidations[field] = validationSet;
         }
@@ -1142,8 +1163,8 @@
       }
     }, {
       key: '_manageSelectValidation',
-      value: function _manageSelectValidation(field, vm, el) {
-        var validation = this._validations[field] = new SelectValidation(field, vm, el, this);
+      value: function _manageSelectValidation(field, vm, el, scope) {
+        var validation = this._validations[field] = new SelectValidation(field, vm, el, scope, this);
         validation.manageElement(el);
         return validation;
       }
@@ -1455,7 +1476,7 @@
     Validate(Vue);
   }
 
-  plugin.version = '2.0.0-alpha.10';
+  plugin.version = '2.0.0-alpha.13';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
