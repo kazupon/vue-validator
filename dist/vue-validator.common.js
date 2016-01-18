@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.13
+ * vue-validator v2.0.0-alpha.14
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -1472,7 +1472,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.13';
+plugin.version = '2.0.0-alpha.14';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.14"></a>
+# [2.0.0-alpha.14](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.13...v2.0.0-alpha.14) (2016-01-18)
+
+
+### Bug Fixes
+
+* **validate:** occured TypeError when use v-if ([9ca17b4](https://github.com/vuejs/vue-validator/commit/9ca17b4)), closes [#139](https://github.com/vuejs/vue-validator/issues/139)
+
+
+
 <a name="2.0.0-alpha.13"></a>
 # [2.0.0-alpha.13](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.12...v2.0.0-alpha.13) (2016-01-17)
 
