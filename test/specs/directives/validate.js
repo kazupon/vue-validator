@@ -147,67 +147,180 @@ describe('validate directive', () => {
 
 
   describe('v-if', () => {
-    beforeEach(() => {
-      vm = new Vue({
-        el: el,
-        data: {
-          hidden: false
-        },
-        template: '<validator name="validator1">' +
+    context('text', () => {
+      beforeEach(() => {
+        el.innerHTML = '<validator name="validator1">' +
           '<form novalidate>' +
           '<input type="text" v-if="hidden" v-validate:field1="{ minlength: 0, maxlength: 10 }">' +
           '</form>' +
+          '<pre>{{ $validator1 | json }}</pre>' +
           '</validator>'
-      })
-    })
-
-    describe('set true', () => {
-      beforeEach((done) => {
-        vm.hidden = true
-        vm.$nextTick(done)
+        vm = new Vue({
+          el: el,
+          data: { hidden: false }
+        })
       })
 
-      it('field scope should be assigned', () => {
-        assert(vm.$validator1.field1 !== undefined)
-        assert(vm.$validator1.field1.minlength !== undefined)
-        assert(vm.$validator1.field1.maxlength !== undefined)
-        assert(vm.$validator1.field1.valid !== undefined)
-        assert(vm.$validator1.field1.invalid !== undefined)
-        assert(vm.$validator1.field1.touched !== undefined)
-        assert(vm.$validator1.field1.untouched !== undefined)
-        assert(vm.$validator1.field1.modified !== undefined)
-        assert(vm.$validator1.field1.dirty !== undefined)
-        assert(vm.$validator1.field1.pristine !== undefined)
-      })
-
-      describe('set false', () => {
+      describe('set true', () => {
         beforeEach((done) => {
-          vm.hidden = false
+          vm.hidden = true
           vm.$nextTick(done)
         })
 
-        it('field scope should not be assigned', () => {
-          assert(vm.$validator1.field1 === undefined)
+        it('field scope should be assigned', () => {
+          assert(vm.$validator1.field1 !== undefined)
+          assert(vm.$validator1.field1.minlength !== undefined)
+          assert(vm.$validator1.field1.maxlength !== undefined)
+          assert(vm.$validator1.field1.valid !== undefined)
+          assert(vm.$validator1.field1.invalid !== undefined)
+          assert(vm.$validator1.field1.touched !== undefined)
+          assert(vm.$validator1.field1.untouched !== undefined)
+          assert(vm.$validator1.field1.modified !== undefined)
+          assert(vm.$validator1.field1.dirty !== undefined)
+          assert(vm.$validator1.field1.pristine !== undefined)
         })
 
-        describe('set true', () => {
+        describe('set false', () => {
           beforeEach((done) => {
-            vm.hidden = true
+            vm.hidden = false
             vm.$nextTick(done)
           })
 
-          it('field scope should be assigned', () => {
-            assert(vm.$validator1.field1 !== undefined)
-            assert(vm.$validator1.field1.minlength !== undefined)
-            assert(vm.$validator1.field1.maxlength !== undefined)
-            assert(vm.$validator1.field1.valid !== undefined)
-            assert(vm.$validator1.field1.invalid !== undefined)
-            assert(vm.$validator1.field1.touched !== undefined)
-            assert(vm.$validator1.field1.untouched !== undefined)
-            assert(vm.$validator1.field1.modified !== undefined)
-            assert(vm.$validator1.field1.dirty !== undefined)
-            assert(vm.$validator1.field1.pristine !== undefined)
+          it('field scope should not be assigned', () => {
+            assert(vm.$validator1.field1 === undefined)
           })
+
+          describe('set true', () => {
+            beforeEach((done) => {
+              vm.hidden = true
+              vm.$nextTick(done)
+            })
+
+            it('field scope should be assigned', () => {
+              assert(vm.$validator1.field1 !== undefined)
+              assert(vm.$validator1.field1.minlength !== undefined)
+              assert(vm.$validator1.field1.maxlength !== undefined)
+              assert(vm.$validator1.field1.valid !== undefined)
+              assert(vm.$validator1.field1.invalid !== undefined)
+              assert(vm.$validator1.field1.touched !== undefined)
+              assert(vm.$validator1.field1.untouched !== undefined)
+              assert(vm.$validator1.field1.modified !== undefined)
+              assert(vm.$validator1.field1.dirty !== undefined)
+              assert(vm.$validator1.field1.pristine !== undefined)
+            })
+          })
+        })
+      })
+    })
+
+    context('checkbox', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<input type="checkbox" v-if="hidden" v-validate:field1="[\'required\']">' +
+          '</form>' +
+          '<pre>{{ $validator1 | json }}</pre>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: { hidden: false }
+        })
+        vm.$nextTick(done)
+      })
+
+      describe('toggling', () => {
+        beforeEach((done) => {
+          vm.hidden = true
+          vm.$nextTick(() => {
+            vm.hidden = false
+            vm.$nextTick(done)
+          })
+        })
+
+        it('field scope should be assigned', () => {
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.invalid === false)
+          assert(vm.$validator1.touched === false)
+          assert(vm.$validator1.untouched === true)
+          assert(vm.$validator1.modified === false)
+          assert(vm.$validator1.dirty === false)
+          assert(vm.$validator1.pristine === true)
+        })
+      })
+    })
+
+    context('radio', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<input type="radio" v-if="hidden" value="one" v-validate:field1="[\'required\']">' +
+          '</form>' +
+          '<pre>{{ $validator1 | json }}</pre>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: { hidden: false }
+        })
+        vm.$nextTick(done)
+      })
+
+      describe('toggling', () => {
+        beforeEach((done) => {
+          vm.hidden = true
+          vm.$nextTick(() => {
+            vm.hidden = false
+            vm.$nextTick(done)
+          })
+        })
+
+        it('field scope should be assigned', () => {
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.invalid === false)
+          assert(vm.$validator1.touched === false)
+          assert(vm.$validator1.untouched === true)
+          assert(vm.$validator1.modified === false)
+          assert(vm.$validator1.dirty === false)
+          assert(vm.$validator1.pristine === true)
+        })
+      })
+    })
+
+    context('select', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<select v-if="hidden" v-validate:lang="{ required: true }">' +
+          '<option value="en">english</option>' +
+          '<option value="ja">japanese</option>' +
+          '<option value="zh">chinese</option>' +
+          '</select>' +
+          '</form>' +
+          '<pre>{{ $validator1 | json }}</pre>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: { hidden: false }
+        })
+        vm.$nextTick(done)
+      })
+
+      describe('toggling', () => {
+        beforeEach((done) => {
+          vm.hidden = true
+          vm.$nextTick(() => {
+            vm.hidden = false
+            vm.$nextTick(done)
+          })
+        })
+
+        it('field scope should be assigned', () => {
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.invalid === false)
+          assert(vm.$validator1.touched === false)
+          assert(vm.$validator1.untouched === true)
+          assert(vm.$validator1.modified === false)
+          assert(vm.$validator1.dirty === false)
+          assert(vm.$validator1.pristine === true)
         })
       })
     })

@@ -95,6 +95,7 @@ export default class Validator {
       validation.unmanageElement(el)
       util.Vue.delete(this._scope, field)
       this._validations[field] = null
+      delete this._validations[field]
     }
   }
 
@@ -119,6 +120,7 @@ export default class Validator {
       if (validationSet.elements === 0) {
         util.Vue.delete(this._scope, field)
         this._checkboxValidations[field] = null
+        delete this._checkboxValidations[field]
       }
     }
   }
@@ -144,6 +146,7 @@ export default class Validator {
       if (validationSet.elements === 0) {
         util.Vue.delete(this._scope, field)
         this._radioValidations[field] = null
+        delete this._radioValidations[field]
       }
     }
   }
@@ -160,6 +163,7 @@ export default class Validator {
       validation.unmanageElement(el)
       util.Vue.delete(this._scope, field)
       this._validations[field] = null
+      delete this._validations[field]
     }
   }
 
