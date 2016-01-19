@@ -642,7 +642,7 @@ new Vue({
 ```html
 <div id="app">
   <validator name="validation1">
-    address: <input type="text" v-validate:address=['email']><br />
+    address: <input type="text" v-validate:address="['email']"><br />
     <div>
       <p v-show="$validation1.address.email">Invalid your mail address format.</p>
     </div>
@@ -680,10 +680,10 @@ new Vue({
 ```html
 <div id="app">
   <validator name="validation1">
-    username: <input type="text" v-validate:username=['required']><br />
+    username: <input type="text" v-validate:username="['required']"><br />
     email: <input type="text" v-validate:address="['email']"><br />
-    age: <input type="text" v-validate:age=['numeric']><br />
-    site: <input type="text" v-validate:site=['url']><br />
+    age: <input type="text" v-validate:age="['numeric']"><br />
+    site: <input type="text" v-validate:site="['url']"><br />
     <div>
       <p v-if="$validation1.username.required">required username</p>
       <p v-if="$validation1.address.email">invalid email address</p>
@@ -742,10 +742,10 @@ new Vue({
 ```html
 <div id="app">
   <validator name="validation1">
-    username: <input type="text" v-validate:username=['required']><br />
+    username: <input type="text" v-validate:username="['required']"><br />
     email: <input type="text" v-validate:address="['email']"><br />
-    age: <input type="text" v-validate:age=['numeric']><br />
-    site: <input type="text" v-validate:site=['url']><br />
+    age: <input type="text" v-validate:age="['numeric']"><br />
+    site: <input type="text" v-validate:site="['url']"><br />
     <div>
       <p v-if="$validation1.username.required">{{ $validation1.username.messages.required }}</p>
       <p v-if="$validation1.address.email">{{ $validation1.address.messages.email }}</p>
