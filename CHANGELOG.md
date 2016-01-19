@@ -1,10 +1,16 @@
-<a name="2.0.0-alpha.14"></a>
-# [2.0.0-alpha.14](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.13...v2.0.0-alpha.14) (2016-01-18)
-
+<a name="2.0.0-alpha.15"></a>
+# [2.0.0-alpha.15](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.14...v2.0.0-alpha.15) (2016-01-19)
 
 ### Bug Fixes
 
 * **validate:** occured TypeError when use v-if ([9ca17b4](https://github.com/vuejs/vue-validator/commit/9ca17b4)), closes [#139](https://github.com/vuejs/vue-validator/issues/139)
+
+
+<a name="2.0.0-alpha.14"></a>
+# [2.0.0-alpha.14](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.13...v2.0.0-alpha.14) (2016-01-18)
+
+
+> Skipped 2.0.0-alpha.14 because it contains an incorrect dist file.
 
 
 

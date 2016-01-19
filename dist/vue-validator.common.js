@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.14
+ * vue-validator v2.0.0-alpha.15
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -1101,6 +1101,7 @@ var Validator$1 = (function () {
         validation.unmanageElement(el);
         exports$1.Vue.delete(this._scope, field);
         this._validations[field] = null;
+        delete this._validations[field];
       }
     }
   }, {
@@ -1127,6 +1128,7 @@ var Validator$1 = (function () {
         if (validationSet.elements === 0) {
           exports$1.Vue.delete(this._scope, field);
           this._checkboxValidations[field] = null;
+          delete this._checkboxValidations[field];
         }
       }
     }
@@ -1154,6 +1156,7 @@ var Validator$1 = (function () {
         if (validationSet.elements === 0) {
           exports$1.Vue.delete(this._scope, field);
           this._radioValidations[field] = null;
+          delete this._radioValidations[field];
         }
       }
     }
@@ -1172,6 +1175,7 @@ var Validator$1 = (function () {
         validation.unmanageElement(el);
         exports$1.Vue.delete(this._scope, field);
         this._validations[field] = null;
+        delete this._validations[field];
       }
     }
   }, {
@@ -1472,7 +1476,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-alpha.14';
+plugin.version = '2.0.0-alpha.15';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
