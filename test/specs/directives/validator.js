@@ -13,10 +13,8 @@ describe('validator element directive', () => {
 
   describe('normal', () => {
     beforeEach(() => {
-      vm = new Vue({
-        el: el,
-        template: '<validator name="validator1"></validator>'
-      })
+      el.innerHTML = '<validator name="validator1"></validator>'
+      vm = new Vue({ el: el })
     })
 
     it('validator scope should be assigned', () => {
@@ -49,10 +47,8 @@ describe('validator element directive', () => {
   describe('name attribute', () => {
     context('kebab-case', () => {
       beforeEach(() => {
-        vm = new Vue({
-          el: el,
-          template: '<validator name="my-validator"></validator>'
-        })
+        el.innerHTML = '<validator name="my-validator"></validator>'
+        vm = new Vue({ el: el })
       })
 
       it('should be assigned with caml-case', () => {
@@ -78,10 +74,8 @@ describe('validator element directive', () => {
   describe('groups attribute', () => {
     context('plain string', () => {
       beforeEach(() => {
-        vm = new Vue({
-          el: el,
-          template: '<validator name="validator1" :groups="\'group1\'"></validator>'
-        })
+        el.innerHTML = '<validator name="validator1" :groups="\'group1\'"></validator>'
+        vm = new Vue({ el: el })
       })
 
       it('validator group scope should be assigned', () => {
@@ -98,10 +92,10 @@ describe('validator element directive', () => {
 
     context('array', () => {
       beforeEach(() => {
+        el.innerHTML = '<validator name="validator1" :groups="[\'group1\', group]"></validator>'
         vm = new Vue({
           el: el,
           data: { group: 'group2' },
-          template: '<validator name="validator1" :groups="[\'group1\', group]"></validator>'
         })
       })
 
@@ -129,12 +123,10 @@ describe('validator element directive', () => {
 
   describe('v-show', () => {
     beforeEach(() => {
+      el.innerHTML = '<validator v-show="hidden" name="validator1"></validator>'
       vm = new Vue({
         el: el,
-        data: {
-          hidden: false
-        },
-        template: '<validator v-show="hidden" name="validator1"></validator>'
+        data: { hidden: false }
       })
     })
 
@@ -196,12 +188,10 @@ describe('validator element directive', () => {
 
   describe('v-if', () => {
     beforeEach(() => {
+      el.innerHTML = '<validator v-if="hidden" name="validator1"></validator>'
       vm = new Vue({
         el: el,
-        data: {
-          hidden: false
-        },
-        template: '<validator v-if="hidden" name="validator1"></validator>'
+        data: { hidden: false }
       })
     })
 
