@@ -39,7 +39,6 @@ export default class BaseValidation {
       el.value = scope.$get(model) || ''
       this._unwatch = scope.$watch(model, _.bind((val, old) => {
         if (val !== old) {
-          el.value = val
           this.handleValidate(el)
         }
       }, this))
