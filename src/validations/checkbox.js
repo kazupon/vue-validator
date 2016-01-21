@@ -45,7 +45,6 @@ export default class CheckboxValidation extends BaseValidation {
         this._setChecked(value, item.el)
         item.unwatch = scope.$watch(model, _.bind((val, old) => {
           if (val !== old) {
-            this._setChecked(val, item.el)
             this.handleValidate(item.el)
           }
         }, this))
@@ -56,7 +55,6 @@ export default class CheckboxValidation extends BaseValidation {
         item.value = el.value
         item.unwatch = scope.$watch(model, _.bind((val, old) => {
           if (val !== old) {
-            el.checked = val
             this.handleValidate(el)
           }
         }, this))

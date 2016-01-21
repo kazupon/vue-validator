@@ -53,7 +53,6 @@ export default class SelectValidation extends BaseValidation {
         let values1 = !Array.isArray(val) ? [val] : val
         let values2 = !Array.isArray(old) ? [old] : old
         if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
-          this._setOption(values1, el)
           this.handleValidate(el)
         }
       }, this))

@@ -44,9 +44,6 @@ export default class RadioValidation extends BaseValidation {
       this._setChecked(value, el, item)
       item.unwatch = scope.$watch(model, _.bind((val, old) => {
         if (val !== old) {
-          if (el.value === val) {
-            el.checked = val
-          }
           this.handleValidate(el)
         }
       }, this))
