@@ -1,3 +1,15 @@
+<a name="2.0.0-alpha.16"></a>
+# [2.0.0-alpha.16](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.15...v2.0.0-alpha.16) (2016-01-22)
+
+
+### Bug Fixes
+
+* **base:** fix input wrong behavior ([2dcafeb](https://github.com/vuejs/vue-validator/commit/2dcafeb)), closes [#141](https://github.com/vuejs/vue-validator/issues/141) [#142](https://github.com/vuejs/vue-validator/issues/142)
+* **validate:** cannot compile validator when using v-for and v-model ([9ade590](https://github.com/vuejs/vue-validator/commit/9ade590)), closes [#140](https://github.com/vuejs/vue-validator/issues/140)
+* **validations:** fix other wrong behaviors ([bf6e7d0](https://github.com/vuejs/vue-validator/commit/bf6e7d0))
+
+
+
 <a name="2.0.0-alpha.15"></a>
 # [2.0.0-alpha.15](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.14...v2.0.0-alpha.15) (2016-01-19)
 
