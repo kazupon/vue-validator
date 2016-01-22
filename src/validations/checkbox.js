@@ -1,4 +1,4 @@
-import util, { each, attr } from '../util'
+import util, { each } from '../util'
 import BaseValidation from './base'
 
 
@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class CheckboxValidation extends BaseValidation {
 
-  constructor (field, vm, el, scope, validator) {
-    super(field, vm, el, scope, validator)
+  constructor (field, model, vm, el, scope, validator) {
+    super(field, model, vm, el, scope, validator)
 
     this._inits = []
   }
@@ -38,7 +38,7 @@ export default class CheckboxValidation extends BaseValidation {
 
     let item = this._addItem(el)
     let scope = this._getScope()
-    let model = item.model = attr(el, 'v-model')
+    let model = item.model = this._model
     if (model) {
       let value = scope.$get(model)
       if (Array.isArray(value)) {

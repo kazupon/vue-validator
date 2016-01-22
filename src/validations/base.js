@@ -1,4 +1,4 @@
-import util, { empty, each, attr, trigger } from '../util'
+import util, { empty, each, trigger } from '../util'
 
 
 /**
@@ -7,12 +7,13 @@ import util, { empty, each, attr, trigger } from '../util'
 
 export default class BaseValidation {
 
-  constructor (field, vm, el, scope, validator) {
+  constructor (field, model, vm, el, scope, validator) {
     this.field = field
     this.touched = false
     this.dirty = false
     this.modified = false
 
+    this._model = model
     this._validator = validator
     this._vm = vm
     this._el = el
@@ -34,14 +35,15 @@ export default class BaseValidation {
     const _ = util.Vue.util
 
     let scope = this._getScope()
-    let model = attr(el, 'v-model')
+    let model = this._model
     if (model) {
       el.value = scope.$get(model) || ''
       this._unwatch = scope.$watch(model, _.bind((val, old) => {
+        console.log('BaseValidation#manageElement $watch', model, val, old)
         if (val !== old) {
           this.handleValidate(el)
         }
-      }, this))
+      }, this), { deep: true })
     }
   }
 

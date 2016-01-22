@@ -1,4 +1,4 @@
-import util, { attr } from '../util'
+import util from '../util'
 import BaseValidation from './base'
 
 
@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class SelectValidation extends BaseValidation {
 
-  constructor (field, vm, el, scope, validator) {
-    super(field, vm, el, scope, validator)
+  constructor (field, model, vm, el, scope, validator) {
+    super(field, model, vm, el, scope, validator)
 
     this._multiple = this._el.hasAttribute('multiple')
   }
@@ -44,7 +44,7 @@ export default class SelectValidation extends BaseValidation {
     const _ = util.Vue.util
 
     let scope = this._getScope()
-    let model = attr(el, 'v-model')
+    let model = this._model
     if (model) {
       let value = scope.$get(model)
       let values = !Array.isArray(value) ? [value] : value

@@ -95,7 +95,7 @@ describe('validator element directive', () => {
         el.innerHTML = '<validator name="validator1" :groups="[\'group1\', group]"></validator>'
         vm = new Vue({
           el: el,
-          data: { group: 'group2' },
+          data: { group: 'group2' }
         })
       })
 

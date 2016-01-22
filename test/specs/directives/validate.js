@@ -740,6 +740,7 @@ describe('validate directive', () => {
         assert(vm.$validator.dirty === false)
         assert(vm.$validator.modified === false)
 
+        // change field value with intaraction
         let name1 = el.getElementsByTagName('input')[0]
         let name2 = el.getElementsByTagName('input')[1]
         name1.value = 'hi'
@@ -761,7 +762,48 @@ describe('validate directive', () => {
           assert(vm.$validator.dirty === true)
           assert(vm.$validator.modified === true)
 
-          done()
+          // add item
+          vm.items.push({ name: '' })
+          vm.$nextTick(() => {
+            each(fields, (field) => {
+              assert(vm.$validator[field].required === false)
+              assert(vm.$validator[field].valid === true)
+              assert(vm.$validator[field].touched === true)
+              assert(vm.$validator[field].dirty === true)
+              assert(vm.$validator[field].modified === true)
+            })
+            assert(vm.$validator.name3.required === true)
+            assert(vm.$validator.name3.valid === false)
+            assert(vm.$validator.name3.touched === false)
+            assert(vm.$validator.name3.dirty === false)
+            assert(vm.$validator.name3.modified === false)
+
+            assert(vm.$validator.valid === false)
+            assert(vm.$validator.touched === true)
+            assert(vm.$validator.dirty === true)
+            assert(vm.$validator.modified === true)
+
+            // remove item
+            vm.items.$remove(1)
+            vm.$nextTick(() => {
+              assert(vm.$validator.name1.required === false)
+              assert(vm.$validator.name1.valid === true)
+              assert(vm.$validator.name1.touched === true)
+              assert(vm.$validator.name1.dirty === true)
+              assert(vm.$validator.name1.modified === true)
+              assert(vm.$validator.name3.required === true)
+              assert(vm.$validator.name3.valid === false)
+              assert(vm.$validator.name3.touched === false)
+              assert(vm.$validator.name3.dirty === false)
+              assert(vm.$validator.name3.modified === false)
+              assert(vm.$validator.valid === false)
+              assert(vm.$validator.touched === true)
+              assert(vm.$validator.dirty === true)
+              assert(vm.$validator.modified === true)
+
+              done()
+            })
+          })
         })
       })
     })
