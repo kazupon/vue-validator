@@ -30,11 +30,32 @@ export default class Validator {
   enableReactive () {
     util.Vue.util.defineReactive(this._dir.vm, this.name, this._scope)
     this._dir.vm._validatorMaps[this.name] = this
+
+    this._dir.vm.$validatorReset = util.Vue.util.bind(() => {
+      this.resetValidation()
+    }, this)
   }
 
   disableReactive () {
+    this._dir.vm.$validatorReset = null
     this._dir.vm._validatorMaps[this.name] = null
     this._dir.vm[this.name] = null
+  }
+
+  resetValidation () {
+    each(this._validations, (validation, key) => {
+      validation.reset()
+    }, this)
+
+    each(this._checkboxValidations, (dataset, key) => {
+      dataset.validation.reset()
+    }, this)
+
+    each(this._radioValidations, (dataset, key) => {
+      dataset.validation.reset()
+    }, this)
+
+    this.validate()
   }
 
   // TODO: should be improved performance (use cache)

@@ -19,16 +19,7 @@ export default class BaseValidation {
     this._el = el
     this._forScope = scope
     this._init = this._getValue(el)
-    this._value = el.value
     this._validators = {}
-  }
-
-  _getValue (el) {
-    return el.value
-  }
-
-  _getScope () {
-    return this._forScope || this._vm
   }
 
   manageElement (el) {
@@ -39,7 +30,6 @@ export default class BaseValidation {
     if (model) {
       el.value = scope.$get(model) || ''
       this._unwatch = scope.$watch(model, _.bind((val, old) => {
-        console.log('BaseValidation#manageElement $watch', model, val, old)
         if (val !== old) {
           this.handleValidate(el)
         }
@@ -87,10 +77,6 @@ export default class BaseValidation {
     this.modified = this._checkModified(el)
 
     this._validator.validate()
-  }
-
-  _checkModified (target) {
-    return this._init !== this._getValue(target)
   }
 
   validate () {
@@ -151,6 +137,29 @@ export default class BaseValidation {
     _.extend(results, props)
 
     return results
+  }
+
+  resetFlags () {
+    this.touched = false
+    this.dirty = false
+    this.modified = false
+  }
+
+  reset () {
+    this.resetFlags()
+    this._init = this._getValue(this._el)
+  }
+
+  _getValue (el) {
+    return el.value
+  }
+
+  _getScope () {
+    return this._forScope || this._vm
+  }
+
+  _checkModified (target) {
+    return this._init !== this._getValue(target)
   }
 
   _fireEvent (el, valid) {

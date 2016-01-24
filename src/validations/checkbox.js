@@ -14,25 +14,6 @@ export default class CheckboxValidation extends BaseValidation {
     this._inits = []
   }
 
-  _addItem (el) {
-    let item = {
-      el: el,
-      init: el.checked,
-      value: el.value
-    }
-    this._inits.push(item)
-    return item
-  }
-
-  _setChecked (values, el) {
-    for (let i = 0, l = values.length; i < l; i++) {
-      let value = values[i]
-      if (!el.disabled && el.value === value && !el.checked) {
-        el.checked = true
-      }
-    }
-  }
-
   manageElement (el) {
     const _ = util.Vue.util
 
@@ -80,6 +61,33 @@ export default class CheckboxValidation extends BaseValidation {
 
     this._inits.splice(found, 1)
     this._validator.validate()
+  }
+
+  reset () {
+    this.resetFlags()
+    each(this._inits, (item, index) => {
+      item.init = item.el.checked
+      item.value = item.el.value
+    })
+  }
+
+  _addItem (el) {
+    let item = {
+      el: el,
+      init: el.checked,
+      value: el.value
+    }
+    this._inits.push(item)
+    return item
+  }
+
+  _setChecked (values, el) {
+    for (let i = 0, l = values.length; i < l; i++) {
+      let value = values[i]
+      if (!el.disabled && el.value === value && !el.checked) {
+        el.checked = true
+      }
+    }
   }
 
   _getValue (el) {

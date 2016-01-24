@@ -14,25 +14,6 @@ export default class RadioValidation extends BaseValidation {
     this._inits = []
   }
 
-  _addItem (el) {
-    let item = {
-      el: el,
-      init: el.checked,
-      value: el.value
-    }
-    this._inits.push(item)
-    return item
-  }
-
-  _setChecked (value, el, item) {
-    if (el.value === value) {
-      el.checked = true
-      this._init = el.checked
-      item.init = el.checked
-      item.value = value
-    }
-  }
-
   manageElement (el) {
     const _ = util.Vue.util
 
@@ -63,6 +44,33 @@ export default class RadioValidation extends BaseValidation {
 
     this._inits.splice(found, 1)
     this._validator.validate()
+  }
+
+  reset () {
+    this.resetFlags()
+    each(this._inits, (item, index) => {
+      item.init = item.el.checked
+      item.value = item.el.value
+    })
+  }
+
+  _addItem (el) {
+    let item = {
+      el: el,
+      init: el.checked,
+      value: el.value
+    }
+    this._inits.push(item)
+    return item
+  }
+
+  _setChecked (value, el, item) {
+    if (el.value === value) {
+      el.checked = true
+      this._init = el.checked
+      item.init = el.checked
+      item.value = value
+    }
   }
 
   _getValue (el) {
