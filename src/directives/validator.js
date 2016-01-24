@@ -19,14 +19,25 @@ export default function (Vue) {
         return
       }
 
-      let validatorName = this.validatorName = '$' + camelize(this.params.name)
+      this.validatorName = '$' + camelize(this.params.name)
       if (!this.vm._validatorMaps) {
         // TODO: should be implemented error message'
         warn('TODO: should be implemented error message')
         return
       }
 
+      this.setupValidator()
+      this.setupFragment(this.params.lazy)
+    },
+    
+    unbind () {
+      this.teardownFragment()
+      this.teardownValidator()
+    },
+
+    getGroups () {
       let groups = []
+
       if (this.params.groups) {
         if (_.isArray(this.params.groups)) {
           groups = this.params.groups
@@ -36,41 +47,42 @@ export default function (Vue) {
         }
       }
 
-      let validator = this.validator = new Validator(validatorName, this, groups)
+      return groups
+    },
+
+    setupValidator () {
+      let validator = this.validator = new Validator(this.validatorName, this, this.getGroups())
       validator.enableReactive()
       validator.setupScope()
-
-      validator.waitFor(bind(() => {
-        this.render(validator, validatorName)
-        validator.validate()
-      }, this))
-
-      if (!this.params.lazy) {
-        this.vm.$activateValidator()
-      }
-    },
-    
-    render (validator, validatorName) {
-      this.anchor = _.createAnchor('vue-validator')
-      _.replace(this.el, this.anchor)
-      this.insert(validatorName)
     },
 
-    insert (name) {
-      _.extend(this.vm.$options, { _validator: name })
-      this.factory = new FragmentFactory(this.vm, this.el.innerHTML)
-      vIf.insert.call(this)
-    },
-
-    unbind () {
-      vIf.unbind.call(this)
-
+    teardownValidator () {
       this.validator.disableReactive()
 
       if (this.validatorName) {
         this.validatorName = null
         this.validator = null
       }
+    },
+
+    setupFragment (lazy) {
+      this.validator.waitFor(bind(() => {
+        this.anchor = _.createAnchor('vue-validator')
+        _.replace(this.el, this.anchor)
+        _.extend(this.vm.$options, { _validator: this.validatorName })
+        this.factory = new FragmentFactory(this.vm, this.el.innerHTML)
+        vIf.insert.call(this)
+
+        this.validator.validate()
+      }, this))
+
+      if (!lazy) {
+        this.vm.$activateValidator()
+      }
+    },
+
+    teardownFragment () {
+      vIf.unbind.call(this)
     }
   })
 }
