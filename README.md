@@ -360,7 +360,7 @@ setTimeout(function () {
 
 # Reset validation results
 
-You can reset the validation results. the below the exmpale:
+You can reset the validation results with `$validatorReset()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
 
 ```html
 <div id="app">
