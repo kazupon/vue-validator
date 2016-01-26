@@ -572,38 +572,68 @@ Data property or computed properties can help reduce clutter, rather than using 
 
 # Event
 
-The new `valid` and `invalid` events can be bound using regular vue event bindings:
+These event that is supported with vue-validator can be bound using regular vue event bindings:
 
-```javascript
-new Vue({
-    el: '#app',
-    data: {
-      occuredValid: '',
-      occuredInvalid: ''
-    },
-    methods: {
-      onValid: function () {
-        this.occuredValid = 'occured valid event'
-        this.occuredInvalid = ''
-      },
-      onInvalid: function () {
-        this.occuredInvalid = 'occured invalid event'
-        this.occuredValid = ''
-      }
-    }
-  }
-})
-```
+- `valid`: occure when validation result of target element became valid
+- `invalid`: occure when validation result of target element became invalid
+- `touched`: occure when target element detected `blur` at least once
+- `dirty`: occure when the value of target element changed from initial value at least once
+- `modified`: occure when the value of target element changed from initial value
+
 ```html
 <div id="app">
   <validator name="validation1">
-    comment: <input type="text" @valid="onValid" @invalid="onInvalid" v-validate:comment="[required]"/>
+    <div class="comment-field">
+      <label for="comment">comment:</label>
+      <input type="text" 
+             @valid="onValid" 
+             @invalid="onInvalid" 
+             @touched="onTouched" 
+             @dirty="onDirty" 
+             @modified="onModified"
+             v-validate:comment="['required']"/>
+    </div>
     <div>
       <p>{{occuredValid}}</p>
       <p>{{occuredInvalid}}</p>
+      <p>{{occuredTouched}}</p>
+      <p>{{occuredDirty}}</p>
+      <p>{{occuredModified}}</p>
     </div>
   </validator>
 </div>
+```
+
+```javascript
+new Vue({
+  el: '#app',
+  data: {
+    occuredValid: '',
+    occuredInvalid: '',
+    occuredTouched: '',
+    occuredDirty: '',
+    occuredModified: ''
+  },
+  methods: {
+    onValid: function () {
+      this.occuredValid = 'occured valid event'
+      this.occuredInvalid = ''
+    },
+    onInvalid: function () {
+      this.occuredInvalid = 'occured invalid event'
+      this.occuredValid = ''
+    },
+    onTouched: function () {
+      this.occuredTouched = 'occured touched event'
+    },
+    onDirty: function () {
+      this.occuredDirty = 'occured dirty event'
+    },
+    onModified: function (e) {
+      this.occuredModified = 'occured modified event: ' + e.modified
+    }
+  }
+})
 ```
 
 
