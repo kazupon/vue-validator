@@ -13,6 +13,7 @@ export default class BaseValidation {
     this.dirty = false
     this.modified = false
 
+    this._modifiedOrg = false
     this._model = model
     this._validator = validator
     this._vm = vm
@@ -68,13 +69,19 @@ export default class BaseValidation {
   handleValidate (el, type) {
     if (type && type === 'blur') {
       this.touched = true
+      this._fireEvent(el, 'touched')
     }
 
     if (!this.dirty && this._checkModified(el)) {
       this.dirty = true
+      this._fireEvent(el, 'dirty')
     }
 
     this.modified = this._checkModified(el)
+    if (this.modifiedOrg !== this.modified) {
+      this._fireEvent(el, 'modified', { modified: this.modified })
+      this.modifiedOrg = this.modified
+    }
 
     this._validator.validate()
   }
@@ -120,7 +127,7 @@ export default class BaseValidation {
       }
     }, this)
 
-    this._fireEvent(this._el, valid)
+    this._fireEvent(this._el, valid ? 'valid' : 'invalid')
 
     let props = {
       valid: valid,
@@ -162,8 +169,8 @@ export default class BaseValidation {
     return this._init !== this._getValue(target)
   }
 
-  _fireEvent (el, valid) {
-    trigger(el, valid ? 'valid' : 'invalid')
+  _fireEvent (el, type, args) {
+    trigger(el, type, args)
   }
 
   _resolveValidator (name) {
