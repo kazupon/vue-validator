@@ -54,9 +54,11 @@ export default function (Vue) {
       let validator = this.validator = new Validator(this.validatorName, this, this.getGroups())
       validator.enableReactive()
       validator.setupScope()
+      validator.registerEvents()
     },
 
     teardownValidator () {
+      this.validator.unregisterEvents()
       this.validator.disableReactive()
 
       if (this.validatorName) {

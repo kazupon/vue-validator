@@ -5,6 +5,9 @@ import RadioValidation from './validations/radio'
 import SelectValidation from './validations/select'
 
 
+const eventRE = /^v-on:|^@/
+
+
 /**
  * Validator class
  */
@@ -21,6 +24,8 @@ export default class Validator {
     this._radioValidations = {}
     this._groups = groups
     this._groupValidations = {}
+    this._events = {}
+    this._modified = false
 
     each(groups, (group) => {
       this._groupValidations[group] = []
@@ -40,6 +45,24 @@ export default class Validator {
     this._dir.vm.$validatorReset = null
     this._dir.vm._validatorMaps[this.name] = null
     this._dir.vm[this.name] = null
+  }
+
+  registerEvents () {
+    let attrs = this._dir.el.attributes
+    for (let i = 0, l = attrs.length; i < l; i++) {
+      let event = attrs[i].name
+      if (eventRE.test(event)) {
+        event = event.replace(eventRE, '')
+        this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true)
+      }
+    }
+  }
+
+  unregisterEvents () {
+    each(this._events, (handler, event) => {
+      this._events[event] = null
+      delete this._events[event]
+    }, this)
   }
 
   resetValidation () {
@@ -227,6 +250,22 @@ export default class Validator {
       let res = dataset.validation.validate()
       util.Vue.set(this._scope, key, res)
     }, this)
+
+    if (this._scope.touched) {
+      this._fireEvent('touched')
+    }
+
+    if (this._scope.dirty) {
+      this._fireEvent('dirty')
+    }
+
+    if (this._modified !== this._scope.modified) {
+      this._fireEvent('modified', this._scope.modified)
+      this._modified = this._scope.modified
+    }
+
+    let valid = this._scope.valid
+    this._fireEvent((valid ? 'valid' : 'invalid'))
   }
 
   setupScope () {
@@ -252,6 +291,15 @@ export default class Validator {
       cb()
       vm[method] = null
     }
+  }
+
+  _fireEvent (type, ...args) {
+    let handler = this._events[this._getEventName(type)]
+    handler && handler.apply(null, args)
+  }
+
+  _getEventName (type) {
+    return this.name + ':' + type
   }
 
   _defineProperties (validationsGetter, targetGetter) {
