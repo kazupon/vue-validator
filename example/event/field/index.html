@@ -2,27 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>event example for validator top level</title>
+    <title>event example for each field</title>
     <script src="../../../node_modules/vue/dist/vue.min.js"></script>
     <script src="../../../dist/vue-validator.min.js"></script>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1"
-                 @valid="onValid"
-                 @invalid="onInvalid"
-                 @touched="onTouched"
-                 @dirty="onDirty"
-                 @modified="onModified">
+      <validator name="validation1">
         <div class="comment-field">
-          <label for="username">username:</label>
+          <label for="comment">comment:</label>
           <input type="text" 
-                 v-validate:username="['required']"/>
-        </div>
-        <div class="passowrd-field">
-          <label for="passowrd">passowrd:</label>
-          <input type="password" 
-                 v-validate:password="{ required: true, minlength: 8 }"/>
+                 @valid="onValid" 
+                 @invalid="onInvalid" 
+                 @touched="onTouched" 
+                 @dirty="onDirty" 
+                 @modified="onModified"
+                 v-validate:comment="['required']"/>
         </div>
         <div>
           <p>{{occuredValid}}</p>
@@ -58,8 +53,8 @@
           onDirty: function () {
             this.occuredDirty = 'occured dirty event'
           },
-          onModified: function (modified) {
-            this.occuredModified = 'occured modified event: ' + modified
+          onModified: function (e) {
+            this.occuredModified = 'occured modified event: ' + e.modified
           }
         }
       })
