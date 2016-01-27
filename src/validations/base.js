@@ -13,7 +13,7 @@ export default class BaseValidation {
     this.dirty = false
     this.modified = false
 
-    this._modifiedOrg = false
+    this._modified = false
     this._model = model
     this._validator = validator
     this._vm = vm
@@ -78,9 +78,9 @@ export default class BaseValidation {
     }
 
     this.modified = this._checkModified(el)
-    if (this.modifiedOrg !== this.modified) {
+    if (this._modified !== this.modified) {
       this._fireEvent(el, 'modified', { modified: this.modified })
-      this.modifiedOrg = this.modified
+      this._modified = this.modified
     }
 
     this._validator.validate()
@@ -150,6 +150,7 @@ export default class BaseValidation {
     this.touched = false
     this.dirty = false
     this.modified = false
+    this._modified = false
   }
 
   reset () {
