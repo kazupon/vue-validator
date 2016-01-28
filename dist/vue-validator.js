@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.16
+ * vue-validator v2.0.0-alpha.17
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -155,11 +155,19 @@
    *
    * @param {Element} el
    * @param {String} event
+   * @param {Object} [args]
    */
 
-  function trigger(el, event) {
+  function trigger(el, event, args) {
     var e = document.createEvent('HTMLEvents');
     e.initEvent(event, true, false);
+
+    if (args) {
+      for (var prop in args) {
+        e[prop] = args[prop];
+      }
+    }
+
     // Due to Firefox bug, events fired on disabled
     // non-attached form controls can throw errors
     try {
@@ -557,27 +565,17 @@
       this.dirty = false;
       this.modified = false;
 
+      this._modified = false;
       this._model = model;
       this._validator = validator;
       this._vm = vm;
       this._el = el;
       this._forScope = scope;
       this._init = this._getValue(el);
-      this._value = el.value;
       this._validators = {};
     }
 
     babelHelpers_createClass(BaseValidation, [{
-      key: '_getValue',
-      value: function _getValue(el) {
-        return el.value;
-      }
-    }, {
-      key: '_getScope',
-      value: function _getScope() {
-        return this._forScope || this._vm;
-      }
-    }, {
       key: 'manageElement',
       value: function manageElement(el) {
         var _this = this;
@@ -589,7 +587,6 @@
         if (model) {
           el.value = scope.$get(model) || '';
           this._unwatch = scope.$watch(model, _.bind(function (val, old) {
-            console.log('BaseValidation#manageElement $watch', model, val, old);
             if (val !== old) {
               _this.handleValidate(el);
             }
@@ -631,20 +628,21 @@
       value: function handleValidate(el, type) {
         if (type && type === 'blur') {
           this.touched = true;
+          this._fireEvent(el, 'touched');
         }
 
         if (!this.dirty && this._checkModified(el)) {
           this.dirty = true;
+          this._fireEvent(el, 'dirty');
         }
 
         this.modified = this._checkModified(el);
+        if (this._modified !== this.modified) {
+          this._fireEvent(el, 'modified', { modified: this.modified });
+          this._modified = this.modified;
+        }
 
         this._validator.validate();
-      }
-    }, {
-      key: '_checkModified',
-      value: function _checkModified(target) {
-        return this._init !== this._getValue(target);
       }
     }, {
       key: 'validate',
@@ -689,7 +687,7 @@
           }
         }, this);
 
-        this._fireEvent(this._el, valid);
+        this._fireEvent(this._el, valid ? 'valid' : 'invalid');
 
         var props = {
           valid: valid,
@@ -708,9 +706,38 @@
         return results;
       }
     }, {
+      key: 'resetFlags',
+      value: function resetFlags() {
+        this.touched = false;
+        this.dirty = false;
+        this.modified = false;
+        this._modified = false;
+      }
+    }, {
+      key: 'reset',
+      value: function reset() {
+        this.resetFlags();
+        this._init = this._getValue(this._el);
+      }
+    }, {
+      key: '_getValue',
+      value: function _getValue(el) {
+        return el.value;
+      }
+    }, {
+      key: '_getScope',
+      value: function _getScope() {
+        return this._forScope || this._vm;
+      }
+    }, {
+      key: '_checkModified',
+      value: function _checkModified(target) {
+        return this._init !== this._getValue(target);
+      }
+    }, {
       key: '_fireEvent',
-      value: function _fireEvent(el, valid) {
-        trigger(el, valid ? 'valid' : 'invalid');
+      value: function _fireEvent(el, type, args) {
+        trigger(el, type, args);
       }
     }, {
       key: '_resolveValidator',
@@ -739,33 +766,6 @@
     }
 
     babelHelpers_createClass(SelectValidation, [{
-      key: '_getValue',
-      value: function _getValue(el) {
-        var ret = [];
-
-        for (var i = 0, l = el.options.length; i < l; i++) {
-          var option = el.options[i];
-          if (!option.disabled && option.selected) {
-            ret.push(option.value);
-          }
-        }
-
-        return ret;
-      }
-    }, {
-      key: '_setOption',
-      value: function _setOption(values, el) {
-        for (var i = 0, l = values.length; i < l; i++) {
-          var value = values[i];
-          for (var j = 0, m = el.options.length; j < m; j++) {
-            var option = el.options[j];
-            if (!option.disabled && option.value === value && (!option.hasAttribute('selected') || !option.selected)) {
-              option.selected = true;
-            }
-          }
-        }
-      }
-    }, {
       key: 'manageElement',
       value: function manageElement(el) {
         var _this2 = this;
@@ -792,6 +792,38 @@
       value: function unmanageElement(el) {
         if (this._unwatch) {
           this._unwatch();
+        }
+      }
+    }, {
+      key: 'reset',
+      value: function reset() {
+        this.resetFlags();
+      }
+    }, {
+      key: '_getValue',
+      value: function _getValue(el) {
+        var ret = [];
+
+        for (var i = 0, l = el.options.length; i < l; i++) {
+          var option = el.options[i];
+          if (!option.disabled && option.selected) {
+            ret.push(option.value);
+          }
+        }
+
+        return ret;
+      }
+    }, {
+      key: '_setOption',
+      value: function _setOption(values, el) {
+        for (var i = 0, l = values.length; i < l; i++) {
+          var value = values[i];
+          for (var j = 0, m = el.options.length; j < m; j++) {
+            var option = el.options[j];
+            if (!option.disabled && option.value === value && (!option.hasAttribute('selected') || !option.selected)) {
+              option.selected = true;
+            }
+          }
         }
       }
     }, {
@@ -826,27 +858,6 @@
     }
 
     babelHelpers_createClass(RadioValidation, [{
-      key: '_addItem',
-      value: function _addItem(el) {
-        var item = {
-          el: el,
-          init: el.checked,
-          value: el.value
-        };
-        this._inits.push(item);
-        return item;
-      }
-    }, {
-      key: '_setChecked',
-      value: function _setChecked(value, el, item) {
-        if (el.value === value) {
-          el.checked = true;
-          this._init = el.checked;
-          item.init = el.checked;
-          item.value = value;
-        }
-      }
-    }, {
       key: 'manageElement',
       value: function manageElement(el) {
         var _this2 = this;
@@ -883,6 +894,36 @@
 
         this._inits.splice(found, 1);
         this._validator.validate();
+      }
+    }, {
+      key: 'reset',
+      value: function reset() {
+        this.resetFlags();
+        each(this._inits, function (item, index) {
+          item.init = item.el.checked;
+          item.value = item.el.value;
+        });
+      }
+    }, {
+      key: '_addItem',
+      value: function _addItem(el) {
+        var item = {
+          el: el,
+          init: el.checked,
+          value: el.value
+        };
+        this._inits.push(item);
+        return item;
+      }
+    }, {
+      key: '_setChecked',
+      value: function _setChecked(value, el, item) {
+        if (el.value === value) {
+          el.checked = true;
+          this._init = el.checked;
+          item.init = el.checked;
+          item.value = value;
+        }
       }
     }, {
       key: '_getValue',
@@ -951,27 +992,6 @@
     }
 
     babelHelpers_createClass(CheckboxValidation, [{
-      key: '_addItem',
-      value: function _addItem(el) {
-        var item = {
-          el: el,
-          init: el.checked,
-          value: el.value
-        };
-        this._inits.push(item);
-        return item;
-      }
-    }, {
-      key: '_setChecked',
-      value: function _setChecked(values, el) {
-        for (var i = 0, l = values.length; i < l; i++) {
-          var value = values[i];
-          if (!el.disabled && el.value === value && !el.checked) {
-            el.checked = true;
-          }
-        }
-      }
-    }, {
       key: 'manageElement',
       value: function manageElement(el) {
         var _this2 = this;
@@ -1027,6 +1047,36 @@
         this._validator.validate();
       }
     }, {
+      key: 'reset',
+      value: function reset() {
+        this.resetFlags();
+        each(this._inits, function (item, index) {
+          item.init = item.el.checked;
+          item.value = item.el.value;
+        });
+      }
+    }, {
+      key: '_addItem',
+      value: function _addItem(el) {
+        var item = {
+          el: el,
+          init: el.checked,
+          value: el.value
+        };
+        this._inits.push(item);
+        return item;
+      }
+    }, {
+      key: '_setChecked',
+      value: function _setChecked(values, el) {
+        for (var i = 0, l = values.length; i < l; i++) {
+          var value = values[i];
+          if (!el.disabled && el.value === value && !el.checked) {
+            el.checked = true;
+          }
+        }
+      }
+    }, {
       key: '_getValue',
       value: function _getValue(el) {
         var _this3 = this;
@@ -1076,6 +1126,8 @@
     return CheckboxValidation;
   })(BaseValidation);
 
+  var eventRE = /^v-on:|^@/;
+
   /**
    * Validator class
    */
@@ -1095,6 +1147,8 @@
       this._radioValidations = {};
       this._groups = groups;
       this._groupValidations = {};
+      this._events = {};
+      this._modified = false;
 
       each(groups, function (group) {
         _this._groupValidations[group] = [];
@@ -1104,14 +1158,60 @@
     babelHelpers_createClass(Validator, [{
       key: 'enableReactive',
       value: function enableReactive() {
+        var _this2 = this;
+
         exports$1.Vue.util.defineReactive(this._dir.vm, this.name, this._scope);
         this._dir.vm._validatorMaps[this.name] = this;
+
+        this._dir.vm.$validatorReset = exports$1.Vue.util.bind(function () {
+          _this2.resetValidation();
+        }, this);
       }
     }, {
       key: 'disableReactive',
       value: function disableReactive() {
+        this._dir.vm.$validatorReset = null;
         this._dir.vm._validatorMaps[this.name] = null;
         this._dir.vm[this.name] = null;
+      }
+    }, {
+      key: 'registerEvents',
+      value: function registerEvents() {
+        var attrs = this._dir.el.attributes;
+        for (var i = 0, l = attrs.length; i < l; i++) {
+          var event = attrs[i].name;
+          if (eventRE.test(event)) {
+            event = event.replace(eventRE, '');
+            this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true);
+          }
+        }
+      }
+    }, {
+      key: 'unregisterEvents',
+      value: function unregisterEvents() {
+        var _this3 = this;
+
+        each(this._events, function (handler, event) {
+          _this3._events[event] = null;
+          delete _this3._events[event];
+        }, this);
+      }
+    }, {
+      key: 'resetValidation',
+      value: function resetValidation() {
+        each(this._validations, function (validation, key) {
+          validation.reset();
+        }, this);
+
+        each(this._checkboxValidations, function (dataset, key) {
+          dataset.validation.reset();
+        }, this);
+
+        each(this._radioValidations, function (dataset, key) {
+          dataset.validation.reset();
+        }, this);
+
+        this.validate();
       }
 
       // TODO: should be improved performance (use cache)
@@ -1263,43 +1363,59 @@
     }, {
       key: 'validate',
       value: function validate(validation) {
-        var _this2 = this;
+        var _this4 = this;
 
         each(this._validations, function (validation, key) {
           var res = validation.validate();
-          exports$1.Vue.set(_this2._scope, key, res);
+          exports$1.Vue.set(_this4._scope, key, res);
         }, this);
 
         each(this._checkboxValidations, function (dataset, key) {
           var res = dataset.validation.validate();
-          exports$1.Vue.set(_this2._scope, key, res);
+          exports$1.Vue.set(_this4._scope, key, res);
         }, this);
 
         each(this._radioValidations, function (dataset, key) {
           var res = dataset.validation.validate();
-          exports$1.Vue.set(_this2._scope, key, res);
+          exports$1.Vue.set(_this4._scope, key, res);
         }, this);
+
+        if (this._scope.touched) {
+          this._fireEvent('touched');
+        }
+
+        if (this._scope.dirty) {
+          this._fireEvent('dirty');
+        }
+
+        if (this._modified !== this._scope.modified) {
+          this._fireEvent('modified', this._scope.modified);
+          this._modified = this._scope.modified;
+        }
+
+        var valid = this._scope.valid;
+        this._fireEvent(valid ? 'valid' : 'invalid');
       }
     }, {
       key: 'setupScope',
       value: function setupScope() {
-        var _this3 = this;
+        var _this5 = this;
 
         var bind = exports$1.Vue.util.bind;
 
         var validationsGetter = bind(function () {
-          return _this3.validations;
+          return _this5.validations;
         }, this);
         var scopeGetter = bind(function () {
-          return _this3._scope;
+          return _this5._scope;
         }, this);
         this._defineProperties(validationsGetter, scopeGetter);
 
         each(this._groups, function (name) {
-          var validations = _this3._groupValidations[name];
+          var validations = _this5._groupValidations[name];
           var group = {};
-          exports$1.Vue.set(_this3._scope, name, group);
-          _this3._defineProperties(function () {
+          exports$1.Vue.set(_this5._scope, name, group);
+          _this5._defineProperties(function () {
             return validations;
           }, function () {
             return group;
@@ -1318,9 +1434,25 @@
         };
       }
     }, {
+      key: '_fireEvent',
+      value: function _fireEvent(type) {
+        var handler = this._events[this._getEventName(type)];
+
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        handler && handler.apply(null, args);
+      }
+    }, {
+      key: '_getEventName',
+      value: function _getEventName(type) {
+        return this.name + ':' + type;
+      }
+    }, {
       key: '_defineProperties',
       value: function _defineProperties(validationsGetter, targetGetter) {
-        var _this4 = this;
+        var _this6 = this;
 
         var bind = exports$1.Vue.util.bind;
 
@@ -1338,7 +1470,7 @@
             enumerable: true,
             configurable: true,
             get: function get() {
-              return bind(descriptor.fn, _this4)(descriptor.arg);
+              return bind(descriptor.fn, _this6)(descriptor.arg);
             }
           });
         }, this);
@@ -1346,7 +1478,7 @@
     }, {
       key: '_walkValidations',
       value: function _walkValidations(validations, property, condition) {
-        var _this5 = this;
+        var _this7 = this;
 
         var hasOwn = exports$1.Vue.util.hasOwn;
         var ret = condition;
@@ -1355,8 +1487,8 @@
           if (ret === !condition) {
             return;
           }
-          if (hasOwn(_this5._scope, validation.field)) {
-            var target = _this5._scope[validation.field];
+          if (hasOwn(_this7._scope, validation.field)) {
+            var target = _this7._scope[validation.field];
             if (target && target[property] === !condition) {
               ret = !condition;
             }
@@ -1403,15 +1535,15 @@
     }, {
       key: '_defineMessages',
       value: function _defineMessages(validationsGetter) {
-        var _this6 = this;
+        var _this8 = this;
 
         var extend = exports$1.Vue.util.extend;
         var hasOwn = exports$1.Vue.util.hasOwn;
         var ret = {};
 
         each(validationsGetter(), function (validation, key) {
-          if (hasOwn(_this6._scope, validation.field)) {
-            var target = _this6._scope[validation.field];
+          if (hasOwn(_this8._scope, validation.field)) {
+            var target = _this8._scope[validation.field];
             if (target && !empty(target['messages'])) {
               ret[validation.field] = extend({}, target['messages']);
             }
@@ -1446,29 +1578,36 @@
     var _ = Vue.util;
     var FragmentFactory = Vue.FragmentFactory;
     var vIf = Vue.directive('if');
-    var _bind = Vue.util.bind;
+    var bind = Vue.util.bind;
     var camelize = Vue.util.camelize;
 
     Vue.elementDirective('validator', {
       params: ['name', 'groups', 'lazy'],
 
       bind: function bind() {
-        var _this = this;
-
         if (!this.params.name) {
           // TODO: should be implemented validator:bind name params nothing error'
           warn('TODO: should be implemented validator:bind name params nothing error');
           return;
         }
 
-        var validatorName = this.validatorName = '$' + camelize(this.params.name);
+        this.validatorName = '$' + camelize(this.params.name);
         if (!this.vm._validatorMaps) {
           // TODO: should be implemented error message'
           warn('TODO: should be implemented error message');
           return;
         }
 
+        this.setupValidator();
+        this.setupFragment(this.params.lazy);
+      },
+      unbind: function unbind() {
+        this.teardownFragment();
+        this.teardownValidator();
+      },
+      getGroups: function getGroups() {
         var groups = [];
+
         if (this.params.groups) {
           if (_.isArray(this.params.groups)) {
             groups = this.params.groups;
@@ -1477,38 +1616,42 @@
           }
         }
 
-        var validator = this.validator = new Validator$1(validatorName, this, groups);
+        return groups;
+      },
+      setupValidator: function setupValidator() {
+        var validator = this.validator = new Validator$1(this.validatorName, this, this.getGroups());
         validator.enableReactive();
         validator.setupScope();
-
-        validator.waitFor(_bind(function () {
-          _this.render(validator, validatorName);
-          validator.validate();
-        }, this));
-
-        if (!this.params.lazy) {
-          this.vm.$activateValidator();
-        }
+        validator.registerEvents();
       },
-      render: function render(validator, validatorName) {
-        this.anchor = _.createAnchor('vue-validator');
-        _.replace(this.el, this.anchor);
-        this.insert(validatorName);
-      },
-      insert: function insert(name) {
-        _.extend(this.vm.$options, { _validator: name });
-        this.factory = new FragmentFactory(this.vm, this.el.innerHTML);
-        vIf.insert.call(this);
-      },
-      unbind: function unbind() {
-        vIf.unbind.call(this);
-
+      teardownValidator: function teardownValidator() {
+        this.validator.unregisterEvents();
         this.validator.disableReactive();
 
         if (this.validatorName) {
           this.validatorName = null;
           this.validator = null;
         }
+      },
+      setupFragment: function setupFragment(lazy) {
+        var _this = this;
+
+        this.validator.waitFor(bind(function () {
+          _this.anchor = _.createAnchor('vue-validator');
+          _.replace(_this.el, _this.anchor);
+          _.extend(_this.vm.$options, { _validator: _this.validatorName });
+          _this.factory = new FragmentFactory(_this.vm, _this.el.innerHTML);
+          vIf.insert.call(_this);
+
+          _this.validator.validate();
+        }, this));
+
+        if (!lazy) {
+          this.vm.$activateValidator();
+        }
+      },
+      teardownFragment: function teardownFragment() {
+        vIf.unbind.call(this);
       }
     });
   }
@@ -1536,7 +1679,7 @@
     Validate(Vue);
   }
 
-  plugin.version = '2.0.0-alpha.16';
+  plugin.version = '2.0.0-alpha.17';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);

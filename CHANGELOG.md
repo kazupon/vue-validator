@@ -1,3 +1,15 @@
+<a name="2.0.0-alpha.17"></a>
+# [2.0.0-alpha.17](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.16...v2.0.0-alpha.17) (2016-01-28)
+
+
+### Features
+
+* **event:** add touched, dirty and modified event for element level ([675bb30](https://github.com/vuejs/vue-validator/commit/675bb30))
+* **event:** add valid, invalid, touched, dirty and modified event for top-level ([0199b93](https://github.com/vuejs/vue-validator/commit/0199b93)), closes [#144](https://github.com/vuejs/vue-validator/issues/144)
+* **validations:** support validation result resetting ([a66909f](https://github.com/vuejs/vue-validator/commit/a66909f)), closes [#136](https://github.com/vuejs/vue-validator/issues/136)
+
+
+
 <a name="2.0.0-alpha.16"></a>
 # [2.0.0-alpha.16](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.15...v2.0.0-alpha.16) (2016-01-22)
 
