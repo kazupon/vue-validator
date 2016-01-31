@@ -57,17 +57,21 @@ export default class BaseValidation {
     }
   }
 
-  updateFlags (el, type) {
+  willUpdateTouched (el, type) {
     if (type && type === 'blur') {
       this.touched = true
       this._fireEvent(el, 'touched')
     }
+  }
 
+  willUpdateDirty (el) {
     if (!this.dirty && this._checkModified(el)) {
       this.dirty = true
       this._fireEvent(el, 'dirty')
     }
+  }
 
+  willUpdateModified (el) {
     this.modified = this._checkModified(el)
     if (this._modified !== this.modified) {
       this._fireEvent(el, 'modified', { modified: this.modified })
@@ -85,7 +89,10 @@ export default class BaseValidation {
   }
 
   handleValidate (el, type) {
-    this.updateFlags(el, type)
+    this.willUpdateTouched(el, type)
+    this.willUpdateDirty(el)
+    this.willUpdateModified(el)
+
     this._validator.validate()
   }
 
