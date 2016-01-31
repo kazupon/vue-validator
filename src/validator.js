@@ -33,15 +33,23 @@ export default class Validator {
   }
 
   enableReactive () {
+    // define the validation scope
     util.Vue.util.defineReactive(this._dir.vm, this.name, this._scope)
     this._dir.vm._validatorMaps[this.name] = this
 
+    // define the validation reset meta method to vue instance
     this._dir.vm.$validatorReset = util.Vue.util.bind(() => {
       this.resetValidation()
+    }, this)
+
+    // define the validate manually meta method to vue instance
+    this._dir.vm.$validate = util.Vue.util.bind((field) => {
+      this._validate(field)
     }, this)
   }
 
   disableReactive () {
+    this._dir.vm.$validate = null
     this._dir.vm.$validatorReset = null
     this._dir.vm._validatorMaps[this.name] = null
     this._dir.vm[this.name] = null
@@ -63,6 +71,33 @@ export default class Validator {
       this._events[event] = null
       delete this._events[event]
     }, this)
+  }
+
+  _validate (field) {
+    let validation = this._validations[field]
+    if (!validation && this._checkboxValidations[field]) {
+      validation = this._checkboxValidations[field].validation
+    } else if (!validation && this._radioValidations[field]) {
+      validation = this._radioValidations[field].validation
+    }
+
+    if (validation) {
+      validation.willUpdateFlags()
+      let res = validation.validate()
+      util.Vue.set(this._scope, field, res)
+
+      if (this._scope.dirty) {
+        this._fireEvent('dirty')
+      }
+
+      if (this._modified !== this._scope.modified) {
+        this._fireEvent('modified', this._scope.modified)
+        this._modified = this._scope.modified
+      }
+
+      let valid = this._scope.valid
+      this._fireEvent((valid ? 'valid' : 'invalid'))
+    }
   }
 
   resetValidation () {

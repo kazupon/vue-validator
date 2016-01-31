@@ -63,6 +63,13 @@ export default class CheckboxValidation extends BaseValidation {
     this._validator.validate()
   }
 
+  willUpdateFlags () {
+    each(this._inits, (item, index) => {
+      this.willUpdateDirty(item.el)
+      this.willUpdateModified(item.el)
+    }, this)
+  }
+
   reset () {
     this.resetFlags()
     each(this._inits, (item, index) => {

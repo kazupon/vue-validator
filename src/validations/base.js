@@ -57,6 +57,11 @@ export default class BaseValidation {
     }
   }
 
+  willUpdateFlags () {
+    this.willUpdateDirty(this._el)
+    this.willUpdateModified(this._el)
+  }
+
   willUpdateTouched (el, type) {
     if (type && type === 'blur') {
       this.touched = true
