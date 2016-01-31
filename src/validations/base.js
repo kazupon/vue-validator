@@ -57,16 +57,7 @@ export default class BaseValidation {
     }
   }
 
-  listener (e) {
-    if (e.relatedTarget && 
-      (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
-      return
-    }
-
-    this.handleValidate(e.target, e.type)
-  }
-
-  handleValidate (el, type) {
+  updateFlags (el, type) {
     if (type && type === 'blur') {
       this.touched = true
       this._fireEvent(el, 'touched')
@@ -82,7 +73,19 @@ export default class BaseValidation {
       this._fireEvent(el, 'modified', { modified: this.modified })
       this._modified = this.modified
     }
+  }
 
+  listener (e) {
+    if (e.relatedTarget && 
+      (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
+      return
+    }
+
+    this.handleValidate(e.target, e.type)
+  }
+
+  handleValidate (el, type) {
+    this.updateFlags(el, type)
     this._validator.validate()
   }
 
