@@ -87,11 +87,19 @@ export default function (Vue) {
 
       this.onBlur = _.bind(validation.listener, validation)
       _.on(el, 'blur', this.onBlur)
-      if ((el.type === 'checkbox' 
-          || el.type === 'radio' 
+      if ((el.type === 'radio' 
           || el.tagName === 'SELECT') && !model) {
         this.onChange = _.bind(validation.listener, validation)
         _.on(el, 'change', this.onChange)
+        
+      } else if (el.type === 'checkbox') {
+        if (!model) {
+          this.onChange = _.bind(validation.listener, validation)
+          _.on(el, 'change', this.onChange)
+        } else {
+          this.onClick = _.bind(validation.listener, validation)
+          _.on(el, 'click', this.onClick)
+        }
       } else {
         if (!model) {
           this.onInput = _.bind(validation.listener, validation)
@@ -106,6 +114,11 @@ export default function (Vue) {
       if (this.onInput) {
         _.off(el, 'input', this.onInput)
         this.onInput = null
+      }
+
+      if (this.onClick) {
+        _.off(el, 'click', this.onClick)
+        this.onClick = null
       }
 
       if (this.onChange) {
