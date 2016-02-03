@@ -1,3 +1,17 @@
+<a name="2.0.0-alpha.18"></a>
+# [2.0.0-alpha.18](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.17...v2.0.0-alpha.18) (2016-02-03)
+
+
+### Bug Fixes
+
+* **checkbox:** fix v-model is not work ([caed1c8](https://github.com/vuejs/vue-validator/commit/caed1c8)), closes [#153](https://github.com/vuejs/vue-validator/issues/153)
+
+### Features
+
+* **validations:** add manually validate API ([c68fe28](https://github.com/vuejs/vue-validator/commit/c68fe28)), closes [#150](https://github.com/vuejs/vue-validator/issues/150)
+
+
+
 <a name="2.0.0-alpha.17"></a>
 # [2.0.0-alpha.17](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.16...v2.0.0-alpha.17) (2016-01-28)
 
