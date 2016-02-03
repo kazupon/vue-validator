@@ -24,17 +24,15 @@ export default class BaseValidation {
   }
 
   manageElement (el) {
-    const _ = util.Vue.util
-
     let scope = this._getScope()
     let model = this._model
     if (model) {
       el.value = scope.$get(model) || ''
-      this._unwatch = scope.$watch(model, _.bind((val, old) => {
+      this._unwatch = scope.$watch(model, (val, old) => {
         if (val !== old) {
           this.handleValidate(el)
         }
-      }, this), { deep: true })
+      }, { deep: true })
     }
   }
 

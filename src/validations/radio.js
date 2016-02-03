@@ -1,4 +1,4 @@
-import util, { each } from '../util'
+import { each } from '../util'
 import BaseValidation from './base'
 
 
@@ -15,19 +15,17 @@ export default class RadioValidation extends BaseValidation {
   }
 
   manageElement (el) {
-    const _ = util.Vue.util
-
     let item = this._addItem(el)
     let scope = this._getScope()
     let model = item.model = this._model
     if (model) {
       let value = scope.$get(model)
       this._setChecked(value, el, item)
-      item.unwatch = scope.$watch(model, _.bind((val, old) => {
+      item.unwatch = scope.$watch(model, (val, old) => {
         if (val !== old) {
           this.handleValidate(el)
         }
-      }, this))
+      })
     } else {
       this._validator.validate()
     }

@@ -1,4 +1,4 @@
-import util, { each } from '../util'
+import { each } from '../util'
 import BaseValidation from './base'
 
 
@@ -15,8 +15,6 @@ export default class CheckboxValidation extends BaseValidation {
   }
 
   manageElement (el) {
-    const _ = util.Vue.util
-
     let item = this._addItem(el)
     let scope = this._getScope()
     let model = item.model = this._model
@@ -24,21 +22,21 @@ export default class CheckboxValidation extends BaseValidation {
       let value = scope.$get(model)
       if (Array.isArray(value)) {
         this._setChecked(value, item.el)
-        item.unwatch = scope.$watch(model, _.bind((val, old) => {
+        item.unwatch = scope.$watch(model, (val, old) => {
           if (val !== old) {
             this.handleValidate(item.el)
           }
-        }, this))
+        })
       } else {
         el.checked = value || false
         this._init = el.checked
         item.init = el.checked
         item.value = el.value
-        item.unwatch = scope.$watch(model, _.bind((val, old) => {
+        item.unwatch = scope.$watch(model, (val, old) => {
           if (val !== old) {
             this.handleValidate(el)
           }
-        }, this))
+        })
       }
     } else {
       this._validator.validate()

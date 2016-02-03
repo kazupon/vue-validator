@@ -1,4 +1,3 @@
-import util from '../util'
 import BaseValidation from './base'
 
 
@@ -15,21 +14,19 @@ export default class SelectValidation extends BaseValidation {
   }
 
   manageElement (el) {
-    const _ = util.Vue.util
-
     let scope = this._getScope()
     let model = this._model
     if (model) {
       let value = scope.$get(model)
       let values = !Array.isArray(value) ? [value] : value
       this._setOption(values, el)
-      this._unwatch = scope.$watch(model, _.bind((val, old) => {
+      this._unwatch = scope.$watch(model, (val, old) => {
         let values1 = !Array.isArray(val) ? [val] : val
         let values2 = !Array.isArray(old) ? [old] : old
         if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
           this.handleValidate(el)
         }
-      }, this))
+      })
     }
   }
 

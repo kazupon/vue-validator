@@ -6,7 +6,6 @@ export default function (Vue) {
   const _ = Vue.util
   const FragmentFactory = Vue.FragmentFactory
   const vIf = Vue.directive('if')
-  const bind = Vue.util.bind
   const camelize = Vue.util.camelize
 
   Vue.elementDirective('validator', {
@@ -68,7 +67,7 @@ export default function (Vue) {
     },
 
     setupFragment (lazy) {
-      this.validator.waitFor(bind(() => {
+      this.validator.waitFor(() => {
         this.anchor = _.createAnchor('vue-validator')
         _.replace(this.el, this.anchor)
         _.extend(this.vm.$options, { _validator: this.validatorName })
@@ -76,7 +75,7 @@ export default function (Vue) {
         vIf.insert.call(this)
 
         this.validator.validate()
-      }, this))
+      })
 
       if (!lazy) {
         this.vm.$activateValidator()

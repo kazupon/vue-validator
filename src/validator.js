@@ -38,14 +38,14 @@ export default class Validator {
     this._dir.vm._validatorMaps[this.name] = this
 
     // define the validation reset meta method to vue instance
-    this._dir.vm.$validatorReset = util.Vue.util.bind(() => {
+    this._dir.vm.$validatorReset = () => {
       this.resetValidation()
-    }, this)
+    }
 
     // define the validate manually meta method to vue instance
-    this._dir.vm.$validate = util.Vue.util.bind((field) => {
+    this._dir.vm.$validate = (field) => {
       this._validate(field)
-    }, this)
+    }
   }
 
   disableReactive () {
@@ -304,10 +304,8 @@ export default class Validator {
   }
 
   setupScope () {
-    const bind = util.Vue.util.bind
-
-    let validationsGetter = bind(() => { return this.validations }, this)
-    let scopeGetter = bind(() => { return this._scope }, this)
+    let validationsGetter = () => { return this.validations }
+    let scopeGetter = () => { return this._scope }
     this._defineProperties(validationsGetter, scopeGetter)
 
     each(this._groups, (name) => {
