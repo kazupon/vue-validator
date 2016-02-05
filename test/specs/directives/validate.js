@@ -463,6 +463,7 @@ describe('validate directive', () => {
           // checked foo
           foo.checked = true
           trigger(foo, 'change')
+          trigger(foo, 'click')
           trigger(foo, 'blur')
           vm.$nextTick(() => {
             assert(vm.$validator1.field1.required === false)
@@ -476,6 +477,7 @@ describe('validate directive', () => {
             // checked bar
             bar.checked = true
             trigger(bar, 'change')
+            trigger(bar, 'click')
             trigger(bar, 'blur')
             vm.$nextTick(() => {
               assert(vm.$validator1.field1.required === false)
