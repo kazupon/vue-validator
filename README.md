@@ -663,8 +663,8 @@ You can be handled the event that has occured in the various top-level validatio
       <input type="text" 
              v-validate:username="['required']"/>
     </div>
-    <div class="passowrd-field">
-      <label for="passowrd">passowrd:</label>
+    <div class="password-field">
+      <label for="password">password:</label>
       <input type="password" 
              v-validate:password="{ required: true, minlength: 8 }"/>
     </div>
