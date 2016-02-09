@@ -38,7 +38,8 @@ module.exports = function (config) {
           query: {
             presets: ['es2015'],
             plugins: [
-              ['babel-plugin-espower']
+              'babel-plugin-espower',
+              'babel-plugin-rewire'
             ]
           }
         }],
