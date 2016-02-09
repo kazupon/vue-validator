@@ -13,16 +13,15 @@ export default function (Vue) {
 
     bind () {
       if (!this.params.name) {
-        // TODO: should be implemented validator:bind name params nothing error'
-        warn('TODO: should be implemented validator:bind name params nothing error')
+        warn('validator element directive need to specify \'name\' param attribute: ' +
+          '(e.g. <validator name="validator1">...</validator>)'
+        )
         return
       }
 
       this.validatorName = '$' + camelize(this.params.name)
       if (!this.vm._validatorMaps) {
-        // TODO: should be implemented error message'
-        warn('TODO: should be implemented error message')
-        return
+        throw new Error('Invalid validator management error')
       }
 
       this.setupValidator()

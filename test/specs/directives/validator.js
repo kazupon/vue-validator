@@ -1,5 +1,6 @@
 import assert from 'power-assert'
 import Vue from 'vue'
+import Validator from '../../../src/directives/validator'
 import { trigger, pull } from '../../../src/util'
 
 
@@ -30,16 +31,51 @@ describe('validator element directive', () => {
   })
 
 
-  describe('invalid warn', () => {
-    context('not specify name attribute', () => {
-      it.skip('should be called warn', () => {
-        // TODO:
+  describe('warnning', () => {
+    let called = false
+    beforeEach(() => {
+      Validator.__Rewire__('warn', (msg, err) => {
+        called = true
       })
     })
-    context.skip('not exist validator map object in vm instance', () => {
-      it.skip('should be called warn', () => {
-        // TODO:
+
+    afterEach(() => {
+      Validator.__ResetDependency__('warn')
+      called = false
+    })
+
+    describe('name attribute', () => {
+      it('should be called warn', (done) => {
+        el.innerHTML = '<validator></validator>'
+        vm = new Vue({ el: el })
+        vm.$nextTick(() => {
+          assert(called === true)
+          done()
+        })
       })
+    })
+  })
+
+
+  describe('internal validator management', () => {
+    let init
+    beforeEach(() => {
+      init = Vue.prototype._init
+      Vue.prototype._init = (options) => {
+        this._validatorMaps = null
+        init.call(this, options)
+      }
+    })
+
+    afterEach(() => {
+      Vue.prototype._init = init
+    })
+
+    it('should be occured error', () => {
+      el.innerHTML = '<validator name="validator1"></validator>'
+      assert.throws(() => {
+        vm = new Vue({ el: el })
+      }, Error)
     })
   })
 
