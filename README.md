@@ -22,17 +22,15 @@ If you have some feedback, you're welcome in [Vue.js Discussion](http://forum.vu
 ## npm
 
 ### stable version
-```shell
-$ npm install vue-validator
-```
+
+    $ npm install vue-validator
 
 ### development version
-```shell
-git clone https://github.com/vuejs/vue-validator.git node_modules/vue-validator
-cd node_modules/vue-validator
-npm install
-npm run build
-```
+
+    $ git clone https://github.com/vuejs/vue-validator.git node_modules/vue-validator
+    $ cd node_modules/vue-validator
+    $ npm install
+    $ npm run build
 
 When used in CommonJS, you must explicitly install the router via `Vue.use()`:
 ```javascript
@@ -89,48 +87,46 @@ The validation results are scoped to the validator element. In above case, the v
 
 Validation results can be accessed in this structure:
 
-```
-  $validation.valid
-             .invalid
-             .touched
-             .untouched
-             .dirty
-             .pristine
-             .modified
-             .messages.field1.validator1
-                             ...
-                             .validatorX
-                      .field2.validator1
-                             ...
-                             .validatorX
-             .field1.validator1
-                    ...
-                    .validatorX
-                    .valid
-                    .invalid
-                    .touched
-                    .untouched
-                    .dirty
-                    .pristine
-                    .modified
-                    .messages.validator1
-                             ...
-                             .validatorX
-             ...
-             .fieldX.validator1
-                    ...
-                    .validatorX
-                    .valid
-                    .invalid
-                    .touched
-                    .untouched
-                    .dirty
-                    .pristine
-                    .modified
-                    .messages.validator1
-                             ...
-                             .validatorX
-```
+      $validation.valid
+                 .invalid
+                 .touched
+                 .untouched
+                 .dirty
+                 .pristine
+                 .modified
+                 .messages.field1.validator1
+                                 ...
+                                 .validatorX
+                          .field2.validator1
+                                 ...
+                                 .validatorX
+                 .field1.validator1
+                        ...
+                        .validatorX
+                        .valid
+                        .invalid
+                        .touched
+                        .untouched
+                        .dirty
+                        .pristine
+                        .modified
+                        .messages.validator1
+                                 ...
+                                 .validatorX
+                 ...
+                 .fieldX.validator1
+                        ...
+                        .validatorX
+                        .valid
+                        .invalid
+                        .touched
+                        .untouched
+                        .dirty
+                        .pristine
+                        .modified
+                        .messages.validator1
+                                 ...
+                                 .validatorX
 
 The various top-level properties are in the validation scope, and each field validation result in its own respective scopes.
 
@@ -158,9 +154,7 @@ The various top-level properties are in the validation scope, and each field val
 # Validator syntax
 `v-validate` directive syntax the below:
 
-```
     v-validate[:field]="array literal | object literal | binding"
-```
 
 ## Field
 In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. In 2.0-alpha and later, use the `v-validate` directive instead.
@@ -925,9 +919,7 @@ new Vue({
 
 # Testing
 
-```shell
-$ npm test
-```
+    $ npm test
 
 
 # License
