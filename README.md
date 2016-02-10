@@ -764,15 +764,28 @@ Vue.component('comment', {
 # Custom validator
 
 ## Global registration
-You can register your custom validator with using `Vue.validator`. the below the exmpale:
-
-Cursom validators are registered to `Vue.validator` using a callback function; return true upon passing.
+You can register your custom validator with using `Vue.validator` method. 
 
 > **NOTE:** `Vue.validator` asset is extended from Vue.js' asset managment system.
 
+Detail of the `Vue.validator` method is following:
+
+### Vue.validator(id, [definition])
+- **Arguments:**
+    - `{String} id`
+    - `{Function | Object} [definition]`
+- **Return:**
+    - validator definition function or object
+
+In validator definition function or `check` of validator definition object, you need to return `true` if valid, else return `false`.
+
+the below the `email` custom validator exmpale:
+
 ```javascript
-// register custom validator
-Vue.validator('email', function (val) {
+// Register custom validator function. 
+// - first argument: file value (In example, `val`)
+// - second argument: rule value, optional. this argument passing from was specified with v-validate
+Vue.validator('email', function (val/*,rule*/) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
 
@@ -795,20 +808,17 @@ new Vue({
 ```
 
 ## Local registration
-You can register your custom validator for component. the below the exmpale:
+You can register your custom validator to component with using `validators` option.
 
 Cursom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
 
-```javascript
-// `email` custom validator is global registration
-Vue.validator('email', function (val) {
-  return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
-})
+the below the `numeric` or `url`  custom validator exmpale:
 
+```javascript
 new Vue({
   el: '#app',
   validators: { // `numeric` and `url` custom validator is local registration
-    numeric: function (val) {
+    numeric: function (val/*,ruel*/) {
       return /^[-+]?[0-9]+$/.test(val)
     },
     url: function (val) {
