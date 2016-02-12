@@ -783,8 +783,8 @@ the below the `email` custom validator exmpale:
 
 ```javascript
 // Register custom validator function. 
-// - first argument: file value (In example, `val`)
-// - second argument: rule value, optional. this argument passing from was specified with v-validate
+// - first argument: field value
+// - second argument: rule value (optional). this argument is being passed from specified validator rule with v-validate
 Vue.validator('email', function (val/*,rule*/) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
@@ -818,7 +818,7 @@ the below the `numeric` or `url`  custom validator exmpale:
 new Vue({
   el: '#app',
   validators: { // `numeric` and `url` custom validator is local registration
-    numeric: function (val/*,ruel*/) {
+    numeric: function (val/*,rule*/) {
       return /^[-+]?[0-9]+$/.test(val)
     },
     url: function (val) {
