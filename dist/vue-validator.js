@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.18
+ * vue-validator v2.0.0-alpha.19
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -687,7 +687,7 @@ var validators = Object.freeze({
         var _ = exports$1.Vue.util;
 
         var results = {};
-        var messages = {};
+        var errors = {};
         var valid = true;
 
         each(this._validators, function (descriptor, name) {
@@ -715,7 +715,7 @@ var validators = Object.freeze({
             if (!ret) {
               valid = false;
               if (msg) {
-                messages[name] = typeof msg === 'function' ? msg.call(_this2._vm, _this2.field, descriptor.arg) : msg;
+                errors[name] = typeof msg === 'function' ? msg.call(_this2._vm, _this2.field, descriptor.arg) : msg;
               }
             }
             results[name] = !ret;
@@ -733,8 +733,8 @@ var validators = Object.freeze({
           pristine: !this.dirty,
           modified: this.modified
         };
-        if (!empty(messages)) {
-          props.messages = messages;
+        if (!empty(errors)) {
+          props.errors = errors;
         }
         _.extend(results, props);
 
@@ -1547,7 +1547,7 @@ var validators = Object.freeze({
           modified: { fn: this._defineModified, arg: validationsGetter },
           dirty: { fn: this._defineDirty, arg: validationsGetter },
           pristine: { fn: this._definePristine, arg: targetGetter },
-          messages: { fn: this._defineMessages, arg: validationsGetter }
+          errors: { fn: this._defineErrors, arg: validationsGetter }
         }, function (descriptor, name) {
           Object.defineProperty(targetGetter(), name, {
             enumerable: true,
@@ -1616,8 +1616,8 @@ var validators = Object.freeze({
         return !scopeGetter().dirty;
       }
     }, {
-      key: '_defineMessages',
-      value: function _defineMessages(validationsGetter) {
+      key: '_defineErrors',
+      value: function _defineErrors(validationsGetter) {
         var _this8 = this;
 
         var extend = exports$1.Vue.util.extend;
@@ -1627,8 +1627,8 @@ var validators = Object.freeze({
         each(validationsGetter(), function (validation, key) {
           if (hasOwn(_this8._scope, validation.field)) {
             var target = _this8._scope[validation.field];
-            if (target && !empty(target['messages'])) {
-              ret[validation.field] = extend({}, target['messages']);
+            if (target && !empty(target['errors'])) {
+              ret[validation.field] = extend({}, target['errors']);
             }
           }
         }, this);
@@ -1668,16 +1668,13 @@ var validators = Object.freeze({
 
       bind: function bind() {
         if (!this.params.name) {
-          // TODO: should be implemented validator:bind name params nothing error'
-          warn('TODO: should be implemented validator:bind name params nothing error');
+          warn('validator element directive need to specify \'name\' param attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
           return;
         }
 
         this.validatorName = '$' + camelize(this.params.name);
         if (!this.vm._validatorMaps) {
-          // TODO: should be implemented error message'
-          warn('TODO: should be implemented error message');
-          return;
+          throw new Error('Invalid validator management error');
         }
 
         this.setupValidator();
@@ -1761,7 +1758,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.0.0-alpha.18';
+  plugin.version = '2.0.0-alpha.19';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);

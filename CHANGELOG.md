@@ -1,3 +1,19 @@
+<a name="2.0.0-alpha.19"></a>
+# [2.0.0-alpha.19](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.18...v2.0.0-alpha.19) (2016-02-14)
+
+
+### Features
+
+* **messages:** change error messages feature ([681f2f0](https://github.com/vuejs/vue-validator/commit/681f2f0))
+* **validator:** update warnning message ([c6495e0](https://github.com/vuejs/vue-validator/commit/c6495e0))
+
+
+### BREAKING CHANGES
+
+* messages: change `messages` to `errors`
+
+
+
 <a name="2.0.0-alpha.18"></a>
 # [2.0.0-alpha.18](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.17...v2.0.0-alpha.18) (2016-02-03)
 
