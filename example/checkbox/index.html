@@ -29,7 +29,7 @@
             <input id="banana" type="checkbox" value="banana" v-validate:fruits>
             <label for="banana">Banana</label>
             <ul class="errors">
-              <li v-for="msg in $validation1.fruits.messages">
+              <li v-for="msg in $validation1.fruits.errors">
                 <p>{{msg}}</p>
               </li>
             </ul>

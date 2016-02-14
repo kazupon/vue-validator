@@ -18,7 +18,7 @@
         }"/><br />
         <div class="errors">
           <ul>
-            <li v-for="obj in $validation1.messages">
+            <li v-for="obj in $validation1.errors">
               <div class="{{$key}}" v-for="msg in obj">
                 <p>{{$key}}: {{msg}}</p>
               </div>

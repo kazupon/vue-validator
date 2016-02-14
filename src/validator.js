@@ -346,7 +346,7 @@ export default class Validator {
       modified: { fn: this._defineModified, arg: validationsGetter },
       dirty: { fn: this._defineDirty, arg: validationsGetter },
       pristine: { fn: this._definePristine, arg: targetGetter },
-      messages: { fn: this._defineMessages, arg: validationsGetter }
+      errors: { fn: this._defineErrors, arg: validationsGetter }
     }, (descriptor, name) => {
       Object.defineProperty(targetGetter(), name, {
         enumerable: true,
@@ -403,7 +403,7 @@ export default class Validator {
     return !scopeGetter().dirty
   }
 
-  _defineMessages (validationsGetter) {
+  _defineErrors (validationsGetter) {
     const extend = util.Vue.util.extend
     const hasOwn = util.Vue.util.hasOwn
     let ret = {}
@@ -411,8 +411,8 @@ export default class Validator {
     each(validationsGetter(), (validation, key) => {
       if (hasOwn(this._scope, validation.field)) {
         let target = this._scope[validation.field]
-        if (target && !empty(target['messages'])) {
-          ret[validation.field] = extend({}, target['messages'])
+        if (target && !empty(target['errors'])) {
+          ret[validation.field] = extend({}, target['errors'])
         }
       }
     }, this)

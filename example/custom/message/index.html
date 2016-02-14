@@ -14,10 +14,10 @@
         age: <input type="text" v-validate:age=['numeric']><br />
         site: <input type="text" v-validate:site=['url']><br />
         <div>
-          <p v-if="$validation1.username.required">{{ $validation1.username.messages.required }}</p>
-          <p v-if="$validation1.address.email">{{ $validation1.address.messages.email }}</p>
-          <p v-if="$validation1.age.numeric">{{ $validation1.age.messages.numeric }}</p>
-          <p v-if="$validation1.site.url">{{ $validation1.site.messages.url }}</p>
+          <p v-if="$validation1.username.required">{{ $validation1.username.errors.required }}</p>
+          <p v-if="$validation1.address.email">{{ $validation1.address.errors.email }}</p>
+          <p v-if="$validation1.age.numeric">{{ $validation1.age.errors.numeric }}</p>
+          <p v-if="$validation1.site.url">{{ $validation1.site.errors.url }}</p>
         </div>
       <validator>
     </div>

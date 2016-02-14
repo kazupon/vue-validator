@@ -25,7 +25,7 @@
             <input id="banana" type="radio" name="fruit" value="banana" v-model="selected" v-validate:fruits>
             <label for="banana">Banana</label>
             <ul class="errors">
-              <li v-for="msg in $validation1.fruits.messages">
+              <li v-for="msg in $validation1.fruits.errors">
                 <p>{{msg}}</p>
               </li>
             </ul>

@@ -69,14 +69,14 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.numeric === true)
-        assert(vm.$validator1.field1.messages.numeric === 'invalid numeric value')
+        assert(vm.$validator1.field1.errors.numeric === 'invalid numeric value')
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'
         trigger(input, 'input')
         vm.$nextTick(() => {
           assert(vm.$validator1.field1.numeric === false)
-          assert(vm.$validator1.field1.messages === undefined)
+          assert(vm.$validator1.field1.errors === undefined)
           done()
         })
       })
@@ -110,14 +110,14 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.numeric === true)
-        assert(vm.$validator1.field1.messages.numeric === (vm.format + 'field1'))
+        assert(vm.$validator1.field1.errors.numeric === (vm.format + 'field1'))
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'
         trigger(input, 'input')
         vm.$nextTick(() => {
           assert(vm.$validator1.field1.numeric === false)
-          assert(vm.$validator1.field1.messages === undefined)
+          assert(vm.$validator1.field1.errors === undefined)
           done()
         })
       })
@@ -153,14 +153,14 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.required === true)
-        assert(vm.$validator1.field1.messages.required === 'required field1')
+        assert(vm.$validator1.field1.errors.required === 'required field1')
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'
         trigger(input, 'input')
         vm.$nextTick(() => {
           assert(vm.$validator1.field1.required === false)
-          assert(vm.$validator1.field1.messages === undefined)
+          assert(vm.$validator1.field1.errors === undefined)
           done()
         })
       })

@@ -16,7 +16,7 @@ describe('messages', () => {
       '<input type="text" group="group2" v-validate:field4="field4">' +
       '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">' +
       '<input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">' +
-      '<ul><li v-for="msg in $validation.messages">' +
+      '<ul><li v-for="msg in $validation.errors">' +
       '<div v-for="val in msg"><p>{{$key}}:{{val}}</p></div>' +
       '</li></ul>' +
       '</validator>'
@@ -59,34 +59,34 @@ describe('messages', () => {
 
     describe('fields', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.field1.messages.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.field2.messages.required === vm.field2.required.message)
-        assert(vm.$validation.field3.messages.max === vm.field3.max.message)
-        assert(vm.$validation.field4.messages.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.field5.messages.min === vm.message1)
-        assert(vm.$validation.field6.messages.minlength === vm.onMessage2('field6'))
+        assert(vm.$validation.field1.errors.pattern === vm.field1.pattern.message)
+        assert(vm.$validation.field2.errors.required === vm.field2.required.message)
+        assert(vm.$validation.field3.errors.max === vm.field3.max.message)
+        assert(vm.$validation.field4.errors.maxlength === vm.field4.maxlength.message)
+        assert(vm.$validation.field5.errors.min === vm.message1)
+        assert(vm.$validation.field6.errors.minlength === vm.onMessage2('field6'))
       })
     })
 
     describe('top', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.messages.field1.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.messages.field2.required === vm.field2.required.message)
-        assert(vm.$validation.messages.field3.max === vm.field3.max.message)
-        assert(vm.$validation.messages.field4.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.messages.field5.min === vm.message1)
-        assert(vm.$validation.messages.field6.minlength === vm.onMessage2('field6'))
+        assert(vm.$validation.errors.field1.pattern === vm.field1.pattern.message)
+        assert(vm.$validation.errors.field2.required === vm.field2.required.message)
+        assert(vm.$validation.errors.field3.max === vm.field3.max.message)
+        assert(vm.$validation.errors.field4.maxlength === vm.field4.maxlength.message)
+        assert(vm.$validation.errors.field5.min === vm.message1)
+        assert(vm.$validation.errors.field6.minlength === vm.onMessage2('field6'))
       })
     })
 
     describe('group', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.group1.messages.field1.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.group1.messages.field2.required === vm.field2.required.message)
-        assert(vm.$validation.group1.messages.field5.min === vm.message1)
-        assert(vm.$validation.group2.messages.field3.max === vm.field3.max.message)
-        assert(vm.$validation.group2.messages.field4.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.group2.messages.field6.minlength === vm.onMessage2('field6'))
+        assert(vm.$validation.group1.errors.field1.pattern === vm.field1.pattern.message)
+        assert(vm.$validation.group1.errors.field2.required === vm.field2.required.message)
+        assert(vm.$validation.group1.errors.field5.min === vm.message1)
+        assert(vm.$validation.group2.errors.field3.max === vm.field3.max.message)
+        assert(vm.$validation.group2.errors.field4.maxlength === vm.field4.maxlength.message)
+        assert(vm.$validation.group2.errors.field6.minlength === vm.onMessage2('field6'))
       })
     })
   })
@@ -133,25 +133,25 @@ describe('messages', () => {
 
     describe('fields', () => {
       it('should not be kept', () => {
-        assert(empty(vm.$validation.field1.messages))
-        assert(empty(vm.$validation.field2.messages))
-        assert(empty(vm.$validation.field3.messages))
-        assert(empty(vm.$validation.field4.messages))
-        assert(empty(vm.$validation.field5.messages))
-        assert(empty(vm.$validation.field6.messages))
+        assert(empty(vm.$validation.field1.errors))
+        assert(empty(vm.$validation.field2.errors))
+        assert(empty(vm.$validation.field3.errors))
+        assert(empty(vm.$validation.field4.errors))
+        assert(empty(vm.$validation.field5.errors))
+        assert(empty(vm.$validation.field6.errors))
       })
     })
 
     describe('top', () => {
       it('should not be kept', () => {
-        assert(empty(vm.$validation.messages))
+        assert(empty(vm.$validation.errors))
       })
     })
 
     describe('group', () => {
       it('should not be kept', () => {
-        assert(empty(vm.$validation.group1.messages))
-        assert(empty(vm.$validation.group2.messages))
+        assert(empty(vm.$validation.group1.errors))
+        assert(empty(vm.$validation.group2.errors))
       })
     })
   })

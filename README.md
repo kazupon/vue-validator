@@ -94,12 +94,12 @@ Validation results can be accessed in this structure:
                  .dirty
                  .pristine
                  .modified
-                 .messages.field1.validator1
-                                 ...
-                                 .validatorX
-                          .field2.validator1
-                                 ...
-                                 .validatorX
+                 .errors.field1.validator1
+                               ...
+                               .validatorX
+                        .field2.validator1
+                               ...
+                               .validatorX
                  .field1.validator1
                         ...
                         .validatorX
@@ -110,9 +110,9 @@ Validation results can be accessed in this structure:
                         .dirty
                         .pristine
                         .modified
-                        .messages.validator1
-                                 ...
-                                 .validatorX
+                        .errors.validator1
+                               ...
+                               .validatorX
                  ...
                  .fieldX.validator1
                         ...
@@ -124,9 +124,9 @@ Validation results can be accessed in this structure:
                         .dirty
                         .pristine
                         .modified
-                        .messages.validator1
-                                 ...
-                                 .validatorX
+                        .errors.validator1
+                               ...
+                               .validatorX
 
 The various top-level properties are in the validation scope, and each field validation result in its own respective scopes.
 
@@ -138,7 +138,7 @@ The various top-level properties are in the validation scope, and each field val
 - `modified`: whether field value is modified; if field value was changed from **initial** value, return `true`, else return `false`.
 - `dirty`: whether field value was changed at least **once**; if so, return `true`, else return `false`.
 - `pristine`: reverse of `dirty`.
-- `messages`: if invalid field exist, return error message wrapped with object, else `undefined`.
+- `errors`: if invalid field exist, return error message wrapped with object, else `undefined`.
 
 ## Top level validation properties
 - `valid`: whether **all** fields is valid. if so, then return `true`, else return `false`.
@@ -148,7 +148,7 @@ The various top-level properties are in the validation scope, and each field val
 - `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
 - `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
 - `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
-- `messages`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
+- `errors`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
 
 
 # Validator syntax
@@ -416,7 +416,7 @@ Checkbox validation supports lengths:
         <input id="banana" type="checkbox" value="banana" v-validate:fruits>
         <label for="banana">Banana</label>
         <ul class="errors">
-          <li v-for="msg in $validation1.fruits.messages">
+          <li v-for="msg in $validation1.fruits.errors">
             <p>{{msg}}</p>
           </li>
         </ul>
@@ -464,7 +464,7 @@ new Vue({
         <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
         <label for="banana">Banana</label>
         <ul class="errors">
-          <li v-for="msg in $validation1.fruits.messages">
+          <li v-for="msg in $validation1.fruits.errors">
             <p>{{msg}}</p>
           </li>
         </ul>
@@ -537,7 +537,7 @@ The vue binding syntax can group inputs together:
 ```
 
 
-# Message
+# Error Messages
 
 Error messages can be stored directly in the validation rules, rather than relying on `v-show` or `v-if`:
 
@@ -552,7 +552,7 @@ Error messages can be stored directly in the validation rules, rather than relyi
   }"/><br />
   <div class="errors">
     <ul>
-      <li v-for="obj in $validation1.messages">
+      <li v-for="obj in $validation1.errors">
         <div class="{{$key}}" v-for="msg in obj">
           <p>{{$key}}: {{msg}}</p>
         </div>
@@ -901,10 +901,10 @@ new Vue({
     age: <input type="text" v-validate:age="['numeric']"><br />
     site: <input type="text" v-validate:site="['url']"><br />
     <div>
-      <p v-if="$validation1.username.required">{{ $validation1.username.messages.required }}</p>
-      <p v-if="$validation1.address.email">{{ $validation1.address.messages.email }}</p>
-      <p v-if="$validation1.age.numeric">{{ $validation1.age.messages.numeric }}</p>
-      <p v-if="$validation1.site.url">{{ $validation1.site.messages.url }}</p>
+      <p v-if="$validation1.username.required">{{ $validation1.username.errors.required }}</p>
+      <p v-if="$validation1.address.email">{{ $validation1.address.errors.email }}</p>
+      <p v-if="$validation1.age.numeric">{{ $validation1.age.errors.numeric }}</p>
+      <p v-if="$validation1.site.url">{{ $validation1.site.errors.url }}</p>
     </div>
   <validator>
 </div>
