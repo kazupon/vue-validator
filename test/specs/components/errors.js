@@ -194,7 +194,6 @@ describe('validator-errors', () => {
           'field2: field2 required',
           'field5: field5 small too'
         ], (msg) => {
-          console.log(msg, element.textContent)
           if (msg === element.textContent) {
             matchCount++
           }

@@ -36,6 +36,7 @@ export default function (Vue) {
     computed: {
       errors () {
         let ret = []
+
         if (this.group !== null) {
           for (let field in this.validation[this.group].errors) {
             for (let validator in this.validation[this.group].errors[field]) {
@@ -43,19 +44,20 @@ export default function (Vue) {
               ret.push({ field: field, validator: validator, message: message })
             }
           }
-        } else if (this.field === null) {
+        } else if (this.field !== null) {
+          for (let validator in this.validation.errors[this.field]) {
+            let message = this.validation.errors[this.field][validator]
+            ret.push({ field: this.field, validator: validator, message: message })
+          }
+        } else {
           for (let field in this.validation.errors) {
             for (let validator in this.validation.errors[field]) {
               let message = this.validation.errors[field][validator]
               ret.push({ field: field, validator: validator, message: message })
             }
           }
-        } else {
-          for (let validator in this.validation.errors[this.field]) {
-            let message = this.validation.errors[this.field][validator]
-            ret.push({ field: this.field, validator: validator, message: message })
-          }
         }
+
         return ret 
       }
     },
