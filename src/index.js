@@ -3,6 +3,7 @@ import Asset from './asset'
 import Override from './override'
 import Validate from './directives/validate'
 import Validator from './directives/validator'
+import Errors from './components/errors'
 
 
 /**
@@ -20,6 +21,7 @@ function plugin (Vue, options = {}) {
 
   util.Vue = Vue
   Asset(Vue)
+  Errors(Vue)
 
   Override(Vue)
   Validator(Vue)
