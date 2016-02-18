@@ -256,7 +256,7 @@ The below example uses an array literal:
 </validator>
 ```
 
-Since `requred` doesn't need to specify any additional rules, this syntax is preferred.
+Since `required` doesn't need to specify any additional rules, this syntax is preferred.
 
 
 ### Object
@@ -267,7 +267,7 @@ The below example uses an object literal:
   <form novalidate>
     ID: <input type="text" v-validate:id="{ required: true, minlength: 3, maxlength: 16 }"><br />
     <div>
-      <span v-if="$validation.id.required">ID is requred.</span>
+      <span v-if="$validation.id.required">ID is required</span>
       <span v-if="$validation.id.minlength">Your ID is too short.</span>
       <span v-if="$validation.id.maxlength">Your ID is too long.</span>
     </div>
@@ -275,7 +275,7 @@ The below example uses an object literal:
 </validator>
 ```
 
-Object literals allow you to provide rule values. For `requred`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
+Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
 
 Alternatively, you can specify a strict object as follows:
 
@@ -619,9 +619,11 @@ In the above example, it's rendered the following:
 </div>
 ```
 
-## Custom error message formatting
+## Custom error message templating
 
-If you don't like the default error message format of `validator-errors`, you can specify the custom error message format with your component or your partial template.
+If you don't like the default error message format of `validator-errors`, you can specify the custom error message template with your component or your partial template.
+
+### Component template
 
 the below component example:
 
@@ -659,6 +661,8 @@ Vue.component('custom-error', {
 new Vue({ el: '#app' })
 ```
   
+### Partial template
+
 the below partial template example:
 
 ```html
