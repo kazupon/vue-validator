@@ -444,7 +444,7 @@ new Vue({
 ```
 
 
-# Radio Button
+# Radio button
 
 ```html
 <div id="app">
@@ -537,7 +537,7 @@ The vue binding syntax can group inputs together:
 ```
 
 
-# Error Messages
+# Error messages
 
 Error messages can be stored directly in the validation rules, rather than relying on `v-show` or `v-if`:
 
@@ -570,7 +570,7 @@ Error messages can be stored directly in the validation rules, rather than relyi
 
 Data property or computed properties can help reduce clutter, rather than using inline rule sets.
 
-## Error Message Enumeration Component
+## Error message enumeration component
 
 In the above example, we used `v-for` directive to enumerate `errors` of validator. But, we can't be bothered to do it. So, vue-validator provide the convenient `validator-errors` component to enumerate error info. the following the example:
 
@@ -621,7 +621,7 @@ In the above example, it's rendered the following:
 
 ## Custom error message formatting
 
-If you don't like the default error message format of `validator-errors`, you can specify the cusome error message format with your component or your partial template.
+If you don't like the default error message format of `validator-errors`, you can specify the custom error message format with your component or your partial template.
 
 the below component example:
 
