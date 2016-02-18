@@ -62,10 +62,9 @@ describe('validator-errors', () => {
         '<input type="text" v-validate:field2="field2">' +
         '<validator-errors :partial="\'custom-error\'":validation="$validation"></validator-errors>' +
         '</validator>'
+      Vue.partial('custom-error', '<span>{{field}}:{{validator}}:{{message}}</span>')
       vm = new Vue({
-        partials: {
-          'custom-error': '<span>{{field}}:{{validator}}:{{message}}</span>'
-        },
+        el: el,
         data: {
           field1: { pattern: { rule: '/foo/', message: 'field1 pattern error' } },
           field2: { 
@@ -73,11 +72,8 @@ describe('validator-errors', () => {
             minlength: { rule: 2, message: 'field2 short too' }
           }
         }
-      }).$mount()
-      vm.$nextTick(() => {
-        vm.$appendTo(el)
-        done()
       })
+      vm.$nextTick(done)
     })
 
     it('should be rendered error messages', () => {

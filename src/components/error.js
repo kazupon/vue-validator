@@ -25,7 +25,7 @@ export default function (Vue) {
       }
     },
 
-    template: '<template><partial :name="partial"></partial></template>',
+    template: '<div><partial :name="partial"></partial></div>',
 
     partials: {}
   }
