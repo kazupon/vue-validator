@@ -39,8 +39,8 @@ module.exports = function (config) {
             presets: ['es2015'],
             plugins: [
               'babel-plugin-espower'
-              /*, NOTE: disable, see https://github.com/speedskater/babel-plugin-rewire#istanbul
-              'babel-plugin-rewire'*/
+              // NOTE: disable, see https://github.com/speedskater/babel-plugin-rewire#istanbul
+              // DISABLE: 'babel-plugin-rewire'
             ]
           }
         }],
