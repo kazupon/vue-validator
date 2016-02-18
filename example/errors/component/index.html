@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>error message with component example</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        <div class="username">
+          <label for="username">username:</label>
+          <input id="username" type="text" v-validate:username="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+        </div>
+        <div class="password">
+          <label for="password">password:</label>
+          <input id="password" type="text" v-validate:password="{
+            required: { rule: true, message: 'required you password !!' },
+            minlength: { rule: 8, message: 'your password short too !!' }
+          }"/>
+        </div>
+        <div class="errors">
+          <validator-errors :component="'custom-error'" :validation="$validation1">
+          </validator-errors>
+        </div>
+      </validator>
+    </div>
+    <script>
+      // register the your component with Vue.component
+      Vue.component('custom-error', {
+        props: ['field', 'validator', 'message'],
+        template: '<p class="error-{{field}}-{{validator}}">{{message}}</p>'
+      })
+
+      new Vue({
+        el: '#app'
+      })
+    </script>
+  </body>
+</html>

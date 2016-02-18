@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>error message with partial example</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1">
+        <div class="username">
+          <label for="username">username:</label>
+          <input id="username" type="text" v-validate:username="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+        </div>
+        <div class="password">
+          <label for="password">password:</label>
+          <input id="password" type="text" v-validate:password="{
+            required: { rule: true, message: 'required you password !!' },
+            minlength: { rule: 8, message: 'your password short too !!' }
+          }"/>
+        </div>
+        <div class="errors">
+          <validator-errors partial="myErrorTemplate" :validation="$validation1">
+          </validator-errors>
+        </div>
+      </validator>
+    </div>
+    <script>
+      // register custom error template
+      Vue.partial('myErrorTemplate', '<p>{{field}}: {{validator}}: {{message}}</p>')
+      new Vue({ el: '#app' })
+    </script>
+  </body>
+</html>
