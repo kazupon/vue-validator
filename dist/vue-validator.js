@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.19
+ * vue-validator v2.0.0-alpha.20
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -1735,6 +1735,121 @@ var validators = Object.freeze({
     });
   }
 
+  function ValidatorError (Vue) {
+
+    /**
+     * ValidatorError component
+     */
+
+    var error = {
+      name: 'validator-error',
+
+      props: {
+        field: {
+          type: String,
+          required: true
+        },
+        validator: {
+          type: String
+        },
+        message: {
+          type: String,
+          required: true
+        },
+        partial: {
+          type: String,
+          default: 'validator-error-default'
+        }
+      },
+
+      template: '<div><partial :name="partial"></partial></div>',
+
+      partials: {}
+    };
+
+    // only use ValidatorError component
+    error.partials['validator-error-default'] = '<p>{{field}}: {{message}}</p>';
+
+    return error;
+  }
+
+  function Errors (Vue) {
+
+    // import ValidatorError component
+    var error = ValidatorError(Vue);
+
+    /**
+     * ValidatorErrors component
+     */
+
+    var errors = {
+      name: 'validator-errors',
+
+      props: {
+        validation: {
+          type: Object,
+          required: true
+        },
+        group: {
+          type: String,
+          default: null
+        },
+        field: {
+          type: String,
+          default: null
+        },
+        component: {
+          type: String,
+          default: 'validator-error'
+        }
+      },
+
+      computed: {
+        errors: function errors() {
+          var ret = [];
+
+          if (this.group !== null) {
+            for (var field in this.validation[this.group].errors) {
+              for (var validator in this.validation[this.group].errors[field]) {
+                var message = this.validation[this.group].errors[field][validator];
+                ret.push({ field: field, validator: validator, message: message });
+              }
+            }
+          } else if (this.field !== null) {
+            for (var validator in this.validation.errors[this.field]) {
+              var message = this.validation.errors[this.field][validator];
+              ret.push({ field: this.field, validator: validator, message: message });
+            }
+          } else {
+            for (var field in this.validation.errors) {
+              for (var validator in this.validation.errors[field]) {
+                var message = this.validation.errors[field][validator];
+                ret.push({ field: field, validator: validator, message: message });
+              }
+            }
+          }
+
+          return ret;
+        }
+      },
+
+      template: '<template v-for="error in errors">' + '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message"></component>' + '</template>',
+
+      components: {}
+    };
+
+    // define 'partial' prop
+    errors.props['partial'] = error.props['partial'];
+
+    // only use ValidatorErrors component
+    errors.components[error.name] = error;
+
+    // install ValidatorErrors component
+    Vue.component(errors.name, errors);
+
+    return errors;
+  }
+
   /**
    * plugin
    *
@@ -1752,13 +1867,14 @@ var validators = Object.freeze({
 
     exports$1.Vue = Vue;
     Asset(Vue);
+    Errors(Vue);
 
     Override(Vue);
     Validator(Vue);
     Validate(Vue);
   }
 
-  plugin.version = '2.0.0-alpha.19';
+  plugin.version = '2.0.0-alpha.20';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);

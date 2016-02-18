@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.20"></a>
+# [2.0.0-alpha.20](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.19...v2.0.0-alpha.20) (2016-02-18)
+
+
+### Features
+
+* **errors:** add validator-errors and validator-error component ([a51829a](https://github.com/vuejs/vue-validator/commit/a51829a))
+
+
+
 <a name="2.0.0-alpha.19"></a>
 # [2.0.0-alpha.19](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.18...v2.0.0-alpha.19) (2016-02-14)
 
