@@ -1,6 +1,5 @@
 import assert from 'power-assert'
 import Vue from 'vue'
-import Validator from '../../../src/directives/validator'
 import { trigger, pull } from '../../../src/util'
 
 
@@ -31,6 +30,11 @@ describe('validator element directive', () => {
   })
 
 
+  /* 
+   * NOTE: 
+   *  disable the warnning tests.
+   *  see https://github.com/speedskater/babel-plugin-rewire#istanbul
+   *
   describe('warnning', () => {
     let called = false
     beforeEach(() => {
@@ -55,6 +59,7 @@ describe('validator element directive', () => {
       })
     })
   })
+  */
 
 
   describe('internal validator management', () => {
