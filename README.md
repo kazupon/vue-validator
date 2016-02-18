@@ -590,8 +590,7 @@ In the above example, we used `v-for` directive to enumerate `errors` of validat
     }"/>
   </div>
   <div class="errors">
-    <validator-errors :validation="$validation1">
-    </validator-errors>
+    <validator-errors :validation="$validation1"></validator-errors>
   </div>
 </validator>
 ```
@@ -608,9 +607,15 @@ In the above example, it's rendered the following:
   <input id="password" type="text">
 </div>
 <div class="errors">
-  <p>password: your password short too !!</p>
-  <p>password: required you password !!</p>
-  <p>username: required you name !!</p>
+  <div>
+    <p>password: your password short too !!</p>
+  </div>
+  <div>
+    <p>password: required you password !!</p>
+  </div>
+  <div>
+    <p>username: required you name !!</p>
+  </div>
 </div>
 ```
 
