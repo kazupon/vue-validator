@@ -69,7 +69,8 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.numeric === true)
-        assert(vm.$validator1.field1.errors.numeric === 'invalid numeric value')
+        assert(vm.$validator1.field1.errors[0].validator === 'numeric')
+        assert(vm.$validator1.field1.errors[0].message === 'invalid numeric value')
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'
@@ -110,7 +111,8 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.numeric === true)
-        assert(vm.$validator1.field1.errors.numeric === (vm.format + 'field1'))
+        assert(vm.$validator1.field1.errors[0].validator === 'numeric')
+        assert(vm.$validator1.field1.errors[0].message === (vm.format + 'field1'))
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'
@@ -153,7 +155,8 @@ describe('custom', () => {
 
       it('should be validated', (done) => {
         assert(vm.$validator1.field1.required === true)
-        assert(vm.$validator1.field1.errors.required === 'required field1')
+        assert(vm.$validator1.field1.errors[0].validator === 'required')
+        assert(vm.$validator1.field1.errors[0].message === 'required field1')
 
         let input = el.getElementsByTagName('input')[0]
         input.value = '10'

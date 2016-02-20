@@ -87,46 +87,64 @@ The validation results are scoped to the validator element. In above case, the v
 
 Validation results can be accessed in this structure:
 
-      $validation.valid
-                 .invalid
-                 .touched
-                 .untouched
-                 .dirty
-                 .pristine
-                 .modified
-                 .errors.field1.validator1
-                               ...
-                               .validatorX
-                        .field2.validator1
-                               ...
-                               .validatorX
-                 .field1.validator1
-                        ...
-                        .validatorX
-                        .valid
-                        .invalid
-                        .touched
-                        .untouched
-                        .dirty
-                        .pristine
-                        .modified
-                        .errors.validator1
-                               ...
-                               .validatorX
-                 ...
-                 .fieldX.validator1
-                        ...
-                        .validatorX
-                        .valid
-                        .invalid
-                        .touched
-                        .untouched
-                        .dirty
-                        .pristine
-                        .modified
-                        .errors.validator1
-                               ...
-                               .validatorX
+```json
+{
+  // top-level validation properties
+  valid: true,
+  invalid: false,
+  touched: false,
+  undefined: true,
+  dirty: false,
+  pristine: true,
+  modified: false,
+  errors: [{
+    field: 'field1', validator: 'required', message: 'required field1'
+  }, ... {
+    field: 'fieldX', validator: 'customValidator', message: 'invalid fieldX'
+  }],
+
+  // field1 validation
+  field1: {
+    required: false, // validator
+    email: true, // custom validator
+    ...
+    customValidator1: false,
+
+    // field validation properties
+    valid: false,
+    invalid: true,
+    touched: false,
+    undefined: true,
+    dirty: false,
+    pristine: true,
+    modified: false,
+    errors: [{
+      validator: 'required', message: 'required field1'
+    }]
+  },
+
+  ...
+
+  // fieldX validation
+  fieldX: {
+    min: false, // validator
+    ...
+    customValidator: true,
+
+    // fieldX validation properties
+    valid: false,
+    invalid: true,
+    touched: true,
+    undefined: false,
+    dirty: true,
+    pristine: false,
+    modified: true,
+    errors: [{
+      validator: 'customValidator', message: 'invalid fieldX'
+    }]
+  },
+}
+```
 
 The various top-level properties are in the validation scope, and each field validation result in its own respective scopes.
 
@@ -138,7 +156,7 @@ The various top-level properties are in the validation scope, and each field val
 - `modified`: whether field value is modified; if field value was changed from **initial** value, return `true`, else return `false`.
 - `dirty`: whether field value was changed at least **once**; if so, return `true`, else return `false`.
 - `pristine`: reverse of `dirty`.
-- `errors`: if invalid field exist, return error message wrapped with object, else `undefined`.
+- `errors`: if invalid field exist, return error message wrapped with array, else `undefined`.
 
 ## Top level validation properties
 - `valid`: whether **all** fields is valid. if so, then return `true`, else return `false`.
@@ -148,7 +166,7 @@ The various top-level properties are in the validation scope, and each field val
 - `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
 - `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
 - `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
-- `errors`: if invalid even one exist, return all field error message wrapped with object, else `undefined`.
+- `errors`: if invalid even one exist, return all field error message wrapped with array, else `undefined`.
 
 
 # Validator syntax
@@ -558,10 +576,8 @@ Error messages can be stored directly in the validation rules, rather than relyi
   </div>
   <div class="errors">
     <ul>
-      <li v-for="obj in $validation1.errors">
-        <div class="{{$key}}" v-for="msg in obj">
-          <p>{{$key}}: {{msg}}</p>
-        </div>
+      <li v-for="error in $validation1.errors">
+        <p>{{error.field}}: {{error.mesage}}</p>
       </li>
     </ul>
   </div>
@@ -1031,7 +1047,7 @@ new Vue({
     email: <input type="text" v-validate:address="['email']"><br />
     age: <input type="text" v-validate:age="['numeric']"><br />
     site: <input type="text" v-validate:site="['url']"><br />
-    <div>
+    <div class="errors">
       <p v-if="$validation1.username.required">required username</p>
       <p v-if="$validation1.address.email">invalid email address</p>
       <p v-if="$validation1.age.numeric">invalid age value</p>
@@ -1093,11 +1109,8 @@ new Vue({
     email: <input type="text" v-validate:address="['email']"><br />
     age: <input type="text" v-validate:age="['numeric']"><br />
     site: <input type="text" v-validate:site="['url']"><br />
-    <div>
-      <p v-if="$validation1.username.required">{{ $validation1.username.errors.required }}</p>
-      <p v-if="$validation1.address.email">{{ $validation1.address.errors.email }}</p>
-      <p v-if="$validation1.age.numeric">{{ $validation1.age.errors.numeric }}</p>
-      <p v-if="$validation1.site.url">{{ $validation1.site.errors.url }}</p>
+    <div class="errors">
+      <validator-errors :validation="$validation1"></validator-errors>
     </div>
   <validator>
 </div>

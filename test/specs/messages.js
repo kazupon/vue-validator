@@ -1,10 +1,25 @@
 import assert from 'power-assert'
 import Vue from 'vue'
-import { empty, trigger } from '../../src/util'
+import { each, empty, trigger } from '../../src/util'
 
 
 describe('messages', () => {
   let el, vm
+
+  let testMatches = (target, validatorErrors) => {
+    let matchCount = 0
+    each(target, (error, index) => {
+      each(validatorErrors, (err, index) => {
+        if (error.field === err.field && 
+            error.validator === err.validator && 
+            error.message === err.message) {
+          matchCount++
+        }
+      })
+    })
+    return matchCount
+  }
+
 
   beforeEach((done) => {
     el = document.createElement('div')
@@ -16,8 +31,8 @@ describe('messages', () => {
       '<input type="text" group="group2" v-validate:field4="field4">' +
       '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">' +
       '<input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">' +
-      '<ul><li v-for="msg in $validation.errors">' +
-      '<div v-for="val in msg"><p>{{$key}}:{{val}}</p></div>' +
+      '<ul><li v-for="error in $validation.errors">' +
+      '<p>{{error.field}}:{{error.message}}</p></div>' +
       '</li></ul>' +
       '</validator>'
     vm = new Vue({
@@ -59,34 +74,50 @@ describe('messages', () => {
 
     describe('fields', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.field1.errors.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.field2.errors.required === vm.field2.required.message)
-        assert(vm.$validation.field3.errors.max === vm.field3.max.message)
-        assert(vm.$validation.field4.errors.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.field5.errors.min === vm.message1)
-        assert(vm.$validation.field6.errors.minlength === vm.onMessage2('field6'))
+        assert(vm.$validation.field1.errors[0].validator === 'pattern')
+        assert(vm.$validation.field1.errors[0].message === vm.field1.pattern.message)
+        assert(vm.$validation.field2.errors[0].validator === 'required')
+        assert(vm.$validation.field2.errors[0].message === vm.field2.required.message)
+        assert(vm.$validation.field3.errors[0].validator === 'max')
+        assert(vm.$validation.field3.errors[0].message === vm.field3.max.message)
+        assert(vm.$validation.field4.errors[0].validator === 'maxlength')
+        assert(vm.$validation.field4.errors[0].message === vm.field4.maxlength.message)
+        assert(vm.$validation.field5.errors[0].validator === 'min')
+        assert(vm.$validation.field5.errors[0].message === vm.message1)
+        assert(vm.$validation.field6.errors[0].validator === 'minlength')
+        assert(vm.$validation.field6.errors[0].message === vm.onMessage2('field6'))
       })
     })
 
     describe('top', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.errors.field1.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.errors.field2.required === vm.field2.required.message)
-        assert(vm.$validation.errors.field3.max === vm.field3.max.message)
-        assert(vm.$validation.errors.field4.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.errors.field5.min === vm.message1)
-        assert(vm.$validation.errors.field6.minlength === vm.onMessage2('field6'))
+        let targets = [
+          { field: 'field1', validator: 'pattern', message: vm.field1.pattern.message },
+          { field: 'field2', validator: 'required', message: vm.field2.required.message },
+          { field: 'field3', validator: 'max', message: vm.field3.max.message },
+          { field: 'field4', validator: 'maxlength', message: vm.field4.maxlength.message },
+          { field: 'field5', validator: 'min', message: vm.message1 },
+          { field: 'field6', validator: 'minlength', message: vm.onMessage2('field6') }
+        ]
+        assert(testMatches(targets, vm.$validation.errors) === 6)
       })
     })
 
     describe('group', () => {
       it('should be kept messages', () => {
-        assert(vm.$validation.group1.errors.field1.pattern === vm.field1.pattern.message)
-        assert(vm.$validation.group1.errors.field2.required === vm.field2.required.message)
-        assert(vm.$validation.group1.errors.field5.min === vm.message1)
-        assert(vm.$validation.group2.errors.field3.max === vm.field3.max.message)
-        assert(vm.$validation.group2.errors.field4.maxlength === vm.field4.maxlength.message)
-        assert(vm.$validation.group2.errors.field6.minlength === vm.onMessage2('field6'))
+        let group1Targets = [
+          { field: 'field1', validator: 'pattern', message: vm.field1.pattern.message },
+          { field: 'field2', validator: 'required', message: vm.field2.required.message },
+          { field: 'field5', validator: 'min', message: vm.message1 }
+        ]
+        let group2Targets = [
+          { field: 'field3', validator: 'max', message: vm.field3.max.message },
+          { field: 'field4', validator: 'maxlength', message: vm.field4.maxlength.message },
+          { field: 'field6', validator: 'minlength', message: vm.onMessage2('field6') }
+        ]
+
+        assert(testMatches(group1Targets, vm.$validation.group1.errors) === 3)
+        assert(testMatches(group2Targets, vm.$validation.group2.errors) === 3)
       })
     })
   })

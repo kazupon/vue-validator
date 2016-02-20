@@ -3,9 +3,8 @@ import ValidatorError from './error'
 
 export default function (Vue) {
 
-  // import ValidatorError component
-  const error = ValidatorError(Vue)
-  
+  const _ = Vue.util
+  const error = ValidatorError(Vue) // import ValidatorError component
 
   /**
    * ValidatorErrors component
@@ -35,30 +34,25 @@ export default function (Vue) {
 
     computed: {
       errors () {
-        let ret = []
-
         if (this.group !== null) {
-          for (let field in this.validation[this.group].errors) {
-            for (let validator in this.validation[this.group].errors[field]) {
-              let message = this.validation[this.group].errors[field][validator]
-              ret.push({ field: field, validator: validator, message: message })
-            }
-          }
+          return this.validation[this.group].errors
         } else if (this.field !== null) {
-          for (let validator in this.validation.errors[this.field]) {
-            let message = this.validation.errors[this.field][validator]
-            ret.push({ field: this.field, validator: validator, message: message })
-          }
-        } else {
-          for (let field in this.validation.errors) {
-            for (let validator in this.validation.errors[field]) {
-              let message = this.validation.errors[field][validator]
-              ret.push({ field: field, validator: validator, message: message })
+          var target = this.validation[this.field]
+          return target.errors.map((error) => {
+            let err = { field: this.field }
+            if (_.isPlainObject(error)) {
+              if (error.validator) {
+                err.validator = error.validator
+              }
+              err.message = error.message
+            } else if (typeof error === 'string') {
+              err.message = error
             }
-          }
+            return err
+          })
+        } else {
+          return this.validation.errors
         }
-
-        return ret 
       }
     },
 

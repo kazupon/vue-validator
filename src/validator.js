@@ -404,19 +404,30 @@ export default class Validator {
   }
 
   _defineErrors (validationsGetter) {
-    const extend = util.Vue.util.extend
     const hasOwn = util.Vue.util.hasOwn
-    let ret = {}
+    const isPlainObject = util.Vue.util.isPlainObject
+    let errors = []
 
     each(validationsGetter(), (validation, key) => {
       if (hasOwn(this._scope, validation.field)) {
         let target = this._scope[validation.field]
-        if (target && !empty(target['errors'])) {
-          ret[validation.field] = extend({}, target['errors'])
+        if (target && !empty(target.errors)) {
+          each(target.errors, (err, index) => {
+            let error = { field: validation.field }
+            if (isPlainObject(err)) {
+              if (err.validator) {
+                error.validator = err.validator
+              }
+              error.message = err.message
+            } else if (typeof err === 'string') {
+              error.message = err
+            }
+            errors.push(error)
+          }, this)
         }
       }
     }, this)
 
-    return empty(ret) ? undefined : ret
+    return empty(errors) ? undefined : errors
   }
 }

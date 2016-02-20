@@ -5,6 +5,9 @@
     <title>error message basic example</title>
     <script src="../../../node_modules/vue/dist/vue.min.js"></script>
     <script src="../../../dist/vue-validator.min.js"></script>
+    <style>
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -24,10 +27,8 @@
         </div>
         <div class="errors">
           <ul>
-            <li v-for="obj in $validation1.errors">
-              <div class="{{$key}}" v-for="msg in obj">
-                <p>{{$key}}: {{msg}}</p>
-              </div>
+            <li v-for="error in $validation1.errors">
+              <p>{{error.field}}: {{error.message}}</p>
             </li>
           </ul>
         </div>

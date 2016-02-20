@@ -5,6 +5,9 @@
     <title>custom validator error message example</title>
     <script src="../../../node_modules/vue/dist/vue.min.js"></script>
     <script src="../../../dist/vue-validator.min.js"></script>
+    <style>
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -13,11 +16,8 @@
         email: <input type="text" v-validate:address="['email']"><br />
         age: <input type="text" v-validate:age=['numeric']><br />
         site: <input type="text" v-validate:site=['url']><br />
-        <div>
-          <p v-if="$validation1.username.required">{{ $validation1.username.errors.required }}</p>
-          <p v-if="$validation1.address.email">{{ $validation1.address.errors.email }}</p>
-          <p v-if="$validation1.age.numeric">{{ $validation1.age.errors.numeric }}</p>
-          <p v-if="$validation1.site.url">{{ $validation1.site.errors.url }}</p>
+        <div class="errors">
+          <validator-errors :validation="$validation1"></validator-errors>
         </div>
       <validator>
     </div>

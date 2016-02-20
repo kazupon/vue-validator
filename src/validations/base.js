@@ -103,7 +103,7 @@ export default class BaseValidation {
     const _ = util.Vue.util
 
     let results = {}
-    let errors = {}
+    let errors = []
     let valid = true
 
     each(this._validators, (descriptor, name) => {
@@ -131,9 +131,11 @@ export default class BaseValidation {
         if (!ret) {
           valid = false
           if (msg) {
-            errors[name] = typeof msg === 'function' 
+            let error = { validator: name }
+            error.message = typeof msg === 'function' 
               ? msg.call(this._vm, this.field, descriptor.arg) 
               : msg
+            errors.push(error)
           }
         }
         results[name] = !ret

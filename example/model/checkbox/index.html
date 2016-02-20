@@ -29,8 +29,8 @@
             <input id="banana" type="checkbox" value="banana" v-model="selected" v-validate:fruits>
             <label for="banana">Banana</label>
             <ul class="errors">
-              <li v-for="msg in $validation1.fruits.errors">
-                <p>{{msg}}</p>
+              <li v-for="error in $validation1.fruits.errors">
+                <p>{{error.message}}</p>
               </li>
             </ul>
             <pre>$data: {{ $data | json }}</pre>

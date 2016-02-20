@@ -32,7 +32,7 @@ export function warn (msg, err) {
  */
 
 export function empty (target) {
-  if (target === null) { return true }
+  if (target === null || target === undefined) { return true }
 
   if (Array.isArray(target)) {
     if (target.length > 0) { return false }
