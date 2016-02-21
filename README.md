@@ -87,7 +87,7 @@ The validation results are scoped to the validator element. In above case, the v
 
 Validation results can be accessed in this structure:
 
-```json
+```
 {
   // top-level validation properties
   valid: true,
