@@ -68,7 +68,7 @@ describe('custom', () => {
       })
 
       it('should be validated', (done) => {
-        assert(vm.$validator1.field1.numeric === true)
+        assert(vm.$validator1.field1)
         assert(vm.$validator1.field1.errors[0].validator === 'numeric')
         assert(vm.$validator1.field1.errors[0].message === 'invalid numeric value')
 
@@ -110,7 +110,7 @@ describe('custom', () => {
       })
 
       it('should be validated', (done) => {
-        assert(vm.$validator1.field1.numeric === true)
+        assert(vm.$validator1.field1.numeric)
         assert(vm.$validator1.field1.errors[0].validator === 'numeric')
         assert(vm.$validator1.field1.errors[0].message === (vm.format + 'field1'))
 
@@ -154,7 +154,7 @@ describe('custom', () => {
       })
 
       it('should be validated', (done) => {
-        assert(vm.$validator1.field1.required === true)
+        assert(vm.$validator1.field1.required)
         assert(vm.$validator1.field1.errors[0].validator === 'required')
         assert(vm.$validator1.field1.errors[0].message === 'required field1')
 

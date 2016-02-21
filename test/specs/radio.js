@@ -43,7 +43,7 @@ describe('radio', () => {
       assert(vm.$validator1.field1.touched === false)
       assert(vm.$validator1.field1.dirty === false)
       assert(vm.$validator1.field1.modified === false)
-      assert(vm.$validator1.field2.required === true)
+      assert(vm.$validator1.field2.required)
       assert(vm.$validator1.field2.valid === false)
       assert(vm.$validator1.field2.touched === false)
       assert(vm.$validator1.field2.dirty === false)

@@ -136,9 +136,13 @@ export default class BaseValidation {
               ? msg.call(this._vm, this.field, descriptor.arg) 
               : msg
             errors.push(error)
+            results[name] = error.message
+          } else {
+            results[name] = !ret
           }
+        } else {
+          results[name] = !ret
         }
-        results[name] = !ret
       }
     }, this)
 

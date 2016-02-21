@@ -27,7 +27,7 @@ describe('checkbox', () => {
 
     it('should be validated', (done) => {
       // default
-      assert(vm.$validator1.field1.required === true)
+      assert(vm.$validator1.field1.required)
       assert(vm.$validator1.field1.valid === false)
       assert(vm.$validator1.field1.touched === false)
       assert(vm.$validator1.field1.dirty === false)
@@ -88,7 +88,7 @@ describe('checkbox', () => {
 
     it('should be validated', (done) => {
       // default
-      assert(vm.$validator1.field1.required === true)
+      assert(vm.$validator1.field1.required)
       assert(vm.$validator1.field1.minlength === true)
       assert(vm.$validator1.field1.valid === false)
       assert(vm.$validator1.field1.touched === false)
@@ -135,7 +135,7 @@ describe('checkbox', () => {
             trigger(checkbox2, 'blur')
             trigger(checkbox2, 'change')
             vm.$nextTick(() => {
-              assert(vm.$validator1.field1.required === true)
+              assert(vm.$validator1.field1.required)
               assert(vm.$validator1.field1.minlength === true)
               assert(vm.$validator1.field1.valid === false)
               assert(vm.$validator1.field1.touched === true)
@@ -201,13 +201,13 @@ describe('checkbox', () => {
       trigger(checkbox3, 'change')
       trigger(checkbox3, 'blur')
       vm.$nextTick(() => {
-        assert(vm.$validator1.field1.required === true)
+        assert(vm.$validator1.field1.required)
         assert(vm.$validator1.field1.minlength === true)
         assert(vm.$validator1.field1.valid === false)
         assert(vm.$validator1.field1.touched === true)
         assert(vm.$validator1.field1.dirty === true)
         assert(vm.$validator1.field1.modified === true)
-        assert(vm.$validator1.field2.required === true)
+        assert(vm.$validator1.field2.required)
         assert(vm.$validator1.field2.valid === false)
         assert(vm.$validator1.field2.touched === true)
         assert(vm.$validator1.field2.dirty === true)
@@ -286,7 +286,7 @@ describe('checkbox', () => {
 
         vm.$set('enabled', false)
         vm.$nextTick(() => {
-          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.required)
           assert(vm.$validator1.field1.valid === false)
           assert(vm.$validator1.field1.touched === false)
           assert(vm.$validator1.field1.dirty === false)
@@ -357,7 +357,7 @@ describe('checkbox', () => {
         trigger(checkbox2, 'change')
         trigger(checkbox2, 'blur')
         vm.$nextTick(() => {
-          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.required)
           assert(vm.$validator1.field1.valid === false)
           assert(vm.$validator1.field1.touched === true)
           assert(vm.$validator1.field1.dirty === true)

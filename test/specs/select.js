@@ -156,7 +156,7 @@ describe('select', () => {
 
       it('should be validated', (done) => {
         // default
-        assert(vm.$validator1.lang.required === true)
+        assert(vm.$validator1.lang.required)
         assert(vm.$validator1.lang.valid === false)
         assert(vm.$validator1.lang.touched === false)
         assert(vm.$validator1.lang.dirty === false)
@@ -190,7 +190,7 @@ describe('select', () => {
           trigger(select, 'change')
           trigger(select, 'blur')
           vm.$nextTick(() => {
-            assert(vm.$validator1.lang.required === true)
+            assert(vm.$validator1.lang.required)
             assert(vm.$validator1.lang.valid === false)
             assert(vm.$validator1.lang.touched === true)
             assert(vm.$validator1.lang.dirty === true)
@@ -231,7 +231,7 @@ describe('select', () => {
 
       it('should be validated', (done) => {
         // default
-        assert(vm.$validator1.lang.required === true)
+        assert(vm.$validator1.lang.required)
         assert(vm.$validator1.lang.minlength === true)
         assert(vm.$validator1.lang.valid === false)
         assert(vm.$validator1.lang.touched === false)
@@ -368,7 +368,7 @@ describe('select', () => {
 
       it('should be validated', (done) => {
         // default
-        assert(vm.$validator1.lang.required === true)
+        assert(vm.$validator1.lang.required)
         assert(vm.$validator1.lang.minlength === true)
         assert(vm.$validator1.lang.valid === false)
         assert(vm.$validator1.lang.touched === false)
@@ -389,7 +389,7 @@ describe('select', () => {
         trigger(select, 'change')
         trigger(select, 'blur')
         vm.$nextTick(() => {
-          assert(vm.$validator1.lang.required === true)
+          assert(vm.$validator1.lang.required)
           assert(vm.$validator1.lang.minlength === false)
           assert(vm.$validator1.lang.valid === false)
           assert(vm.$validator1.lang.touched === true)
@@ -406,7 +406,7 @@ describe('select', () => {
           trigger(select, 'change')
           trigger(select, 'blur')
           vm.$nextTick(() => {
-            assert(vm.$validator1.lang.required === true)
+            assert(vm.$validator1.lang.required)
             assert(vm.$validator1.lang.minlength === false)
             assert(vm.$validator1.lang.valid === false)
             assert(vm.$validator1.lang.touched === true)

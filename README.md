@@ -107,6 +107,7 @@ Validation results can be accessed in this structure:
   field1: {
     required: false, // validator
     email: true, // custom validator
+    url: 'invalid url format', // if specify the error message, set it
     ...
     customValidator1: false,
 
@@ -557,7 +558,30 @@ The vue binding syntax can group inputs together:
 
 # Error messages
 
-Error messages can be stored directly in the validation rules, rather than relying on `v-show` or `v-if`:
+Error messages can be stored directly in the validation rules, and can be use error message on `v-show` or `v-if`:
+
+```html
+<validator name="validation1">
+  <div class="username">
+    <label for="username">username:</label>
+    <input id="username" type="text" v-validate:username="{
+      required: { rule: true, message: 'required you name !!' }
+    }">
+    <span v-if="$validation1.username.required">{{ $validation1.username.required }}</span>
+  </div>
+  <div class="password">
+    <label for="password">password:</label>
+    <input id="password" type="text" v-validate:password="{
+      required: { rule: true, message: 'required you password !!' },
+      minlength: { rule: 8, message: 'your password short too !!' }
+    }"/>
+    <span v-if="$validation1.password.required">{{ $validation1.password.required }}</span>
+    <span v-if="$validation1.password.minlength">{{ $validation1.password.minlength }}</span>
+  </div>
+</validator>
+```
+
+Also, Error message can be used with `v-for`:
 
 ```html
 <validator name="validation1">

@@ -24,7 +24,7 @@ describe('$validate', () => {
     })
 
     it('should be validated', (done) => {
-      assert(vm.$validator1.field1.required === true)
+      assert(vm.$validator1.field1.required)
       assert(vm.$validator1.field1.min === false)
       assert(vm.$validator1.field1.max === false)
       assert(vm.$validator1.field1.valid === false)
@@ -87,7 +87,7 @@ describe('$validate', () => {
     })
 
     it('should be validated', (done) => {
-      assert(vm.$validator1.field1.required === true)
+      assert(vm.$validator1.field1.required)
       assert(vm.$validator1.field1.minlength === true)
       assert(vm.$validator1.field1.valid === false)
       assert(vm.$validator1.field1.touched === false)
@@ -152,7 +152,7 @@ describe('$validate', () => {
       assert(vm.$validator1.field1.touched === false)
       assert(vm.$validator1.field1.dirty === false)
       assert(vm.$validator1.field1.modified === false)
-      assert(vm.$validator1.field2.required === true)
+      assert(vm.$validator1.field2.required)
       assert(vm.$validator1.field2.valid === false)
       assert(vm.$validator1.field2.touched === false)
       assert(vm.$validator1.field2.dirty === false)
@@ -214,7 +214,7 @@ describe('$validate', () => {
 
     it('should be validated', (done) => {
       // default
-      assert(vm.$validator1.lang.required === true)
+      assert(vm.$validator1.lang.required)
       assert(vm.$validator1.lang.minlength === true)
       assert(vm.$validator1.lang.valid === false)
       assert(vm.$validator1.lang.touched === false)

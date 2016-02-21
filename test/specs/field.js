@@ -27,7 +27,7 @@ describe('field', () => {
     })
 
     it('should be validated', (done) => {
-      assert(vm.$validator1.field1.required === true)
+      assert(vm.$validator1.field1.required)
       assert(vm.$validator1.field1.valid === false)
       assert(vm.$validator1.field1.dirty === false)
       assert(vm.$validator1.field1.modified === false)
@@ -80,12 +80,12 @@ describe('field', () => {
     })
 
     it('should be validated', (done) => {
-      assert(vm.$validator1.title.minlength === true)
+      assert(vm.$validator1.title.minlength)
       assert(vm.$validator1.title.valid === false)
       assert(vm.$validator1.title.dirty === false)
       assert(vm.$validator1.title.modified === false)
       assert(vm.$validator1.title.touched === false)
-      assert(vm.$validator1.description.required === true)
+      assert(vm.$validator1.description.required)
       assert(vm.$validator1.description.valid === false)
       assert(vm.$validator1.description.dirty === false)
       assert(vm.$validator1.description.modified === false)
