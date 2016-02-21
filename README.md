@@ -105,12 +105,11 @@ Validation results can be accessed in this structure:
 
   // field1 validation
   field1: {
-    required: false, // validator
+    required: false, // build-in validator, return `false` or `true`
     email: true, // custom validator
-    url: 'invalid url format', // if specify the error message, set it
+    url: 'invalid url format', // custom validator, if specify the error message in validation rule, set it
     ...
-    customValidator1: false,
-
+    customValidator1: false, // custom validator
     // field validation properties
     valid: false,
     invalid: true,
