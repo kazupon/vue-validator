@@ -46,11 +46,17 @@ export default class Validator {
     this._dir.vm.$validate = (field) => {
       this._validate(field)
     }
+
+    // define manually the validation errors
+    this._dir.vm.$setValidationErrors = (errors) => {
+      this._setValidationErrors(errors)
+    }
   }
 
   disableReactive () {
-    this._dir.vm.$validate = null
-    this._dir.vm.$validatorReset = null
+    this._dir.vm.$setValidationErrors = undefined
+    this._dir.vm.$validate = undefined
+    this._dir.vm.$validatorReset = undefined
     this._dir.vm._validatorMaps[this.name] = null
     this._dir.vm[this.name] = null
   }
@@ -114,6 +120,35 @@ export default class Validator {
     }, this)
 
     this.validate()
+  }
+
+  _setValidationErrors (errors) {
+    const extend = util.Vue.util.extend
+
+    // make tempolaly errors
+    let temp = {}
+    each(errors, (error, index) => {
+      if (!temp[error.field]) {
+        temp[error.field] = []
+      }
+      temp[error.field].push(error)
+    })
+
+    // set errors
+    each(temp, (values, field) => {
+      let validation = this._scope[field]
+      let newValidation = {}
+      each(values, (error) => {
+        if (error.validator) {
+          validation[error.validator] = error.message
+        }
+      })
+      validation.valid = false
+      validation.invalid = true
+      validation.errors = values
+      extend(newValidation, validation)
+      util.Vue.set(this._scope, field, newValidation)
+    }, this)
   }
 
   // TODO: should be improved performance (use cache)

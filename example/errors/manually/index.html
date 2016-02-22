@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>manually error message example</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+    <style>
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation">
+        <div class="username">
+          <label for="username">username:</label>
+          <input id="username" type="text" v-model="username" v-validate:username="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+        </div>
+        <div class="old">
+          <label for="old">old password:</label>
+          <input id="old" type="text" v-model="passowrd.old" v-validate:old="{
+            required: { rule: true, message: 'required you old password !!' }
+          }"/>
+        </div>
+        <div class="new">
+          <label for="new">new password:</label>
+          <input id="new" type="text" v-model="password.new" v-validate:new="{
+            required: { rule: true, message: 'required you new password !!' },
+            minlength: { rule: 8, message: 'your new password short too !!' }
+          }"/>
+        </div>
+        <div class="confirm">
+          <label for="confirm">confirm password:</label>
+          <input id="confirm" type="text" v-validate:confirm="{
+            required: { rule: true, message: 'required you confirm password !!' },
+            confirm: { rule: true, message: 'your confirm password incorrect !!' }
+          }"/>
+        </div>
+        <div class="errors">
+          <validator-errors :validation="$validation"></validator-errors>
+        </div>
+        <button type="button" v-if="$validation.valid" @click.prevent="onSubmit">update</button>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          id: 1,
+          username: '',
+          password: {
+            old: '',
+            new: ''
+          }
+        },
+        validators: {
+          confirm: function (val) {
+            return this.password.new === val
+          }
+        },
+        methods: {
+          onSubmit: function () {
+            var self = this
+
+            // simulate server validation errors
+            setTimeout(function () {
+              self.$setValidationErrors([
+                { field: 'old', message: 'sorry, your account is locked !!' }
+              ])
+            }, 2000)
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

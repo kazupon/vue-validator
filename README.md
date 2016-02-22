@@ -795,6 +795,109 @@ Vue.validator('url', function (val) {
 new Vue({ el: '#app' })
 ```
 
+## Manually error message settings
+
+Sometimes, you need to manually set the validation error message such as server-side validation error. At that time, you can apply some error messages to validation results with using `$setValidationErrors` meta method.
+
+### vm.$setValidationErrors(erros)
+
+- **Arguments:**
+  - `Array<Object>` errors
+    - `{String}` feild 
+    - `{String}` message
+    - `{String}` validator [optional]
+
+- **Usage:**
+
+  Set the `errors` to validation result errors. This is useful when you want to set manually some errors of server-side validation.
+
+- **Example:**
+
+  ```html
+    <div id="app">
+      <validator name="validation">
+        <div class="username">
+          <label for="username">username:</label>
+          <input id="username" type="text" v-model="username" v-validate:username="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+        </div>
+        <div class="old">
+          <label for="old">old password:</label>
+          <input id="old" type="text" v-model="passowrd.old" v-validate:old="{
+            required: { rule: true, message: 'required you old password !!' }
+          }"/>
+        </div>
+        <div class="new">
+          <label for="new">new password:</label>
+          <input id="new" type="text" v-model="password.new" v-validate:new="{
+            required: { rule: true, message: 'required you new password !!' },
+            minlength: { rule: 8, message: 'your new password short too !!' }
+          }"/>
+        </div>
+        <div class="confirm">
+          <label for="confirm">confirm password:</label>
+          <input id="confirm" type="text" v-validate:confirm="{
+            required: { rule: true, message: 'required you confirm password !!' },
+            confirm: { rule: true, message: 'your confirm password incorrect !!' }
+          }"/>
+        </div>
+        <div class="errors">
+          <validator-errors :validation="$validation"></validator-errors>
+        </div>
+        <button type="button" v-if="$validation.valid" @click.prevent="onSubmit">update</button>
+      </validator>
+    </div>
+  ```
+  ```javascript
+    new Vue({
+      el: '#app',
+      data: {
+        id: 1,
+        username: '',
+        password: {
+          old: '',
+          new: ''
+        }
+      },
+      validators: {
+        confirm: function (val) {
+          return this.password.new === val
+        }
+      },
+      methods: {
+        onSubmit: function () {
+          var self = this
+          var resource = this.$resource('/user/:id')
+          resource.save({ id: this.id }, {
+            username: this.username,
+            passowrd: this.new
+          }, function (data, stat, req) {
+            // something handle success ...
+            // ...
+          }).error(function (data, stat, req) {
+            // handle server error
+            self.$setValidationErrors([
+              { field: data.field, message: data.message }
+            ])
+          })
+        }
+      }
+    })
+  ```
+
+- **Argument: field**
+
+    To detect as validation feild error, you need to pass in `field` argument.
+
+- **Argument: message**
+
+    To output as validation error messsage, you need to pass in `message` argument.
+
+- **Argument: validator**
+
+    In order to detect where the validator error occurred, you pass in `validator` argument.
+
 
 # Event
 

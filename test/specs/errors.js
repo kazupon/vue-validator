@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { each, empty, trigger } from '../../src/util'
 
 
-describe('messages', () => {
+describe('errors', () => {
   let el, vm
 
   let testMatches = (target, validatorErrors) => {
@@ -57,7 +57,8 @@ describe('messages', () => {
     vm.$nextTick(done)
   })
 
-  context('invalid', () => {
+
+  describe('invalid', () => {
     beforeEach((done) => {
       let field3 = el.getElementsByTagName('input')[2]
       field3.value = '4'
@@ -123,7 +124,7 @@ describe('messages', () => {
   })
 
 
-  context('valid', () => {
+  describe('valid', () => {
     beforeEach((done) => {
       let field1 = el.getElementsByTagName('input')[0]
       field1.value = 'foo'
@@ -183,6 +184,72 @@ describe('messages', () => {
       it('should not be kept', () => {
         assert(empty(vm.$validation.group1.errors))
         assert(empty(vm.$validation.group2.errors))
+      })
+    })
+  })
+
+
+  describe('$setValidationErrors', () => {
+    beforeEach((done) => {
+      let field1 = el.getElementsByTagName('input')[0]
+      field1.value = 'foo'
+      trigger(field1, 'input')
+      trigger(field1, 'blur')
+      vm.$nextTick(() => {
+        let field2 = el.getElementsByTagName('input')[1]
+        field2.value = 'hello'
+        trigger(field2, 'input')
+        trigger(field2, 'blur')
+        vm.$nextTick(() => {
+          let field3 = el.getElementsByTagName('input')[2]
+          field3.value = '1'
+          trigger(field3, 'input')
+          trigger(field3, 'blur')
+          vm.$nextTick(() => {
+            let field4 = el.getElementsByTagName('input')[3]
+            field4.value = 'hi'
+            trigger(field4, 'input')
+            trigger(field4, 'blur')
+            vm.$nextTick(() => {
+              let field5 = el.getElementsByTagName('input')[4]
+              field5.value = '10'
+              trigger(field5, 'input')
+              trigger(field5, 'blur')
+              vm.$nextTick(() => {
+                let field6 = el.getElementsByTagName('input')[5]
+                field6.value = 'hello'
+                trigger(field6, 'input')
+                trigger(field6, 'blur')
+                done()
+              })
+            })
+          })
+        })
+      })
+    })
+
+    it('should be set errors', (done) => {
+      vm.$setValidationErrors([
+        { field: 'field1', validator: 'pattern', message: 'failed field1 server validation error' },
+        { field: 'field5', validator: 'min', message: 'failed field5 server validation error' }
+      ])
+      vm.$nextTick(() => {
+        assert(vm.$validation.field1.pattern === 'failed field1 server validation error')
+        assert(vm.$validation.field1.valid === false)
+        assert(vm.$validation.field1.invalid === true)
+        assert(vm.$validation.field1.errors[0].validator === 'pattern')
+        assert(vm.$validation.field1.errors[0].message === 'failed field1 server validation error')
+        assert(vm.$validation.field5.min === 'failed field5 server validation error')
+        assert(vm.$validation.field5.valid === false)
+        assert(vm.$validation.field5.invalid === true)
+        assert(vm.$validation.field5.errors[0].validator === 'min')
+        assert(vm.$validation.field5.errors[0].message === 'failed field5 server validation error')
+        assert(vm.$validation.valid === false)
+        assert(vm.$validation.invalid === true)
+        assert(!empty(vm.$validation.errors))
+        assert(vm.$validation.group1.errors.length === 2)
+        assert(empty(vm.$validation.group2.errors))
+        done()
       })
     })
   })
