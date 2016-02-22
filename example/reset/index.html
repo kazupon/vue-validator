@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>validation result reset example</title>
+    <title>validation result resetting example</title>
     <script src="../../node_modules/vue/dist/vue.min.js"></script>
     <script src="../../dist/vue-validator.min.js"></script>
     <style>
@@ -26,7 +26,7 @@
             <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
           </div>
           <input type="submit" value="send" v-if="$validation1.valid">
-          <button type="button" @click="onReset">Validation Reset</button>
+          <button type="button" @click="onReset">Reset Validation</button>
         </form>
         <pre>{{ $validation1 | json }}</pre>
       </validator>
@@ -36,7 +36,7 @@
         el: '#app',
         methods: {
           onReset: function () {
-            this.$validatorReset()
+            this.$resetValidation()
           }
         }
       })

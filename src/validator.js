@@ -37,8 +37,8 @@ export default class Validator {
     util.Vue.util.defineReactive(this._dir.vm, this.name, this._scope)
     this._dir.vm._validatorMaps[this.name] = this
 
-    // define the validation reset meta method to vue instance
-    this._dir.vm.$validatorReset = () => {
+    // define the validation resetting meta method to vue instance
+    this._dir.vm.$resetValidation = () => {
       this.resetValidation()
     }
 

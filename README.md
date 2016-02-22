@@ -372,7 +372,7 @@ setTimeout(function () {
 
 # Reset validation results
 
-You can reset the validation results with `$validatorReset()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
+You can reset the validation results with `$resetValidation()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
 
 ```html
 <div id="app">
@@ -391,7 +391,7 @@ You can reset the validation results with `$validatorReset()` Vue instance meta 
         <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
       </div>
       <input type="submit" value="send" v-if="$validation1.valid">
-      <button type="button" @click="onReset">Validation Reset</button>
+      <button type="button" @click="onReset">Reset Validation</button>
     </form>
     <pre>{{ $validation1 | json }}</pre>
   </validator>
@@ -403,7 +403,7 @@ new Vue({
   el: '#app',
   methods: {
     onReset: function () {
-      this.$validatorReset()
+      this.$resetValidation()
     }
   }
 })

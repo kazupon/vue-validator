@@ -51,7 +51,7 @@ describe('reset', () => {
       trigger(field2, 'input')
       trigger(field2, 'blur')
       vm.$nextTick(() => {
-        vm.$validatorReset()
+        vm.$resetValidation()
 
         assert(vm.$validator1.field1.required === false)
         assert(vm.$validator1.field1.min === false)
@@ -111,7 +111,7 @@ describe('reset', () => {
       trigger(checkbox2, 'change')
       trigger(checkbox2, 'blur')
       vm.$nextTick(() => {
-        vm.$validatorReset()
+        vm.$resetValidation()
 
         assert(vm.$validator1.field1.required === false)
         assert(vm.$validator1.field1.minlength === false)
@@ -180,7 +180,7 @@ describe('reset', () => {
       trigger(radio3, 'change')
       trigger(radio3, 'blur')
       vm.$nextTick(() => {
-        vm.$validatorReset()
+        vm.$resetValidation()
 
         assert(vm.$validator1.field1.required === false)
         assert(vm.$validator1.field1.valid === true)
@@ -245,7 +245,7 @@ describe('reset', () => {
       trigger(select, 'change')
       trigger(select, 'blur')
       vm.$nextTick(() => {
-        vm.$validatorReset()
+        vm.$resetValidation()
 
         assert(vm.$validator1.lang.required === false)
         assert(vm.$validator1.lang.minlength === false)
