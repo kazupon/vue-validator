@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-alpha.20
+ * vue-validator v2.0.0-alpha.21
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -97,7 +97,7 @@
    */
 
   function empty(target) {
-    if (target === null) {
+    if (target === null || target === undefined) {
       return true;
     }
 
@@ -687,7 +687,7 @@ var validators = Object.freeze({
         var _ = exports$1.Vue.util;
 
         var results = {};
-        var errors = {};
+        var errors = [];
         var valid = true;
 
         each(this._validators, function (descriptor, name) {
@@ -715,10 +715,16 @@ var validators = Object.freeze({
             if (!ret) {
               valid = false;
               if (msg) {
-                errors[name] = typeof msg === 'function' ? msg.call(_this2._vm, _this2.field, descriptor.arg) : msg;
+                var error = { validator: name };
+                error.message = typeof msg === 'function' ? msg.call(_this2._vm, _this2.field, descriptor.arg) : msg;
+                errors.push(error);
+                results[name] = error.message;
+              } else {
+                results[name] = !ret;
               }
+            } else {
+              results[name] = !ret;
             }
-            results[name] = !ret;
           }
         }, this);
 
@@ -1222,12 +1228,18 @@ var validators = Object.freeze({
         this._dir.vm.$validate = function (field) {
           _this2._validate(field);
         };
+
+        // define manually the validation errors
+        this._dir.vm.$setValidationErrors = function (errors) {
+          _this2._setValidationErrors(errors);
+        };
       }
     }, {
       key: 'disableReactive',
       value: function disableReactive() {
-        this._dir.vm.$validate = null;
-        this._dir.vm.$validatorReset = null;
+        this._dir.vm.$setValidationErrors = undefined;
+        this._dir.vm.$validate = undefined;
+        this._dir.vm.$validatorReset = undefined;
         this._dir.vm._validatorMaps[this.name] = null;
         this._dir.vm[this.name] = null;
       }
@@ -1297,6 +1309,38 @@ var validators = Object.freeze({
         }, this);
 
         this.validate();
+      }
+    }, {
+      key: '_setValidationErrors',
+      value: function _setValidationErrors(errors) {
+        var _this4 = this;
+
+        var extend = exports$1.Vue.util.extend;
+
+        // make tempolaly errors
+        var temp = {};
+        each(errors, function (error, index) {
+          if (!temp[error.field]) {
+            temp[error.field] = [];
+          }
+          temp[error.field].push(error);
+        });
+
+        // set errors
+        each(temp, function (values, field) {
+          var validation = _this4._scope[field];
+          var newValidation = {};
+          each(values, function (error) {
+            if (error.validator) {
+              validation[error.validator] = error.message;
+            }
+          });
+          validation.valid = false;
+          validation.invalid = true;
+          validation.errors = values;
+          extend(newValidation, validation);
+          exports$1.Vue.set(_this4._scope, field, newValidation);
+        }, this);
       }
 
       // TODO: should be improved performance (use cache)
@@ -1448,21 +1492,21 @@ var validators = Object.freeze({
     }, {
       key: 'validate',
       value: function validate(validation) {
-        var _this4 = this;
+        var _this5 = this;
 
         each(this._validations, function (validation, key) {
           var res = validation.validate();
-          exports$1.Vue.set(_this4._scope, key, res);
+          exports$1.Vue.set(_this5._scope, key, res);
         }, this);
 
         each(this._checkboxValidations, function (dataset, key) {
           var res = dataset.validation.validate();
-          exports$1.Vue.set(_this4._scope, key, res);
+          exports$1.Vue.set(_this5._scope, key, res);
         }, this);
 
         each(this._radioValidations, function (dataset, key) {
           var res = dataset.validation.validate();
-          exports$1.Vue.set(_this4._scope, key, res);
+          exports$1.Vue.set(_this5._scope, key, res);
         }, this);
 
         if (this._scope.touched) {
@@ -1484,21 +1528,21 @@ var validators = Object.freeze({
     }, {
       key: 'setupScope',
       value: function setupScope() {
-        var _this5 = this;
+        var _this6 = this;
 
         var validationsGetter = function validationsGetter() {
-          return _this5.validations;
+          return _this6.validations;
         };
         var scopeGetter = function scopeGetter() {
-          return _this5._scope;
+          return _this6._scope;
         };
         this._defineProperties(validationsGetter, scopeGetter);
 
         each(this._groups, function (name) {
-          var validations = _this5._groupValidations[name];
+          var validations = _this6._groupValidations[name];
           var group = {};
-          exports$1.Vue.set(_this5._scope, name, group);
-          _this5._defineProperties(function () {
+          exports$1.Vue.set(_this6._scope, name, group);
+          _this6._defineProperties(function () {
             return validations;
           }, function () {
             return group;
@@ -1535,7 +1579,7 @@ var validators = Object.freeze({
     }, {
       key: '_defineProperties',
       value: function _defineProperties(validationsGetter, targetGetter) {
-        var _this6 = this;
+        var _this7 = this;
 
         var bind = exports$1.Vue.util.bind;
 
@@ -1553,7 +1597,7 @@ var validators = Object.freeze({
             enumerable: true,
             configurable: true,
             get: function get() {
-              return bind(descriptor.fn, _this6)(descriptor.arg);
+              return bind(descriptor.fn, _this7)(descriptor.arg);
             }
           });
         }, this);
@@ -1561,7 +1605,7 @@ var validators = Object.freeze({
     }, {
       key: '_walkValidations',
       value: function _walkValidations(validations, property, condition) {
-        var _this7 = this;
+        var _this8 = this;
 
         var hasOwn = exports$1.Vue.util.hasOwn;
         var ret = condition;
@@ -1570,8 +1614,8 @@ var validators = Object.freeze({
           if (ret === !condition) {
             return;
           }
-          if (hasOwn(_this7._scope, validation.field)) {
-            var target = _this7._scope[validation.field];
+          if (hasOwn(_this8._scope, validation.field)) {
+            var target = _this8._scope[validation.field];
             if (target && target[property] === !condition) {
               ret = !condition;
             }
@@ -1618,22 +1662,33 @@ var validators = Object.freeze({
     }, {
       key: '_defineErrors',
       value: function _defineErrors(validationsGetter) {
-        var _this8 = this;
+        var _this9 = this;
 
-        var extend = exports$1.Vue.util.extend;
         var hasOwn = exports$1.Vue.util.hasOwn;
-        var ret = {};
+        var isPlainObject = exports$1.Vue.util.isPlainObject;
+        var errors = [];
 
         each(validationsGetter(), function (validation, key) {
-          if (hasOwn(_this8._scope, validation.field)) {
-            var target = _this8._scope[validation.field];
-            if (target && !empty(target['errors'])) {
-              ret[validation.field] = extend({}, target['errors']);
+          if (hasOwn(_this9._scope, validation.field)) {
+            var target = _this9._scope[validation.field];
+            if (target && !empty(target.errors)) {
+              each(target.errors, function (err, index) {
+                var error = { field: validation.field };
+                if (isPlainObject(err)) {
+                  if (err.validator) {
+                    error.validator = err.validator;
+                  }
+                  error.message = err.message;
+                } else if (typeof err === 'string') {
+                  error.message = err;
+                }
+                errors.push(error);
+              }, _this9);
             }
           }
         }, this);
 
-        return empty(ret) ? undefined : ret;
+        return empty(errors) ? undefined : errors;
       }
     }, {
       key: 'validations',
@@ -1775,8 +1830,8 @@ var validators = Object.freeze({
 
   function Errors (Vue) {
 
-    // import ValidatorError component
-    var error = ValidatorError(Vue);
+    var _ = Vue.util;
+    var error = ValidatorError(Vue); // import ValidatorError component
 
     /**
      * ValidatorErrors component
@@ -1806,30 +1861,27 @@ var validators = Object.freeze({
 
       computed: {
         errors: function errors() {
-          var ret = [];
+          var _this = this;
 
           if (this.group !== null) {
-            for (var field in this.validation[this.group].errors) {
-              for (var validator in this.validation[this.group].errors[field]) {
-                var message = this.validation[this.group].errors[field][validator];
-                ret.push({ field: field, validator: validator, message: message });
-              }
-            }
+            return this.validation[this.group].errors;
           } else if (this.field !== null) {
-            for (var validator in this.validation.errors[this.field]) {
-              var message = this.validation.errors[this.field][validator];
-              ret.push({ field: this.field, validator: validator, message: message });
-            }
-          } else {
-            for (var field in this.validation.errors) {
-              for (var validator in this.validation.errors[field]) {
-                var message = this.validation.errors[field][validator];
-                ret.push({ field: field, validator: validator, message: message });
+            var target = this.validation[this.field];
+            return target.errors.map(function (error) {
+              var err = { field: _this.field };
+              if (_.isPlainObject(error)) {
+                if (error.validator) {
+                  err.validator = error.validator;
+                }
+                err.message = error.message;
+              } else if (typeof error === 'string') {
+                err.message = error;
               }
-            }
+              return err;
+            });
+          } else {
+            return this.validation.errors;
           }
-
-          return ret;
         }
       },
 
@@ -1874,7 +1926,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.0.0-alpha.20';
+  plugin.version = '2.0.0-alpha.21';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);

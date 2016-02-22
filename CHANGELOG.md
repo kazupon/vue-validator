@@ -1,3 +1,25 @@
+<a name="2.0.0-alpha.21"></a>
+# [2.0.0-alpha.21](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.20...v2.0.0-alpha.21) (2016-02-22)
+
+
+### Bug Fixes
+
+* **karma:** fix lint error ([e8a0ae4](https://github.com/vuejs/vue-validator/commit/e8a0ae4))
+
+### Features
+
+* **errors:** add manually validation error message settings ([83f5806](https://github.com/vuejs/vue-validator/commit/83f5806)), closes [#70](https://github.com/vuejs/vue-validator/issues/70)
+* **errors:** change errors validation property type ([5af4efa](https://github.com/vuejs/vue-validator/commit/5af4efa))
+* **validator:** change validation result of validator ([d82dd5e](https://github.com/vuejs/vue-validator/commit/d82dd5e))
+
+
+### BREAKING CHANGES
+
+* errors: change to `Array` from `Object`
+see more [Validation result structure](https://github.com/vuejs/vue-validator#validation-result-structure)
+
+
+
 <a name="2.0.0-alpha.20"></a>
 # [2.0.0-alpha.20](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.19...v2.0.0-alpha.20) (2016-02-18)
 
