@@ -1242,6 +1242,72 @@ new Vue({
 </div>
 ```
 
+# Validation timing customization
+vue-validator validate automatically when detect DOM event (`input`, `blur`, `change`) in formalable elements (input, checkbox, select, etc).
+
+However, sometimes, we are disabling automatically validation, and there are times we want to validate manually. In the case, use the `disable-change`, `disable-blur` attributes:
+
+```html
+<div id="app">
+  <validator name="validation">
+    <form novalidate @submit="onSubmit">
+      <h1>user registration</h1>
+      <div class="username">
+        <label for="username">username:</label>
+        <input id="username" type="text" 
+          detect-change="off" detect-blur="off" v-validate:username="{
+          required: { rule: true, message: 'required you name !!' }
+        }" />
+      </div>
+      <div class="password">
+        <label for="password">password:</label>
+        <input id="password" type="password" v-model="password" 
+          detect-change="off" detect-blur="off" v-validate:password="{
+          required: { rule: true, message: 'required you new password !!' },
+          minlength: { rule: 8, message: 'your new password short too !!' }
+        }" />
+      </div>
+      <div class="confirm">
+        <label for="confirm">confirm password:</label>
+        <input id="confirm" type="password" 
+          detect-change="off" detect-blur="off" v-validate:confirm="{
+          required: { rule: true, message: 'required you confirm password !!' },
+          confirm: { rule: true, message: 'your confirm password incorrect !!' }
+        }" />
+      </div>
+      <div class="errors" v-if="$validation.touched">
+        <validator-errors :validation="$validation"></validator-errors>
+      </div>
+      <input type="submit" value="register" />
+    </form>
+  </validator>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#app',
+  data: {
+    password: ''
+  },
+  validators: {
+    confirm: function (val) {
+      return this.password === val
+    }
+  },
+  methods: {
+    onSubmit: function (e) {
+      // validate manually
+      this.$validate(true)
+
+      if (this.$validation.invalid) {
+        e.preventDefault()
+      }
+    }
+  }
+})
+```
+
 
 # TODO
 - async validation
