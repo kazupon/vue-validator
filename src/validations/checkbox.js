@@ -8,8 +8,8 @@ import BaseValidation from './base'
 
 export default class CheckboxValidation extends BaseValidation {
 
-  constructor (field, model, vm, el, scope, validator) {
-    super(field, model, vm, el, scope, validator)
+  constructor (field, model, vm, el, scope, validator, detectBlur, detectChange) {
+    super(field, model, vm, el, scope, validator, detectBlur, detectChange)
 
     this._inits = []
   }
@@ -24,6 +24,9 @@ export default class CheckboxValidation extends BaseValidation {
         this._setChecked(value, item.el)
         item.unwatch = scope.$watch(model, (val, old) => {
           if (val !== old) {
+            if (this.guardValidate(item.el, 'change')) {
+              return
+            }
             this.handleValidate(item.el)
           }
         })
@@ -34,6 +37,9 @@ export default class CheckboxValidation extends BaseValidation {
         item.value = el.value
         item.unwatch = scope.$watch(model, (val, old) => {
           if (val !== old) {
+            if (this.guardValidate(el, 'change')) {
+              return
+            }
             this.handleValidate(el)
           }
         })

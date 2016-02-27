@@ -7,8 +7,8 @@ import BaseValidation from './base'
 
 export default class SelectValidation extends BaseValidation {
 
-  constructor (field, model, vm, el, scope, validator) {
-    super(field, model, vm, el, scope, validator)
+  constructor (field, model, vm, el, scope, validator, detectBlur, detectChange) {
+    super(field, model, vm, el, scope, validator, detectBlur, detectChange)
 
     this._multiple = this._el.hasAttribute('multiple')
   }
@@ -24,6 +24,9 @@ export default class SelectValidation extends BaseValidation {
         let values1 = !Array.isArray(val) ? [val] : val
         let values2 = !Array.isArray(old) ? [old] : old
         if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
+          if (this.guardValidate(el, 'change')) {
+            return
+          }
           this.handleValidate(el)
         }
       })

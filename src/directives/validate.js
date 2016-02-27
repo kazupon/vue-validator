@@ -16,7 +16,19 @@ export default function (Vue) {
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
-    params: ['group', 'field'],
+    params: ['group', 'field', 'detect-blur', 'detect-change'],
+
+    paramWatchers: {
+      detectBlur (val, old) {
+        this.validation.detectBlur = this.isDetectBlur(val) 
+        this.validator.validate()
+      },
+
+      detectChange (val, old) {
+        this.validation.detectChange = this.isDetectChange(val)
+        this.validator.validate()
+      }
+    },
 
     bind () {
       if (this.el.__vue__) {
@@ -54,7 +66,7 @@ export default function (Vue) {
         this.handleArray(value)
       }
 
-      this.validator.validate(this.validation)
+      this.validator.validate()
     },
 
     unbind () {
@@ -72,7 +84,9 @@ export default function (Vue) {
       this.field = _.camelize(this.arg ? this.arg : params.field)
 
       this.validation = validator.manageValidation(
-        this.field, model, this.vm, this.frag.node, this._scope
+        this.field, model, this.vm, this.frag.node, this._scope, 
+        this.isDetectBlur(this.params.detectBlur), 
+        this.isDetectChange(this.params.detectChange)
       )
 
       if (params.group) {
@@ -91,7 +105,6 @@ export default function (Vue) {
           || el.tagName === 'SELECT') && !model) {
         this.onChange = _.bind(validation.listener, validation)
         _.on(el, 'change', this.onChange)
-        
       } else if (el.type === 'checkbox') {
         if (!model) {
           this.onChange = _.bind(validation.listener, validation)
@@ -185,6 +198,14 @@ export default function (Vue) {
           this.validation.setValidation(key, val)
         }
       }, this)
+    },
+
+    isDetectBlur (detectBlur) {
+      return detectBlur === undefined || detectBlur === 'on' || detectBlur === true
+    },
+
+    isDetectChange (detectChange) {
+      return detectChange === undefined || detectChange === 'on' || detectChange === true
     }
   })
 }

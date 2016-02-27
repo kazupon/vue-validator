@@ -7,7 +7,7 @@ import util, { empty, each, trigger } from '../util'
 
 export default class BaseValidation {
 
-  constructor (field, model, vm, el, scope, validator) {
+  constructor (field, model, vm, el, scope, validator, detectBlur, detectChange) {
     this.field = field
     this.touched = false
     this.dirty = false
@@ -21,6 +21,24 @@ export default class BaseValidation {
     this._forScope = scope
     this._init = this._getValue(el)
     this._validators = {}
+    this._detectBlur = detectBlur
+    this._detectChange = detectChange
+  }
+
+  get detectChange () {
+    return this._detectChange
+  }
+
+  set detectChange (val) {
+    this._detectChange = val
+  }
+
+  get detectBlur () {
+    return this._detectBlur
+  }
+
+  set detectBlur (val) {
+    this._detectBlur = val
   }
 
   manageElement (el) {
@@ -30,6 +48,9 @@ export default class BaseValidation {
       el.value = scope.$get(model) || ''
       this._unwatch = scope.$watch(model, (val, old) => {
         if (val !== old) {
+          if (this.guardValidate(el, 'input')) {
+            return
+          }
           this.handleValidate(el)
         }
       }, { deep: true })
@@ -88,6 +109,9 @@ export default class BaseValidation {
       return
     }
 
+    if (this.guardValidate(e.target, e.type)) {
+      return
+    }
     this.handleValidate(e.target, e.type)
   }
 
@@ -175,6 +199,26 @@ export default class BaseValidation {
   reset () {
     this.resetFlags()
     this._init = this._getValue(this._el)
+  }
+
+  guardValidate (el, type) {
+    if (type && type === 'blur' && !this.detectBlur) {
+      return true
+    }
+
+    if (type && type === 'input' && !this.detectChange) {
+      return true
+    }
+
+    if (type && type === 'change' && !this.detectChange) {
+      return true
+    }
+
+    if (type && type === 'click' && !this.detectChange) {
+      return true
+    }
+
+    return false
   }
 
   _getValue (el) {

@@ -810,4 +810,185 @@ describe('validate directive', () => {
       })
     })
   })
+
+  
+  describe('params', () => {
+    describe('detect-blur', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">' +
+          '<form novalidate>' +
+          '<input type="text" :detect-blur="blur" v-validate:field1="{ required: true, minlength: 5 }">' +
+          '</form>' +
+          '</validator>'
+        vm = new Vue({
+          el: el,
+          data: {
+            msg: 'hello', blur: 'off'
+          }
+        })
+        vm.$nextTick(done)
+      })
+
+      it('should be validated', (done) => {
+        let field = el.getElementsByTagName('input')[0]
+
+        // default
+        assert(vm.$validator1.field1.required === true)
+        assert(vm.$validator1.field1.minlength === true)
+        assert(vm.$validator1.field1.valid === false)
+        assert(vm.$validator1.field1.touched === false)
+        assert(vm.$validator1.field1.modified === false)
+        assert(vm.$validator1.field1.dirty === false)
+
+        // occured blur
+        field.value = 'helloworld'
+        trigger(field, 'blur')
+        vm.$nextTick(() => {
+          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.minlength === true)
+          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field1.modified === false)
+          assert(vm.$validator1.field1.dirty === false)
+
+          vm.$set('blur', 'on')
+          vm.$nextTick(() => {
+            field.value = 'helloworld!!'
+            trigger(field, 'blur')
+            vm.$nextTick(() => {
+              assert(vm.$validator1.field1.required === false)
+              assert(vm.$validator1.field1.minlength === false)
+              assert(vm.$validator1.field1.valid === true)
+              assert(vm.$validator1.field1.touched === true)
+              assert(vm.$validator1.field1.modified === true)
+              assert(vm.$validator1.field1.dirty === true)
+
+              done()
+            })
+          })
+        })
+      })
+    })
+
+
+    describe('detect-change', () => {
+      describe('normal', () => {
+        beforeEach((done) => {
+          el.innerHTML = '<validator name="validator1">' +
+            '<form novalidate>' +
+            '<select :detect-change="change" v-validate:lang="{ required: true }">' +
+            '<option value="">select a language</option>' +
+            '<option value="en">english</option>' +
+            '<option value="ja">japanese</option>' +
+            '<option value="zh">chinese</option>' +
+            '</select>' +
+            '</form>' +
+            '</validator>'
+          vm = new Vue({
+            el: el,
+            data: { change: 'off' }
+          })
+          vm.$nextTick(done)
+        })
+
+        it('should be valided', (done) => {
+          // default
+          assert(vm.$validator1.lang.required === true)
+          assert(vm.$validator1.lang.valid === false)
+          assert(vm.$validator1.lang.touched === false)
+          assert(vm.$validator1.lang.modified === false)
+          assert(vm.$validator1.lang.dirty === false)
+
+          let select = el.getElementsByTagName('select')[0]
+
+          // select a language
+          let option1 = el.getElementsByTagName('option')[1]
+          option1.selected = true
+          trigger(select, 'change')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.lang.required === true)
+            assert(vm.$validator1.lang.valid === false)
+            assert(vm.$validator1.lang.touched === false)
+            assert(vm.$validator1.lang.modified === false)
+            assert(vm.$validator1.lang.dirty === false)
+
+            vm.change = 'on'
+            vm.$nextTick(() => {
+              let option2 = el.getElementsByTagName('option')[2]
+              option2.selected = true
+              trigger(select, 'change')
+              vm.$nextTick(() => {
+                assert(vm.$validator1.lang.required === false)
+                assert(vm.$validator1.lang.valid === true)
+                assert(vm.$validator1.lang.touched === false)
+                assert(vm.$validator1.lang.dirty === true)
+                assert(vm.$validator1.lang.modified === true)
+                done()
+              })
+            })
+          })
+        })
+      })
+
+      describe('v-model', () => {
+        beforeEach((done) => {
+          el.innerHTML = 
+            '<validator name="validator1">' +
+            '<form novalidate>' +
+            '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="foo" v-validate:field1="{ required: true, minlength: 2 }">' +
+            '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="bar" v-validate:field1>' +
+            '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="buz" v-validate:field1>' +
+            '</form>' +
+            '</validator>'
+          vm = new Vue({
+            el: el,
+            data: { checkedNames: [], change: 'off' }
+          })
+          vm.$nextTick(done)
+        })
+
+        it('should be validated', (done) => {
+          let foo = el.getElementsByTagName('input')[0]
+          let bar = el.getElementsByTagName('input')[1]
+
+          // default
+          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.minlength === true)
+          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field1.dirty === false)
+          assert(vm.$validator1.field1.modified === false)
+
+          // checked foo
+          foo.checked = true
+          trigger(foo, 'click')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.field1.required === true)
+            assert(vm.$validator1.field1.minlength === true)
+            assert(vm.$validator1.field1.valid === false)
+            assert(vm.$validator1.field1.touched === false)
+            assert(vm.$validator1.field1.dirty === false)
+            assert(vm.$validator1.field1.modified === false)
+
+            vm.$set('change', 'on')
+            vm.$nextTick(() => {
+              // checked bar
+              bar.checked = true
+              trigger(bar, 'click')
+              vm.$nextTick(() => {
+                assert(vm.$validator1.field1.required === false)
+                assert(vm.$validator1.field1.minlength === false)
+                assert(vm.$validator1.field1.valid === true)
+                assert(vm.$validator1.field1.touched === false)
+                assert(vm.$validator1.field1.dirty === true)
+                assert(vm.$validator1.field1.modified === true)
+
+                done()
+              })
+            })
+          })
+        })
+      })
+    })
+  })
 })
