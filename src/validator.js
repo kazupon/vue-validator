@@ -43,8 +43,22 @@ export default class Validator {
     }
 
     // define the validate manually meta method to vue instance
-    this._dir.vm.$validate = (field) => {
-      this._validate(field)
+    this._dir.vm.$validate = (...args) => {
+      let field = null
+      let touched = false
+
+      if (args.length === 1) {
+        if (typeof args[0] === 'string') {
+          field = args[0]
+        } else if (typeof args[0] === 'boolean') {
+          touched = args[0]
+        }
+      } else if (args.length === 2) {
+        field = args[0]
+        touched = args[1]
+      }
+
+      this._validate(field, touched)
     }
 
     // define manually the validation errors
@@ -79,30 +93,37 @@ export default class Validator {
     }, this)
   }
 
-  _validate (field) {
-    let validation = this._validations[field]
-    if (!validation && this._checkboxValidations[field]) {
-      validation = this._checkboxValidations[field].validation
-    } else if (!validation && this._radioValidations[field]) {
-      validation = this._radioValidations[field].validation
-    }
-
-    if (validation) {
-      validation.willUpdateFlags()
-      let res = validation.validate()
-      util.Vue.set(this._scope, field, res)
-
-      if (this._scope.dirty) {
-        this._fireEvent('dirty')
+  _validate (field, touched) {
+    if (!field) { // all
+      each(this.validations, (validation, key) => {
+        validation.willUpdateFlags(touched)
+      })
+      this.validate()
+    } else { // each field
+      let validation = this._validations[field]
+      if (!validation && this._checkboxValidations[field]) {
+        validation = this._checkboxValidations[field].validation
+      } else if (!validation && this._radioValidations[field]) {
+        validation = this._radioValidations[field].validation
       }
 
-      if (this._modified !== this._scope.modified) {
-        this._fireEvent('modified', this._scope.modified)
-        this._modified = this._scope.modified
-      }
+      if (validation) {
+        validation.willUpdateFlags(touched)
+        let res = validation.validate()
+        util.Vue.set(this._scope, field, res)
 
-      let valid = this._scope.valid
-      this._fireEvent((valid ? 'valid' : 'invalid'))
+        if (this._scope.dirty) {
+          this._fireEvent('dirty')
+        }
+
+        if (this._modified !== this._scope.modified) {
+          this._fireEvent('modified', this._scope.modified)
+          this._modified = this._scope.modified
+        }
+
+        let valid = this._scope.valid
+        this._fireEvent((valid ? 'valid' : 'invalid'))
+      }
     }
   }
 
