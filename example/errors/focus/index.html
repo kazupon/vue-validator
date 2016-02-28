@@ -24,21 +24,21 @@
         </div>
          <div class="old">
          <label for="old">old password:</label>
-          <input id="old" type="text" group="password" v-validate:old="{
+          <input id="old" type="password" group="password" v-validate:old="{
             required: { rule: true, message: 'required you old password !!' },
             minlength: { rule: 8, message: 'your old password short too !!' }
           }"/>
         </div>
         <div class="new">
           <label for="new">new password:</label>
-          <input id="new" type="text" group="password" v-validate:new="{
+          <input id="new" type="password" group="password" v-validate:new="{
             required: { rule: true, message: 'required you new password !!' },
             minlength: { rule: 8, message: 'your new password short too !!' }
           }"/>
         </div>
         <div class="confirm">
           <label for="confirm">confirm password:</label>
-          <input id="confirm" type="text" group="password" v-validate:confirm="{
+          <input id="confirm" type="password" group="password" v-validate:confirm="{
             required: { rule: true, message: 'required you confirm password !!' },
             minlength: { rule: 8, message: 'your confirm password short too !!' }
           }"/>

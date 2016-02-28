@@ -17,7 +17,7 @@
         </div>
         <div class="password">
           <label for="password">password:</label>
-          <input id="password" type="text" v-validate:password="{
+          <input id="password" type="password" v-validate:password="{
             required: { rule: true, message: 'required you password !!' },
             minlength: { rule: 8, message: 'your password short too !!' }
           }"/>

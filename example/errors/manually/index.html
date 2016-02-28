@@ -20,20 +20,20 @@
         </div>
         <div class="old">
           <label for="old">old password:</label>
-          <input id="old" type="text" v-model="passowrd.old" v-validate:old="{
+          <input id="old" type="password" v-model="passowrd.old" v-validate:old="{
             required: { rule: true, message: 'required you old password !!' }
           }"/>
         </div>
         <div class="new">
           <label for="new">new password:</label>
-          <input id="new" type="text" v-model="password.new" v-validate:new="{
+          <input id="new" type="password" v-model="password.new" v-validate:new="{
             required: { rule: true, message: 'required you new password !!' },
             minlength: { rule: 8, message: 'your new password short too !!' }
           }"/>
         </div>
         <div class="confirm">
           <label for="confirm">confirm password:</label>
-          <input id="confirm" type="text" v-validate:confirm="{
+          <input id="confirm" type="password" v-validate:confirm="{
             required: { rule: true, message: 'required you confirm password !!' },
             confirm: { rule: true, message: 'your confirm password incorrect !!' }
           }"/>

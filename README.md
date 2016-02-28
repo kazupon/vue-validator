@@ -543,8 +543,8 @@ The vue binding syntax can group inputs together:
 ```html
 <validator name="validation1" :groups="['user', 'password']">
   username: <input type="text" group="user" v-validate:username="['required']"><br />
-  password: <input type="text" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
-  password (confirm): <input type="text" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
+  password: <input type="password" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
+  password (confirm): <input type="password" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
   <div class="user">
     <span v-if="$validation1.user.invalid">Invalid yourname !!</span>
   </div>
@@ -570,7 +570,7 @@ Error messages can be stored directly in the validation rules, and can be use er
   </div>
   <div class="password">
     <label for="password">password:</label>
-    <input id="password" type="text" v-validate:password="{
+    <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'required you password !!' },
       minlength: { rule: 8, message: 'your password short too !!' }
     }"/>
@@ -592,7 +592,7 @@ Also, Error message can be used with `v-for`:
   </div>
   <div class="password">
     <label for="password">password:</label>
-    <input id="password" type="text" v-validate:password="{
+    <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'required you password !!' },
       minlength: { rule: 8, message: 'your password short too !!' }
     }"/>
@@ -623,7 +623,7 @@ In the above example, we used `v-for` directive to enumerate `errors` of validat
   </div>
   <div class="password">
     <label for="password">password:</label>
-    <input id="password" type="text" v-validate:password="{
+    <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'required you password !!' },
       minlength: { rule: 8, message: 'your password short too !!' }
     }"/>
@@ -643,7 +643,7 @@ In the above example, it's rendered the following:
 </div>
 <div class="password">
   <label for="password">password:</label>
-  <input id="password" type="text">
+  <input id="password" type="password">
 </div>
 <div class="errors">
   <div>
@@ -677,7 +677,7 @@ the below component example:
     </div>
     <div class="password">
       <label for="password">password:</label>
-      <input id="password" type="text" v-validate:password="{
+      <input id="password" type="password" v-validate:password="{
         required: { rule: true, message: 'required you password !!' },
         minlength: { rule: 8, message: 'your password short too !!' }
       }"/>
@@ -715,7 +715,7 @@ the below partial template example:
     </div>
     <div class="password">
       <label for="password">password:</label>
-      <input id="password" type="text" v-validate:password="{
+      <input id="password" type="password" v-validate:password="{
         required: { rule: true, message: 'required you password !!' },
         minlength: { rule: 8, message: 'your password short too !!' }
       }"/>
@@ -761,21 +761,21 @@ the below `group` attribute example:
     </div>
      <div class="old">
      <label for="old">old password:</label>
-      <input id="old" type="text" group="password" v-validate:old="{
+      <input id="old" type="password" group="password" v-validate:old="{
         required: { rule: true, message: 'required you old password !!' },
         minlength: { rule: 8, message: 'your old password short too !!' }
       }"/>
     </div>
     <div class="new">
       <label for="new">new password:</label>
-      <input id="new" type="text" group="password" v-validate:new="{
+      <input id="new" type="password" group="password" v-validate:new="{
         required: { rule: true, message: 'required you new password !!' },
         minlength: { rule: 8, message: 'your new password short too !!' }
       }"/>
     </div>
     <div class="confirm">
       <label for="confirm">confirm password:</label>
-      <input id="confirm" type="text" group="password" v-validate:confirm="{
+      <input id="confirm" type="password" group="password" v-validate:confirm="{
         required: { rule: true, message: 'required you confirm password !!' },
         minlength: { rule: 8, message: 'your confirm password short too !!' }
       }"/>
@@ -824,20 +824,20 @@ Sometimes, you need to manually set the validation error message such as server-
         </div>
         <div class="old">
           <label for="old">old password:</label>
-          <input id="old" type="text" v-model="passowrd.old" v-validate:old="{
+          <input id="old" type="password" v-model="passowrd.old" v-validate:old="{
             required: { rule: true, message: 'required you old password !!' }
           }"/>
         </div>
         <div class="new">
           <label for="new">new password:</label>
-          <input id="new" type="text" v-model="password.new" v-validate:new="{
+          <input id="new" type="password" v-model="password.new" v-validate:new="{
             required: { rule: true, message: 'required you new password !!' },
             minlength: { rule: 8, message: 'your new password short too !!' }
           }"/>
         </div>
         <div class="confirm">
           <label for="confirm">confirm password:</label>
-          <input id="confirm" type="text" v-validate:confirm="{
+          <input id="confirm" type="password" v-validate:confirm="{
             required: { rule: true, message: 'required you confirm password !!' },
             confirm: { rule: true, message: 'your confirm password incorrect !!' }
           }"/>

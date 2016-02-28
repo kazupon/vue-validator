@@ -11,7 +11,7 @@
       <validator name="validation">
       <form novalidate>
         ID: <input type="text" v-validate:id="['required']"><br />
-        Password: <input type="text" v-validate:password="{ required: true, minlength: 8, maxlength: 16 }"><br />
+        Password: <input type="password" v-validate:password="{ required: true, minlength: 8, maxlength: 16 }"><br />
         <div>
           <p v-if="$validation.id.required">Required ID.</p>
           <p v-if="$validation.password.required">Required Your Password.</p>
