@@ -1311,8 +1311,7 @@ new Vue({
 
 # TODO
 - async validation
-- validate timing customize with options
-- server-side validation error applying
+- more docs with gitbook
 - more tests !!
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
 
