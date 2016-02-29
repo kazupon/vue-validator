@@ -1,3 +1,20 @@
+<a name="2.0.0-alpha.22"></a>
+# [2.0.0-alpha.22](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.21...v2.0.0-alpha.22) (2016-02-29)
+
+
+### Features
+
+* **api:** update $validate API ([4635ce4](https://github.com/vuejs/vue-validator/commit/4635ce4))
+* **reset:** change meta method name ([f4fcd64](https://github.com/vuejs/vue-validator/commit/f4fcd64))
+* **trigger:** support validation trigger ([46d153e](https://github.com/vuejs/vue-validator/commit/46d153e))
+
+
+### BREAKING CHANGES
+
+* reset: `$validatorReset` to `$resetValidation`
+
+
+
 <a name="2.0.0-alpha.21"></a>
 # [2.0.0-alpha.21](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.20...v2.0.0-alpha.21) (2016-02-22)
 
