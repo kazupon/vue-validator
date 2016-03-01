@@ -429,7 +429,7 @@ Checkbox validation supports lengths:
         <label for="apple">Apple</label>
         <input id="orange" type="checkbox" value="orange" v-validate:fruits>
         <label for="orange">Orage</label>
-        <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+        <input id="grape" type="checkbox" value="grape" v-validate:fruits>
         <label for="grape">Grape</label>
         <input id="banana" type="checkbox" value="banana" v-validate:fruits>
         <label for="banana">Banana</label>
@@ -477,7 +477,7 @@ new Vue({
         <label for="apple">Apple</label>
         <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
         <label for="orange">Orage</label>
-        <input id="grape" type="radio" name="fruit" value="grage" v-validate:fruits>
+        <input id="grape" type="radio" name="fruit" value="grape" v-validate:fruits>
         <label for="grape">Grape</label>
         <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
         <label for="banana">Banana</label>
@@ -803,7 +803,7 @@ Sometimes, you need to manually set the validation error message such as server-
 
 - **Arguments:**
   - `Array<Object>` errors
-    - `{String}` feild 
+    - `{String}` field
     - `{String}` message
     - `{String}` validator [optional]
 
@@ -888,7 +888,7 @@ Sometimes, you need to manually set the validation error message such as server-
 
 - **Argument: field**
 
-    To detect as validation feild error, you need to pass in `field` argument.
+    To detect as validation field error, you need to pass in `field` argument.
 
 - **Argument: message**
 
