@@ -1,5 +1,4 @@
 export default function (Vue) {
-
   // override _init
   const init = Vue.prototype._init
   Vue.prototype._init = function (options) {

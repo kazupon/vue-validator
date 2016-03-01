@@ -2,7 +2,6 @@ import { warn, each } from '../util'
 
 
 export default function (Vue) {
-  
   const _ = Vue.util
   const vIf = Vue.directive('if')
   const FragmentFactory = Vue.FragmentFactory
@@ -32,21 +31,17 @@ export default function (Vue) {
 
     bind () {
       if (this.el.__vue__) {
-        warn(
-          'v-validate="' + this.expression + '" cannot be ' +
-          'used on an instance root element.'
-        )
+        warn('v-validate="' + this.expression + '" cannot be '
+          + 'used on an instance root element.')
         return
       }
 
       let validatorName = this.vm.$options._validator
       if (!validatorName) {
-        warn(
-          'v-validate need to use into validator element directive: ' +
-          '(e.g. <validator name="validator">' +
-          '<input type="text" v-validate:field1="[\'required\']">' +
-          '</validator>).'
-        )
+        warn('v-validate need to use into validator element directive: '
+          + '(e.g. <validator name="validator">'
+          + '<input type="text" v-validate:field1="[\'required\']">'
+          + '</validator>).')
         return
       }
 

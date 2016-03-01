@@ -2,7 +2,6 @@ import ValidatorError from './error'
 
 
 export default function (Vue) {
-
   const _ = Vue.util
   const error = ValidatorError(Vue) // import ValidatorError component
 
@@ -56,9 +55,10 @@ export default function (Vue) {
       }
     },
 
-    template: '<template v-for="error in errors">' + 
-      '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message"></component>' +
-      '</template>',
+    template: '<template v-for="error in errors">'
+      + '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message">'
+      + '</component>'
+      + '</template>',
 
     components: {}
   }

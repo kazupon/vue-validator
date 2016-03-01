@@ -13,8 +13,8 @@ export default function (Vue) {
 
     bind () {
       if (!this.params.name) {
-        warn('validator element directive need to specify \'name\' param attribute: ' +
-          '(e.g. <validator name="validator1">...</validator>)'
+        warn('validator element directive need to specify \'name\' param attribute: '
+            + '(e.g. <validator name="validator1">...</validator>)'
         )
         return
       }
@@ -39,8 +39,8 @@ export default function (Vue) {
       if (this.params.groups) {
         if (_.isArray(this.params.groups)) {
           groups = this.params.groups
-        } else if (!_.isPlainObject(this.params.groups) && 
-            typeof this.params.groups === 'string') {
+        } else if (!_.isPlainObject(this.params.groups)
+            && typeof this.params.groups === 'string') {
           groups.push(this.params.groups)
         }
       }

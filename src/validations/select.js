@@ -61,8 +61,8 @@ export default class SelectValidation extends BaseValidation {
       let value = values[i]
       for (let j = 0, m = el.options.length; j < m; j++) {
         let option = el.options[j]
-        if (!option.disabled && option.value === value && 
-            (!option.hasAttribute('selected') || !option.selected)) {
+        if (!option.disabled && option.value === value
+          && (!option.hasAttribute('selected') || !option.selected)) {
           option.selected = true
         }
       }

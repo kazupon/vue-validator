@@ -107,8 +107,8 @@ export default class BaseValidation {
   }
 
   listener (e) {
-    if (e.relatedTarget && 
-      (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
+    if (e.relatedTarget
+        && (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
       return
     }
 

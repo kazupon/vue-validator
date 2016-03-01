@@ -26,7 +26,6 @@ export function required (val) {
     } else {
       return false
     }
-    return val.length > 0
   } else if (typeof val === 'number' || typeof val === 'function') {
     return true
   } else if (typeof val === 'boolean') {
