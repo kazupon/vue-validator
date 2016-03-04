@@ -11,8 +11,10 @@
   },
   "extends": "standard",
   "rules": {
-    "no-inline-comments": 0,
+    "complexity": 0,
+    "operator-linebreak": [2, "before"],
     "no-trailing-spaces": 0,
+    "no-inline-comments": 0,
     "no-multiple-empty-lines": [2, {"max": 2}],
     "no-new": 0
   }

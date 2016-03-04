@@ -14,10 +14,9 @@ describe('event', () => {
   describe('validate target element level', () => {
     describe('valid', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<input type="text" @valid="onValid" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<input type="text" @valid="onValid" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -39,10 +38,9 @@ describe('event', () => {
 
     describe('invalid', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<input type="text" value="hello" @invalid="onInValid" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<input type="text" value="hello" @invalid="onInValid" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -64,10 +62,9 @@ describe('event', () => {
 
     describe('touched', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<input type="text" value="hello" @touched="onTouched" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<input type="text" value="hello" @touched="onTouched" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -89,10 +86,9 @@ describe('event', () => {
 
     describe('dirty', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<input type="text" value="hello" @dirty="onDirty" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<input type="text" value="hello" @dirty="onDirty" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -115,10 +111,9 @@ describe('event', () => {
     describe('modified', () => {
       it('should be occured event', (done) => {
         let results = []
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<input type="text" value="hello" @modified="onModified" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<input type="text" value="hello" @modified="onModified" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -150,11 +145,10 @@ describe('event', () => {
   describe('validator top level', () => {
     describe('valid', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1" @valid="onValid">' +
-          '<input type="text" v-validate:field1="{ required: true }">' +
-          '<input type="text" v-validate:field2="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1" @valid="onValid">'
+          + '<input type="text" v-validate:field1="{ required: true }">'
+          + '<input type="text" v-validate:field2="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -178,11 +172,10 @@ describe('event', () => {
 
     describe('invalid', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1" @invalid="onInvalid">' +
-          '<input type="text" value="hello" v-validate:field1="{ required: true }">' +
-          '<input type="text" value="world" v-validate:field2="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1" @invalid="onInvalid">'
+          + '<input type="text" value="hello" v-validate:field1="{ required: true }">'
+          + '<input type="text" value="world" v-validate:field2="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -204,11 +197,10 @@ describe('event', () => {
 
     describe('touched', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1" @touched="onTouched">' +
-          '<input type="text" v-validate:field1="{ required: true }">' +
-          '<input type="text" v-validate:field2="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1" @touched="onTouched">'
+          + '<input type="text" v-validate:field1="{ required: true }">'
+          + '<input type="text" v-validate:field2="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -229,11 +221,10 @@ describe('event', () => {
 
     describe('dirty', () => {
       it('should be occured event', (done) => {
-        el.innerHTML = 
-          '<validator name="validator1" @dirty="onDirty">' +
-          '<input type="text" v-validate:field1="{ required: true }">' +
-          '<input type="text" v-validate:field2="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1" @dirty="onDirty">'
+          + '<input type="text" v-validate:field1="{ required: true }">'
+          + '<input type="text" v-validate:field2="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {
@@ -256,10 +247,9 @@ describe('event', () => {
     describe('modified', () => {
       it('should be occured event', (done) => {
         let results = []
-        el.innerHTML = 
-          '<validator name="validator1" @modified="onModified">' +
-          '<input type="text" value="hello" v-validate:field1="{ required: true }">' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1" @modified="onModified">'
+          + '<input type="text" value="hello" v-validate:field1="{ required: true }">'
+          + '</validator>'
         vm = new Vue({
           el: el,
           methods: {

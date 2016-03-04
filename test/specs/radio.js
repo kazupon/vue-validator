@@ -13,23 +13,22 @@ describe('radio', () => {
 
   describe('normal', () => {
     beforeEach((done) => {
-      el.innerHTML = 
-        '<validator name="validator1">' +
-        '<form novalidate>' +
-        '<fieldset>' +
-        '<label for="radio1">radio1</label>' +
-        '<input type="radio" id="radio1" name="r1" checked value="foo" v-validate:field1="{ required: true }">' +
-        '<label for="radio2">radio2</label>' +
-        '<input type="radio" id="radio2" name="r1" value="bar" v-validate:field1>' +
-        '</fieldset>' +
-        '<fieldset>' +
-        '<label for="radio3">radio3</label>' +
-        '<input type="radio" id="radio3" name="r2" value="buz" v-validate:field2="{ required: true }">' +
-        '<label for="radio4">radio4</label>' +
-        '<input type="radio" id="radio4" name="r2" value="hoge" v-validate:field2>' +
-        '</fieldset>' +
-        '</form>' +
-        '</validator>'
+      el.innerHTML = '<validator name="validator1">'
+        + '<form novalidate>'
+        + '<fieldset>'
+        + '<label for="radio1">radio1</label>'
+        + '<input type="radio" id="radio1" name="r1" checked value="foo" v-validate:field1="{ required: true }">'
+        + '<label for="radio2">radio2</label>'
+        + '<input type="radio" id="radio2" name="r1" value="bar" v-validate:field1>'
+        + '</fieldset>'
+        + '<fieldset>'
+        + '<label for="radio3">radio3</label>'
+        + '<input type="radio" id="radio3" name="r2" value="buz" v-validate:field2="{ required: true }">'
+        + '<label for="radio4">radio4</label>'
+        + '<input type="radio" id="radio4" name="r2" value="hoge" v-validate:field2>'
+        + '</fieldset>'
+        + '</form>'
+        + '</validator>'
       vm = new Vue({
         el: el
       })

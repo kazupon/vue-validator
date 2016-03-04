@@ -34,11 +34,11 @@ describe('asset', () => {
       let globalCount = 0
       let localCount = 0
       beforeEach((done) => {
-        let template = '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" v-validate:field1="{ custom11: true }">' +
-          '</form>' +
-          '</validator>'
+        let template = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:field1="{ custom11: true }">'
+          + '</form>'
+          + '</validator>'
         el1 = document.createElement('div')
         el1.innerHTML = template
         el2 = document.createElement('div')

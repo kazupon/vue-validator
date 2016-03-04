@@ -13,12 +13,11 @@ describe('checkbox', () => {
 
   describe('single', () => {
     beforeEach((done) => {
-      el.innerHTML = 
-        '<validator name="validator1">' +
-        '<form novalidate>' +
-        '<input type="checkbox" v-validate:field1="[\'required\']">' +
-        '</form>' +
-        '</validator>'
+      el.innerHTML = '<validator name="validator1">'
+        + '<form novalidate>'
+        + '<input type="checkbox" v-validate:field1="[\'required\']">'
+        + '</form>'
+        + '</validator>'
       vm = new Vue({
         el: el
       })
@@ -73,13 +72,12 @@ describe('checkbox', () => {
 
   describe('multiple', () => {
     beforeEach((done) => {
-      el.innerHTML = 
-        '<validator name="validator1">' +
-        '<form novalidate>' +
-        '<input type="checkbox" value="foo" v-validate:field1="{ required: true, minlength: 1 }">' +
-        '<input type="checkbox" value="bar" v-validate:field1="{ required: true, minlength: 1 }">' +
-        '</form>' +
-        '</validator>'
+      el.innerHTML = '<validator name="validator1">'
+        + '<form novalidate>'
+        + '<input type="checkbox" value="foo" v-validate:field1="{ required: true, minlength: 1 }">'
+        + '<input type="checkbox" value="bar" v-validate:field1="{ required: true, minlength: 1 }">'
+        + '</form>'
+        + '</validator>'
       vm = new Vue({
         el: el
       })
@@ -151,18 +149,17 @@ describe('checkbox', () => {
 
   describe('complex', () => {
     beforeEach((done) => {
-      el.innerHTML = 
-        '<validator :groups="[\'group1\',\'group2\'] "name="validator1">' +
-        '<form novalidate>' +
-        '<fieldset>' +
-        '<input type="checkbox" group="group1" checked value="foo" v-validate:field1="{ required: true, minlength: 1 }">' +
-        '<input type="checkbox" group="group1" value="bar" v-validate:field1>' +
-        '</fieldset>' +
-        '<fieldset>' +
-        '<input type="checkbox" group="group2" checked v-validate:field2="{ required: true }">' +
-        '</fieldset>' +
-        '</form>' +
-        '</validator>'
+      el.innerHTML = '<validator :groups="[\'group1\',\'group2\'] "name="validator1">'
+        + '<form novalidate>'
+        + '<fieldset>'
+        + '<input type="checkbox" group="group1" checked value="foo" v-validate:field1="{ required: true, minlength: 1 }">'
+        + '<input type="checkbox" group="group1" value="bar" v-validate:field1>'
+        + '</fieldset>'
+        + '<fieldset>'
+        + '<input type="checkbox" group="group2" checked v-validate:field2="{ required: true }">'
+        + '</fieldset>'
+        + '</form>'
+        + '</validator>'
       vm = new Vue({
         el: el
       })
@@ -261,13 +258,12 @@ describe('checkbox', () => {
   describe('v-if', () => {
     context('a part', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">' +
-          '<input type="checkbox" v-if="enabled" checked value="bar" v-validate:field1>' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">'
+          + '<input type="checkbox" v-if="enabled" checked value="bar" v-validate:field1>'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           data: {
@@ -328,13 +324,12 @@ describe('checkbox', () => {
 
     context('all', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate v-if="enabled">' +
-          '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">' +
-          '<input type="checkbox" checked value="bar" v-validate:field1>' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate v-if="enabled">'
+          + '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">'
+          + '<input type="checkbox" checked value="bar" v-validate:field1>'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           data: {

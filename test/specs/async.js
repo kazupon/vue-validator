@@ -15,12 +15,11 @@ describe('async', () => {
   describe('promise like function', () => {
     describe('resolve', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" v-validate:username="{ exist: true, required: true }">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:username="{ exist: true, required: true }">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           validators: {
@@ -64,12 +63,11 @@ describe('async', () => {
 
     describe('reject', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" v-validate:username="{ exist: true, required: true }">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:username="{ exist: true, required: true }">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           validators: {
@@ -116,12 +114,11 @@ describe('async', () => {
   describe('promise', () => {
     describe('resolve', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" v-validate:username="{ exist: true, required: true }">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:username="{ exist: true, required: true }">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           validators: {
@@ -165,12 +162,11 @@ describe('async', () => {
 
     describe('reject', () => {
       beforeEach((done) => {
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" v-validate:username="{ exist: true, required: true }">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:username="{ exist: true, required: true }">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           validators: {

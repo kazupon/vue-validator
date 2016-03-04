@@ -269,15 +269,15 @@ describe('validator element directive', () => {
 
   describe('v-for', () => {
     beforeEach((done) => {
-      el.innerHTML = '<ul><li v-for="task in tasks">' + 
-        '<button :id="del + $index" @click="onDelete(task)">delete</button>' + 
-        '<validator :name="\'validator\' + $index">' +
-        '<form novalidate>' + 
-        '<input type="text" :value="task.name" v-validate:name="{ required: true, minlength: calculate($index) }">' +
-        '</form>' +
-        '</validator>' +
-        '</li></ul>' + 
-        '<button id="add" @click="onAdd">add</button>'
+      el.innerHTML = '<ul><li v-for="task in tasks">'
+        + '<button :id="del + $index" @click="onDelete(task)">delete</button>'
+        + '<validator :name="\'validator\' + $index">'
+        + '<form novalidate>'
+        + '<input type="text" :value="task.name" v-validate:name="{ required: true, minlength: calculate($index) }">'
+        + '</form>'
+        + '</validator>'
+        + '</li></ul>'
+        + '<button id="add" @click="onAdd">add</button>'
       vm = new Vue({
         el: el,
         data: {

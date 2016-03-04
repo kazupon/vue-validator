@@ -8,13 +8,12 @@ describe('group', () => {
 
   beforeEach((done) => {
     el = document.createElement('div')
-    el.innerHTML = 
-      '<validator :groups="[\'group1\', \'group2\']" name="validator1">' +
-      '<input type="text" group="group1" v-validate:field1="{ pattern: \'/foo/\' }">' +
-      '<input type="text" group="group1" value="hoge" v-validate:field2="{ required: true }">' +
-      '<input type="text" group="group2" v-validate:field3="{ pattern: \'/bar/\' }">' +
-      '<input type="text" group="group2" v-validate:field4="{ pattern: \'/piyo/\' }">' +
-      '</validator>'
+    el.innerHTML = '<validator :groups="[\'group1\', \'group2\']" name="validator1">'
+      + '<input type="text" group="group1" v-validate:field1="{ pattern: \'/foo/\' }">'
+      + '<input type="text" group="group1" value="hoge" v-validate:field2="{ required: true }">'
+      + '<input type="text" group="group2" v-validate:field3="{ pattern: \'/bar/\' }">'
+      + '<input type="text" group="group2" v-validate:field4="{ pattern: \'/piyo/\' }">'
+      + '</validator>'
     vm = new Vue({
       el: el
     })

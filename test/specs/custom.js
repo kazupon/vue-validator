@@ -17,12 +17,11 @@ describe('custom', () => {
         return /^[-+]?[0-9]+$/.test(val)
       })
 
-      el.innerHTML = 
-        '<validator name="validator1">' +
-        '<form novalidate>' +
-        '<input type="text" value="hi" v-validate:field1="{ numeric: true }">' +
-        '</form>' +
-        '</validator>'
+      el.innerHTML = '<validator name="validator1">'
+        + '<form novalidate>'
+        + '<input type="text" value="hi" v-validate:field1="{ numeric: true }">'
+        + '</form>'
+        + '</validator>'
       vm = new Vue({
         el: el
       })
@@ -55,12 +54,11 @@ describe('custom', () => {
           }
         })
 
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" value="hi" v-validate:field1="[\'numeric\']">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" value="hi" v-validate:field1="[\'numeric\']">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el
         })
@@ -94,12 +92,11 @@ describe('custom', () => {
           }
         })
 
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" value="hi" v-validate:field1="[\'numeric\']">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" value="hi" v-validate:field1="[\'numeric\']">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el,
           data: {
@@ -137,12 +134,11 @@ describe('custom', () => {
         required.check = org
         Vue.validator('required', required)
 
-        el.innerHTML = 
-          '<validator name="validator1">' +
-          '<form novalidate>' +
-          '<input type="text" value="" v-validate:field1="[\'required\']">' +
-          '</form>' +
-          '</validator>'
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" value="" v-validate:field1="[\'required\']">'
+          + '</form>'
+          + '</validator>'
         vm = new Vue({
           el: el
         })
