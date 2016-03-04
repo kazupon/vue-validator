@@ -116,3 +116,14 @@ export function trigger (el, event, args) {
   // non-attached form controls can throw errors
   try { el.dispatchEvent(e) } catch (e) {}
 }
+
+/**
+ * Forgiving check for a promise
+ *
+ * @param {Object} p
+ * @return {Boolean}
+ */
+
+export function isPromise (p) {
+  return p && typeof p.then === 'function'
+}

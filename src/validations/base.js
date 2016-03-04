@@ -1,4 +1,4 @@
-import util, { empty, each, trigger } from '../util'
+import util, { empty, each, trigger, isPromise } from '../util'
 
 
 /**
@@ -126,14 +126,16 @@ export default class BaseValidation {
     this._validator.validate()
   }
 
-  validate () {
+  validate (cb) {
+    const self = this
     const _ = util.Vue.util
+    const vm = this._vm
 
     let results = {}
     let errors = []
     let valid = true
 
-    each(this._validators, (descriptor, name) => {
+    this._runValidators((descriptor, name, done) => {
       let asset = this._resolveValidator(name)
       let validator = null
       let msg = null
@@ -154,42 +156,48 @@ export default class BaseValidation {
       }
 
       if (validator) {
-        let ret = validator.call(this._vm, this._getValue(this._el), descriptor.arg)
-        if (!ret) {
-          valid = false
-          if (msg) {
-            let error = { validator: name }
-            error.message = typeof msg === 'function' 
-              ? msg.call(this._vm, this.field, descriptor.arg) 
-              : msg
-            errors.push(error)
-            results[name] = error.message
+        let value = this._getValue(this._el)
+        this._invokeValidator(vm, validator, value, descriptor.arg, (ret) => {
+          if (!ret) {
+            valid = false
+            if (msg) {
+              let error = { validator: name }
+              error.message = typeof msg === 'function' 
+                ? msg.call(vm, self.field, descriptor.arg) 
+                : msg
+              errors.push(error)
+              results[name] = error.message
+            } else {
+              results[name] = !ret
+            }
           } else {
             results[name] = !ret
           }
-        } else {
-          results[name] = !ret
-        }
+
+          done()
+        })
+      } else {
+        done()
       }
-    }, this)
+    }, () => { // finished
+      this._fireEvent(this._el, valid ? 'valid' : 'invalid')
 
-    this._fireEvent(this._el, valid ? 'valid' : 'invalid')
+      let props = {
+        valid: valid,
+        invalid: !valid,
+        touched: this.touched,
+        untouched: !this.touched,
+        dirty: this.dirty,
+        pristine: !this.dirty,
+        modified: this.modified
+      }
+      if (!empty(errors)) {
+        props.errors = errors
+      }
+      _.extend(results, props)
 
-    let props = {
-      valid: valid,
-      invalid: !valid,
-      touched: this.touched,
-      untouched: !this.touched,
-      dirty: this.dirty,
-      pristine: !this.dirty,
-      modified: this.modified
-    }
-    if (!empty(errors)) {
-      props.errors = errors
-    }
-    _.extend(results, props)
-
-    return results
+      cb(results)
+    })
   }
 
   resetFlags () {
@@ -240,9 +248,53 @@ export default class BaseValidation {
     trigger(el, type, args)
   }
 
+  _runValidators (fn, cb) {
+    const validators = this._validators
+    const length = Object.keys(validators).length
+
+    let count = 0
+    each(validators, (descriptor, name) => {
+      fn(descriptor, name, () => {
+        ++count
+        count >= length && cb()
+      })
+    })
+  }
+
+  _invokeValidator (vm, validator, val, arg, cb) {
+    let future = validator.call(vm, val, arg)
+    if (typeof future === 'function') { // function 
+      if (future.resolved) {
+        // cached
+        cb(future.resolved)
+      } else if (future.requested) {
+        // pool callbacks
+        future.pendingCallbacks.push(cb)
+      } else {
+        future.requested = true
+        let cbs = future.pendingCallbacks = [cb]
+        future(() => { // resolve
+          future.resolved = true
+          for (let i = 0, l = cbs.length; i < l; i++) {
+            cbs[i](true)
+          }
+        }, () => { // reject
+          cb(false)
+        })
+      }
+    } else if (isPromise(future)) { // promise
+      future.then(() => { // resolve
+        cb(true)
+      }).catch(() => { // reject
+        cb(false)
+      })
+    } else { // sync
+      cb(future)
+    }
+  }
+
   _resolveValidator (name) {
     const resolveAsset = util.Vue.util.resolveAsset
     return resolveAsset(this._vm.$options, 'validators', name)
   }
-
 }

@@ -262,24 +262,6 @@ describe('validator element directive', () => {
         it('validator scope should not be assigned', () => {
           assert(vm.$validator1 === null)
         })
-
-        describe('set true', () => {
-          beforeEach((done) => {
-            vm.hidden = true
-            vm.$nextTick(done)
-          })
-
-          it('validator scope should be assigned', () => {
-            assert(vm.$validator1 !== undefined)
-            assert(vm.$validator1.valid !== undefined)
-            assert(vm.$validator1.invalid !== undefined)
-            assert(vm.$validator1.touched !== undefined)
-            assert(vm.$validator1.untouched !== undefined)
-            assert(vm.$validator1.modified !== undefined)
-            assert(vm.$validator1.dirty !== undefined)
-            assert(vm.$validator1.pristine !== undefined)
-          })
-        })
       })
     })
   })
@@ -379,23 +361,6 @@ describe('validator element directive', () => {
         it('should not be assigned', () => {
           assert(vm.$validator0 === null)
           assert(vm.$validator1 === null)
-        })
-
-        context('add', () => {
-          beforeEach((done) => {
-            let add = el.getElementsByTagName('button')[0]
-            trigger(add, 'click')
-            trigger(add, 'click')
-            vm.$nextTick(done)
-          })
-
-          it('should be assigned', (done) => {
-            assert(vm.$validator0.name.required === false)
-            assert(vm.$validator0.name.minlength === false)
-            assert(vm.$validator1.name.required === false)
-            assert(vm.$validator1.name.minlength === true)
-            done()
-          })
         })
       })
     })

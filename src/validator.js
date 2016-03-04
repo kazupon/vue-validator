@@ -109,20 +109,21 @@ export default class Validator {
 
       if (validation) {
         validation.willUpdateFlags(touched)
-        let res = validation.validate()
-        util.Vue.set(this._scope, field, res)
+        validation.validate((results) => {
+          util.Vue.set(this._scope, field, results)
 
-        if (this._scope.dirty) {
-          this._fireEvent('dirty')
-        }
+          if (this._scope.dirty) {
+            this._fireEvent('dirty')
+          }
 
-        if (this._modified !== this._scope.modified) {
-          this._fireEvent('modified', this._scope.modified)
-          this._modified = this._scope.modified
-        }
+          if (this._modified !== this._scope.modified) {
+            this._fireEvent('modified', this._scope.modified)
+            this._modified = this._scope.modified
+          }
 
-        let valid = this._scope.valid
-        this._fireEvent((valid ? 'valid' : 'invalid'))
+          let valid = this._scope.valid
+          this._fireEvent((valid ? 'valid' : 'invalid'))
+        })
       }
     }
   }
@@ -172,7 +173,6 @@ export default class Validator {
     }, this)
   }
 
-  // TODO: should be improved performance (use cache)
   get validations () {
     const extend = util.Vue.util.extend
 
@@ -338,37 +338,33 @@ export default class Validator {
     }
   }
 
-  validate () {
-    each(this._validations, (validation, key) => {
-      let res = validation.validate()
-      util.Vue.set(this._scope, key, res)
-    }, this)
+  validate (cb) {
+    const self = this
 
-    each(this._checkboxValidations, (dataset, key) => {
-      let res = dataset.validation.validate()
-      util.Vue.set(this._scope, key, res)
-    }, this)
+    this._runValidates((validation, key, done) => {
+      validation.validate((results) => {
+        util.Vue.set(self._scope, key, results)
+        done()
+      })
+    }, () => { // finished
+      if (this._scope.touched) {
+        this._fireEvent('touched')
+      }
 
-    each(this._radioValidations, (dataset, key) => {
-      let res = dataset.validation.validate()
-      util.Vue.set(this._scope, key, res)
-    }, this)
+      if (this._scope.dirty) {
+        this._fireEvent('dirty')
+      }
 
-    if (this._scope.touched) {
-      this._fireEvent('touched')
-    }
+      if (this._modified !== this._scope.modified) {
+        this._fireEvent('modified', this._scope.modified)
+        this._modified = this._scope.modified
+      }
 
-    if (this._scope.dirty) {
-      this._fireEvent('dirty')
-    }
+      let valid = this._scope.valid
+      this._fireEvent((valid ? 'valid' : 'invalid'))
 
-    if (this._modified !== this._scope.modified) {
-      this._fireEvent('modified', this._scope.modified)
-      this._modified = this._scope.modified
-    }
-
-    let valid = this._scope.valid
-    this._fireEvent((valid ? 'valid' : 'invalid'))
+      cb && cb()
+    })
   }
 
   setupScope () {
@@ -424,6 +420,18 @@ export default class Validator {
         }
       })
     }, this)
+  }
+
+  _runValidates (fn, cb) {
+    const length = Object.keys(this.validations).length
+
+    let count = 0
+    each(this.validations, (validation, key) => {
+      fn(validation, key, () => {
+        ++count
+        count >= length && cb()
+      })
+    })
   }
 
   _walkValidations (validations, property, condition) {

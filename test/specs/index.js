@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueValidator from '../../src/index'
+import 'babel-polyfill'
 
 require('./validators')
 require('./override')
@@ -30,3 +31,4 @@ require('./radio')
 require('./select')
 require('./reset')
 require('./validate')
+require('./async')
