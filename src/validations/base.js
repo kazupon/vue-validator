@@ -58,9 +58,7 @@ export default class BaseValidation {
   }
 
   unmanageElement (el) {
-    if (this._unwatch) {
-      this._unwatch()
-    }
+    this._unwatch && this._unwatch()
   }
 
   setValidation (name, arg, msg) {
@@ -77,9 +75,7 @@ export default class BaseValidation {
   }
 
   willUpdateFlags (touched = false) {
-    if (touched) {
-      this.willUpdateTouched(this._el, 'blur')
-    }
+    touched && this.willUpdateTouched(this._el, 'blur')
     this.willUpdateDirty(this._el)
     this.willUpdateModified(this._el)
   }
@@ -115,6 +111,7 @@ export default class BaseValidation {
     if (this.guardValidate(e.target, e.type)) {
       return
     }
+
     this.handleValidate(e.target, e.type)
   }
 
@@ -127,9 +124,7 @@ export default class BaseValidation {
   }
 
   validate (cb) {
-    const self = this
     const _ = util.Vue.util
-    const vm = this._vm
 
     let results = {}
     let errors = []
@@ -157,13 +152,13 @@ export default class BaseValidation {
 
       if (validator) {
         let value = this._getValue(this._el)
-        this._invokeValidator(vm, validator, value, descriptor.arg, (ret) => {
+        this._invokeValidator(this._vm, validator, value, descriptor.arg, (ret) => {
           if (!ret) {
             valid = false
             if (msg) {
               let error = { validator: name }
               error.message = typeof msg === 'function' 
-                ? msg.call(vm, self.field, descriptor.arg) 
+                ? msg.call(this._vm, this.field, descriptor.arg) 
                 : msg
               errors.push(error)
               results[name] = error.message

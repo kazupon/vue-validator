@@ -51,7 +51,7 @@ export default class RadioValidation extends BaseValidation {
     each(this._inits, (item, index) => {
       this.willUpdateDirty(item.el)
       this.willUpdateModified(item.el)
-    }, this)
+    })
   }
 
   reset () {
@@ -87,9 +87,7 @@ export default class RadioValidation extends BaseValidation {
     } else {
       let vals = []
       each(this._inits, (item, index) => {
-        if (item.el.checked) {
-          vals.push(item.el.value)
-        }
+        item.el.checked && vals.push(item.el.value)
       })
       return vals
     }

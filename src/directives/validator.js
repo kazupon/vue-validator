@@ -49,7 +49,9 @@ export default function (Vue) {
     },
 
     setupValidator () {
-      let validator = this.validator = new Validator(this.validatorName, this, this.getGroups())
+      let validator 
+        = this.validator 
+        = new Validator(this.validatorName, this, this.getGroups())
       validator.enableReactive()
       validator.setupScope()
       validator.registerEvents()
@@ -76,9 +78,7 @@ export default function (Vue) {
         this.validator.validate()
       })
 
-      if (!lazy) {
-        this.vm.$activateValidator()
-      }
+      !lazy && this.vm.$activateValidator()
     },
 
     teardownFragment () {

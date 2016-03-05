@@ -29,7 +29,7 @@ export default class Validator {
 
     each(groups, (group) => {
       this._groupValidations[group] = []
-    }, this)
+    })
   }
 
   enableReactive () {
@@ -39,7 +39,7 @@ export default class Validator {
 
     // define the validation resetting meta method to vue instance
     this._dir.vm.$resetValidation = () => {
-      this.resetValidation()
+      this._resetValidation()
     }
 
     // define the validate manually meta method to vue instance
@@ -90,87 +90,7 @@ export default class Validator {
     each(this._events, (handler, event) => {
       this._events[event] = null
       delete this._events[event]
-    }, this)
-  }
-
-  _validate (field, touched) {
-    if (!field) { // all
-      each(this.validations, (validation, key) => {
-        validation.willUpdateFlags(touched)
-      })
-      this.validate()
-    } else { // each field
-      let validation = this._validations[field]
-      if (!validation && this._checkboxValidations[field]) {
-        validation = this._checkboxValidations[field].validation
-      } else if (!validation && this._radioValidations[field]) {
-        validation = this._radioValidations[field].validation
-      }
-
-      if (validation) {
-        validation.willUpdateFlags(touched)
-        validation.validate((results) => {
-          util.Vue.set(this._scope, field, results)
-
-          if (this._scope.dirty) {
-            this._fireEvent('dirty')
-          }
-
-          if (this._modified !== this._scope.modified) {
-            this._fireEvent('modified', this._scope.modified)
-            this._modified = this._scope.modified
-          }
-
-          let valid = this._scope.valid
-          this._fireEvent((valid ? 'valid' : 'invalid'))
-        })
-      }
-    }
-  }
-
-  resetValidation () {
-    each(this._validations, (validation, key) => {
-      validation.reset()
-    }, this)
-
-    each(this._checkboxValidations, (dataset, key) => {
-      dataset.validation.reset()
-    }, this)
-
-    each(this._radioValidations, (dataset, key) => {
-      dataset.validation.reset()
-    }, this)
-
-    this.validate()
-  }
-
-  _setValidationErrors (errors) {
-    const extend = util.Vue.util.extend
-
-    // make tempolaly errors
-    let temp = {}
-    each(errors, (error, index) => {
-      if (!temp[error.field]) {
-        temp[error.field] = []
-      }
-      temp[error.field].push(error)
     })
-
-    // set errors
-    each(temp, (values, field) => {
-      let validation = this._scope[field]
-      let newValidation = {}
-      each(values, (error) => {
-        if (error.validator) {
-          validation[error.validator] = error.message
-        }
-      })
-      validation.valid = false
-      validation.invalid = true
-      validation.errors = values
-      extend(newValidation, validation)
-      util.Vue.set(this._scope, field, newValidation)
-    }, this)
   }
 
   get validations () {
@@ -181,11 +101,11 @@ export default class Validator {
 
     each(this._checkboxValidations, (dataset, key) => {
       ret[key] = dataset.validation
-    }, this)
+    })
 
     each(this._radioValidations, (dataset, key) => {
       ret[key] = dataset.validation
-    }, this)
+    })
 
     return ret
   }
@@ -225,6 +145,152 @@ export default class Validator {
       this._unmanageBaseValidation(field, el)
     }
   }
+
+  addGroupValidation (group, field) {
+    const indexOf = util.Vue.util.indexOf
+
+    let validation = this._validations[field] 
+      || this._checkboxValidations[field].validation 
+      || this._radioValidations[field].validation
+    let validations = this._groupValidations[group]
+    if (validations) {
+      if (!~indexOf(validations, validation)) {
+        validations.push(validation)
+      }
+    }
+  }
+
+  removeGroupValidation (group, field) {
+    let validation = this._validations[field] 
+      || this._checkboxValidations[field].validation 
+      || this._radioValidations[field].validation
+    let validations = this._groupValidations[group]
+    if (validations) {
+      pull(validations, validation)
+    }
+  }
+
+  validate (cb) {
+    const self = this
+
+    this._runValidates((validation, key, done) => {
+      validation.validate((results) => {
+        util.Vue.set(self._scope, key, results)
+        done()
+      })
+    }, () => { // finished
+      this._scope.touched && this._fireEvent('touched')
+      this._scope.dirty && this._fireEvent('dirty')
+
+      if (this._modified !== this._scope.modified) {
+        this._fireEvent('modified', this._scope.modified)
+        this._modified = this._scope.modified
+      }
+
+      let valid = this._scope.valid
+      this._fireEvent((valid ? 'valid' : 'invalid'))
+
+      cb && cb()
+    })
+  }
+
+  setupScope () {
+    let validationsGetter = () => { return this.validations }
+    let scopeGetter = () => { return this._scope }
+    this._defineProperties(validationsGetter, scopeGetter)
+
+    each(this._groups, (name) => {
+      let validations = this._groupValidations[name]
+      let group = {}
+      util.Vue.set(this._scope, name, group)
+      this._defineProperties(() => { return validations }, () => { return group })
+    })
+  }
+
+  waitFor (cb) {
+    let vm = this._dir.vm
+    let method = '$activateValidator'
+
+    this._dir.vm[method] = () => {
+      cb()
+      vm[method] = null
+    }
+  }
+
+
+  _validate (field, touched) {
+    if (!field) { // all
+      each(this.validations, (validation, key) => {
+        validation.willUpdateFlags(touched)
+      })
+      this.validate()
+    } else { // each field
+      let validation = this._getValidationFrom(field)
+      if (validation) {
+        validation.willUpdateFlags(touched)
+        validation.validate((results) => {
+          util.Vue.set(this._scope, field, results)
+
+          this._scope.dirty && this._fireEvent('dirty')
+
+          if (this._modified !== this._scope.modified) {
+            this._fireEvent('modified', this._scope.modified)
+            this._modified = this._scope.modified
+          }
+
+          let valid = this._scope.valid
+          this._fireEvent((valid ? 'valid' : 'invalid'))
+        })
+      }
+    }
+  }
+
+  _getValidationFrom (field) {
+    let validation = this._validations[field]
+    if (!validation && this._checkboxValidations[field]) {
+      validation = this._checkboxValidations[field].validation
+    } else if (!validation && this._radioValidations[field]) {
+      validation = this._radioValidations[field].validation
+    }
+    return validation
+  }
+
+  _resetValidation () {
+    each(this.validations, (validation, key) => {
+      validation.reset()
+    })
+    this.validate()
+  }
+
+  _setValidationErrors (errors) {
+    const extend = util.Vue.util.extend
+
+    // make tempolaly errors
+    let temp = {}
+    each(errors, (error, index) => {
+      if (!temp[error.field]) {
+        temp[error.field] = []
+      }
+      temp[error.field].push(error)
+    })
+
+    // set errors
+    each(temp, (values, field) => {
+      let validation = this._scope[field]
+      let newValidation = {}
+      each(values, (error) => {
+        if (error.validator) {
+          validation[error.validator] = error.message
+        }
+      })
+      validation.valid = false
+      validation.invalid = true
+      validation.errors = values
+      extend(newValidation, validation)
+      util.Vue.set(this._scope, field, newValidation)
+    })
+  }
+
 
   _manageBaseValidation (field, model, vm, el, scope, detectBlur, detectChange) {
     let validation = this._validations[field] = new BaseValidation(
@@ -314,82 +380,6 @@ export default class Validator {
     }
   }
 
-  addGroupValidation (group, field) {
-    const indexOf = util.Vue.util.indexOf
-
-    let validation = this._validations[field] 
-      || this._checkboxValidations[field].validation 
-      || this._radioValidations[field].validation
-    let validations = this._groupValidations[group]
-    if (validations) {
-      if (!~indexOf(validations, validation)) {
-        validations.push(validation)
-      }
-    }
-  }
-
-  removeGroupValidation (group, field) {
-    let validation = this._validations[field] 
-      || this._checkboxValidations[field].validation 
-      || this._radioValidations[field].validation
-    let validations = this._groupValidations[group]
-    if (validations) {
-      pull(validations, validation)
-    }
-  }
-
-  validate (cb) {
-    const self = this
-
-    this._runValidates((validation, key, done) => {
-      validation.validate((results) => {
-        util.Vue.set(self._scope, key, results)
-        done()
-      })
-    }, () => { // finished
-      if (this._scope.touched) {
-        this._fireEvent('touched')
-      }
-
-      if (this._scope.dirty) {
-        this._fireEvent('dirty')
-      }
-
-      if (this._modified !== this._scope.modified) {
-        this._fireEvent('modified', this._scope.modified)
-        this._modified = this._scope.modified
-      }
-
-      let valid = this._scope.valid
-      this._fireEvent((valid ? 'valid' : 'invalid'))
-
-      cb && cb()
-    })
-  }
-
-  setupScope () {
-    let validationsGetter = () => { return this.validations }
-    let scopeGetter = () => { return this._scope }
-    this._defineProperties(validationsGetter, scopeGetter)
-
-    each(this._groups, (name) => {
-      let validations = this._groupValidations[name]
-      let group = {}
-      util.Vue.set(this._scope, name, group)
-      this._defineProperties(() => { return validations }, () => { return group })
-    }, this)
-  }
-
-  waitFor (cb) {
-    let vm = this._dir.vm
-    let method = '$activateValidator'
-
-    this._dir.vm[method] = () => {
-      cb()
-      vm[method] = null
-    }
-  }
-
   _fireEvent (type, ...args) {
     let handler = this._events[this._getEventName(type)]
     handler && handler.apply(null, args)
@@ -419,7 +409,7 @@ export default class Validator {
           return bind(descriptor.fn, this)(descriptor.arg)
         }
       })
-    }, this)
+    })
   }
 
   _runValidates (fn, cb) {
@@ -441,12 +431,12 @@ export default class Validator {
     each(validations, (validation, key) => {
       if (ret === !condition) { return }
       if (hasOwn(this._scope, validation.field)) {
-        var target = this._scope[validation.field]
+        let target = this._scope[validation.field]
         if (target && target[property] === !condition) {
           ret = !condition
         }
       }
-    }, this)
+    })
 
     return ret
   }
@@ -499,10 +489,10 @@ export default class Validator {
               error.message = err
             }
             errors.push(error)
-          }, this)
+          })
         }
       }
-    }, this)
+    })
 
     return empty(errors) ? undefined : errors
   }

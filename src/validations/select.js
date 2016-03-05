@@ -34,9 +34,7 @@ export default class SelectValidation extends BaseValidation {
   }
 
   unmanageElement (el) {
-    if (this._unwatch) {
-      this._unwatch()
-    }
+    this._unwatch && this._unwatch()
   }
 
   reset () {

@@ -84,9 +84,8 @@ export default function (Vue) {
         this.isDetectChange(this.params.detectChange)
       )
 
-      if (params.group) {
-        validator.addGroupValidation(params.group, this.field)
-      }
+      params.group
+        && validator.addGroupValidation(params.group, this.field)
     },
 
     listen () {
@@ -144,9 +143,8 @@ export default function (Vue) {
       if (this.validator && this.validation) {
         let el = this.frag.node
 
-        if (this.params.group) {
-          this.validator.removeGroupValidation(this.params.group, this.field)
-        }
+        this.params.group 
+          && this.validator.removeGroupValidation(this.params.group, this.field)
 
         this.validator.unmanageValidation(this.field, el)
 
@@ -179,7 +177,7 @@ export default function (Vue) {
     handleArray (value) {
       each(value, (val) => {
         this.validation.setValidation(val)
-      }, this)
+      })
     },
 
     handleObject (value) {
@@ -192,15 +190,17 @@ export default function (Vue) {
         } else {
           this.validation.setValidation(key, val)
         }
-      }, this)
+      })
     },
 
     isDetectBlur (detectBlur) {
-      return detectBlur === undefined || detectBlur === 'on' || detectBlur === true
+      return detectBlur === undefined 
+        || detectBlur === 'on' || detectBlur === true
     },
 
     isDetectChange (detectChange) {
-      return detectChange === undefined || detectChange === 'on' || detectChange === true
+      return detectChange === undefined 
+        || detectChange === 'on' || detectChange === true
     }
   })
 }
