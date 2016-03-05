@@ -38,27 +38,27 @@ export default class Validator {
     this._dir.vm._validatorMaps[this.name] = this
 
     // define the validation resetting meta method to vue instance
-    this._dir.vm.$resetValidation = () => {
-      this._resetValidation()
+    this._dir.vm.$resetValidation = (cb) => {
+      this._resetValidation(cb)
     }
 
     // define the validate manually meta method to vue instance
     this._dir.vm.$validate = (...args) => {
       let field = null
       let touched = false
+      let cb = null
 
-      if (args.length === 1) {
-        if (typeof args[0] === 'string') {
-          field = args[0]
-        } else if (typeof args[0] === 'boolean') {
-          touched = args[0]
+      each(args, (arg, index) => {
+        if (typeof arg === 'string') {
+          field = arg
+        } else if (typeof arg === 'boolean') {
+          touched = arg
+        } else if (typeof arg === 'function') {
+          cb = arg
         }
-      } else if (args.length === 2) {
-        field = args[0]
-        touched = args[1]
-      }
+      })
 
-      this._validate(field, touched)
+      this._validate(field, touched, cb)
     }
 
     // define manually the validation errors
@@ -218,12 +218,12 @@ export default class Validator {
   }
 
 
-  _validate (field, touched) {
+  _validate (field, touched, cb) {
     if (!field) { // all
       each(this.validations, (validation, key) => {
         validation.willUpdateFlags(touched)
       })
-      this.validate()
+      this.validate(cb)
     } else { // each field
       let validation = this._getValidationFrom(field)
       if (validation) {
@@ -240,6 +240,8 @@ export default class Validator {
 
           let valid = this._scope.valid
           this._fireEvent((valid ? 'valid' : 'invalid'))
+
+          cb && cb()
         })
       }
     }
@@ -255,11 +257,11 @@ export default class Validator {
     return validation
   }
 
-  _resetValidation () {
+  _resetValidation (cb) {
     each(this.validations, (validation, key) => {
       validation.reset()
     })
-    this.validate()
+    this.validate(cb)
   }
 
   _setValidationErrors (errors) {
