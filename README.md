@@ -1310,7 +1310,7 @@ new Vue({
 
 
 # TODO
-- async validation
+- a little improvemnets
 - more docs with gitbook
 - more tests !!
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
