@@ -152,10 +152,13 @@ export default class BaseValidation {
 
       if (validator) {
         let value = this._getValue(this._el)
-        this._invokeValidator(this._vm, validator, value, descriptor.arg, (ret) => {
+        this._invokeValidator(this._vm, validator, value, descriptor.arg, (ret, err) => {
           if (!ret) {
             valid = false
-            if (msg) {
+            if (err) { // async error message
+              errors.push({ validator: name, message: err })
+              results[name] = err
+            } else if (msg) {
               let error = { validator: name }
               error.message = typeof msg === 'function' 
                 ? msg.call(this._vm, this.field, descriptor.arg) 
@@ -273,15 +276,17 @@ export default class BaseValidation {
           for (let i = 0, l = cbs.length; i < l; i++) {
             cbs[i](true)
           }
-        }, () => { // reject
-          cb(false)
+        }, (msg) => { // reject
+          cb(false, msg)
         })
       }
     } else if (isPromise(future)) { // promise
       future.then(() => { // resolve
         cb(true)
-      }).catch(() => { // reject
-        cb(false)
+      }, (msg) => { // reject
+        cb(false, msg)
+      }).catch((err) => {
+        cb(false, err.message)
       })
     } else { // sync
       cb(future)

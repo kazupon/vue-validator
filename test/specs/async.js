@@ -74,7 +74,7 @@ describe('async', () => {
             exist: (val) => {
               return (resolve, reject) => {
                 setTimeout(() => {
-                  reject()
+                  reject('already registration !!')
                 }, DELAY)
               }
             }
@@ -86,7 +86,7 @@ describe('async', () => {
       it('should be validated', (done) => {
         setTimeout(() => {
           // default
-          assert(vm.$validator1.username.exist === true)
+          assert(vm.$validator1.username.exist === 'already registration !!')
           assert(vm.$validator1.valid === false)
           assert(vm.$validator1.touched === false)
           assert(vm.$validator1.dirty === false)
@@ -98,7 +98,7 @@ describe('async', () => {
           trigger(input, 'input')
           trigger(input, 'blur')
           setTimeout(() => {
-            assert(vm.$validator1.username.exist === true)
+            assert(vm.$validator1.username.exist === 'already registration !!')
             assert(vm.$validator1.valid === false)
             assert(vm.$validator1.touched === true)
             assert(vm.$validator1.dirty === true)
@@ -173,7 +173,7 @@ describe('async', () => {
             exist: (val) => {
               return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                  reject()
+                  reject('already registration !!')
                 }, DELAY)
               })
             }
@@ -185,7 +185,7 @@ describe('async', () => {
       it('should be validated', (done) => {
         setTimeout(() => {
           // default
-          assert(vm.$validator1.username.exist === true)
+          assert(vm.$validator1.username.exist === 'already registration !!')
           assert(vm.$validator1.valid === false)
           assert(vm.$validator1.touched === false)
           assert(vm.$validator1.dirty === false)
@@ -197,7 +197,7 @@ describe('async', () => {
           trigger(input, 'input')
           trigger(input, 'blur')
           setTimeout(() => {
-            assert(vm.$validator1.username.exist === true)
+            assert(vm.$validator1.username.exist === 'already registration !!')
             assert(vm.$validator1.valid === false)
             assert(vm.$validator1.touched === true)
             assert(vm.$validator1.dirty === true)
