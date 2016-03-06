@@ -103,11 +103,6 @@ export default class BaseValidation {
   }
 
   listener (e) {
-    if (e.relatedTarget
-        && (e.relatedTarget.tagName === 'A' || e.relatedTarget.tagName === 'BUTTON')) {
-      return
-    }
-
     if (this.guardValidate(e.target, e.type)) {
       return
     }
