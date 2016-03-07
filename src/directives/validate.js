@@ -73,15 +73,15 @@ export default function (Vue) {
     },
 
     setupValidate (name, model) {
-      let params = this.params
+      const params = this.params
       let validator = this.validator = this.vm._validatorMaps[name]
 
       this.field = _.camelize(this.arg ? this.arg : params.field)
 
       this.validation = validator.manageValidation(
         this.field, model, this.vm, this.frag.node, this._scope, 
-        this.isDetectBlur(this.params.detectBlur), 
-        this.isDetectChange(this.params.detectChange)
+        this.isDetectBlur(params.detectBlur), 
+        this.isDetectChange(params.detectChange)
       )
 
       params.group

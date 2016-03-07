@@ -42,7 +42,7 @@ export default class BaseValidation {
   }
 
   manageElement (el) {
-    let scope = this._getScope()
+    const scope = this._getScope()
     let model = this._model
     if (model) {
       el.value = scope.$get(model) || ''

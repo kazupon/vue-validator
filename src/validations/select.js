@@ -14,8 +14,8 @@ export default class SelectValidation extends BaseValidation {
   }
 
   manageElement (el) {
-    let scope = this._getScope()
-    let model = this._model
+    const scope = this._getScope()
+    const model = this._model
     if (model) {
       let value = scope.$get(model)
       let values = !Array.isArray(value) ? [value] : value

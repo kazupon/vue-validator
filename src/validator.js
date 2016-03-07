@@ -33,17 +33,19 @@ export default class Validator {
   }
 
   enableReactive () {
+    let vm = this._dir.vm
+
     // define the validation scope
-    util.Vue.util.defineReactive(this._dir.vm, this.name, this._scope)
-    this._dir.vm._validatorMaps[this.name] = this
+    util.Vue.util.defineReactive(vm, this.name, this._scope)
+    vm._validatorMaps[this.name] = this
 
     // define the validation resetting meta method to vue instance
-    this._dir.vm.$resetValidation = (cb) => {
+    vm.$resetValidation = (cb) => {
       this._resetValidation(cb)
     }
 
     // define the validate manually meta method to vue instance
-    this._dir.vm.$validate = (...args) => {
+    vm.$validate = (...args) => {
       let field = null
       let touched = false
       let cb = null
@@ -62,17 +64,18 @@ export default class Validator {
     }
 
     // define manually the validation errors
-    this._dir.vm.$setValidationErrors = (errors) => {
+    vm.$setValidationErrors = (errors) => {
       this._setValidationErrors(errors)
     }
   }
 
   disableReactive () {
-    this._dir.vm.$setValidationErrors = undefined
-    this._dir.vm.$validate = undefined
-    this._dir.vm.$validatorReset = undefined
-    this._dir.vm._validatorMaps[this.name] = null
-    this._dir.vm[this.name] = null
+    let vm = this._dir.vm
+    vm.$setValidationErrors = undefined
+    vm.$validate = undefined
+    vm.$validatorReset = undefined
+    vm._validatorMaps[this.name] = null
+    vm[this.name] = null
   }
 
   registerEvents () {
@@ -153,11 +156,8 @@ export default class Validator {
       || this._checkboxValidations[field].validation 
       || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
-    if (validations) {
-      if (!~indexOf(validations, validation)) {
-        validations.push(validation)
-      }
-    }
+
+    validations && !~indexOf(validations, validation) && validations.push(validation)
   }
 
   removeGroupValidation (group, field) {
@@ -165,29 +165,28 @@ export default class Validator {
       || this._checkboxValidations[field].validation 
       || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
-    if (validations) {
-      pull(validations, validation)
-    }
+
+    validations && pull(validations, validation)
   }
 
   validate (cb) {
-    const self = this
+    const scope = this._scope
 
     this._runValidates((validation, key, done) => {
       validation.validate((results) => {
-        util.Vue.set(self._scope, key, results)
+        util.Vue.set(scope, key, results)
         done()
       })
     }, () => { // finished
-      this._scope.touched && this._fireEvent('touched')
-      this._scope.dirty && this._fireEvent('dirty')
+      scope.touched && this._fireEvent('touched')
+      scope.dirty && this._fireEvent('dirty')
 
-      if (this._modified !== this._scope.modified) {
-        this._fireEvent('modified', this._scope.modified)
-        this._modified = this._scope.modified
+      if (this._modified !== scope.modified) {
+        this._fireEvent('modified', scope.modified)
+        this._modified = scope.modified
       }
 
-      let valid = this._scope.valid
+      let valid = scope.valid
       this._fireEvent((valid ? 'valid' : 'invalid'))
 
       cb && cb()
@@ -211,7 +210,7 @@ export default class Validator {
     let vm = this._dir.vm
     let method = '$activateValidator'
 
-    this._dir.vm[method] = () => {
+    vm[method] = () => {
       cb()
       vm[method] = null
     }
@@ -219,6 +218,8 @@ export default class Validator {
 
 
   _validate (field, touched, cb) {
+    const scope = this._scope
+
     if (!field) { // all
       each(this.validations, (validation, key) => {
         validation.willUpdateFlags(touched)
@@ -229,16 +230,16 @@ export default class Validator {
       if (validation) {
         validation.willUpdateFlags(touched)
         validation.validate((results) => {
-          util.Vue.set(this._scope, field, results)
+          util.Vue.set(scope, field, results)
 
-          this._scope.dirty && this._fireEvent('dirty')
+          scope.dirty && this._fireEvent('dirty')
 
-          if (this._modified !== this._scope.modified) {
-            this._fireEvent('modified', this._scope.modified)
-            this._modified = this._scope.modified
+          if (this._modified !== scope.modified) {
+            this._fireEvent('modified', scope.modified)
+            this._modified = scope.modified
           }
 
-          let valid = this._scope.valid
+          let valid = scope.valid
           this._fireEvent((valid ? 'valid' : 'invalid'))
 
           cb && cb()

@@ -12,20 +12,22 @@ export default function (Vue) {
     params: ['name', 'groups', 'lazy'],
 
     bind () {
-      if (!this.params.name) {
+      const params = this.params
+
+      if (!params.name) {
         warn('validator element directive need to specify \'name\' param attribute: '
             + '(e.g. <validator name="validator1">...</validator>)'
         )
         return
       }
 
-      this.validatorName = '$' + camelize(this.params.name)
+      this.validatorName = '$' + camelize(params.name)
       if (!this.vm._validatorMaps) {
         throw new Error('Invalid validator management error')
       }
 
       this.setupValidator()
-      this.setupFragment(this.params.lazy)
+      this.setupFragment(params.lazy)
     },
     
     unbind () {
@@ -34,14 +36,15 @@ export default function (Vue) {
     },
 
     getGroups () {
+      const params = this.params
       let groups = []
 
-      if (this.params.groups) {
-        if (_.isArray(this.params.groups)) {
-          groups = this.params.groups
-        } else if (!_.isPlainObject(this.params.groups)
-            && typeof this.params.groups === 'string') {
-          groups.push(this.params.groups)
+      if (params.groups) {
+        if (_.isArray(params.groups)) {
+          groups = params.groups
+        } else if (!_.isPlainObject(params.groups)
+            && typeof params.groups === 'string') {
+          groups.push(params.groups)
         }
       }
 
@@ -68,17 +71,19 @@ export default function (Vue) {
     },
 
     setupFragment (lazy) {
+      const vm = this.vm
+
       this.validator.waitFor(() => {
         this.anchor = _.createAnchor('vue-validator')
         _.replace(this.el, this.anchor)
-        _.extend(this.vm.$options, { _validator: this.validatorName })
-        this.factory = new FragmentFactory(this.vm, this.el.innerHTML)
+        _.extend(vm.$options, { _validator: this.validatorName })
+        this.factory = new FragmentFactory(vm, this.el.innerHTML)
         vIf.insert.call(this)
 
         this.validator.validate()
       })
 
-      !lazy && this.vm.$activateValidator()
+      !lazy && vm.$activateValidator()
     },
 
     teardownFragment () {

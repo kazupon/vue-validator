@@ -15,9 +15,9 @@ export default class CheckboxValidation extends BaseValidation {
   }
 
   manageElement (el) {
+    const scope = this._getScope()
     let item = this._addItem(el)
-    let scope = this._getScope()
-    let model = item.model = this._model
+    const model = item.model = this._model
     if (model) {
       let value = scope.$get(model)
       if (Array.isArray(value)) {
