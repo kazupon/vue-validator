@@ -37,10 +37,7 @@ export default function (Vue) {
           return this.validation[this.group].errors
         } else if (this.field !== null) {
           var target = this.validation[this.field]
-          
-          if(!target.errors) {
-            return
-          }
+          if (!target.errors) { return }
           
           return target.errors.map((error) => {
             let err = { field: this.field }
