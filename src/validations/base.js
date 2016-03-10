@@ -115,7 +115,7 @@ export default class BaseValidation {
     this.willUpdateDirty(el)
     this.willUpdateModified(el)
 
-    this._validator.validate()
+    this._validator.validate(this.field)
   }
 
   validate (cb) {

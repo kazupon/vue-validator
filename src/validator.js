@@ -46,21 +46,7 @@ export default class Validator {
 
     // define the validate manually meta method to vue instance
     vm.$validate = (...args) => {
-      let field = null
-      let touched = false
-      let cb = null
-
-      each(args, (arg, index) => {
-        if (typeof arg === 'string') {
-          field = arg
-        } else if (typeof arg === 'boolean') {
-          touched = arg
-        } else if (typeof arg === 'function') {
-          cb = arg
-        }
-      })
-
-      this._validate(field, touched, cb)
+      this.validate(...args)
     }
 
     // define manually the validation errors
@@ -169,34 +155,33 @@ export default class Validator {
     validations && pull(validations, validation)
   }
 
-  validate (cb) {
-    const scope = this._scope
+  validate (...args) {
+    let field = null
+    let touched = false
+    let cb = null
 
-    this._runValidates((validation, key, done) => {
-      validation.validate((results) => {
-        util.Vue.set(scope, key, results)
-        done()
-      })
-    }, () => { // finished
-      scope.touched && this._fireEvent('touched')
-      scope.dirty && this._fireEvent('dirty')
-
-      if (this._modified !== scope.modified) {
-        this._fireEvent('modified', scope.modified)
-        this._modified = scope.modified
+    each(args, (arg, index) => {
+      if (typeof arg === 'string') {
+        field = arg
+      } else if (typeof arg === 'boolean') {
+        touched = arg
+      } else if (typeof arg === 'function') {
+        cb = arg
       }
-
-      let valid = scope.valid
-      this._fireEvent((valid ? 'valid' : 'invalid'))
-
-      cb && cb()
     })
+
+    if (!field) { // all
+      each(this.validations, (validation, key) => {
+        validation.willUpdateFlags(touched)
+      })
+      this._validates(cb)
+    } else { // each field
+      this._validate(field, touched, cb)
+    }
   }
 
   setupScope () {
-    let validationsGetter = () => { return this.validations }
-    let scopeGetter = () => { return this._scope }
-    this._defineProperties(validationsGetter, scopeGetter)
+    this._defineProperties(() => { return this.validations }, () => { return this._scope })
 
     each(this._groups, (name) => {
       let validations = this._groupValidations[name]
@@ -216,37 +201,34 @@ export default class Validator {
     }
   }
 
-
-  _validate (field, touched, cb) {
+  _validate (field, touched = false, cb = null) {
     const scope = this._scope
 
-    if (!field) { // all
-      each(this.validations, (validation, key) => {
-        validation.willUpdateFlags(touched)
+    let validation = this._getValidationFrom(field)
+    if (validation) {
+      validation.willUpdateFlags(touched)
+      validation.validate((results) => {
+        util.Vue.set(scope, field, results)
+        this._fireEvents()
+        cb && cb()
       })
-      this.validate(cb)
-    } else { // each field
-      let validation = this._getValidationFrom(field)
-      if (validation) {
-        validation.willUpdateFlags(touched)
-        validation.validate((results) => {
-          util.Vue.set(scope, field, results)
-
-          scope.dirty && this._fireEvent('dirty')
-
-          if (this._modified !== scope.modified) {
-            this._fireEvent('modified', scope.modified)
-            this._modified = scope.modified
-          }
-
-          let valid = scope.valid
-          this._fireEvent((valid ? 'valid' : 'invalid'))
-
-          cb && cb()
-        })
-      }
     }
   }
+
+  _validates (cb) {
+    const scope = this._scope
+
+    this._runValidates((validation, key, done) => {
+      validation.validate((results) => {
+        util.Vue.set(scope, key, results)
+        done()
+      })
+    }, () => { // finished
+      this._fireEvents()
+      cb && cb()
+    })
+  }
+
 
   _getValidationFrom (field) {
     let validation = this._validations[field]
@@ -262,7 +244,7 @@ export default class Validator {
     each(this.validations, (validation, key) => {
       validation.reset()
     })
-    this.validate(cb)
+    this._validates(cb)
   }
 
   _setValidationErrors (errors) {
@@ -386,6 +368,21 @@ export default class Validator {
   _fireEvent (type, ...args) {
     let handler = this._events[this._getEventName(type)]
     handler && handler.apply(null, args)
+  }
+
+  _fireEvents () {
+    const scope = this._scope
+
+    scope.touched && this._fireEvent('touched')
+    scope.dirty && this._fireEvent('dirty')
+
+    if (this._modified !== scope.modified) {
+      this._fireEvent('modified', scope.modified)
+      this._modified = scope.modified
+    }
+
+    let valid = scope.valid
+    this._fireEvent(valid ? 'valid' : 'invalid')
   }
 
   _getEventName (type) {

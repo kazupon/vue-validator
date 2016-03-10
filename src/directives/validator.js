@@ -79,8 +79,6 @@ export default function (Vue) {
         _.extend(vm.$options, { _validator: this.validatorName })
         this.factory = new FragmentFactory(vm, this.el.innerHTML)
         vIf.insert.call(this)
-
-        this.validator.validate()
       })
 
       !lazy && vm.$activateValidator()

@@ -20,12 +20,12 @@ export default function (Vue) {
     paramWatchers: {
       detectBlur (val, old) {
         this.validation.detectBlur = this.isDetectBlur(val) 
-        this.validator.validate()
+        this.validator.validate(this.field)
       },
 
       detectChange (val, old) {
         this.validation.detectChange = this.isDetectChange(val)
-        this.validator.validate()
+        this.validator.validate(this.field)
       }
     },
 
@@ -61,7 +61,7 @@ export default function (Vue) {
         this.handleArray(value)
       }
 
-      this.validator.validate()
+      this.validator.validate(this.field)
     },
 
     unbind () {
