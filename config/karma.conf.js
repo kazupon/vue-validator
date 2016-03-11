@@ -36,7 +36,7 @@ module.exports = function (config) {
           exclude: /node_modules|vue\/dist/,
           loader: 'babel',
           query: {
-            presets: ['es2015'],
+            presets: ['es2015-loose'],
             plugins: [
               'babel-plugin-espower'
               // NOTE: disable, see https://github.com/speedskater/babel-plugin-rewire#istanbul

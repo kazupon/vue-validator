@@ -12,7 +12,7 @@ module.exports = {
       exclude: /node_modules|vue\/dist/,
       loader: 'babel',
       query: {
-        presets: ['es2015']
+        presets: ['es2015-loose']
       }
     }]
   },
