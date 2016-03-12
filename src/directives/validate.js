@@ -190,7 +190,8 @@ export default function (Vue) {
         if (_.isPlainObject(val)) {
           if ('rule' in val) {
             let msg = 'message' in val ? val.message : null
-            this.validation.setValidation(key, val.rule, msg)
+            let initial = 'initial' in val ? val.initial : null
+            this.validation.setValidation(key, val.rule, msg, initial)
           }
         } else {
           this.validation.setValidation(key, val)

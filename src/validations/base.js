@@ -61,7 +61,7 @@ export default class BaseValidation {
     this._unwatch && this._unwatch()
   }
 
-  setValidation (name, arg, msg) {
+  setValidation (name, arg, msg, initial) {
     let validator = this._validators[name]
     if (!validator) {
       validator = this._validators[name] = {}
@@ -71,6 +71,11 @@ export default class BaseValidation {
     validator.arg = arg
     if (msg) {
       validator.msg = msg
+    }
+
+    if (initial) {
+      validator.initial = initial
+      validator._isNoopable = true
     }
   }
 
@@ -150,6 +155,12 @@ export default class BaseValidation {
         return done()
       }
 
+      if (descriptor._isNoopable) {
+        results[name] = false
+        descriptor._isNoopable = null
+        return done()
+      }
+
       if (validator) {
         let value = this._getValue(this._el)
         this._invokeValidator(this._vm, validator, value, descriptor.arg, (ret, err) => {
@@ -206,6 +217,11 @@ export default class BaseValidation {
   }
 
   reset () {
+    each(this._validators, (descriptor, key) => {
+      if (descriptor.initial && !descriptor._isNoopable) {
+        descriptor._isNoopable = true
+      }
+    })
     this.resetFlags()
     this._init = this._getValue(this._el)
   }

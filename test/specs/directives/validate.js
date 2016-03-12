@@ -817,7 +817,7 @@ describe('validate directive', () => {
         vm.$nextTick(done)
       })
 
-      it('should not run validation', (done) => {
+      it('should be validated', (done) => {
         let field = el.getElementsByTagName('input')[0]
 
         // default
