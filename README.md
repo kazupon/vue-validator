@@ -1243,9 +1243,35 @@ new Vue({
 ```
 
 # Validation timing customization
-vue-validator validate automatically when detect DOM event (`input`, `blur`, `change`) in formalable elements (input, checkbox, select, etc).
+vue-validator validate automatically with `validator` element directive and `v-validate` directive. However, sometimes, we are disabling automatically validation, and there are times we want to validate manually.
 
-However, sometimes, we are disabling automatically validation, and there are times we want to validate manually. In the case, use the `disable-change`, `disable-blur` attributes:
+## `initial`
+When vue-validator completed initial compilation, each `v-validate` directive automatically validate target element. if you don't hope that behavior, you can specify with `initial` attribute, or  `v-validate` syntax:
+
+```html
+<div id="app">
+  <validator name="validation1">
+    <form novalidate>
+      <div class="username-field">
+        <label for="username">username:</label>
+        <!-- 'inital' attribute is applied the all validators of target element (e.g. required, exist) -->
+        <input id="username" type="text" inital="off" v-validate:username="['required', 'exist']">
+      </div>
+      <div class="password-field">
+        <label for="password">password:</label>
+        <!-- 'initial' optional is applied with `v-validate` validator (e.g. required only) -->
+        <input id="password" type="password" v-validate:passowrd="{ required: { rule: true, initial: 'off' }, minlength: 8 }">
+      </div>
+      <input type="submit" value="send" v-if="$validation1.valid">
+    </form>
+  </validator>
+</div>
+```
+
+This is useful, when you need to suppress the validation (like the server-side validation) with async validation feature (explain later).
+
+## `detect-blur` and `detect-change`
+vue-validator validate automatically when detect DOM event (`input`, `blur`, `change`) in formalable elements (input, checkbox, select, etc).  In the case, use the `detect-change`, `detect-blur` attributes:
 
 ```html
 <div id="app">
@@ -1303,6 +1329,139 @@ new Vue({
       if (this.$validation.invalid) {
         e.preventDefault()
       }
+    }
+  }
+})
+```
+
+# Async validation
+You can use the async validation. This is useful, when you need to use the server-side validation. the below the example:
+
+```html
+<template>
+  <validator name="validation">
+    <form novalidate>
+      <h1>user registration</h1>
+      <div class="username">
+        <label for="username">username:</label>
+        <input id="username" type="text" 
+          detect-change="off" v-validate:username="{
+          required: { rule: true, message: 'required your name !!' },
+          exist: { rule: true, initial: 'off' }
+        }" />
+        <span v-if="checking">checking ...</span>
+      </div>
+      <div class="errors">
+        <validator-errors :validation="$validation"></validator-errors>
+      </div>
+      <input type="submit" value="register" :disabled="!$validation.valid" />
+    </form>
+  </validator>
+</template>
+```
+
+```javascript
+function copyOwnFrom (target, source) {
+  Object.getOwnPropertyNames(source).forEach(function (propName) {
+    Object.defineProperty(target, propName, Object.getOwnPropertyDescriptor(source, propName))
+  })
+  return target
+}
+
+function ValidationError () {
+  copyOwnFrom(this, Error.apply(null, arguments))
+}
+ValidationError.prototype = Object.create(Error.prototype)
+ValidationError.prototype.constructor = ValidationError
+
+export default {
+  validators: {
+    data () {
+      return { checking: false }
+    },
+    exist (val) {
+      this.vm.checking = true // spinner on
+      return fetch('/validations/exist', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: val
+        })
+      }).then((res) => {
+        this.vm.checking = false // spinner off
+        return res.json()
+      }).then((json) => {
+        return Object.keys(json).length > 0 
+          ? Promise.reject(new ValidationError(json.message))
+          : Promise.resolve()
+      }).catch((error) => {
+        if (error instanceof ValidationError) {
+          return Promise.reject(error.message)
+        } else {
+          return Promise.reject('unexpected error')
+        }
+      })
+    }
+  }
+}
+```
+
+## Async validation interfaces
+In async validation, You can use the two type interfaces:
+
+### 1. function
+You need to implement custom validator that return function have `function (resolve, reject)` like promise (future). The following, those argument of the function, you need to use according to validation result.
+
+- validation result
+  - successful: `resolve`
+  - failed: `reject`
+
+### 2. promise
+As mentioned above, You need to implement custom validation that return a promise. you need to `resolve` or `reject` according to validation result.
+
+## Using error message
+As mentioned above, when server-side validation error occured, you can use the server-side error message.
+
+
+# Validator function context
+Validator function context is bind with Validation object. Validation object expose the some properties. These properties is useful when you need to implement specially validation.
+
+## `vm` property
+Expose the vue instance of current validation.
+
+e.g.
+```javascript
+new Vue({
+  data: function () { return { checking: false } },
+  validators: {
+    exist: function (val) {
+      this.vm.checking = true // spinner on
+      return fetch('/validations/exist', {
+        // ...
+      }).then((res) => { // done
+        this.vm.checking = false // spinner off
+        return res.json()
+      }).then((json) => {
+        return Promise.resolve()
+      }).catch((error) => {
+        return Promise.reject(error.message)
+      })
+    }
+  }
+})
+```
+
+## `el` property
+Expose the target DOM element of current validation. In the case, use [International Telephone Input](https://github.com/jackocnr/intl-tel-input) jQuery plugin example:
+
+```javascript
+new Vue({
+  validators: {
+    phone: function (val) {
+      return $(this.el).intlTelInput('isValidNumber')
     }
   }
 })
