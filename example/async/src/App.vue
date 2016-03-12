@@ -7,7 +7,7 @@
         <input id="username" type="text" 
           detect-change="off" v-validate:username="{
           required: { rule: true, message: 'required your name !!' },
-          exist: { rule: true }
+          exist: { rule: true, initial: 'off' }
         }" />
       </div>
       <div class="errors">
