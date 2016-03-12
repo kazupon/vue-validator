@@ -165,7 +165,6 @@ describe('event', () => {
           input1.value = 'foo'
           input2.value = 'bar'
           trigger(input1, 'input')
-          trigger(input2, 'input')
         })
       })
     })

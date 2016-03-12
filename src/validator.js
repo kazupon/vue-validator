@@ -46,7 +46,21 @@ export default class Validator {
 
     // define the validate manually meta method to vue instance
     vm.$validate = (...args) => {
-      this.validate(...args)
+      let field = null
+      let touched = false
+      let cb = null
+
+      each(args, (arg, index) => {
+        if (typeof arg === 'string') {
+          field = arg
+        } else if (typeof arg === 'boolean') {
+          touched = arg
+        } else if (typeof arg === 'function') {
+          cb = arg
+        }
+      })
+
+      this.validate({ field: field, touched: touched, cb: cb })
     }
 
     // define manually the validation errors
@@ -155,28 +169,14 @@ export default class Validator {
     validations && pull(validations, validation)
   }
 
-  validate (...args) {
-    let field = null
-    let touched = false
-    let cb = null
-
-    each(args, (arg, index) => {
-      if (typeof arg === 'string') {
-        field = arg
-      } else if (typeof arg === 'boolean') {
-        touched = arg
-      } else if (typeof arg === 'function') {
-        cb = arg
-      }
-    })
-
+  validate ({ field = null, touched = false, noopable = false, cb = null } = {}) {
     if (!field) { // all
       each(this.validations, (validation, key) => {
         validation.willUpdateFlags(touched)
       })
       this._validates(cb)
     } else { // each field
-      this._validate(field, touched, cb)
+      this._validate(field, touched, noopable, cb)
     }
   }
 
@@ -201,7 +201,7 @@ export default class Validator {
     }
   }
 
-  _validate (field, touched = false, cb = null) {
+  _validate (field, touched = false, noopable = false, cb = null) {
     const scope = this._scope
 
     let validation = this._getValidationFrom(field)
@@ -211,7 +211,7 @@ export default class Validator {
         util.Vue.set(scope, field, results)
         this._fireEvents()
         cb && cb()
-      })
+      }, noopable)
     }
   }
 

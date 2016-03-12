@@ -118,7 +118,7 @@ export default class BaseValidation {
     this._validator.validate(this.field)
   }
 
-  validate (cb) {
+  validate (cb, noopable = false) {
     const _ = util.Vue.util
 
     let results = {}
@@ -143,6 +143,11 @@ export default class BaseValidation {
 
       if (descriptor.msg) {
         msg = descriptor.msg
+      }
+
+      if (noopable) {
+        results[name] = false
+        return done()
       }
 
       if (validator) {

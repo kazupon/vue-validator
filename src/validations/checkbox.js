@@ -45,7 +45,7 @@ export default class CheckboxValidation extends BaseValidation {
         })
       }
     } else {
-      this._validator.validate(this.field)
+      this._validator.validate({ field: this.field })
     }
   }
 
@@ -64,7 +64,7 @@ export default class CheckboxValidation extends BaseValidation {
     if (found === -1) { return }
 
     this._inits.splice(found, 1)
-    this._validator.validate(this.field)
+    this._validator.validate({ field: this.field })
   }
 
   willUpdateFlags () {

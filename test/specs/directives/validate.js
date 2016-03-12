@@ -806,6 +806,43 @@ describe('validate directive', () => {
 
   
   describe('params', () => {
+    describe('initial', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" initial="off" v-validate:field1="{ required: true, minlength: 5 }">'
+          + '</form>'
+          + '</validator>'
+        vm = new Vue({ el: el })
+        vm.$nextTick(done)
+      })
+
+      it('should not run validation', (done) => {
+        let field = el.getElementsByTagName('input')[0]
+
+        // default
+        assert(vm.$validator1.field1.required === false) // default validation success
+        assert(vm.$validator1.field1.minlength === false) // default validation success
+        assert(vm.$validator1.field1.valid === true)
+        assert(vm.$validator1.field1.touched === false)
+        assert(vm.$validator1.field1.modified === false)
+        assert(vm.$validator1.field1.dirty === false)
+
+        // occured blur
+        trigger(field, 'blur')
+        vm.$nextTick(() => {
+          assert(vm.$validator1.field1.required === true)
+          assert(vm.$validator1.field1.minlength === true)
+          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.touched === true)
+          assert(vm.$validator1.field1.modified === false)
+          assert(vm.$validator1.field1.dirty === false)
+
+          done()
+        })
+      })
+    })
+
     describe('detect-blur', () => {
       beforeEach((done) => {
         el.innerHTML = '<validator name="validator1">'

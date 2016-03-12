@@ -15,7 +15,7 @@ export default function (Vue) {
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
-    params: ['group', 'field', 'detect-blur', 'detect-change'],
+    params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
       detectBlur (val, old) {
@@ -61,7 +61,10 @@ export default function (Vue) {
         this.handleArray(value)
       }
 
-      this.validator.validate(this.field)
+      this.validator.validate({ field: this.field, noopable: this._initialNoopValidation })
+      if (this._initialNoopValidation) {
+        this._initialNoopValidation = null
+      }
     },
 
     unbind () {
@@ -86,6 +89,8 @@ export default function (Vue) {
 
       params.group
         && validator.addGroupValidation(params.group, this.field)
+
+      this._initialNoopValidation = this.isInitialNoopValidation(params.initial)
     },
 
     listen () {
@@ -201,6 +206,10 @@ export default function (Vue) {
     isDetectChange (detectChange) {
       return detectChange === undefined 
         || detectChange === 'on' || detectChange === true
+    },
+
+    isInitialNoopValidation (initial) {
+      return initial === 'off' || initial === false
     }
   })
 }
