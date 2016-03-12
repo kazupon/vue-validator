@@ -25,21 +25,17 @@ export default class BaseValidation {
     this._detectChange = detectChange
   }
 
-  get detectChange () {
-    return this._detectChange
-  }
+  get vm () { return this._vm }
 
-  set detectChange (val) {
-    this._detectChange = val
-  }
+  get el () { return this._el }
 
-  get detectBlur () {
-    return this._detectBlur
-  }
+  get detectChange () { return this._detectChange }
 
-  set detectBlur (val) {
-    this._detectBlur = val
-  }
+  set detectChange (val) { this._detectChange = val }
+
+  get detectBlur () { return this._detectBlur }
+
+  set detectBlur (val) { this._detectBlur = val }
 
   manageElement (el) {
     const scope = this._getScope()
@@ -276,7 +272,7 @@ export default class BaseValidation {
   }
 
   _invokeValidator (vm, validator, val, arg, cb) {
-    let future = validator.call(vm, val, arg)
+    let future = validator.call(this, val, arg)
     if (typeof future === 'function') { // function 
       if (future.resolved) {
         // cached
