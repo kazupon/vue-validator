@@ -12,10 +12,6 @@ Validator component for Vue.js
 # Requirements
 - Vue.js `1.0.14`+
 
-## NOTE
-vue-validator is still in its alpha verison. There may be some breaking changes. 
-If you have some feedback, you're welcome in [Vue.js Discussion](http://forum.vuejs.org) :smiley_cat:
-
 
 # Installation
 
@@ -45,7 +41,7 @@ You don't need to do this when using the standalone build, as it installs itself
 ## CDN
 jsdelivr
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.0.0-alpha.22/vue-validator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.validator/2.0.0-beta.1/vue-validator.min.js"></script>
 ```
 
 
@@ -1469,9 +1465,9 @@ new Vue({
 
 
 # TODO
-- a little improvemnets
-- more docs with gitbook
+- more documentation with gitbook
 - more tests !!
+- a little improvemnets
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
 
 

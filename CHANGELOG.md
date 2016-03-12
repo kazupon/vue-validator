@@ -1,3 +1,27 @@
+<a name="2.0.0-beta.1"></a>
+# [2.0.0-beta.1](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.22...v2.0.0-beta.1) (2016-03-12)
+
+
+### Bug Fixes
+
+* **validation:** change babel es2015 preset to es2015 loose (for IE 9/10) ([bd1a21b](https://github.com/vuejs/vue-validator/commit/bd1a21b)), closes [#161](https://github.com/vuejs/vue-validator/issues/161)
+* **validation:** touched property issues ([d8f1d09](https://github.com/vuejs/vue-validator/commit/d8f1d09)), closes [#163](https://github.com/vuejs/vue-validator/issues/163)
+
+### Features
+
+* **api:** expose `vm` and `el` property at the validator function context ([faaf4ca](https://github.com/vuejs/vue-validator/commit/faaf4ca)), closes [#63](https://github.com/vuejs/vue-validator/issues/63) [#165](https://github.com/vuejs/vue-validator/issues/165)
+* **api:** update api interfaces ([b70de4d](https://github.com/vuejs/vue-validator/commit/b70de4d))
+* **async:** support async validation ([a21a0af](https://github.com/vuejs/vue-validator/commit/a21a0af)), closes [#156](https://github.com/vuejs/vue-validator/issues/156)
+* **async:** support async validation error message ([7e65517](https://github.com/vuejs/vue-validator/commit/7e65517))
+* **v-validate:** add 'initial' params ([7d1ecd5](https://github.com/vuejs/vue-validator/commit/7d1ecd5)), closes [#58](https://github.com/vuejs/vue-validator/issues/58)
+* **validator:** add 'initial' option ([cc01431](https://github.com/vuejs/vue-validator/commit/cc01431)), closes [#58](https://github.com/vuejs/vue-validator/issues/58)
+
+### Performance Improvements
+
+* **validation:** improve validation performance ([3e79962](https://github.com/vuejs/vue-validator/commit/3e79962))
+
+
+
 <a name="2.0.0-alpha.22"></a>
 # [2.0.0-alpha.22](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.21...v2.0.0-alpha.22) (2016-02-29)
 
