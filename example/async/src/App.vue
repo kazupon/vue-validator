@@ -9,6 +9,7 @@
           required: { rule: true, message: 'required your name !!' },
           exist: { rule: true, initial: 'off' }
         }" />
+        <span v-if="checking">checking ...</span>
       </div>
       <div class="errors">
         <validator-errors :validation="$validation"></validator-errors>
@@ -34,7 +35,11 @@ ValidationError.prototype.constructor = ValidationError
 
 export default {
   validators: {
+    data () {
+      return { checking: false }
+    },
     exist (val) {
+      this.vm.checking = true // spinner on
       return fetch('/validations/exist', {
         method: 'post',
         headers: {
@@ -45,6 +50,7 @@ export default {
           username: val
         })
       }).then((res) => {
+        this.vm.checking = false // spinner off
         return res.json()
       }).then((json) => {
         return Object.keys(json).length > 0 
