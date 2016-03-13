@@ -17,8 +17,8 @@ export default class SelectValidation extends BaseValidation {
     const scope = this._getScope()
     const model = this._model
     if (model) {
-      let value = scope.$get(model)
-      let values = !Array.isArray(value) ? [value] : value
+      const value = scope.$get(model)
+      const values = !Array.isArray(value) ? [value] : value
       this._setOption(values, el)
       this._unwatch = scope.$watch(model, (val, old) => {
         let values1 = !Array.isArray(val) ? [val] : val
@@ -68,7 +68,7 @@ export default class SelectValidation extends BaseValidation {
   }
 
   _checkModified (target) {
-    let values = this._getValue(target).slice().sort()
+    const values = this._getValue(target).slice().sort()
     if (this._init.length !== values.length) {
       return true
     } else {

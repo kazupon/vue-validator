@@ -83,7 +83,7 @@ export default class CheckboxValidation extends BaseValidation {
   }
 
   _addItem (el) {
-    let item = {
+    const item = {
       el: el,
       init: el.checked,
       value: el.value

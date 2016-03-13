@@ -79,7 +79,7 @@ export default class Validator {
   }
 
   registerEvents () {
-    let attrs = this._dir.el.attributes
+    const attrs = this._dir.el.attributes
     for (let i = 0, l = attrs.length; i < l; i++) {
       let event = attrs[i].name
       if (eventRE.test(event)) {
@@ -152,7 +152,7 @@ export default class Validator {
   addGroupValidation (group, field) {
     const indexOf = util.Vue.util.indexOf
 
-    let validation = this._validations[field] 
+    const validation = this._validations[field] 
       || this._checkboxValidations[field].validation 
       || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
@@ -161,7 +161,7 @@ export default class Validator {
   }
 
   removeGroupValidation (group, field) {
-    let validation = this._validations[field] 
+    const validation = this._validations[field] 
       || this._checkboxValidations[field].validation 
       || this._radioValidations[field].validation
     let validations = this._groupValidations[group]
@@ -192,8 +192,8 @@ export default class Validator {
   }
 
   waitFor (cb) {
+    const method = '$activateValidator'
     let vm = this._dir.vm
-    let method = '$activateValidator'
 
     vm[method] = () => {
       cb()
@@ -204,7 +204,7 @@ export default class Validator {
   _validate (field, touched = false, noopable = false, cb = null) {
     const scope = this._scope
 
-    let validation = this._getValidationFrom(field)
+    const validation = this._getValidationFrom(field)
     if (validation) {
       validation.willUpdateFlags(touched)
       validation.validate((results) => {
@@ -366,7 +366,7 @@ export default class Validator {
   }
 
   _fireEvent (type, ...args) {
-    let handler = this._events[this._getEventName(type)]
+    const handler = this._events[this._getEventName(type)]
     handler && handler.apply(null, args)
   }
 

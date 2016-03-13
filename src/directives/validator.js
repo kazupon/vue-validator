@@ -8,6 +8,11 @@ export default function (Vue) {
   const vIf = Vue.directive('if')
   const camelize = Vue.util.camelize
 
+
+  /**
+   * `validator` element directive
+   */
+
   Vue.elementDirective('validator', {
     params: ['name', 'groups', 'lazy'],
 
@@ -52,7 +57,7 @@ export default function (Vue) {
     },
 
     setupValidator () {
-      let validator 
+      const validator 
         = this.validator 
         = new Validator(this.validatorName, this, this.getGroups())
       validator.enableReactive()

@@ -9,12 +9,14 @@ export default function (Vue) {
   // register `v-validate` as terminal directive
   Vue.compiler.terminalDirectives.push('validate')
 
+
   /**
    * `v-validate` directive
    */
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
+
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
@@ -94,9 +96,9 @@ export default function (Vue) {
     },
 
     listen () {
-      let model = this.model
-      let validation = this.validation
-      let el = this.frag.node
+      const model = this.model
+      const validation = this.validation
+      const el = this.frag.node
 
       this.onBlur = _.bind(validation.listener, validation)
       _.on(el, 'blur', this.onBlur)
@@ -121,7 +123,7 @@ export default function (Vue) {
     },
 
     unlisten () {
-      let el = this.frag.node
+      const el = this.frag.node
 
       if (this.onInput) {
         _.off(el, 'input', this.onInput)

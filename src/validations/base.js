@@ -30,16 +30,14 @@ export default class BaseValidation {
   get el () { return this._el }
 
   get detectChange () { return this._detectChange }
-
   set detectChange (val) { this._detectChange = val }
 
   get detectBlur () { return this._detectBlur }
-
   set detectBlur (val) { this._detectBlur = val }
 
   manageElement (el) {
     const scope = this._getScope()
-    let model = this._model
+    const model = this._model
     if (model) {
       el.value = scope.$get(model) || ''
       this._unwatch = scope.$watch(model, (val, old) => {

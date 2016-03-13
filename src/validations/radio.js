@@ -63,7 +63,7 @@ export default class RadioValidation extends BaseValidation {
   }
 
   _addItem (el) {
-    let item = {
+    const item = {
       el: el,
       init: el.checked,
       value: el.value
