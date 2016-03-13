@@ -1,3 +1,13 @@
+<a name="2.0.0-beta.2"></a>
+# [2.0.0-beta.2](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2016-03-13)
+
+
+### Bug Fixes
+
+* **model:** fix cannot work v-model fitler expression ([6ad0840](https://github.com/vuejs/vue-validator/commit/6ad0840)), closes [#167](https://github.com/vuejs/vue-validator/issues/167)
+
+
+
 <a name="2.0.0-beta.1"></a>
 # [2.0.0-beta.1](https://github.com/vuejs/vue-validator/compare/v2.0.0-alpha.22...v2.0.0-beta.1) (2016-03-12)
 

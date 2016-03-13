@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-beta.1
+ * vue-validator v2.0.0-beta.2
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -407,6 +407,7 @@ function Validate (Vue) {
   var _ = Vue.util;
   var vIf = Vue.directive('if');
   var FragmentFactory = Vue.FragmentFactory;
+  var parseDirective = Vue.parsers.directive.parseDirective;
 
   // register `v-validate` as terminal directive
   Vue.compiler.terminalDirectives.push('validate');
@@ -417,6 +418,7 @@ function Validate (Vue) {
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
+
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
@@ -442,7 +444,11 @@ function Validate (Vue) {
         return;
       }
 
-      this.model = this.el.getAttribute('v-model');
+      var model = this.el.getAttribute('v-model');
+      if (model) {
+        var parsed = parseDirective(model);
+        this.model = parsed.expression;
+      }
 
       this.setupFragment();
       this.setupValidate(validatorName, this.model);
@@ -1504,8 +1510,8 @@ var Validator$1 = function () {
   };
 
   Validator.prototype.waitFor = function waitFor(cb) {
-    var vm = this._dir.vm;
     var method = '$activateValidator';
+    var vm = this._dir.vm;
 
     vm[method] = function () {
       cb();
@@ -1856,6 +1862,10 @@ function Validator (Vue) {
   var vIf = Vue.directive('if');
   var camelize = Vue.util.camelize;
 
+  /**
+   * `validator` element directive
+   */
+
   Vue.elementDirective('validator', {
     params: ['name', 'groups', 'lazy'],
 
@@ -2067,7 +2077,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-beta.1';
+plugin.version = '2.0.0-beta.2';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
