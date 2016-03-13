@@ -5,6 +5,7 @@ export default function (Vue) {
   const _ = Vue.util
   const vIf = Vue.directive('if')
   const FragmentFactory = Vue.FragmentFactory
+  const parseDirective = Vue.parsers.directive.parseDirective
 
   // register `v-validate` as terminal directive
   Vue.compiler.terminalDirectives.push('validate')
@@ -47,7 +48,11 @@ export default function (Vue) {
         return
       }
 
-      this.model = this.el.getAttribute('v-model')
+      let model = this.el.getAttribute('v-model')
+      if (model) {
+        let parsed = parseDirective(model)
+        this.model = parsed.expression
+      }
 
       this.setupFragment()
       this.setupValidate(validatorName, this.model)

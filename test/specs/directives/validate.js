@@ -802,6 +802,65 @@ describe('validate directive', () => {
         })
       })
     })
+
+
+    // # See issue #167
+    describe('filter', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-model="msg | filter1" v-validate:field1="{ required: true }" v-if="show">'
+          + '</form>'
+          + '</validator>'
+        vm = new Vue({
+          el: el,
+          data: { msg: '', show: true },
+          filters: {
+            filter1: {
+              read (val) { return val },
+              write (val) { return val }
+            }
+          }
+        })
+        vm.$nextTick(done)
+      })
+
+      it('should be validated', (done) => {
+        let field1 = el.getElementsByTagName('input')[0]
+
+        assert(vm.$validator1.field1.required)
+        assert(vm.$validator1.field1.valid === false)
+        assert(vm.$validator1.field1.touched === false)
+        assert(vm.$validator1.field1.modified === false)
+        assert(vm.$validator1.field1.dirty === false)
+
+        field1.value = 'hello'
+        trigger(field1, 'input')
+        trigger(field1, 'blur')
+        setTimeout(() => {
+          assert(vm.$validator1.field1.required === false)
+          assert(vm.$validator1.field1.valid === true)
+          assert(vm.$validator1.field1.touched === true)
+          assert(vm.$validator1.field1.modified === true)
+          assert(vm.$validator1.field1.dirty === true)
+
+          // toggle input
+          vm.show = false
+          vm.$nextTick(() => {
+            vm.show = true
+            vm.$nextTick(() => {
+              assert(vm.$validator1.field1.required === false)
+              assert(vm.$validator1.field1.valid === true)
+              assert(vm.$validator1.field1.touched === false)
+              assert(vm.$validator1.field1.modified === false)
+              assert(vm.$validator1.field1.dirty === false)
+
+              done()
+            })
+          })
+        }, 10)
+      })
+    })
   })
 
   
