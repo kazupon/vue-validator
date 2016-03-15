@@ -35,7 +35,7 @@
           <label for="confirm">confirm password:</label>
           <input id="confirm" type="password" v-validate:confirm="{
             required: { rule: true, message: 'required you confirm password !!' },
-            confirm: { rule: true, message: 'your confirm password incorrect !!' }
+            confirm: { rule: password.new, message: 'your confirm password incorrect !!' }
           }"/>
         </div>
         <div class="errors">
@@ -56,8 +56,8 @@
           }
         },
         validators: {
-          confirm: function (val) {
-            return this.password.new === val
+          confirm: function (val, target) {
+            return val === target
           }
         },
         methods: {

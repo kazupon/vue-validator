@@ -836,7 +836,7 @@ Sometimes, you need to manually set the validation error message such as server-
           <label for="confirm">confirm password:</label>
           <input id="confirm" type="password" v-validate:confirm="{
             required: { rule: true, message: 'required you confirm password !!' },
-            confirm: { rule: true, message: 'your confirm password incorrect !!' }
+            confirm: { rule: passowd.new, message: 'your confirm password incorrect !!' }
           }"/>
         </div>
         <div class="errors">
@@ -858,8 +858,8 @@ Sometimes, you need to manually set the validation error message such as server-
         }
       },
       validators: {
-        confirm: function (val) {
-          return this.password.new === val
+        confirm: function (val, target) {
+          return val === target
         }
       },
       methods: {
@@ -1295,7 +1295,7 @@ vue-validator validate automatically when detect DOM event (`input`, `blur`, `ch
         <input id="confirm" type="password" 
           detect-change="off" detect-blur="off" v-validate:confirm="{
           required: { rule: true, message: 'required you confirm password !!' },
-          confirm: { rule: true, message: 'your confirm password incorrect !!' }
+          confirm: { rule: password, message: 'your confirm password incorrect !!' }
         }" />
       </div>
       <div class="errors" v-if="$validation.touched">
@@ -1314,8 +1314,8 @@ new Vue({
     password: ''
   },
   validators: {
-    confirm: function (val) {
-      return this.password === val
+    confirm: function (val, target) {
+      return val === target
     }
   },
   methods: {
