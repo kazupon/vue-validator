@@ -1,5 +1,7 @@
 # vue-validator documentation
 
+> :warning: WIP
+
 **[CHANGELOG](https://github.com/vuejs/vue-validator/CHANGELOG.md)**
 
 - [Installation](installation.md)
