@@ -7,8 +7,8 @@ import BaseValidation from './base'
 
 export default class SelectValidation extends BaseValidation {
 
-  constructor (field, model, vm, el, scope, validator, detectBlur, detectChange) {
-    super(field, model, vm, el, scope, validator, detectBlur, detectChange)
+  constructor (field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+    super(field, model, vm, el, scope, validator, filters, detectBlur, detectChange)
 
     this._multiple = this._el.hasAttribute('multiple')
   }
@@ -17,7 +17,7 @@ export default class SelectValidation extends BaseValidation {
     const scope = this._getScope()
     const model = this._model
     if (model) {
-      const value = scope.$get(model)
+      const value = this._evalModel(model, this._filters)
       const values = !Array.isArray(value) ? [value] : value
       this._setOption(values, el)
       this._unwatch = scope.$watch(model, (val, old) => {

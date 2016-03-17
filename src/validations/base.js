@@ -7,7 +7,7 @@ import util, { empty, each, trigger, isPromise } from '../util'
 
 export default class BaseValidation {
 
-  constructor (field, model, vm, el, scope, validator, detectBlur, detectChange) {
+  constructor (field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
     this.field = field
     this.touched = false
     this.dirty = false
@@ -15,6 +15,7 @@ export default class BaseValidation {
 
     this._modified = false
     this._model = model
+    this._filters = filters
     this._validator = validator
     this._vm = vm
     this._el = el
@@ -39,7 +40,7 @@ export default class BaseValidation {
     const scope = this._getScope()
     const model = this._model
     if (model) {
-      el.value = scope.$get(model) || ''
+      el.value = this._evalModel(model, this._filters) || ''
       this._unwatch = scope.$watch(model, (val, old) => {
         if (val !== old) {
           if (this.guardValidate(el, 'input')) {
@@ -254,6 +255,45 @@ export default class BaseValidation {
 
   _fireEvent (el, type, args) {
     trigger(el, type, args)
+  }
+
+  _evalModel (model, filters) {
+    const scope = this._getScope()
+
+    if (filters) {
+      let val = scope.$get(model)
+      return filters ? this._applyFilters(val, null, filters) : val
+    } else {
+      return scope.$get(model)
+    }
+  }
+
+  _applyFilters (value, oldValue, filters, write) {
+    const resolveAsset = util.Vue.util.resolveAsset
+    const scope = this._getScope()
+
+    let filter, fn, args, arg, offset, i, l, j, k
+    for (i = 0, l = filters.length; i < l; i++) {
+      filter = filters[i]
+      fn = resolveAsset(this._vm.$options, 'filters', filter.name)
+      if (!fn) { continue }
+
+      fn = write ? fn.write : (fn.read || fn)
+      if (typeof fn !== 'function') { continue }
+
+      args = write ? [value, oldValue] : [value]
+      offset = write ? 2 : 1
+      if (filter.args) {
+        for (j = 0, k = filter.args.length; j < k; j++) {
+          arg = filter.args[j]
+          args[j + offset] = arg.dynamic ? scope.$get(arg.value) : arg.value
+        }
+      }
+
+      value = fn.apply(this._vm, args)
+    }
+
+    return value
   }
 
   _runValidators (fn, cb) {
