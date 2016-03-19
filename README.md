@@ -1371,6 +1371,7 @@ function ValidationError () {
 ValidationError.prototype = Object.create(Error.prototype)
 ValidationError.prototype.constructor = ValidationError
 
+// exmpale with ES2015
 export default {
   validators: {
     data () {
@@ -1429,12 +1430,12 @@ Validator function context is bind with Validation object. Validation object exp
 ## `vm` property
 Expose the vue instance of current validation.
 
-e.g.
+the following ES2015 example:
 ```javascript
 new Vue({
-  data: function () { return { checking: false } },
+  data () { return { checking: false } },
   validators: {
-    exist: function (val) {
+    exist (val) {
       this.vm.checking = true // spinner on
       return fetch('/validations/exist', {
         // ...
@@ -1468,7 +1469,7 @@ new Vue({
 # TODO
 - more documentation with gitbook
 - more tests !!
-- a little improvemnets
+- a little improvements
 - [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
 
 
