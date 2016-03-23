@@ -5,13 +5,13 @@
 **[CHANGELOG](https://github.com/vuejs/vue-validator/CHANGELOG.md)**
 
 - [Installation](installation.md)
-- [Usage](usage.md)
+- [Getting started](started.md)
 - [Validation result structure](structure.md)
 - [Validator syntax](syntax.md)
 - [v-model integration](model.md)
 - [Reset validation results](reset.md)
 - [Form validatable elements](elements.md)
-- [Grouping](grouping)
+- [Grouping](grouping.md)
 - [Error messages](errors.md)
 - [Events](events.md)
 - [Lazy initialization](lazy.md)
