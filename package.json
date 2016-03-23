@@ -91,6 +91,7 @@
     "dev": "webpack-dev-server --quite --config config/webpack.dev.conf.js --host 0.0.0.0",
     "dev-test": "webpack-dev-server --quiet --config config/webpack.test.conf.js --host 0.0.0.0",
     "docs": "cd docs && gitbook serve",
+    "docs-deploy": "cd docs && rm -rf _book && gitbook build && cd _book && git init && git add -A && git commit -m 'update book' && git push -f git@github.com:vuejs/vue-validator.git master:gh-pages && cd .. && cd ..",
     "e2e": "webpack-dev-server --quiet --config config/webpack.e2e.conf.js & mocha --opts test/e2e/mocha.opts --harmony test/e2e/test.js && kill $! || (kill $! && exit 1)",
     "ie": "VUE_VALIDATOR_TYPE=sauce SAUCE=batch2 karma start config/karma.conf.js",
     "lint": "eslint src config test/specs",
