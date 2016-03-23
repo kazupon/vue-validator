@@ -896,7 +896,7 @@ Sometimes, you need to manually set the validation error message such as server-
     In order to detect where the validator error occurred, you pass in `validator` argument.
 
 
-# Event
+# Events
 
 Using regular vue event bindings, you can be bound the event that has occured with validator.
 
