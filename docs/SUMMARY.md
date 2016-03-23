@@ -1,8 +1,8 @@
 # vue-validator documentation
 
-> :warning: WIP
+> Validator component for Vue.js 
 
-**[CHANGELOG](https://github.com/vuejs/vue-validator/CHANGELOG.md)**
+**[CHANGELOG](https://github.com/vuejs/vue-validator/blob/dev/CHANGELOG.md)**
 
 - [Installation](installation.md)
 - [Getting started](started.md)
