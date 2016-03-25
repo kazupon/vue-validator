@@ -8,17 +8,12 @@ export default function (Vue) {
   const parseDirective = Vue.parsers.directive.parseDirective
   const REGEX_FILTER = /[^|]\|[^|]/
 
-  // register `v-validate` as terminal directive
-  Vue.compiler.terminalDirectives.push('validate')
-
-
   /**
    * `v-validate` directive
    */
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
-
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
