@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-beta.3
+ * vue-validator v2.0.0-beta.4
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -410,16 +410,12 @@ function Validate (Vue) {
   var parseDirective = Vue.parsers.directive.parseDirective;
   var REGEX_FILTER = /[^|]\|[^|]/;
 
-  // register `v-validate` as terminal directive
-  Vue.compiler.terminalDirectives.push('validate');
-
   /**
    * `v-validate` directive
    */
 
   Vue.directive('validate', {
     priority: vIf.priority + 1,
-
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
@@ -2142,7 +2138,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-beta.3';
+plugin.version = '2.0.0-beta.4';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

@@ -1,3 +1,13 @@
+<a name="2.0.0-beta.4"></a>
+# [2.0.0-beta.4](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2016-03-25)
+
+
+### Bug Fixes
+
+* **validate:** compatible vue 1.0.19 ([655156b](https://github.com/vuejs/vue-validator/commit/655156b)), closes [#176](https://github.com/vuejs/vue-validator/issues/176)
+
+
+
 <a name="2.0.0-beta.2"></a>
 # [2.0.0-beta.2](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2016-03-13)
 
