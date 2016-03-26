@@ -61,7 +61,9 @@ describe('field', () => {
     beforeEach((done) => {
       el.innerHTML = '<validator name="validator1">'
         + '<form novalidate>'
-        + '<input type="text" :field="field.name" v-validate="field.validate" v-for="field in fields">'
+        + '<template v-for="field in fields">'
+        + '<input type="text" :field="field.name" v-validate="field.validate">'
+        + '</template>'
         + '</form>'
         + '</validator>'
       vm = new Vue({
