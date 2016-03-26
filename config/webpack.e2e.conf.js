@@ -4,7 +4,8 @@ module.exports = {
   entry: './test/e2e/index.js',
   output: {
     path: './test/e2e',
-    filename: 'e2e.js'
+    filename: 'e2e.js',
+    publicPath: '/'
   },
   module: {
     loaders: [{
