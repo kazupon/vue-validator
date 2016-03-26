@@ -29,14 +29,14 @@ export default function (Vue) {
     },
 
     bind () {
-      if (this.el.__vue__) {
+      if (process.env.NODE_ENV !== 'production' && this.el.__vue__) {
         warn('v-validate="' + this.expression + '" cannot be '
           + 'used on an instance root element.')
         return
       }
 
       let validatorName = this.vm.$options._validator
-      if (!validatorName) {
+      if (process.env.NODE_ENV !== 'production' && !validatorName) {
         warn('v-validate need to use into validator element directive: '
           + '(e.g. <validator name="validator">'
           + '<input type="text" v-validate:field1="[\'required\']">'
