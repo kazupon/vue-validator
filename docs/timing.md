@@ -12,7 +12,7 @@ When vue-validator completed initial compilation, each `v-validate` directive au
       <div class="username-field">
         <label for="username">username:</label>
         <!-- 'inital' attribute is applied the all validators of target element (e.g. required, exist) -->
-        <input id="username" type="text" inital="off" v-validate:username="['required', 'exist']">
+        <input id="username" type="text" initial="off" v-validate:username="['required', 'exist']">
       </div>
       <div class="password-field">
         <label for="password">password:</label>
