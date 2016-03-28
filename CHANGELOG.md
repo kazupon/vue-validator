@@ -1,3 +1,16 @@
+<a name="2.0.0-beta.5"></a>
+# [2.0.0-beta.5](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2016-03-28)
+
+
+### Bug Fixes
+
+* **validate:** validation every time issue ([606875c](https://github.com/vuejs/vue-validator/commit/606875c)), closes [#179](https://github.com/vuejs/vue-validator/issues/179)
+
+### Features
+
+* **warn:** warning suppression for production ([6664b51](https://github.com/vuejs/vue-validator/commit/6664b51))
+
+
 <a name="2.0.0-beta.4"></a>
 # [2.0.0-beta.4](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2016-03-25)
 

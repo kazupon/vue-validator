@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-beta.4
+ * vue-validator v2.0.0-beta.5
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -430,13 +430,13 @@ function Validate (Vue) {
     },
 
     bind: function bind() {
-      if (this.el.__vue__) {
+      if (process.env.NODE_ENV !== 'production' && this.el.__vue__) {
         warn('v-validate="' + this.expression + '" cannot be ' + 'used on an instance root element.');
         return;
       }
 
       var validatorName = this.vm.$options._validator;
-      if (!validatorName) {
+      if (process.env.NODE_ENV !== 'production' && !validatorName) {
         warn('v-validate need to use into validator element directive: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
         return;
       }
@@ -719,7 +719,7 @@ var BaseValidation = function () {
     this.willUpdateDirty(el);
     this.willUpdateModified(el);
 
-    this._validator.validate(this.field);
+    this._validator.validate({ field: this.field });
   };
 
   BaseValidation.prototype.validate = function validate(cb) {
@@ -1933,7 +1933,7 @@ function Validator (Vue) {
     bind: function bind() {
       var params = this.params;
 
-      if (!params.name) {
+      if (process.env.NODE_ENV !== 'production' && !params.name) {
         warn('validator element directive need to specify \'name\' param attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
         return;
       }
@@ -2138,7 +2138,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-beta.4';
+plugin.version = '2.0.0-beta.5';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
