@@ -261,7 +261,9 @@ describe('checkbox', () => {
         el.innerHTML = '<validator name="validator1">'
           + '<form novalidate>'
           + '<input type="checkbox" value="foo" v-validate:field1="{ required: true }">'
-          + '<input type="checkbox" v-if="enabled" checked value="bar" v-validate:field1>'
+          + '<template v-if="enabled">'
+          + '<input type="checkbox" checked value="bar" v-validate:field1>'
+          + '</template>'
           + '</form>'
           + '</validator>'
         vm = new Vue({

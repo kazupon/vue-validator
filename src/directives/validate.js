@@ -13,38 +13,58 @@ export default function (Vue) {
    */
 
   Vue.directive('validate', {
-    priority: vIf.priority + 1,
+    terminal: true,
+    priority: vIf.priority + 16,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
       detectBlur (val, old) {
+        if (this._invalid) { return }
         this.validation.detectBlur = this.isDetectBlur(val) 
         this.validator.validate(this.field)
       },
 
       detectChange (val, old) {
+        if (this._invalid) { return }
         this.validation.detectChange = this.isDetectChange(val)
         this.validator.validate(this.field)
       }
     },
 
     bind () {
-      if (process.env.NODE_ENV !== 'production' && this.el.__vue__) {
+      const el = this.el
+
+      if ((process.env.NODE_ENV !== 'production') && el.__vue__) {
         warn('v-validate="' + this.expression + '" cannot be '
           + 'used on an instance root element.')
+        this._invalid = true
+        return
+      }
+
+      if ((process.env.NODE_ENV !== 'production') 
+          && (el.hasAttribute('v-if') || el.hasAttribute('v-for'))) {
+        warn('v-validate cannot be used `v-if` or `v-for` build-in terminal directive '
+          + 'on an element. these is wrapped with `<template>` or other tags: '
+          + '(e.g. <validator name="validator">'
+          + '<template v-if="hidden">'
+          + '<input type="text" v-validate:field1="[\'required\']">'
+          + '</template>'
+          + '</validator>).')
+        this._invalid = true
         return
       }
 
       let validatorName = this.vm.$options._validator
-      if (process.env.NODE_ENV !== 'production' && !validatorName) {
+      if ((process.env.NODE_ENV !== 'production') && !validatorName) {
         warn('v-validate need to use into validator element directive: '
           + '(e.g. <validator name="validator">'
           + '<input type="text" v-validate:field1="[\'required\']">'
           + '</validator>).')
+        this._invalid = true
         return
       }
 
-      let raw = this.el.getAttribute('v-model')
+      let raw = el.getAttribute('v-model')
       let { model, filters } = this.parseModelRaw(raw)
       this.model = model
 
@@ -54,7 +74,7 @@ export default function (Vue) {
     },
 
     update (value, old) {
-      if (!value) { return }
+      if (!value || this._invalid) { return }
 
       if (_.isPlainObject(value)) {
         this.handleObject(value)
@@ -69,6 +89,8 @@ export default function (Vue) {
     },
 
     unbind () {
+      if (this._invalid) { return }
+
       this.unlisten()
       this.teardownValidate()
       this.teardownFragment()

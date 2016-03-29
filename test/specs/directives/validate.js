@@ -68,6 +68,28 @@ describe('validate directive', () => {
   })
 
 
+  describe('v-if specify error', () => {
+    // TODO: should be tested with spy library (we try to use sinon.js, however it not work ... )
+    it('should not be called warn', (done) => {
+      el.innerHTML = '<validator name="validator">'
+        + '<form novalidate>'
+        + '<input type="text" v-if="show" v-validate:field1="{ required: true }">'
+        + '</form>'
+        + '</validator>'
+      vm = new Vue({
+        el: el,
+        data: {
+          show: true
+        }
+      })
+      vm.$nextTick(() => {
+        assert(true)
+        done()
+      })
+    })
+  })
+
+
   describe('v-show', () => {
     beforeEach(() => {
       vm = new Vue({
@@ -150,7 +172,9 @@ describe('validate directive', () => {
       beforeEach(() => {
         el.innerHTML = '<validator name="validator1">'
           + '<form novalidate>'
-          + '<input type="text" v-if="hidden" v-validate:field1="{ minlength: 0, maxlength: 10 }">'
+          + '<template v-if="hidden">'
+          + '<input type="text" v-validate:field1="{ minlength: 0, maxlength: 10 }">'
+          + '</template>'
           + '</form>'
           + '<pre>{{ $validator1 | json }}</pre>'
           + '</validator>'
@@ -216,7 +240,9 @@ describe('validate directive', () => {
       beforeEach((done) => {
         el.innerHTML = '<validator name="validator1">'
           + '<form novalidate>'
-          + '<input type="checkbox" v-if="hidden" v-validate:field1="[\'required\']">'
+          + '<template v-if="hidden">'
+          + '<input type="checkbox" v-validate:field1="[\'required\']">'
+          + '</template>'
           + '</form>'
           + '<pre>{{ $validator1 | json }}</pre>'
           + '</validator>'
@@ -252,7 +278,9 @@ describe('validate directive', () => {
       beforeEach((done) => {
         el.innerHTML = '<validator name="validator1">'
           + '<form novalidate>'
-          + '<input type="radio" v-if="hidden" value="one" v-validate:field1="[\'required\']">'
+          + '<template v-if="hidden">'
+          + '<input type="radio" value="one" v-validate:field1="[\'required\']">'
+          + '</template>'
           + '</form>'
           + '<pre>{{ $validator1 | json }}</pre>'
           + '</validator>'
@@ -288,11 +316,13 @@ describe('validate directive', () => {
       beforeEach((done) => {
         el.innerHTML = '<validator name="validator1">'
           + '<form novalidate>'
-          + '<select v-if="hidden" v-validate:lang="{ required: true }">'
+          + '<template v-if="hidden">'
+          + '<select v-validate:lang="{ required: true }">'
           + '<option value="en">english</option>'
           + '<option value="ja">japanese</option>'
           + '<option value="zh">chinese</option>'
           + '</select>'
+          + '</template>'
           + '</form>'
           + '<pre>{{ $validator1 | json }}</pre>'
           + '</validator>'
@@ -810,7 +840,9 @@ describe('validate directive', () => {
         beforeEach((done) => {
           el.innerHTML = '<validator name="validator1">'
             + '<form novalidate>'
-            + '<input type="text" v-model="msg | filter1" v-validate:field1="{ required: true }" v-if="show">'
+            + '<template v-if="show">'
+            + '<input type="text" v-model="msg | filter1" v-validate:field1="{ required: true }">'
+            + '</template>'
             + '</form>'
             + '</validator>'
           vm = new Vue({
