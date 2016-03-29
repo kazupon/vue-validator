@@ -8,7 +8,7 @@ Validator component for Vue.js
 
 
 # Compatibility
-- Vue.js `1.0.14`+
+- Vue.js `1.0.20`+
 
 
 # Documentation
