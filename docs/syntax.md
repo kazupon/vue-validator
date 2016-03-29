@@ -167,3 +167,39 @@ new Vue({
 ```
 
 You can also use computed properties or methods to retrieve rule sets, instead of a set data property.
+
+## Using Terminal Directive Caveats
+Note that if you need to use terminal directive like `v-if` and `v-for`, you should be wrapped the validatable target element with the non-visiblity tag like `<template>` tag, because when used together with these terminal directive, `v-validate` directive does not work.
+
+The below example using `<div>` tag:
+
+```javascript
+new Vue({
+  el: '#app',
+  data: {
+    enable: true
+  }
+})
+```
+
+```html
+<div id="app">
+  <validator name="validation">
+    <form novalidate>
+      <div class="username">
+        <label for="username">username:</label>
+        <input id="username" type="text" 
+               @valid="this.enable = true" 
+               @invalid="this.enable = false" 
+               v-validate:username="['required']">
+      </div>
+      <div v-if="enable" class="password">
+        <label for="password">password:</label>
+        <input id="password" type="password" v-validate:password="{
+          required: { rule: true }, minlength: { rule: 8 }
+        }"/>
+      <div>
+    </form>
+  </validator>
+</div>
+```
