@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0-beta.5
+ * vue-validator v2.0.0-beta.6
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -415,33 +415,50 @@ function Validate (Vue) {
    */
 
   Vue.directive('validate', {
-    priority: vIf.priority + 1,
+    terminal: true,
+    priority: vIf.priority + 16,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial'],
 
     paramWatchers: {
       detectBlur: function detectBlur(val, old) {
+        if (this._invalid) {
+          return;
+        }
         this.validation.detectBlur = this.isDetectBlur(val);
         this.validator.validate(this.field);
       },
       detectChange: function detectChange(val, old) {
+        if (this._invalid) {
+          return;
+        }
         this.validation.detectChange = this.isDetectChange(val);
         this.validator.validate(this.field);
       }
     },
 
     bind: function bind() {
-      if (process.env.NODE_ENV !== 'production' && this.el.__vue__) {
+      var el = this.el;
+
+      if (process.env.NODE_ENV !== 'production' && el.__vue__) {
         warn('v-validate="' + this.expression + '" cannot be ' + 'used on an instance root element.');
+        this._invalid = true;
+        return;
+      }
+
+      if (process.env.NODE_ENV !== 'production' && (el.hasAttribute('v-if') || el.hasAttribute('v-for'))) {
+        warn('v-validate cannot be used `v-if` or `v-for` build-in terminal directive ' + 'on an element. these is wrapped with `<template>` or other tags: ' + '(e.g. <validator name="validator">' + '<template v-if="hidden">' + '<input type="text" v-validate:field1="[\'required\']">' + '</template>' + '</validator>).');
+        this._invalid = true;
         return;
       }
 
       var validatorName = this.vm.$options._validator;
       if (process.env.NODE_ENV !== 'production' && !validatorName) {
         warn('v-validate need to use into validator element directive: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
+        this._invalid = true;
         return;
       }
 
-      var raw = this.el.getAttribute('v-model');
+      var raw = el.getAttribute('v-model');
 
       var _parseModelRaw = this.parseModelRaw(raw);
 
@@ -455,7 +472,7 @@ function Validate (Vue) {
       this.listen();
     },
     update: function update(value, old) {
-      if (!value) {
+      if (!value || this._invalid) {
         return;
       }
 
@@ -471,6 +488,10 @@ function Validate (Vue) {
       }
     },
     unbind: function unbind() {
+      if (this._invalid) {
+        return;
+      }
+
       this.unlisten();
       this.teardownValidate();
       this.teardownFragment();
@@ -2138,7 +2159,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0-beta.5';
+plugin.version = '2.0.0-beta.6';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

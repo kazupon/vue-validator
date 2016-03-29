@@ -1,3 +1,13 @@
+<a name="2.0.0-beta.6"></a>
+# [2.0.0-beta.6](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2016-03-29)
+
+
+### Features
+
+* **validate:** add terminal directive restrictions ([c2d4096](https://github.com/vuejs/vue-validator/commit/c2d4096))
+
+
+
 <a name="2.0.0-beta.5"></a>
 # [2.0.0-beta.5](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2016-03-28)
 
