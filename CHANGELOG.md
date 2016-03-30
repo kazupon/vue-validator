@@ -1,3 +1,9 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.6...v2.0.0) (2016-03-30)
+
+Release v2.0.0 :tada:
+
+
 <a name="2.0.0-beta.6"></a>
 # [2.0.0-beta.6](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2016-03-29)
 

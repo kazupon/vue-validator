@@ -10,7 +10,7 @@ var banner = require('./banner')
 // update main file
 var main = fs
   .readFileSync('src/index.js', 'utf-8')
-  .replace(/plugin\.version = '[\d\.]+-beta\.[\d]+'/, "plugin.version = '" + pack.version + "'")
+  .replace(/plugin\.version = '[\d\.]+[\d]+'/, "plugin.version = '" + pack.version + "'")
 fs.writeFileSync('src/index.js', main)
 
 // CommonJS build.
