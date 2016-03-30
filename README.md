@@ -59,11 +59,6 @@ Please make sure to read the [Contributing Guide](https://github.com/vuejs/vue/b
 Details changes for each release are documented in the [CHANGELOG.md](https://github.com/vuejs/vue-validator/blob/dev/CHANGELOG.md).
 
 
-# TODO
-- more tests !!
-- [and other issues...](https://github.com/vuejs/vue-validator/labels/2.0)
-
-
 # License
 
 [MIT](http://opensource.org/licenses/MIT)
