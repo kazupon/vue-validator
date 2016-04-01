@@ -40,33 +40,13 @@ export default class Validator {
     vm._validatorMaps[this.name] = this
 
     // define the validation resetting meta method to vue instance
-    vm.$resetValidation = (cb) => {
-      this._resetValidation(cb)
-    }
+    this._defineResetValidation()
 
     // define the validate manually meta method to vue instance
-    vm.$validate = (...args) => {
-      let field = null
-      let touched = false
-      let cb = null
-
-      each(args, (arg, index) => {
-        if (typeof arg === 'string') {
-          field = arg
-        } else if (typeof arg === 'boolean') {
-          touched = arg
-        } else if (typeof arg === 'function') {
-          cb = arg
-        }
-      })
-
-      this.validate({ field: field, touched: touched, cb: cb })
-    }
+    this._defineValidate()
 
     // define manually the validation errors
-    vm.$setValidationErrors = (errors) => {
-      this._setValidationErrors(errors)
-    }
+    this._defineSetValidationErrors()
   }
 
   disableReactive () {
@@ -200,6 +180,39 @@ export default class Validator {
       vm[method] = null
     }
   }
+
+  _defineResetValidation () {
+    this._dir.vm.$resetValidation = (cb) => {
+      this._resetValidation(cb)
+    }
+  }
+
+  _defineValidate () {
+    this._dir.vm.$validate = (...args) => {
+      let field = null
+      let touched = false
+      let cb = null
+
+      each(args, (arg, index) => {
+        if (typeof arg === 'string') {
+          field = arg
+        } else if (typeof arg === 'boolean') {
+          touched = arg
+        } else if (typeof arg === 'function') {
+          cb = arg
+        }
+      })
+
+      this.validate({ field: field, touched: touched, cb: cb })
+    }
+  }
+
+  _defineSetValidationErrors () {
+    this._dir.vm.$setValidationErrors = (errors) => {
+      this._setValidationErrors(errors)
+    }
+  }
+
 
   _validate (field, touched = false, noopable = false, cb = null) {
     const scope = this._scope
