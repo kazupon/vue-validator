@@ -1134,5 +1134,4 @@ describe('validate directive', () => {
       assert(field.value !== 'this is placeholder')
     })
   })
-
 })
