@@ -1,3 +1,13 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/vuejs/vue-validator/compare/v2.0.0...v2.0.1) (2016-04-07)
+
+
+### Bug Fixes
+
+* **validator:** fix multiple validator error ([21296d5](https://github.com/vuejs/vue-validator/commit/21296d5)), closes [#177](https://github.com/vuejs/vue-validator/issues/177) [#185](https://github.com/vuejs/vue-validator/issues/185)
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/vuejs/vue-validator/compare/v2.0.0-beta.6...v2.0.0) (2016-03-30)
 

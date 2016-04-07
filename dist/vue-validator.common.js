@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.0
+ * vue-validator v2.0.1
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -410,6 +410,18 @@ function Validate (Vue) {
   var parseDirective = Vue.parsers.directive.parseDirective;
   var REGEX_FILTER = /[^|]\|[^|]/;
 
+  // Test for IE10/11 textarea placeholder clone bug
+  function checkTextareaCloneBug() {
+    if (_.inBrowser) {
+      var t = document.createElement('textarea');
+      t.placeholder = 't';
+      return t.cloneNode(true).value === 't';
+    } else {
+      return false;
+    }
+  }
+  var hasTextareaCloneBug = checkTextareaCloneBug();
+
   /**
    * `v-validate` directive
    */
@@ -583,7 +595,7 @@ function Validate (Vue) {
       this.anchor = _.createAnchor('v-validate');
       _.replace(this.el, this.anchor);
 
-      this.factory = new FragmentFactory(this.vm, this.el);
+      this.factory = new FragmentFactory(this.vm, this.shimNode(this.el));
       this.frag = this.factory.create(this._host, this._scope, this._frag);
       this.frag.before(this.anchor);
     },
@@ -627,6 +639,20 @@ function Validate (Vue) {
     },
     isInitialNoopValidation: function isInitialNoopValidation(initial) {
       return initial === 'off' || initial === false;
+    },
+    shimNode: function shimNode(node) {
+      var ret = node;
+      if (hasTextareaCloneBug) {
+        if (node.tagName === 'TEXTAREA') {
+          ret = node.cloneNode(true);
+          ret.value = node.value;
+          var i = ret.childNodes.length;
+          while (i--) {
+            ret.removeChild(ret.childNodes[i]);
+          }
+        }
+      }
+      return ret;
     }
   });
 }
@@ -1430,8 +1456,6 @@ var Validator$1 = function () {
   }
 
   Validator.prototype.enableReactive = function enableReactive() {
-    var _this2 = this;
-
     var vm = this._dir.vm;
 
     // define the validation scope
@@ -1439,37 +1463,13 @@ var Validator$1 = function () {
     vm._validatorMaps[this.name] = this;
 
     // define the validation resetting meta method to vue instance
-    vm.$resetValidation = function (cb) {
-      _this2._resetValidation(cb);
-    };
+    this._defineResetValidation();
 
     // define the validate manually meta method to vue instance
-    vm.$validate = function () {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var field = null;
-      var touched = false;
-      var cb = null;
-
-      each(args, function (arg, index) {
-        if (typeof arg === 'string') {
-          field = arg;
-        } else if (typeof arg === 'boolean') {
-          touched = arg;
-        } else if (typeof arg === 'function') {
-          cb = arg;
-        }
-      });
-
-      _this2.validate({ field: field, touched: touched, cb: cb });
-    };
+    this._defineValidate();
 
     // define manually the validation errors
-    vm.$setValidationErrors = function (errors) {
-      _this2._setValidationErrors(errors);
-    };
+    this._defineSetValidationErrors();
   };
 
   Validator.prototype.disableReactive = function disableReactive() {
@@ -1493,11 +1493,11 @@ var Validator$1 = function () {
   };
 
   Validator.prototype.unregisterEvents = function unregisterEvents() {
-    var _this3 = this;
+    var _this2 = this;
 
     each(this._events, function (handler, event) {
-      _this3._events[event] = null;
-      delete _this3._events[event];
+      _this2._events[event] = null;
+      delete _this2._events[event];
     });
   };
 
@@ -1570,19 +1570,19 @@ var Validator$1 = function () {
   };
 
   Validator.prototype.setupScope = function setupScope() {
-    var _this4 = this;
+    var _this3 = this;
 
     this._defineProperties(function () {
-      return _this4.validations;
+      return _this3.validations;
     }, function () {
-      return _this4._scope;
+      return _this3._scope;
     });
 
     each(this._groups, function (name) {
-      var validations = _this4._groupValidations[name];
+      var validations = _this3._groupValidations[name];
       var group = {};
-      exports$1.Vue.set(_this4._scope, name, group);
-      _this4._defineProperties(function () {
+      exports$1.Vue.set(_this3._scope, name, group);
+      _this3._defineProperties(function () {
         return validations;
       }, function () {
         return group;
@@ -1600,10 +1600,52 @@ var Validator$1 = function () {
     };
   };
 
+  Validator.prototype._defineResetValidation = function _defineResetValidation() {
+    var _this4 = this;
+
+    this._dir.vm.$resetValidation = function (cb) {
+      _this4._resetValidation(cb);
+    };
+  };
+
+  Validator.prototype._defineValidate = function _defineValidate() {
+    var _this5 = this;
+
+    this._dir.vm.$validate = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var field = null;
+      var touched = false;
+      var cb = null;
+
+      each(args, function (arg, index) {
+        if (typeof arg === 'string') {
+          field = arg;
+        } else if (typeof arg === 'boolean') {
+          touched = arg;
+        } else if (typeof arg === 'function') {
+          cb = arg;
+        }
+      });
+
+      _this5.validate({ field: field, touched: touched, cb: cb });
+    };
+  };
+
+  Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
+    var _this6 = this;
+
+    this._dir.vm.$setValidationErrors = function (errors) {
+      _this6._setValidationErrors(errors);
+    };
+  };
+
   Validator.prototype._validate = function _validate(field) {
     var touched = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-    var _this5 = this;
+    var _this7 = this;
 
     var noopable = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
     var cb = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
@@ -1615,14 +1657,14 @@ var Validator$1 = function () {
       validation.willUpdateFlags(touched);
       validation.validate(function (results) {
         exports$1.Vue.set(scope, field, results);
-        _this5._fireEvents();
+        _this7._fireEvents();
         cb && cb();
       }, noopable);
     }
   };
 
   Validator.prototype._validates = function _validates(cb) {
-    var _this6 = this;
+    var _this8 = this;
 
     var scope = this._scope;
 
@@ -1633,7 +1675,7 @@ var Validator$1 = function () {
       });
     }, function () {
       // finished
-      _this6._fireEvents();
+      _this8._fireEvents();
       cb && cb();
     });
   };
@@ -1656,7 +1698,7 @@ var Validator$1 = function () {
   };
 
   Validator.prototype._setValidationErrors = function _setValidationErrors(errors) {
-    var _this7 = this;
+    var _this9 = this;
 
     var extend = exports$1.Vue.util.extend;
 
@@ -1671,7 +1713,7 @@ var Validator$1 = function () {
 
     // set errors
     each(temp, function (values, field) {
-      var validation = _this7._scope[field];
+      var validation = _this9._scope[field];
       var newValidation = {};
       each(values, function (error) {
         if (error.validator) {
@@ -1682,7 +1724,7 @@ var Validator$1 = function () {
       validation.invalid = true;
       validation.errors = values;
       extend(newValidation, validation);
-      exports$1.Vue.set(_this7._scope, field, newValidation);
+      exports$1.Vue.set(_this9._scope, field, newValidation);
     });
   };
 
@@ -1800,7 +1842,7 @@ var Validator$1 = function () {
   };
 
   Validator.prototype._defineProperties = function _defineProperties(validationsGetter, targetGetter) {
-    var _this8 = this;
+    var _this10 = this;
 
     var bind = exports$1.Vue.util.bind;
 
@@ -1818,7 +1860,7 @@ var Validator$1 = function () {
         enumerable: true,
         configurable: true,
         get: function get() {
-          return bind(descriptor.fn, _this8)(descriptor.arg);
+          return bind(descriptor.fn, _this10)(descriptor.arg);
         }
       });
     });
@@ -1837,7 +1879,7 @@ var Validator$1 = function () {
   };
 
   Validator.prototype._walkValidations = function _walkValidations(validations, property, condition) {
-    var _this9 = this;
+    var _this11 = this;
 
     var hasOwn = exports$1.Vue.util.hasOwn;
     var ret = condition;
@@ -1846,8 +1888,8 @@ var Validator$1 = function () {
       if (ret === !condition) {
         return;
       }
-      if (hasOwn(_this9._scope, validation.field)) {
-        var target = _this9._scope[validation.field];
+      if (hasOwn(_this11._scope, validation.field)) {
+        var target = _this11._scope[validation.field];
         if (target && target[property] === !condition) {
           ret = !condition;
         }
@@ -1886,15 +1928,15 @@ var Validator$1 = function () {
   };
 
   Validator.prototype._defineErrors = function _defineErrors(validationsGetter) {
-    var _this10 = this;
+    var _this12 = this;
 
     var hasOwn = exports$1.Vue.util.hasOwn;
     var isPlainObject = exports$1.Vue.util.isPlainObject;
     var errors = [];
 
     each(validationsGetter(), function (validation, key) {
-      if (hasOwn(_this10._scope, validation.field)) {
-        var target = _this10._scope[validation.field];
+      if (hasOwn(_this12._scope, validation.field)) {
+        var target = _this12._scope[validation.field];
         if (target && !empty(target.errors)) {
           each(target.errors, function (err, index) {
             var error = { field: validation.field };
@@ -1940,7 +1982,6 @@ var Validator$1 = function () {
 function Validator (Vue) {
   var _ = Vue.util;
   var FragmentFactory = Vue.FragmentFactory;
-  var parseTemplate = Vue.parsers.template.parseTemplate;
   var vIf = Vue.directive('if');
   var camelize = Vue.util.camelize;
 
@@ -2009,7 +2050,7 @@ function Validator (Vue) {
         _this.anchor = _.createAnchor('vue-validator');
         _.replace(_this.el, _this.anchor);
         _.extend(vm.$options, { _validator: _this.validatorName });
-        _this.factory = new FragmentFactory(vm, parseTemplate(_this.el, true));
+        _this.factory = new FragmentFactory(vm, _this.el.innerHTML);
         vIf.insert.call(_this);
       });
 
@@ -2159,7 +2200,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.0';
+plugin.version = '2.0.1';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
