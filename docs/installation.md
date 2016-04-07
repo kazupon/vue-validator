@@ -4,6 +4,14 @@
 
 See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note the dist files are always the latest stable - it's not update-to-date with the dev branch source.
 
+## CDN
+
+### jsdelivr
+
+```html
+<script src="https://cdn.jsdelivr.net/vue.validator/2.0.1/vue-validator.min.js"></script>
+```
+
 ## NPM
 
 ### stable version
