@@ -5,7 +5,6 @@ import Validator from '../validator'
 export default function (Vue) {
   const _ = Vue.util
   const FragmentFactory = Vue.FragmentFactory
-  const parseTemplate = Vue.parsers.template.parseTemplate
   const vIf = Vue.directive('if')
   const camelize = Vue.util.camelize
 
@@ -83,7 +82,7 @@ export default function (Vue) {
         this.anchor = _.createAnchor('vue-validator')
         _.replace(this.el, this.anchor)
         _.extend(vm.$options, { _validator: this.validatorName })
-        this.factory = new FragmentFactory(vm, parseTemplate(this.el, true))
+        this.factory = new FragmentFactory(vm, this.el.innerHTML)
         vIf.insert.call(this)
       })
 

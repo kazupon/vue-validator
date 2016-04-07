@@ -1115,4 +1115,24 @@ describe('validate directive', () => {
       })
     })
   })
+
+
+  // # issue 172
+  describe('textarea', () => {
+    beforeEach((done) => {
+      el.innerHTML = '<validator name="validator1">'
+        + '<form novalidate>'
+        + '<textarea v-validate:field1="{  maxlength: 100 }" placeholder="this is placeholder"></textarea>'
+        + '</form>'
+        + '</validator>'
+      vm = new Vue({ el: el })
+      vm.$nextTick(done)
+    })
+
+    it('should not be filled with placeholder value', () => {
+      let field = el.getElementsByTagName('textarea')[0]
+      assert(field.value !== 'this is placeholder')
+    })
+  })
+
 })

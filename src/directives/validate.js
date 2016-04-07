@@ -8,6 +8,19 @@ export default function (Vue) {
   const parseDirective = Vue.parsers.directive.parseDirective
   const REGEX_FILTER = /[^|]\|[^|]/
 
+  // Test for IE10/11 textarea placeholder clone bug
+  function checkTextareaCloneBug () {
+    if (_.inBrowser) {
+      let t = document.createElement('textarea')
+      t.placeholder = 't'
+      return t.cloneNode(true).value === 't'
+    } else {
+      return false
+    }
+  }
+  const hasTextareaCloneBug = checkTextareaCloneBug()
+
+
   /**
    * `v-validate` directive
    */
@@ -195,7 +208,7 @@ export default function (Vue) {
       this.anchor = _.createAnchor('v-validate')
       _.replace(this.el, this.anchor)
 
-      this.factory = new FragmentFactory(this.vm, this.el)
+      this.factory = new FragmentFactory(this.vm, this.shimNode(this.el))
       this.frag = this.factory.create(this._host, this._scope, this._frag)
       this.frag.before(this.anchor)
     },
@@ -243,6 +256,21 @@ export default function (Vue) {
 
     isInitialNoopValidation (initial) {
       return initial === 'off' || initial === false
+    },
+    
+    shimNode (node) {
+      let ret = node
+      if (hasTextareaCloneBug) {
+        if (node.tagName === 'TEXTAREA') {
+          ret = node.cloneNode(true)
+          ret.value = node.value
+          let i = ret.childNodes.length
+          while (i--) {
+            ret.removeChild(ret.childNodes[i])
+          }
+        }
+      }
+      return ret
     }
   })
 }
