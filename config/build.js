@@ -13,6 +13,15 @@ var main = fs
   .replace(/plugin\.version = '[\d\.]+[\d]+'/, "plugin.version = '" + pack.version + "'")
 fs.writeFileSync('src/index.js', main)
 
+// update installation.md
+var installation = fs
+  .readFileSync('docs/installation.md', 'utf-8')
+  .replace(
+    /\<script src=\"https\:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js\"\>\<\/script\>/,
+    '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
+  )
+fs.writeFileSync('docs/installation.md', installation)
+
 // CommonJS build.
 // this is used as the "main" field in package.json
 // and used by bundlers like Webpack and Browserify.
