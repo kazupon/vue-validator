@@ -12,7 +12,7 @@ Validator component for Vue.js
 
 
 # Documentation
-See the [here](http://vuejs.github.io/vue-validator/)
+See [here](http://vuejs.github.io/vue-validator/)
 
 
 # Contributing
