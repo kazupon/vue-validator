@@ -326,6 +326,8 @@
 
   The validation results keep to scope name prefixed with `$`, specified by the `name` attribute of the `<validator>` element.
   
+> NOTE: :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
+
 - **Example:**
 
   ```html

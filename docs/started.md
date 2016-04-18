@@ -30,3 +30,5 @@ We can use the `validator` element directive and `v-validate` directive, as foll
 ```
 
 The validation results are scoped to the validator element. In above case, the validation results keep to `$validation1` scope (prefixed with `$`), specified by the `name` attribute of the `validator` element.
+
+> NOTE: :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
