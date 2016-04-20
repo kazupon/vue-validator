@@ -40,7 +40,7 @@ export default class BaseValidation {
     const scope = this._getScope()
     const model = this._model
     if (model) {
-      el.value = this._evalModel(model, this._filters) || ''
+      el.value = this._evalModel(model, this._filters)
       this._unwatch = scope.$watch(model, (val, old) => {
         if (val !== old) {
           if (this.guardValidate(el, 'input')) {
@@ -260,11 +260,13 @@ export default class BaseValidation {
   _evalModel (model, filters) {
     const scope = this._getScope()
 
+    let val = null
     if (filters) {
-      let val = scope.$get(model)
+      val = scope.$get(model)
       return filters ? this._applyFilters(val, null, filters) : val
     } else {
-      return scope.$get(model)
+      val = scope.$get(model)
+      return val === undefined || val === null ? '' : val
     }
   }
 
