@@ -1,4 +1,4 @@
-# Getting started
+# 入门
 
 ```javascript
 new Vue({
@@ -6,7 +6,7 @@ new Vue({
 })
 ```
 
-We can use the `validator` element directive and `v-validate` directive, as follows:
+我们可以像下面这样使用 `validator` 元素指令和 `v-validate` 指令:
 
 ```html
 <div id="app">
@@ -29,6 +29,6 @@ We can use the `validator` element directive and `v-validate` directive, as foll
   </validator>
 ```
 
-The validation results are scoped to the validator element. In above case, the validation results keep to `$validation1` scope (prefixed with `$`), specified by the `name` attribute of the `validator` element.
+验证结果会关联到验证器元素上。在上例中，验证结果保存在 `$validation1` 下，`$validation1` 是由 `validator` 元素的 `name` 属性值加 `$` 前缀组成。
 
-> :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
+> :提醒: 验证器名称不要与 Vue.js 中的自带属性重复，如 `$event` 等。
