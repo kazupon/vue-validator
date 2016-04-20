@@ -1,3 +1,13 @@
+<a name="2.0.2"></a>
+## [2.0.2](https://github.com/vuejs/vue-validator/compare/v2.0.1...v2.0.2) (2016-04-20)
+
+
+### Bug Fixes
+
+* **model:** fix field empty bug :bug: ([360a209](https://github.com/vuejs/vue-validator/commit/360a209)), closes [#195](https://github.com/vuejs/vue-validator/issues/195)
+
+
+
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/vuejs/vue-validator/compare/v2.0.0...v2.0.1) (2016-04-07)
 

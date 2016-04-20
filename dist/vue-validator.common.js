@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.0.1
+ * vue-validator v2.0.2
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -689,7 +689,7 @@ var BaseValidation = function () {
     var scope = this._getScope();
     var model = this._model;
     if (model) {
-      el.value = this._evalModel(model, this._filters) || '';
+      el.value = this._evalModel(model, this._filters);
       this._unwatch = scope.$watch(model, function (val, old) {
         if (val !== old) {
           if (_this.guardValidate(el, 'input')) {
@@ -915,11 +915,13 @@ var BaseValidation = function () {
   BaseValidation.prototype._evalModel = function _evalModel(model, filters) {
     var scope = this._getScope();
 
+    var val = null;
     if (filters) {
-      var val = scope.$get(model);
+      val = scope.$get(model);
       return filters ? this._applyFilters(val, null, filters) : val;
     } else {
-      return scope.$get(model);
+      val = scope.$get(model);
+      return val === undefined || val === null ? '' : val;
     }
   };
 
@@ -2200,7 +2202,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.0.1';
+plugin.version = '2.0.2';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
