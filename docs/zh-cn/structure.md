@@ -1,6 +1,6 @@
-# Validation result structure
+# 验证结果结构
 
-Validation results can be accessed in this structure:
+验证结果保存在如下结构中:
 
 ```
 {
@@ -61,24 +61,24 @@ Validation results can be accessed in this structure:
 }
 ```
 
-The various top-level properties are in the validation scope, and each field validation result in its own respective scopes.
+全局结果可以直接从验证结果中获取到，字段验证结果保存在以字段名命名的键下。
 
-## Field validation properties
-- `valid`: whether field is valid; if it's valid, then return `true`, else return `false`.
-- `invalid`: reverse of `valid`.
-- `touched`: whether field is touched. if field was focused, return `true`, else return `false`.
-- `untouched`: reverse of `touched`.
-- `modified`: whether field value is modified; if field value was changed from **initial** value, return `true`, else return `false`.
-- `dirty`: whether field value was changed at least **once**; if so, return `true`, else return `false`.
-- `pristine`: reverse of `dirty`.
-- `errors`: if invalid field exist, return error message wrapped with array, else `undefined`.
+## 字段验证结果
+- `valid`: 字段有效时返回 `true`,否则返回 `false`。
+- `invalid`: `valid` 的逆.
+- `touched`: 字段获得过焦点时返回 `true`,否则返回 `false`。
+- `untouched`: `touched` 的逆.
+- `modified`: 字段值与**初始**值不同时返回 `true`,否则返回 `false`。
+- `dirty`: 字段值改变过至少**一次**时返回 `true`,否则返回 `false`。
+- `pristine`: `dirty` 的逆.
+- `errors`: 字段无效时返回存有错误信息的数据，否则返回 `undefined`。
 
-## Top level validation properties
-- `valid`: whether **all** fields is valid. if so, then return `true`, else return `false`.
-- `invalid`: if invalid field exist even **one** in validate fields, return `true`, else `false`.
-- `touched`: whether **all** fields is touched, if so, return `true`, else `false`.
-- `untouched`: if untouched field exist even **one** in validate fields, return `true`, else `false`.
-- `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
-- `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
-- `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
-- `errors`: if invalid even one exist, return all field error message wrapped with array, else `undefined`.
+## 全局结果
+- `valid`: **所有**字段都有效时返回 `true`,否则返回 `false`。
+- `invalid`: 只要存在无效字段就返回 `true`,否则返回 `false`。
+- `touched`: 只要存在获得过焦点的字段就返回 `true`,否则返回 `false`。
+- `untouched`: `touched` 的逆。
+- `modified`: 只要存在与**初始**值不同的字段就返回 `true`,否则返回 `false`。
+- `dirty`: 只要存在值改变过至少**一次**的字段就返回 `true`,否则返回 `false`。
+- `pristine`: **所有**字段都没有发生过变化时返回 `true`,否则返回 `false`。
+- `errors`: 有无效字段时返回所有无效字段的错误信息，否则返回 `undefined`。
