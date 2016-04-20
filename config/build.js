@@ -15,12 +15,12 @@ fs.writeFileSync('src/index.js', main)
 
 // update installation.md
 var installation = fs
-  .readFileSync('docs/installation.md', 'utf-8')
+  .readFileSync('docs/en/installation.md', 'utf-8')
   .replace(
     /\<script src=\"https\:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js\"\>\<\/script\>/,
     '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
   )
-fs.writeFileSync('docs/installation.md', installation)
+fs.writeFileSync('docs/en/installation.md', installation)
 
 // CommonJS build.
 // this is used as the "main" field in package.json
