@@ -1,5 +1,5 @@
-# v-model integration
-You can validate the field that updated with v-model:
+# 结合 v-model
+可以验证通过 v-model 指令进行数据绑定的字段：
 
 ```html
 <div id="app">
