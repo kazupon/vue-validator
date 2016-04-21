@@ -1,6 +1,6 @@
-# Grouping
+# 分组
 
-The vue binding syntax can group inputs together:
+支持把验证字段分组：
 
 ```html
 <validator name="validation1" :groups="['user', 'password']">
