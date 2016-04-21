@@ -1,6 +1,6 @@
-# Reset validation results
+# 重置验证结果
 
-You can reset the validation results with `$resetValidation()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
+可以通过 Vue 实例的 `$resetValidation()` 方法重置验证结果，该方法是由验证器安装时动态定义的。使用方法见下例：
 
 ```html
 <div id="app">
