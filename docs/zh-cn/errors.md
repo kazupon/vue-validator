@@ -1,7 +1,6 @@
-# Error messages
+# 错误消息
 
-Error messages can be stored directly in the validation rules, and can be use error message on `v-show` or `v-if`:
-
+错误消息可以直接在验证规则中指定，同时可以在 `v-show` 和 `v-if` 中使用错误消息：
 ```html
 <validator name="validation1">
   <div class="username">
@@ -23,7 +22,7 @@ Error messages can be stored directly in the validation rules, and can be use er
 </validator>
 ```
 
-Also, Error message can be used with `v-for`:
+也可以在 `v-for` 指令中使用错误消息：
 
 ```html
 <validator name="validation1">
@@ -50,11 +49,11 @@ Also, Error message can be used with `v-for`:
 </validator>
 ```
 
-Data property or computed properties can help reduce clutter, rather than using inline rule sets.
+使用数据属性或计算属性来指定验证规则比使用内联验证规则更简洁。
 
-## Error message enumeration component
+## 错误消息枚举组件
 
-In the above example, we used `v-for` directive to enumerate `errors` of validator. But, we can't be bothered to do it. So, vue-validator provide the convenient `validator-errors` component to enumerate error info. the following the example:
+在上例中，我们使用 `v-for` 指令来枚举验证器的 `errors`。但是，我们可以让它更简单。本验证器提供了非常易用的 `validator-errors` 组件来枚举错误消息，如下例所示：
 
 ```html
 <validator name="validation1">
@@ -77,7 +76,7 @@ In the above example, we used `v-for` directive to enumerate `errors` of validat
 </validator>
 ```
 
-In the above example, it's rendered the following:
+上例的代码渲染出的界面如下：
 
 ```html
 <div class="username">
@@ -101,13 +100,13 @@ In the above example, it's rendered the following:
 </div>
 ```
 
-## Custom error message templating
+## 自定义错误消息模版
 
-If you don't like the default error message format of `validator-errors`, you can specify the custom error message template with your component or your partial template.
+如果你不喜欢 `validator-errors` 默认的错误消息格式，可以指定自定义的组件或 partial 作为消息模版。
 
-### Component template
+### 组件模版
 
-the below component example:
+下例中展示了使用组件作为模版：
 
 ```html
 <div id="app">
@@ -143,9 +142,9 @@ Vue.component('custom-error', {
 new Vue({ el: '#app' })
 ```
   
-### Partial template
+### Partial 模版
 
-the below partial template example:
+下例中展示了使用 partial 作为模版：
 
 ```html
 <div id="app">
@@ -177,14 +176,14 @@ Vue.partial('myErrorTemplate', '<p>{{field}}: {{validator}}: {{message}}</p>')
 new Vue({ el: '#app' })
 ```
 
-### Error messages focusing
+### 指定错误消息
 
-Sometimes, you need to output the part of error messages. You can focus the part of validation results when you use the `group` or `field` attributes.
+有时候你只需要输出部分错误消息，此时你可以通过 `group` 或 `field` 属性来指定这部分验证结果。
 
-- `group`: error messages of the group in validation results (e.g. $validation.group1.errors)
-- `field`: error messages of the field in validation results (e.g. $validation.field1.errors)
+- `group`: 指定组的错误消息 (例如 $validation.group1.errors)
+- `field`: 指定字段的错误消息 (例如 $validation.field1.errors)
 
-the below `group` attribute example:
+下例中展示了 `group` 属性的使用：
 
 ```html
 <div id="app">
@@ -238,9 +237,9 @@ Vue.validator('url', function (val) {
 new Vue({ el: '#app' })
 ```
 
-## Manually error message settings
+## 手动设置错误消息
 
-Sometimes, you need to manually set the validation error message such as server-side validation error. At that time, you can apply some error messages to validation results with using `$setValidationErrors` meta method. example:
+有时候你需要手动设置验证错误的消息，如从服务器端得到的验证错误消息。这时你可以通过 `$setValidationErrors` 方法设置错误消息，如下例：
 
 ```html
 <div id="app">
