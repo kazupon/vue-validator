@@ -1,8 +1,8 @@
-# Form validatable elements
+# 可验证的表单元素
 
-## Checkbox
+## 复选框
 
-Checkbox validation supports:
+支持复选框验证:
 
 ```html
 <div id="app">
@@ -51,9 +51,9 @@ new Vue({
 })
 ```
 
-## Radio button
+## 单选按钮
 
-Radio button validation supports:
+支持单选按钮验证:
 
 ```html
 <div id="app">
@@ -95,9 +95,9 @@ new Vue({
 ```
 
 
-## Selectbox
+## 下拉列表
 
-Selectbox validation supports:
+支持下拉列表验证:
 
 ```html
 <div id="app">
