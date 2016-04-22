@@ -32,7 +32,7 @@ v2.0-alpha later:
 </validator>
 ```
 
-### Caml-case property
+### Camel-case property
 As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case for `v-validate` models:
 
 ```html
