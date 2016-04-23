@@ -300,7 +300,7 @@ new Vue({
       var resource = this.$resource('/user/:id')
       resource.save({ id: this.id }, {
         username: this.username,
-        passowrd: this.new
+        password: this.new
       }, function (data, stat, req) {
         // something handle success ...
         // ...
