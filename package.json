@@ -19,6 +19,7 @@
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-preset-es2015-loose-rollup": "git+https://github.com/kazupon/babel-preset-es2015-loose-rollup.git#master",
+    "component-classes": "^1.2.6",
     "eslint": "^2.7.0",
     "eslint-config-standard": "^5.1.0",
     "eslint-loader": "^1.3.0",

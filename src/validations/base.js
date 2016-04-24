@@ -1,4 +1,4 @@
-import util, { empty, each, trigger, isPromise } from '../util'
+import util, { empty, each, trigger, isPromise, toggleClasses } from '../util'
 
 
 /**
@@ -200,6 +200,8 @@ export default class BaseValidation {
       }
       _.extend(results, props)
 
+      this.updateClasses(results)
+
       cb(results)
     })
   }
@@ -219,6 +221,10 @@ export default class BaseValidation {
     })
     this.resetFlags()
     this._init = this._getValue(this._el)
+  }
+
+  updateClasses (results) {
+    this._updateClasses(this._el, results)
   }
 
   guardValidate (el, type) {
@@ -269,6 +275,67 @@ export default class BaseValidation {
       return val === undefined || val === null ? '' : val
     }
   }
+
+  _updateClasses (el, results) {
+    this._toggleValid(el, results.valid)
+    this._toggleTouched(el, results.touched)
+    this._togglePristine(el, results.pristine)
+    this._toggleModfied(el, results.modified)
+  }
+
+  _toggleValid (el, valid) {
+    const { addClass, removeClass } = util.Vue.util
+    const validClass = 'valid'
+    const invalidClass = 'invalid'
+
+    if (valid) {
+      toggleClasses(el, validClass, addClass)
+      toggleClasses(el, invalidClass, removeClass)
+    } else {
+      toggleClasses(el, validClass, removeClass)
+      toggleClasses(el, invalidClass, addClass)
+    }
+  }
+
+  _toggleTouched (el, touched) {
+    const { addClass, removeClass } = util.Vue.util
+    const touchedClass = 'touched'
+    const untouchedClass = 'untouched'
+
+    if (touched) {
+      toggleClasses(el, touchedClass, addClass)
+      toggleClasses(el, untouchedClass, removeClass)
+    } else {
+      toggleClasses(el, touchedClass, removeClass)
+      toggleClasses(el, untouchedClass, addClass)
+    }
+  }
+
+  _togglePristine (el, pristine) {
+    const { addClass, removeClass } = util.Vue.util
+    const pristineClass = 'pristine'
+    const dirtyClass = 'dirty'
+
+    if (pristine) {
+      toggleClasses(el, pristineClass, addClass)
+      toggleClasses(el, dirtyClass, removeClass)
+    } else {
+      toggleClasses(el, pristineClass, removeClass)
+      toggleClasses(el, dirtyClass, addClass)
+    }
+  }
+
+  _toggleModfied (el, modified) {
+    const { addClass, removeClass } = util.Vue.util
+    const modifiedClass = 'modified'
+
+    if (modified) {
+      toggleClasses(el, modifiedClass, addClass)
+    } else {
+      toggleClasses(el, modifiedClass, removeClass)
+    }
+  }
+
 
   _applyFilters (value, oldValue, filters, write) {
     const resolveAsset = util.Vue.util.resolveAsset

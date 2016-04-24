@@ -127,3 +127,24 @@ export function trigger (el, event, args) {
 export function isPromise (p) {
   return p && typeof p.then === 'function'
 }
+
+/**
+ * Togging classes
+ *
+ * @param {Element} el
+ * @param {String} key
+ * @param {Function} fn
+ */
+
+export function toggleClasses (el, key, fn) {
+  key = key.trim()
+  if (key.indexOf(' ') === -1) {
+    fn(el, key)
+    return
+  }
+
+  let keys = key.split(/\s+/)
+  for (let i = 0, l = keys.length; i < l; i++) {
+    fn(el, keys[i])
+  }
+}

@@ -82,6 +82,12 @@ export default class CheckboxValidation extends BaseValidation {
     })
   }
 
+  updateClasses (results) {
+    each(this._inits, (item, index) => {
+      this._updateClasses(item.el, results)
+    })
+  }
+
   _addItem (el) {
     const item = {
       el: el,
