@@ -250,47 +250,114 @@ describe('validation classes', () => {
   })
 
 
-  describe('specify strict', () => {
-    beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" v-validate:field1="{ required: true, minlength: 4 }"'
-        + '  :validate-classes="{'
-        + '    valid: \'valid-custom\', invalid: \'invalid-custom\','
-        + '    touched: \'touched-custom\', untouched: \'untouched-custom\', '
-        + '    pristine: \'pristine-custom\', dirty: \'dirty-custom\','
-        + '    modified: \'modified-custom\''
-        + '}">'
-        + '</form>'
-        + '</validator>'
-      vm = new Vue({ el: el })
-      vm.$nextTick(done)
+  describe('custom classes', () => {
+    describe('validator element directive', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator :classes="classes" name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:field1="{ required: true, minlength: 4 }">'
+          + '</form>'
+          + '</validator>'
+        vm = new Vue({
+          el: el,
+          data: {
+            classes: {
+              valid: 'valid-ed-custom',
+              invalid: 'invalid-ed-custom',
+              touched: 'touched-ed-custom',
+              untouched: 'untouched-ed-custom',
+              pristine: 'pristine-ed-custom',
+              dirty: 'dirty-ed-custom',
+              modified: 'modified-ed-custom'
+            }
+          }
+        })
+        vm.$nextTick(done)
+      })
+
+      it('should be added', (done) => {
+        let field1 = el.getElementsByTagName('input')[0]
+        let cls1 = classes(field1)
+        assert(!cls1.has('valid-ed-custom'))
+        assert(cls1.has('invalid-ed-custom'))
+        assert(!cls1.has('touched-ed-custom'))
+        assert(cls1.has('untouched-ed-custom'))
+        assert(cls1.has('pristine-ed-custom'))
+        assert(!cls1.has('dirty-ed-custom'))
+        assert(!cls1.has('modified-ed-custom'))
+
+        field1.value = 'hello'
+        trigger(field1, 'input')
+        trigger(field1, 'blur')
+        vm.$nextTick(() => {
+          assert(cls1.has('valid-ed-custom'))
+          assert(!cls1.has('invalid-ed-custom'))
+          assert(cls1.has('touched-ed-custom'))
+          assert(!cls1.has('untouched-ed-custom'))
+          assert(!cls1.has('pristine-ed-custom'))
+          assert(cls1.has('dirty-ed-custom'))
+          assert(cls1.has('modified-ed-custom'))
+
+          done()
+        })
+      })
     })
 
-    it('should be added', (done) => {
-      let field1 = el.getElementsByTagName('input')[0]
-      let cls1 = classes(field1)
-      assert(!cls1.has('valid-custom'))
-      assert(cls1.has('invalid-custom'))
-      assert(!cls1.has('touched-custom'))
-      assert(cls1.has('untouched-custom'))
-      assert(cls1.has('pristine-custom'))
-      assert(!cls1.has('dirty-custom'))
-      assert(!cls1.has('modified-custom'))
+    describe('v-validate directive', () => {
+      beforeEach((done) => {
+        el.innerHTML = '<validator :classes="classes" name="validator1">'
+          + '<form novalidate>'
+          + '<input type="text" v-validate:field1="{ required: true, minlength: 4 }"'
+          + '  :validate-classes="{'
+          + '    valid: \'valid-custom\', invalid: \'invalid-custom\','
+          + '    touched: \'touched-custom\', untouched: \'untouched-custom\', '
+          + '    pristine: \'pristine-custom\', dirty: \'dirty-custom\','
+          + '    modified: \'modified-custom\''
+          + '}">'
+          + '</form>'
+          + '</validator>'
+        vm = new Vue({
+          el: el,
+          data: {
+            classes: {
+              valid: 'valid-ed-custom',
+              invalid: 'invalid-ed-custom',
+              touched: 'touched-ed-custom',
+              untouched: 'untouched-ed-custom',
+              pristine: 'pristine-ed-custom',
+              dirty: 'dirty-ed-custom',
+              modified: 'modified-ed-custom'
+            }
+          }
+        })
+        vm.$nextTick(done)
+      })
 
-      field1.value = 'hello'
-      trigger(field1, 'input')
-      trigger(field1, 'blur')
-      vm.$nextTick(() => {
-        assert(cls1.has('valid-custom'))
-        assert(!cls1.has('invalid-custom'))
-        assert(cls1.has('touched-custom'))
-        assert(!cls1.has('untouched-custom'))
-        assert(!cls1.has('pristine-custom'))
-        assert(cls1.has('dirty-custom'))
-        assert(cls1.has('modified-custom'))
+      it('should be added', (done) => {
+        let field1 = el.getElementsByTagName('input')[0]
+        let cls1 = classes(field1)
+        assert(!cls1.has('valid-custom'))
+        assert(cls1.has('invalid-custom'))
+        assert(!cls1.has('touched-custom'))
+        assert(cls1.has('untouched-custom'))
+        assert(cls1.has('pristine-custom'))
+        assert(!cls1.has('dirty-custom'))
+        assert(!cls1.has('modified-custom'))
 
-        done()
+        field1.value = 'hello'
+        trigger(field1, 'input')
+        trigger(field1, 'blur')
+        vm.$nextTick(() => {
+          assert(cls1.has('valid-custom'))
+          assert(!cls1.has('invalid-custom'))
+          assert(cls1.has('touched-custom'))
+          assert(!cls1.has('untouched-custom'))
+          assert(!cls1.has('pristine-custom'))
+          assert(cls1.has('dirty-custom'))
+          assert(cls1.has('modified-custom'))
+
+          done()
+        })
       })
     })
   })

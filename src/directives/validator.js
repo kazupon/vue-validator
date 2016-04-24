@@ -14,7 +14,7 @@ export default function (Vue) {
    */
 
   Vue.elementDirective('validator', {
-    params: ['name', 'groups', 'lazy'],
+    params: ['name', 'groups', 'lazy', 'classes'],
 
     bind () {
       const params = this.params
@@ -31,7 +31,12 @@ export default function (Vue) {
         throw new Error('Invalid validator management error')
       }
 
-      this.setupValidator()
+      let classes = {}
+      if (this.params.classes && typeof this.params.classes === 'object') {
+        classes = this.params.classes
+      }
+
+      this.setupValidator(classes)
       this.setupFragment(params.lazy)
     },
     
@@ -56,10 +61,10 @@ export default function (Vue) {
       return groups
     },
 
-    setupValidator () {
+    setupValidator (classes) {
       const validator 
         = this.validator 
-        = new Validator(this.validatorName, this, this.getGroups())
+        = new Validator(this.validatorName, this, this.getGroups(), classes)
       validator.enableReactive()
       validator.setupScope()
       validator.registerEvents()

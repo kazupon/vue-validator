@@ -14,7 +14,7 @@ const eventRE = /^v-on:|^@/
 
 export default class Validator {
 
-  constructor (name, dir, groups) {
+  constructor (name, dir, groups, classes) {
     this.name = name
 
     this._scope = {}
@@ -26,6 +26,7 @@ export default class Validator {
     this._groupValidations = {}
     this._events = {}
     this._modified = false
+    this._classes = classes
 
     each(groups, (group) => {
       this._groupValidations[group] = []
@@ -113,6 +114,8 @@ export default class Validator {
         field, model, vm, el, scope, filters, detectBlur, detectChange
       )
     }
+
+    validation.setValidationClasses(this._classes)
 
     return validation
   }
