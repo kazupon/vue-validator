@@ -308,7 +308,7 @@ describe('validation classes', () => {
         el.innerHTML = '<validator :classes="classes" name="validator1">'
           + '<form novalidate>'
           + '<input type="text" v-validate:field1="{ required: true, minlength: 4 }"'
-          + '  :validate-classes="{'
+          + '  :classes="{'
           + '    valid: \'valid-custom\', invalid: \'invalid-custom\','
           + '    touched: \'touched-custom\', untouched: \'untouched-custom\', '
           + '    pristine: \'pristine-custom\', dirty: \'dirty-custom\','

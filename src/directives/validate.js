@@ -28,7 +28,7 @@ export default function (Vue) {
   Vue.directive('validate', {
     terminal: true,
     priority: vIf.priority + 16,
-    params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'validate-classes'],
+    params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
       detectBlur (val, old) {
@@ -132,8 +132,8 @@ export default function (Vue) {
         this.isDetectChange(params.detectChange)
       )
 
-      if (params.validateClasses && typeof params.validateClasses === 'object') {
-        this.validation.setValidationClasses(params.validateClasses)
+      if (params.classes && typeof params.classes === 'object') {
+        this.validation.setValidationClasses(params.classes)
       }
 
       params.group
