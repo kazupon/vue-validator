@@ -24,6 +24,7 @@ export default class BaseValidation {
     this._validators = {}
     this._detectBlur = detectBlur
     this._detectChange = detectChange
+    this._classes = {}
   }
 
   get vm () { return this._vm }
@@ -72,6 +73,12 @@ export default class BaseValidation {
       validator.initial = initial
       validator._isNoopable = true
     }
+  }
+
+  setValidationClasses (classes) {
+    each(classes, (value, key) => {
+      this._classes[key] = value
+    })
   }
 
   willUpdateFlags (touched = false) {
@@ -285,8 +292,8 @@ export default class BaseValidation {
 
   _toggleValid (el, valid) {
     const { addClass, removeClass } = util.Vue.util
-    const validClass = 'valid'
-    const invalidClass = 'invalid'
+    const validClass = this._classes.valid || 'valid'
+    const invalidClass = this._classes.invalid || 'invalid'
 
     if (valid) {
       toggleClasses(el, validClass, addClass)
@@ -299,8 +306,8 @@ export default class BaseValidation {
 
   _toggleTouched (el, touched) {
     const { addClass, removeClass } = util.Vue.util
-    const touchedClass = 'touched'
-    const untouchedClass = 'untouched'
+    const touchedClass = this._classes.touched || 'touched'
+    const untouchedClass = this._classes.untouched || 'untouched'
 
     if (touched) {
       toggleClasses(el, touchedClass, addClass)
@@ -313,8 +320,8 @@ export default class BaseValidation {
 
   _togglePristine (el, pristine) {
     const { addClass, removeClass } = util.Vue.util
-    const pristineClass = 'pristine'
-    const dirtyClass = 'dirty'
+    const pristineClass = this._classes.pristine || 'pristine'
+    const dirtyClass = this._classes.dirty || 'dirty'
 
     if (pristine) {
       toggleClasses(el, pristineClass, addClass)
@@ -327,7 +334,7 @@ export default class BaseValidation {
 
   _toggleModfied (el, modified) {
     const { addClass, removeClass } = util.Vue.util
-    const modifiedClass = 'modified'
+    const modifiedClass = this._classes.modified || 'modified'
 
     if (modified) {
       toggleClasses(el, modifiedClass, addClass)
