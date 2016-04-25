@@ -1,16 +1,16 @@
-# Events
+# 事件
 
-Using regular vue event bindings, you can be bound the event that has occured with validator.
+可以使用 vue 中的事件绑定方法绑定验证器产生的事件。
 
-## Field validation event
+## 字段验证事件
 
-You can be handled the event to each field properties, like `v-validate` directive  specified to `input` tag:
+对于每一个字段，你都可以监听如下事件：
 
-- `valid`: occure when validation result of **each field** became valid
-- `invalid`: occure when validation result of **each field** became invalid
-- `touched`: occure when **each field** detected `blur` at least once
-- `dirty`: occure when the value of **each field** changed from initial value at least once
-- `modified`: occure when the value of **each field** changed from initial value
+- `valid`: 当字段验证结果变为有效时触发
+- `invalid`: 当字段验证结果变为无效时触发
+- `touched`: 当字段失去焦点时触发
+- `dirty`: 当字段值首次变化时触发
+- `modified`: 当字段值与初始值不同时或变回初始值时触发
 
 ```html
 <div id="app">
@@ -68,15 +68,15 @@ new Vue({
 })
 ```
 
-## Top level validation event
+## 顶级验证事件
 
-You can be handled the event that has occured in the various top-level validation properties:
+可以监听如下顶级验证结果的变化事件：
 
-- `valid`: occure when validation result of **top-level** became valid
-- `invalid`: occure when validation result of **top-level** became invalid
-- `touched`: occure when **top-level** detected `blur` at least once
-- `dirty`: occure when the value of **top-level** changed from initial value at least once
-- `modified`: occure when the value of **top-level** changed from initial value
+- `valid`: 当全局验证结果变为有效时触发
+- `invalid`: 当全局验证结果变为无效时触发
+- `touched`: 当任意验证字段失去焦点时触发
+- `dirty`: 当任意字段首次改变时触发
+- `modified`: 当任意字段首次改变时或所有字段恢复初始值时触发
 
 ```html
 <div id="app">
