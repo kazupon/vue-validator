@@ -1,3 +1,4 @@
+import { VALIDATE_UPDATE } from '../const'
 import BaseValidation from './base'
 
 
@@ -16,6 +17,13 @@ export default class SelectValidation extends BaseValidation {
   manageElement (el) {
     const scope = this._getScope()
     const model = this._model
+
+    const activeIds = el.getAttribute(VALIDATE_UPDATE)
+    if (activeIds) {
+      el.removeAttribute(VALIDATE_UPDATE)
+      this._activeIds = activeIds.split(',')
+    }
+
     if (model) {
       const value = this._evalModel(model, this._filters)
       const values = !Array.isArray(value) ? [value] : value

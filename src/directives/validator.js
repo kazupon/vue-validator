@@ -3,10 +3,12 @@ import Validator from '../validator'
 
 
 export default function (Vue) {
-  const _ = Vue.util
   const FragmentFactory = Vue.FragmentFactory
   const vIf = Vue.directive('if')
-  const camelize = Vue.util.camelize
+  const {
+    isArray, isPlainObject, createAnchor,
+    replace, extend, camelize
+  } = Vue.util
 
 
   /**
@@ -32,7 +34,7 @@ export default function (Vue) {
       }
 
       let classes = {}
-      if (this.params.classes && typeof this.params.classes === 'object') {
+      if (isPlainObject(this.params.classes)) {
         classes = this.params.classes
       }
 
@@ -50,9 +52,9 @@ export default function (Vue) {
       let groups = []
 
       if (params.groups) {
-        if (_.isArray(params.groups)) {
+        if (isArray(params.groups)) {
           groups = params.groups
-        } else if (!_.isPlainObject(params.groups)
+        } else if (!isPlainObject(params.groups)
             && typeof params.groups === 'string') {
           groups.push(params.groups)
         }
@@ -84,9 +86,9 @@ export default function (Vue) {
       const vm = this.vm
 
       this.validator.waitFor(() => {
-        this.anchor = _.createAnchor('vue-validator')
-        _.replace(this.el, this.anchor)
-        _.extend(vm.$options, { _validator: this.validatorName })
+        this.anchor = createAnchor('vue-validator')
+        replace(this.el, this.anchor)
+        extend(vm.$options, { _validator: this.validatorName })
         this.factory = new FragmentFactory(vm, this.el.innerHTML)
         vIf.insert.call(this)
       })

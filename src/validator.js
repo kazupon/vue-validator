@@ -152,14 +152,14 @@ export default class Validator {
     validations && pull(validations, validation)
   }
 
-  validate ({ field = null, touched = false, noopable = false, cb = null } = {}) {
+  validate ({ el = null, field = null, touched = false, noopable = false, cb = null } = {}) {
     if (!field) { // all
       each(this.validations, (validation, key) => {
         validation.willUpdateFlags(touched)
       })
       this._validates(cb)
     } else { // each field
-      this._validate(field, touched, noopable, cb)
+      this._validate(field, touched, noopable, el, cb)
     }
   }
 
@@ -217,7 +217,7 @@ export default class Validator {
   }
 
 
-  _validate (field, touched = false, noopable = false, cb = null) {
+  _validate (field, touched = false, noopable = false, el = null, cb = null) {
     const scope = this._scope
 
     const validation = this._getValidationFrom(field)
@@ -227,7 +227,7 @@ export default class Validator {
         util.Vue.set(scope, field, results)
         this._fireEvents()
         cb && cb()
-      }, noopable)
+      }, noopable, el)
     }
   }
 

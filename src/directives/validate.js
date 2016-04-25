@@ -1,16 +1,19 @@
+import { PRIORITY_VALIDATE, REGEX_FILTER } from '../const'
 import { warn, each } from '../util'
 
 
 export default function (Vue) {
-  const _ = Vue.util
   const vIf = Vue.directive('if')
   const FragmentFactory = Vue.FragmentFactory
   const parseDirective = Vue.parsers.directive.parseDirective
-  const REGEX_FILTER = /[^|]\|[^|]/
+  const {
+    inBrowser, bind, on, off, createAnchor,
+    replace, camelize, isPlainObject
+  } = Vue.util
 
   // Test for IE10/11 textarea placeholder clone bug
   function checkTextareaCloneBug () {
-    if (_.inBrowser) {
+    if (inBrowser) {
       let t = document.createElement('textarea')
       t.placeholder = 't'
       return t.cloneNode(true).value === 't'
@@ -27,7 +30,7 @@ export default function (Vue) {
 
   Vue.directive('validate', {
     terminal: true,
-    priority: vIf.priority + 16,
+    priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
@@ -89,13 +92,18 @@ export default function (Vue) {
     update (value, old) {
       if (!value || this._invalid) { return }
 
-      if (_.isPlainObject(value)) {
+      if (isPlainObject(value)) {
         this.handleObject(value)
       } else if (Array.isArray(value)) {
         this.handleArray(value)
       }
 
-      this.validator.validate({ field: this.field, noopable: this._initialNoopValidation })
+      let options = { field: this.field, noopable: this._initialNoopValidation }
+      if (this.frag) {
+        options.el = this.frag.node
+      }
+      this.validator.validate(options)
+
       if (this._initialNoopValidation) {
         this._initialNoopValidation = null
       }
@@ -124,7 +132,7 @@ export default function (Vue) {
       const params = this.params
       let validator = this.validator = this.vm._validatorMaps[name]
 
-      this.field = _.camelize(this.arg ? this.arg : params.field)
+      this.field = camelize(this.arg ? this.arg : params.field)
 
       this.validation = validator.manageValidation(
         this.field, model, this.vm, this.frag.node, this._scope, filters,
@@ -132,9 +140,8 @@ export default function (Vue) {
         this.isDetectChange(params.detectChange)
       )
 
-      if (params.classes && typeof params.classes === 'object') {
-        this.validation.setValidationClasses(params.classes)
-      }
+      isPlainObject(params.classes)
+        && this.validation.setValidationClasses(params.classes)
 
       params.group
         && validator.addGroupValidation(params.group, this.field)
@@ -147,24 +154,24 @@ export default function (Vue) {
       const validation = this.validation
       const el = this.frag.node
 
-      this.onBlur = _.bind(validation.listener, validation)
-      _.on(el, 'blur', this.onBlur)
+      this.onBlur = bind(validation.listener, validation)
+      on(el, 'blur', this.onBlur)
       if ((el.type === 'radio' 
           || el.tagName === 'SELECT') && !model) {
-        this.onChange = _.bind(validation.listener, validation)
-        _.on(el, 'change', this.onChange)
+        this.onChange = bind(validation.listener, validation)
+        on(el, 'change', this.onChange)
       } else if (el.type === 'checkbox') {
         if (!model) {
-          this.onChange = _.bind(validation.listener, validation)
-          _.on(el, 'change', this.onChange)
+          this.onChange = bind(validation.listener, validation)
+          on(el, 'change', this.onChange)
         } else {
-          this.onClick = _.bind(validation.listener, validation)
-          _.on(el, 'click', this.onClick)
+          this.onClick = bind(validation.listener, validation)
+          on(el, 'click', this.onClick)
         }
       } else {
         if (!model) {
-          this.onInput = _.bind(validation.listener, validation)
-          _.on(el, 'input', this.onInput)
+          this.onInput = bind(validation.listener, validation)
+          on(el, 'input', this.onInput)
         }
       }
     },
@@ -173,22 +180,22 @@ export default function (Vue) {
       const el = this.frag.node
 
       if (this.onInput) {
-        _.off(el, 'input', this.onInput)
+        off(el, 'input', this.onInput)
         this.onInput = null
       }
 
       if (this.onClick) {
-        _.off(el, 'click', this.onClick)
+        off(el, 'click', this.onClick)
         this.onClick = null
       }
 
       if (this.onChange) {
-        _.off(el, 'change', this.onChange)
+        off(el, 'change', this.onChange)
         this.onChange = null
       }
 
       if (this.onBlur) {
-        _.off(el, 'blur', this.onBlur)
+        off(el, 'blur', this.onBlur)
         this.onBlur = null
       }
     },
@@ -209,8 +216,8 @@ export default function (Vue) {
     },
 
     setupFragment () {
-      this.anchor = _.createAnchor('v-validate')
-      _.replace(this.el, this.anchor)
+      this.anchor = createAnchor('v-validate')
+      replace(this.el, this.anchor)
 
       this.factory = new FragmentFactory(this.vm, this.shimNode(this.el))
       this.frag = this.factory.create(this._host, this._scope, this._frag)
@@ -224,7 +231,7 @@ export default function (Vue) {
         this.factory = null
       }
 
-      _.replace(this.anchor, this.el)
+      replace(this.anchor, this.el)
       this.anchor = null
     },
 
@@ -236,7 +243,7 @@ export default function (Vue) {
 
     handleObject (value) {
       each(value, (val, key) => {
-        if (_.isPlainObject(val)) {
+        if (isPlainObject(val)) {
           if ('rule' in val) {
             let msg = 'message' in val ? val.message : null
             let initial = 'initial' in val ? val.initial : null

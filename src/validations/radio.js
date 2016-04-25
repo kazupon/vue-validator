@@ -1,3 +1,4 @@
+import { VALIDATE_UPDATE } from '../const'
 import { each } from '../util'
 import BaseValidation from './base'
 
@@ -17,6 +18,7 @@ export default class RadioValidation extends BaseValidation {
   manageElement (el) {
     const scope = this._getScope()
     let item = this._addItem(el)
+
     const model = item.model = this._model
     if (model) {
       let value = this._evalModel(model, this._filters)
@@ -30,7 +32,11 @@ export default class RadioValidation extends BaseValidation {
         }
       })
     } else {
-      this._validator.validate({ field: this.field })
+      let options = { field: this.field }
+      if (this._checkActiveIds(el)) {
+        options.el = el
+      }
+      this._validator.validate(options)
     }
   }
 
@@ -62,18 +68,29 @@ export default class RadioValidation extends BaseValidation {
     })
   }
 
-  updateClasses (results) {
-    each(this._inits, (item, index) => {
-      this._updateClasses(item.el, results)
-    })
+  updateClasses (results, el = null) {
+    if (el) { // for validation active classes
+      this._updateClasses(el, results)
+    } else {
+      each(this._inits, (item, index) => {
+        this._updateClasses(item.el, results)
+      })
+    }
   }
 
   _addItem (el) {
-    const item = {
+    let item = {
       el: el,
       init: el.checked,
       value: el.value
     }
+
+    const activeIds = el.getAttribute(VALIDATE_UPDATE)
+    if (activeIds) {
+      el.removeAttribute(VALIDATE_UPDATE)
+      item.activeIds = activeIds.split(',')
+    }
+
     this._inits.push(item)
     return item
   }
@@ -99,6 +116,16 @@ export default class RadioValidation extends BaseValidation {
     }
   }
 
+  _getActiveIds (el) {
+    let activeIds
+    each(this._inits, (item, index) => {
+      if (item.el === el) {
+        activeIds = item.activeIds
+      }
+    })
+    return activeIds
+  }
+
   _checkModified (target) {
     if (this._inits.length === 0) {
       return this._init !== target.checked
@@ -111,5 +138,9 @@ export default class RadioValidation extends BaseValidation {
       })
       return modified
     }
+  }
+
+  _checkActiveIds (el) {
+    return this._getActiveIds(el)
   }
 }

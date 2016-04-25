@@ -1,3 +1,4 @@
+import { VALIDATE_UPDATE } from '../const'
 import util, { empty, each, trigger, isPromise, toggleClasses } from '../util'
 
 
@@ -40,6 +41,13 @@ export default class BaseValidation {
   manageElement (el) {
     const scope = this._getScope()
     const model = this._model
+
+    const activeIds = el.getAttribute(VALIDATE_UPDATE)
+    if (activeIds) {
+      el.removeAttribute(VALIDATE_UPDATE)
+      this._activeIds = activeIds.split(',')
+    }
+
     if (model) {
       el.value = this._evalModel(model, this._filters)
       this._unwatch = scope.$watch(model, (val, old) => {
@@ -122,10 +130,10 @@ export default class BaseValidation {
     this.willUpdateDirty(el)
     this.willUpdateModified(el)
 
-    this._validator.validate({ field: this.field })
+    this._validator.validate({ field: this.field, el: el })
   }
 
-  validate (cb, noopable = false) {
+  validate (cb, noopable = false, el = null) {
     const _ = util.Vue.util
 
     let results = {}
@@ -207,7 +215,7 @@ export default class BaseValidation {
       }
       _.extend(results, props)
 
-      this.updateClasses(results)
+      this.willUpdateClasses(results, el)
 
       cb(results)
     })
@@ -230,8 +238,19 @@ export default class BaseValidation {
     this._init = this._getValue(this._el)
   }
 
-  updateClasses (results) {
-    this._updateClasses(this._el, results)
+  willUpdateClasses (results, el = null) {
+    if (this._checkActiveIds(el)) {
+      const activeIds = this._getActiveIds(el)
+      this.vm.$nextTick(() => {
+        this.vm.$emit(VALIDATE_UPDATE, activeIds, this, results)
+      })
+    } else {
+      this.updateClasses(results)
+    }
+  }
+
+  updateClasses (results, el = null) {
+    this._updateClasses(el || this._el, results)
   }
 
   guardValidate (el, type) {
@@ -262,8 +281,16 @@ export default class BaseValidation {
     return this._forScope || this._vm
   }
 
+  _getActiveIds (el) {
+    return this._activeIds
+  }
+
   _checkModified (target) {
     return this._init !== this._getValue(target)
+  }
+
+  _checkActiveIds (el) {
+    return this._activeIds
   }
 
   _fireEvent (el, type, args) {
