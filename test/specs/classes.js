@@ -87,30 +87,34 @@ describe('validation classes', () => {
       checkbox1.checked = true
       trigger(checkbox1, 'change')
       trigger(checkbox1, 'blur')
-      each(checkboxClasses, (cls, index) => {
-        assert(!cls.has('valid'))
-        assert(cls.has('invalid'))
-        assert(cls.has('touched'))
-        assert(!cls.has('untouched'))
-        assert(!cls.has('pristine'))
-        assert(cls.has('dirty'))
-        assert(cls.has('modified'))
-      })
+      vm.$nextTick(() => {
+        each(checkboxClasses, (cls, index) => {
+          assert(!cls.has('valid'))
+          assert(cls.has('invalid'))
+          assert(cls.has('touched'))
+          assert(!cls.has('untouched'))
+          assert(!cls.has('pristine'))
+          assert(cls.has('dirty'))
+          assert(cls.has('modified'))
+        })
 
-      checkbox2.checked = true
-      trigger(checkbox2, 'change')
-      trigger(checkbox2, 'blur')
-      each(checkboxClasses, (cls, index) => {
-        assert(cls.has('valid'))
-        assert(!cls.has('invalid'))
-        assert(cls.has('touched'))
-        assert(!cls.has('untouched'))
-        assert(!cls.has('pristine'))
-        assert(cls.has('dirty'))
-        assert(cls.has('modified'))
-      })
+        checkbox2.checked = true
+        trigger(checkbox2, 'change')
+        trigger(checkbox2, 'blur')
+        vm.$nextTick(() => {
+          each(checkboxClasses, (cls, index) => {
+            assert(cls.has('valid'))
+            assert(!cls.has('invalid'))
+            assert(cls.has('touched'))
+            assert(!cls.has('untouched'))
+            assert(!cls.has('pristine'))
+            assert(cls.has('dirty'))
+            assert(cls.has('modified'))
+          })
 
-      done()
+          done()
+        })
+      })
     })
   })
 
@@ -137,7 +141,7 @@ describe('validation classes', () => {
       vm.$nextTick(done)
     })
 
-    it('should be validated', (done) => {
+    it('should be added', (done) => {
       let radio1 = el.getElementsByTagName('input')[0]
       let radio2 = el.getElementsByTagName('input')[1]
       let radio3 = el.getElementsByTagName('input')[2]
