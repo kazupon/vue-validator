@@ -36,7 +36,7 @@ new Vue({
 ## Local registration
 You can register your custom validator to component with using `validators` option.
 
-Cursom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
+Custom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
 
 the below the `numeric` or `url`  custom validator exmpale:
 
