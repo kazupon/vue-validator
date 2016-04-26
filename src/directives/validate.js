@@ -70,6 +70,13 @@ export default function (Vue) {
         return
       }
 
+      if ((process.env.NODE_ENV !== 'production')
+          && !(this.arg || this.params.field)) {
+        warn('you need specify field name for v-validate directive.')
+        this._invalid = true
+        return
+      }
+
       let validatorName = this.vm.$options._validator
       if ((process.env.NODE_ENV !== 'production') && !validatorName) {
         warn('v-validate need to use into validator element directive: '
