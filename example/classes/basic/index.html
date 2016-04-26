@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>validation classes basic example</title>
+    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
+    <script src="../../../dist/vue-validator.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <validator name="validation1" @valid="onValidation" @invalid="onValidation">
+        <div class="username">
+          <label for="username">username:</label>
+          <input id="username" type="text" v-validate:username="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+          <span>{{usernameClasses}}</span>
+        </div>
+      </validator>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          usernameClasses: ''
+        },
+        ready: function () {
+          this._username = document.getElementById('username')
+          this.usernameClasses = this._username.className
+        },
+        methods: {
+          onValidation: function () {
+            if (this._username) {
+              this.usernameClasses = this._username.className
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
