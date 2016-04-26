@@ -1,4 +1,4 @@
-import { VALIDATE_UPDATE, PRIORITY_VALIDATE_ACTIVE, REGEX_VALIDATE_DIRECITVE } from '../const'
+import { VALIDATE_UPDATE, PRIORITY_VALIDATE_ACTIVE, REGEX_VALIDATE_DIRECTIVE } from '../const'
 
 
 let activeId = 0 // ID for validation active class
@@ -45,7 +45,7 @@ export default function (Vue) {
           let attrs = hasAttrs && toArray(element.attributes)
           for (let k = 0, l = attrs.length; k < l; k++) {
             let attr = attrs[k]
-            if (attr.name.match(REGEX_VALIDATE_DIRECITVE)) {
+            if (attr.name.match(REGEX_VALIDATE_DIRECTIVE)) {
               let existingId = element.getAttribute(VALIDATE_UPDATE)
               let value = existingId ? (existingId + ',' + id) : id
               element.setAttribute(VALIDATE_UPDATE, value)
