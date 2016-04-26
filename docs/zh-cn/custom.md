@@ -1,13 +1,11 @@
-# Custom validator
+# 自定义验证器
 
-## Global registration
-You can register your custom validator with using `Vue.validator` method. 
+## 全局注册
+可以使用 `Vue.validator` 方法注册自定义验证器。
 
-> **NOTE:** `Vue.validator` asset is extended from Vue.js' asset managment system.
+> **提示:** `Vue.validator` asset 继承自 Vue.js 的 asset 管理系统.
 
-Detail of the `Vue.validator` method.
-
-The below the `email` custom validator exmpale:
+通过下例中的 `email` 自定义验证器详细了解 `Vue.validator` 的使用方法：
 
 ```javascript
 // Register email validator function. 
@@ -33,12 +31,12 @@ new Vue({
 </div>
 ```
 
-## Local registration
-You can register your custom validator to component with using `validators` option.
+## 局部注册
+可以通过组件的 `validators` 选项注册只能在组件内使用的自定义验证器。
 
-Cursom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
+自定义验证器是通过在组件的 `validators` 下定义验证通过返回真不通过返回假的回调函数来实现。
 
-the below the `numeric` or `url`  custom validator exmpale:
+下例中注册了 `numeric` 和 `url` 两个自定义验证器：
 
 ```javascript
 new Vue({
@@ -74,9 +72,9 @@ new Vue({
 </div>
 ```
 
-## Error message
+## 错误消息
 
-Custom validators may have default error messages attached:
+可以为自定义验证器指定默认的错误消息：
 
 ```javascript
 // `email` custom validator global registration
