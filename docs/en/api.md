@@ -274,6 +274,7 @@
   - `detect-blur`
   - `detect-change`
   - `initial`
+  - `classes` (required with v-bind, object)
 
 - **Usage:**
 
@@ -302,6 +303,9 @@
 
   <!-- disable initial auto-validation -->
   <input type="text" initial="off" v-validate:message="['required']">
+
+  <!-- validation custom class -->
+  <input type="text" :name="{ valid: 'valid-custom-class' }" v-validate:username="['required']">
   ```
 
 - **See also:**
@@ -310,6 +314,28 @@
   - [Events](events.html)
   - [v-model integration](model.html)
   - [Validation timing customization](timing.html)
+  - [Validation classes](classes.html)
+
+### v-validate-class
+
+> 2.1+
+
+- **Does not expect expression**
+
+- **Limited to:** directive that expect `v-validate` used together
+
+- **Usage:**
+
+  Indicate automatically validation class insertion.
+
+- **Example:**
+
+  ```html
+  <fieldset v-validate-class>
+    <label for="username">username:</label>
+    <input id="username" type="text" v-validate:username="['required']">
+  </fieldset>
+  ```
 
 ## Special Elements
 
@@ -319,6 +345,7 @@
   - `name` (required)
   - `groups`
   - `lazy`
+  - `classes` (required with v-bind, object)
  
 - **Usage:**
 
@@ -356,6 +383,12 @@
     <span v-if="$validation.comment.maxlength">Too long comment !!</span>
     <button type="button" value="save" @click="onSave" v-if="valid">
   </validator>
+
+  <!-- validation custom class -->
+  <validator :classes="{ valid: 'valid-custom-class' }" name="validation">
+    <input type="text" v-validate:username="['required']">
+    <p v-if="$validation.invalid">invalid !!<p>
+  </validator>
   ```
 
 - **See also:**
@@ -364,6 +397,7 @@
   - [Lazy initialization](lazy.html)
   - [Validation timing customization](timing.html)
   - [Async validation](async.html)
+  - [Validation classes](classes.html)
 
 ### validator-errors
 
