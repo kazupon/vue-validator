@@ -1,5 +1,7 @@
 # Validation classes
 
+> 2.1+
+
 Sometimes, we need to be styling for each validation result to indicate the user interaction. vue-validator provide useful the auto classes insertion when was run the validation of formable elements. for example the below like the validation:
 
 ```html
