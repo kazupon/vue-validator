@@ -1,7 +1,7 @@
 import util, { warn } from './util'
 import Asset from './asset'
 import Override from './override'
-import ValidateActive from './directives/validate-active'
+import ValidateClass from './directives/validate-class'
 import Validate from './directives/validate'
 import Validator from './directives/validator'
 import Errors from './components/errors'
@@ -26,7 +26,7 @@ function plugin (Vue, options = {}) {
 
   Override(Vue)
   Validator(Vue)
-  ValidateActive(Vue)
+  ValidateClass(Vue)
   Validate(Vue)
 }
 

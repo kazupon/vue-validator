@@ -42,10 +42,10 @@ export default class BaseValidation {
     const scope = this._getScope()
     const model = this._model
 
-    const activeIds = el.getAttribute(VALIDATE_UPDATE)
-    if (activeIds) {
+    const classIds = el.getAttribute(VALIDATE_UPDATE)
+    if (classIds) {
       el.removeAttribute(VALIDATE_UPDATE)
-      this._activeIds = activeIds.split(',')
+      this._classIds = classIds.split(',')
     }
 
     if (model) {
@@ -239,10 +239,10 @@ export default class BaseValidation {
   }
 
   willUpdateClasses (results, el = null) {
-    if (this._checkActiveIds(el)) {
-      const activeIds = this._getActiveIds(el)
+    if (this._checkClassIds(el)) {
+      const classIds = this._getClassIds(el)
       this.vm.$nextTick(() => {
-        this.vm.$emit(VALIDATE_UPDATE, activeIds, this, results)
+        this.vm.$emit(VALIDATE_UPDATE, classIds, this, results)
       })
     } else {
       this.updateClasses(results)
@@ -281,16 +281,16 @@ export default class BaseValidation {
     return this._forScope || this._vm
   }
 
-  _getActiveIds (el) {
-    return this._activeIds
+  _getClassIds (el) {
+    return this._classIds
   }
 
   _checkModified (target) {
     return this._init !== this._getValue(target)
   }
 
-  _checkActiveIds (el) {
-    return this._activeIds
+  _checkClassIds (el) {
+    return this._getClassIds(el)
   }
 
   _fireEvent (el, type, args) {

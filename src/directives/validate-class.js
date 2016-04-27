@@ -1,7 +1,7 @@
-import { VALIDATE_UPDATE, PRIORITY_VALIDATE_ACTIVE, REGEX_VALIDATE_DIRECTIVE } from '../const'
+import { VALIDATE_UPDATE, PRIORITY_VALIDATE_CLASS, REGEX_VALIDATE_DIRECTIVE } from '../const'
 
 
-let activeId = 0 // ID for validation active class
+let classId = 0 // ID for validation class
 
 
 export default function (Vue) {
@@ -11,19 +11,19 @@ export default function (Vue) {
 
 
   /**
-   * `v-validate-active` directive
+   * `v-validate-class` directive
    */
 
-  Vue.directive('validate-active', {
+  Vue.directive('validate-class', {
     terminal: true,
-    priority: vIf.priority + PRIORITY_VALIDATE_ACTIVE,
+    priority: vIf.priority + PRIORITY_VALIDATE_CLASS,
 
     bind () {
-      const id = String(activeId++)
-      this.setActiveIds(this.el, id)
+      const id = String(classId++)
+      this.setClassIds(this.el, id)
 
-      this.vm.$on(VALIDATE_UPDATE, this.cb = (activeIds, validation, results) => {
-        if (activeIds.indexOf(id) > -1) {
+      this.vm.$on(VALIDATE_UPDATE, this.cb = (classIds, validation, results) => {
+        if (classIds.indexOf(id) > -1) {
           validation.updateClasses(results, this.frag.node)
         }
       })
@@ -36,7 +36,7 @@ export default function (Vue) {
       this.teardownFragment()
     },
 
-    setActiveIds (el, id) {
+    setClassIds (el, id) {
       let childNodes = toArray(el.childNodes)
       for (let i = 0, l = childNodes.length; i < l; i++) {
         let element = childNodes[i]
@@ -54,13 +54,13 @@ export default function (Vue) {
         }
 
         if (element.hasChildNodes()) {
-          this.setActiveIds(element, id)
+          this.setClassIds(element, id)
         }
       }
     },
 
     setupFragment () {
-      this.anchor = createAnchor('v-validate-active')
+      this.anchor = createAnchor('v-validate-class')
       replace(this.el, this.anchor)
 
       this.factory = new FragmentFactory(this.vm, this.el)

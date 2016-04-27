@@ -18,10 +18,10 @@ export default class SelectValidation extends BaseValidation {
     const scope = this._getScope()
     const model = this._model
 
-    const activeIds = el.getAttribute(VALIDATE_UPDATE)
-    if (activeIds) {
+    const classIds = el.getAttribute(VALIDATE_UPDATE)
+    if (classIds) {
       el.removeAttribute(VALIDATE_UPDATE)
-      this._activeIds = activeIds.split(',')
+      this._classIds = classIds.split(',')
     }
 
     if (model) {

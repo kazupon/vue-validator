@@ -48,7 +48,7 @@ export default class CheckboxValidation extends BaseValidation {
       }
     } else {
       let options = { field: this.field }
-      if (this._checkActiveIds(el)) {
+      if (this._checkClassIds(el)) {
         options.el = el
       }
       this._validator.validate(options)
@@ -89,7 +89,7 @@ export default class CheckboxValidation extends BaseValidation {
   }
 
   updateClasses (results, el = null) {
-    if (el) { // for validation active classes
+    if (el) { // for another element
       this._updateClasses(el, results)
     } else {
       each(this._inits, (item, index) => {
@@ -105,10 +105,10 @@ export default class CheckboxValidation extends BaseValidation {
       value: el.value
     }
 
-    const activeIds = el.getAttribute(VALIDATE_UPDATE)
-    if (activeIds) {
+    const classIds = el.getAttribute(VALIDATE_UPDATE)
+    if (classIds) {
       el.removeAttribute(VALIDATE_UPDATE)
-      item.activeIds = activeIds.split(',')
+      item.classIds = classIds.split(',')
     }
 
     this._inits.push(item)
@@ -136,14 +136,14 @@ export default class CheckboxValidation extends BaseValidation {
     }
   }
 
-  _getActiveIds (el) {
-    let activeIds
+  _getClassIds (el) {
+    let classIds
     each(this._inits, (item, index) => {
       if (item.el === el) {
-        activeIds = item.activeIds
+        classIds = item.classIds
       }
     })
-    return activeIds
+    return classIds
   }
 
   _checkModified (target) {
@@ -158,9 +158,5 @@ export default class CheckboxValidation extends BaseValidation {
       })
       return modified
     }
-  }
-
-  _checkActiveIds (el) {
-    return this._getActiveIds(el)
   }
 }
