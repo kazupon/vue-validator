@@ -14,9 +14,11 @@ export default class SelectValidation extends BaseValidation {
     this._multiple = this._el.hasAttribute('multiple')
   }
 
-  manageElement (el) {
+  manageElement (el, initial) {
     const scope = this._getScope()
     const model = this._model
+
+    this._initial = initial
 
     const classIds = el.getAttribute(VALIDATE_UPDATE)
     if (classIds) {
@@ -35,7 +37,11 @@ export default class SelectValidation extends BaseValidation {
           if (this.guardValidate(el, 'change')) {
             return
           }
-          this.handleValidate(el)
+
+          this.handleValidate(el, this._initial)
+          if (this._initial) {
+            this._initial = null
+          }
         }
       })
     }

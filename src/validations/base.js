@@ -38,9 +38,11 @@ export default class BaseValidation {
   get detectBlur () { return this._detectBlur }
   set detectBlur (val) { this._detectBlur = val }
 
-  manageElement (el) {
+  manageElement (el, initial) {
     const scope = this._getScope()
     const model = this._model
+
+    this._initial = initial
 
     const classIds = el.getAttribute(VALIDATE_UPDATE)
     if (classIds) {
@@ -55,7 +57,11 @@ export default class BaseValidation {
           if (this.guardValidate(el, 'input')) {
             return
           }
-          this.handleValidate(el)
+
+          this.handleValidate(el, this._initial)
+          if (this._initial) {
+            this._initial = null
+          }
         }
       }, { deep: true })
     }
@@ -122,15 +128,15 @@ export default class BaseValidation {
       return
     }
 
-    this.handleValidate(e.target, e.type)
+    this.handleValidate(e.target, { type: e.type })
   }
 
-  handleValidate (el, type) {
+  handleValidate (el, { type = null, noopable = false } = {}) {
     this.willUpdateTouched(el, type)
     this.willUpdateDirty(el)
     this.willUpdateModified(el)
 
-    this._validator.validate({ field: this.field, el: el })
+    this._validator.validate({ field: this.field, el: el, noopable: noopable })
   }
 
   validate (cb, noopable = false, el = null) {

@@ -15,9 +15,9 @@ export default class RadioValidation extends BaseValidation {
     this._inits = []
   }
 
-  manageElement (el) {
+  manageElement (el, initial) {
     const scope = this._getScope()
-    let item = this._addItem(el)
+    let item = this._addItem(el, initial)
 
     const model = item.model = this._model
     if (model) {
@@ -28,11 +28,15 @@ export default class RadioValidation extends BaseValidation {
           if (this.guardValidate(item.el, 'change')) {
             return
           }
-          this.handleValidate(el)
+
+          this.handleValidate(el, { noopable: item.initial })
+          if (item.initial) {
+            item.initial = null
+          }
         }
       })
     } else {
-      let options = { field: this.field }
+      let options = { field: this.field, noopable: initial }
       if (this._checkClassIds(el)) {
         options.el = el
       }
@@ -79,11 +83,12 @@ export default class RadioValidation extends BaseValidation {
     }
   }
 
-  _addItem (el) {
+  _addItem (el, initial) {
     let item = {
       el: el,
       init: el.checked,
-      value: el.value
+      value: el.value,
+      initial: initial
     }
 
     const classIds = el.getAttribute(VALIDATE_UPDATE)

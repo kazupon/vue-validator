@@ -94,24 +94,24 @@ export default class Validator {
     return ret
   }
 
-  manageValidation (field, model, vm, el, scope, filters, detectBlur, detectChange) {
+  manageValidation (field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
     let validation = null
 
     if (el.tagName === 'SELECT') {
       validation = this._manageSelectValidation(
-        field, model, vm, el, scope, filters, detectBlur, detectChange
+        field, model, vm, el, scope, filters, initial, detectBlur, detectChange
       )
     } else if (el.type === 'checkbox') {
       validation = this._manageCheckboxValidation(
-        field, model, vm, el, scope, filters, detectBlur, detectChange
+        field, model, vm, el, scope, filters, initial, detectBlur, detectChange
       )
     } else if (el.type === 'radio') {
       validation = this._manageRadioValidation(
-        field, model, vm, el, scope, filters, detectBlur, detectChange
+        field, model, vm, el, scope, filters, initial, detectBlur, detectChange
       )
     } else {
       validation = this._manageBaseValidation(
-        field, model, vm, el, scope, filters, detectBlur, detectChange
+        field, model, vm, el, scope, filters, initial, detectBlur, detectChange
       )
     }
 
@@ -293,11 +293,11 @@ export default class Validator {
   }
 
 
-  _manageBaseValidation (field, model, vm, el, scope, filters, detectBlur, detectChange) {
+  _manageBaseValidation (field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
     let validation = this._validations[field] = new BaseValidation(
       field, model, vm, el, scope, this, filters, detectBlur, detectChange
     )
-    validation.manageElement(el)
+    validation.manageElement(el, initial)
     return validation
   }
 
@@ -311,7 +311,7 @@ export default class Validator {
     }
   }
 
-  _manageCheckboxValidation (field, model, vm, el, scope, filters, detectBlur, detectChange) {
+  _manageCheckboxValidation (field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
     let validationSet = this._checkboxValidations[field]
     if (!validationSet) {
       let validation = new CheckboxValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange)
@@ -320,7 +320,7 @@ export default class Validator {
     }
 
     validationSet.elements++
-    validationSet.validation.manageElement(el)
+    validationSet.validation.manageElement(el, initial)
     return validationSet.validation
   }
 
@@ -337,7 +337,7 @@ export default class Validator {
     }
   }
 
-  _manageRadioValidation (field, model, vm, el, scope, filters, detectBlur, detectChange) {
+  _manageRadioValidation (field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
     let validationSet = this._radioValidations[field]
     if (!validationSet) {
       let validation = new RadioValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange)
@@ -346,7 +346,7 @@ export default class Validator {
     }
 
     validationSet.elements++
-    validationSet.validation.manageElement(el)
+    validationSet.validation.manageElement(el, initial)
     return validationSet.validation
   }
 
@@ -363,11 +363,11 @@ export default class Validator {
     }
   }
 
-  _manageSelectValidation (field, model, vm, el, scope, filters, detectBlur, detectChange) {
+  _manageSelectValidation (field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
     let validation = this._validations[field] = new SelectValidation(
         field, model, vm, el, scope, this, filters, detectBlur, detectChange
     )
-    validation.manageElement(el)
+    validation.manageElement(el, initial)
     return validation
   }
 

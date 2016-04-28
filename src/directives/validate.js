@@ -142,7 +142,8 @@ export default function (Vue) {
       this.field = camelize(this.arg ? this.arg : params.field)
 
       this.validation = validator.manageValidation(
-        this.field, model, this.vm, this.frag.node, this._scope, filters,
+        this.field, model, this.vm, this.frag.node, 
+        this._scope, filters, params.initial,
         this.isDetectBlur(params.detectBlur), 
         this.isDetectChange(params.detectChange)
       )
