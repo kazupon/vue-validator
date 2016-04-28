@@ -53,8 +53,9 @@ export default class RadioValidation extends BaseValidation {
     this._validator.validate({ field: this.field })
   }
 
-  willUpdateFlags () {
+  willUpdateFlags (touched = false) {
     each(this._inits, (item, index) => {
+      touched && this.willUpdateTouched(item.el, 'blur')
       this.willUpdateDirty(item.el)
       this.willUpdateModified(item.el)
     })
