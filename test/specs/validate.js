@@ -63,7 +63,7 @@ describe('$validate', () => {
             assert(vm.$validator1.dirty === true)
             assert(vm.$validator1.modified === true)
             assert(vm.$validator1.touched === false)
-            
+
             done()
           })
         })
@@ -254,6 +254,22 @@ describe('$validate', () => {
         + '<form novalidate>'
         + '<input type="number" v-validate:field1="{ required: true, min: 0, max: 10 }">'
         + '<input type="text" value="hello" v-validate:field2="{ minlength: 4 }">'
+        + '<input type="checkbox" value="foo" v-validate:checkbox="{ required: true, minlength: 1 }">'
+        + '<input type="checkbox" value="bar" v-validate:checkbox>'
+        + '<input type="checkbox" value="buz" v-validate:checkbox>'
+        + '<fieldset>'
+        + '<label for="radio1">radio1</label>'
+        + '<input type="radio" id="radio1" name="r1" checked value="foo" v-validate:radio="{ required: true }">'
+        + '<label for="radio2">radio2</label>'
+        + '<input type="radio" id="radio2" name="r1" value="bar" v-validate:radio="{ required: true }">'
+        + '</fieldset>'
+        + '<select multiple v-validate:select="{ required: true, minlength: 2 }">'
+        + '<option value="en">english</option>'
+        + '<option value="ja">japanese</option>'
+        + '<option value="zh">chinese</option>'
+        + '<option value="fr">french</option>'
+        + '<option value="de">German</option>'
+        + '</select>'
         + '</form>'
         + '</validator>'
       vm = new Vue({ el: el })
@@ -349,6 +365,45 @@ describe('$validate', () => {
           assert(vm.$validator1.modified === true)
           assert(vm.$validator1.touched === true)
           
+          done()
+        })
+      })
+    })
+
+    describe('touched for all validatable elements', () => {
+      it('should be validated', (done) => {
+        assert(vm.$validator1.field1.touched === false)
+        assert(vm.$validator1.field2.touched === false)
+        assert(vm.$validator1.checkbox.touched === false)
+        assert(vm.$validator1.radio.touched === false)
+        assert(vm.$validator1.select.touched === false)
+        assert(vm.$validator1.touched === false)
+
+        vm.$nextTick(() => {
+          vm.$validate('field2')
+          vm.$validate('checkbox')
+          vm.$validate('radio')
+          vm.$validate('select')
+
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field2.touched === false)
+          assert(vm.$validator1.checkbox.touched === false)
+          assert(vm.$validator1.radio.touched === false)
+          assert(vm.$validator1.select.touched === false)
+          assert(vm.$validator1.touched === false)
+
+          vm.$validate('field2', true)
+          vm.$validate('checkbox', true)
+          vm.$validate('radio', true)
+          vm.$validate('select', true)
+
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field2.touched === true)
+          assert(vm.$validator1.checkbox.touched === true)
+          assert(vm.$validator1.radio.touched === true)
+          assert(vm.$validator1.select.touched === true)
+          assert(vm.$validator1.touched === true)
+
           done()
         })
       })
