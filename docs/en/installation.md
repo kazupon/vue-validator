@@ -26,6 +26,9 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
     $ npm run build
 
 When used in CommonJS, you must explicitly install the validator via `Vue.use()`:
+
+> :warning: if you are using `vue-router`, you must install with `Vue.use()` in advance of `router#start`.
+
 ```javascript
 var Vue = require('vue')
 var VueValidator = require('vue-validator')
