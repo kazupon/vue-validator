@@ -72,11 +72,11 @@ new Vue({
 
 You can be handled the event that has occured in the various top-level validation properties:
 
-- `valid`: occure when validation result of **top-level** became valid
-- `invalid`: occure when validation result of **top-level** became invalid
-- `touched`: occure when **top-level** detected `blur` at least once
-- `dirty`: occure when the value of **top-level** changed from initial value at least once
-- `modified`: occure when the value of **top-level** changed from initial value
+- `valid`: occurs when validation result of **top-level** became valid
+- `invalid`: occurs when validation result of **top-level** became invalid
+- `touched`: occurs when **top-level** detected `blur` at least once
+- `dirty`: occurs when the value of **top-level** changed from initial value at least once
+- `modified`: occurs when the value of **top-level** changed from initial value
 
 ```html
 <div id="app">
