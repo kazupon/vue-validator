@@ -1,3 +1,23 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/vuejs/vue-validator/compare/v2.0.2...v2.1.0) (2016-04-30)
+
+
+### Bug Fixes
+
+* **initial:** cannot work 'initial="off"' on the checkbox([0d705d8](https://github.com/vuejs/vue-validator/commit/0d705d8)), closes [#208](https://github.com/vuejs/vue-validator/issues/208)
+* **v-validate:** friendly error for field name missing ([#205](https://github.com/vuejs/vue-validator/issues/205)) by [@xjchengo](https://github.com/xjchengo)([35c01d3](https://github.com/vuejs/vue-validator/commit/35c01d3))
+
+
+### Features
+
+* **active:** add validation active classes([5a71499](https://github.com/vuejs/vue-validator/commit/5a71499))
+* **api:** fix $validate API when using touched ([#211](https://github.com/vuejs/vue-validator/issues/211)) by [@losadaem](https://github.com/losadaem)([68282d1](https://github.com/vuejs/vue-validator/commit/68282d1)), closes [(#211](https://github.com/(/issues/211)
+* **classes:** add custom validation classes([1d52746](https://github.com/vuejs/vue-validator/commit/1d52746))
+* **classes:** add validation classes([85fe201](https://github.com/vuejs/vue-validator/commit/85fe201))
+* **validator:** add classes params to validator element directive([6103e8d](https://github.com/vuejs/vue-validator/commit/6103e8d))
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/vuejs/vue-validator/compare/v2.0.1...v2.0.2) (2016-04-20)
 
