@@ -231,7 +231,7 @@
 
   - If no `field` argument, validate the all fields;
 
-  - If `touched` argument pass to `true`, `trouched` of validation result set `true`;
+  - If `touched` argument pass to `true`, `touched` of validation result set `true`;
 
 - **Example:**
 
