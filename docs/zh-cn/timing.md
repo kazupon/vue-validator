@@ -1,9 +1,9 @@
-# Validation timing customization
+# 自定义验证时机
 
-vue-validator validate automatically with `validator` element directive and `v-validate` directive. However, sometimes, we are disabling automatically validation, and there are times we want to validate manually.
+默认情况下，`vue-validator` 会根据 `validator` 和 `v-validate` 指令自动进行验证。然而有时候我们需要关闭自动验证，在有需要时手动触发验证。
 
 ## `initial`
-When vue-validator completed initial compilation, each `v-validate` directive automatically validate target element. if you don't hope that behavior, you can specify with `initial` attribute, or  `v-validate` syntax:
+当 `vue-validator` 完成初始编译后，会根据每一条 `v-validate` 指令自动进行验证。如果你不需要自动验证，可以通过 `initial` 属性或 `v-validate` 验证规则来关闭自动验证，如下所示：
 
 ```html
 <div id="app">
@@ -25,10 +25,10 @@ When vue-validator completed initial compilation, each `v-validate` directive au
 </div>
 ```
 
-This is useful, when you need to suppress the validation (like the server-side validation) with async validation feature (explain later).
+这在使用服务器端验证等异步验证方式时有用，具体可见后文例子。
 
 ## `detect-blur` and `detect-change`
-vue-validator validate automatically when detect DOM event (`input`, `blur`, `change`) in formalable elements (input, checkbox, select, etc).  In the case, use the `detect-change`, `detect-blur` attributes:
+`vue-validator` 会在检测到表单元素(input, checkbox, select 等)上的 DOM 事件(`input`, `blur`, `change`)时自动验证。此时，可以使用 `detect-change` 和 `detect-blur` 属性：
 
 ```html
 <div id="app">
