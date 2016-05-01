@@ -1,6 +1,6 @@
-# Async validation
+# 异步验证
 
-You can use the async validation. This is useful, when you need to use the server-side validation. the below the example:
+当在需要进行服务器端验证，可以使用异步验证，如下例：
 
 ```html
 <template>
@@ -75,28 +75,30 @@ export default {
 }
 ```
 
-## Async validation interfaces
-In async validation, You can use the two type interfaces:
+## 异步验证接口
 
-### 1. function
-You need to implement custom validator that return function have `function (resolve, reject)` like promise (future). The following, those argument of the function, you need to use according to validation result.
+在异步验证时，可以使用如下两类接口：
 
-- validation result
-  - successful: `resolve`
-  - failed: `reject`
+### 1. 函数
+
+需要实现一个返回签名为 `function (resolve, reject)` 如同 `promise` 一样的函数的自定义验证器。函数参数解释如下：
+
+- 验证结果
+  - 成功时: `resolve`
+  - 失败时: `reject`
 
 ### 2. promise
-As mentioned above, You need to implement custom validation that return a promise. you need to `resolve` or `reject` according to validation result.
+需要实现一个返回 `promise` 的自定义验证器。根据验证结果来 `resolve` 或 `reject`。
 
-## Using error message
-As mentioned above, when server-side validation error occured, you can use the server-side error message.
+## 使用错误消息
+如上例所示，在服务器端验证错误发生时，可以使用服务器端返回的错误消息。
 
 
-# Validator function context
-Validator function context is bind with Validation object. Validation object expose the some properties. These properties is useful when you need to implement specially validation.
+# 验证器函数 context
+验证器函数 context 是绑定到 Validation 对象上的。Validation 对象提供了一些属性，这些属性在实现特定的验证器时有用。
 
-## `vm` property
-Expose the vue instance of current validation.
+## `vm` 属性
+暴露了当前验证所在的 vue 实例。
 
 the following ES2015 example:
 ```javascript
@@ -120,8 +122,8 @@ new Vue({
 })
 ```
 
-## `el` property
-Expose the target DOM element of current validation. In the case, use [International Telephone Input](https://github.com/jackocnr/intl-tel-input) jQuery plugin example:
+## `el` 属性
+暴露了当前验证器的目标 DOM 元素。下面展示了结合 [International Telephone Input](https://github.com/jackocnr/intl-tel-input) jQuery 插件使用的例子：
 
 ```javascript
 new Vue({
