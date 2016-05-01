@@ -1,11 +1,9 @@
 import util, { empty, each, pull } from './util'
+import { REGEX_EVENT } from './const'
 import BaseValidation from './validations/base'
 import CheckboxValidation from './validations/checkbox'
 import RadioValidation from './validations/radio'
 import SelectValidation from './validations/select'
-
-
-const eventRE = /^v-on:|^@/
 
 
 /**
@@ -63,8 +61,8 @@ export default class Validator {
     const attrs = this._dir.el.attributes
     for (let i = 0, l = attrs.length; i < l; i++) {
       let event = attrs[i].name
-      if (eventRE.test(event)) {
-        event = event.replace(eventRE, '')
+      if (REGEX_EVENT.test(event)) {
+        event = event.replace(REGEX_EVENT, '')
         this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true)
       }
     }
