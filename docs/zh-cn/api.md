@@ -1,18 +1,18 @@
-# API Reference
+# API 手册
 
-## Global API
+## 全局 API
 
 ### Vue.validator( id, [definition] )
 
-- **Arguments:**
+- **参数:**
     - `{String} id`
     - `{Function | Object} [definition]`
-- **Return:**
+- **返回:**
     - validator definition function or object
 
-- **Usage:**
+- **用法:**
 
-  Register or retrieve a global validator.
+  注册或获取全局验证器。
 
   ```javascript
   /*
@@ -58,34 +58,34 @@
   })
   ```
 
-- **See also:**
-  - [Custom validator](custom.html)
+- **另见:**
+  - [自定义验证器](custom.html)
 
-## Constructor Options
+## 构造器选项
 
 ### validators
 
-- **Type:** `Object`
+- **类型:** `Object`
 
-- **Details:**
+- **详细:**
 
-  A validator definition object to be made available to the Vue instance only.
+  一个只对当前 Vue 实例可见的验证器定义对象。
 
-- **See also:**
+- **另见:**
   - [Vue.validator()](#vuevalidator-id-definition-)
 
-## Instance Meta Methods
+## 实例元方法
 
 ### $activateValidator()
 
-- **Arguments:**
-  Nothing
+- **参数:**
+  无
 
-- **Usage:**
+- **用法:**
 
-  Activate a validator that was delaying initialization with `lazy` attribute of `validator` element.
+  激活使用 `validator` 元素的 `lazy` 属性延迟初始化的验证器
 
-- **Example:**
+- **示例:**
 
   ```javascript
   Vue.component('comment', {
@@ -122,19 +122,19 @@
   })
   ```
   
-- **See also:**
-  - [Lazy initialization](lazy.html)
+- **另见:**
+  - [延迟初始化](lazy.html)
 
 ### $resetValidation( [cb] )
 
-- **Arguments:**
+- **参数:**
   - `{Function} [cb]`
 
-- **Usage:**
+- **用法:**
 
-  Reset the validation results.
+  重置验证结果。
 
-- **Example:**
+- **示例:**
 
   ```javascript
   new Vue({
@@ -149,34 +149,34 @@
   })
   ```
 
-- **See also:**
-  - [Reset validation results](reset.html)
+- **另见:**
+  - [重置验证结果](reset.html)
 
 ### $setValidationErrors( errors )
 
-- **Arguments:**
+- **参数:**
   - `Array<Object>` errors
     - `{String}` field
     - `{String}` message
     - `{String}` validator [optional]
 
-- **Argument: field**
+- **参数: field**
 
-  To detect as validation field error, you need to pass in `field` argument.
+  指定错误字段名。
 
-- **Argument: message**
+- **参数: message**
 
-  To output as validation error messsage, you need to pass in `message` argument.
+  指定错误消息。
 
-- **Argument: validator**
+- **参数: validator**
 
-  In order to detect where the validator error occurred, you pass in `validator` argument.
+  指定错误所在的验证器。
 
-- **Usage:**
+- **用法:**
 
-  Set the `errors` to validation result errors. This is useful when you want to set manually some errors of server-side validation.
+  用来设置验证错误结果。这在手动设置服务器端验证产生的错误时有用。
 
-- **Example:**
+- **示例:**
 
   ```javascript
   new Vue({
@@ -215,25 +215,26 @@
   })
   ```
 
-- **See also:**
-  - [Error messages](errors.html)
+- **另见:**
+  - [错误消息](errors.html)
 
 ### $validate( [field], [touched], [cb] )
 
-- **Arguments:**
+- **参数:**
   - `{String} [field]`
   - `{Boolean} [touched]`
   - `{Function} [cb]`
 
-- **Usage:**
+- **用法:**
 
   Validate the target formalable element fields. 
+  验证目标表单元素。
 
-  - If no `field` argument, validate the all fields;
+  - 如果未设置 `field` 参数，验证所有字段；
 
-  - If `touched` argument pass to `true`, `trouched` of validation result set `true`;
+  - 如果 `touched` 参数为 `true`，那么验证结果的 `touched` 值会被设置为 `true`；
 
-- **Example:**
+- **示例:**
 
   ```javascript
   new Vue({
@@ -259,14 +260,14 @@
   })
   ```
 
-- **See also:**
-  - [Validation timing customization](timing.html)
+- **另见:**
+  - [自定义验证时机](timing.html)
 
-## Directives
+## 指令
 
 ### v-validate
 
-- **Expects:** `Array | Object`
+- **类型:** `Array | Object`
 
 - **Param Attributes:**
   - `group`
@@ -275,11 +276,11 @@
   - `detect-change`
   - `initial`
 
-- **Usage:**
+- **用法:**
 
-  Validate form element. For detailed usage, the following the above examples.
+  自定需要验证的表单元素。可参见下面的示例。
 
-- **Example:**
+- **示例:**
 
   ```html
   <!-- array syntax -->
@@ -304,31 +305,31 @@
   <input type="text" initial="off" v-validate:message="['required']">
   ```
 
-- **See also:**
-  - [Validator syntax](syntax.html)
-  - [Grouping](grouping.html)
-  - [Events](events.html)
-  - [v-model integration](model.html)
-  - [Validation timing customization](timing.html)
+- **另见:**
+  - [验证器语法](syntax.html)
+  - [分组](grouping.html)
+  - [事件](events.html)
+  - [结合 v-model](model.html)
+  - [自定义验证时机](timing.html)
 
 ## Special Elements
 
 ### validator
 
-- **Attributes:**
+- **属性:**
   - `name` (required)
   - `groups`
   - `lazy`
  
-- **Usage:**
+- **用法:**
 
-  `<validator>` elements serve as validation in formable (input, select and textarea) elements. The `<validator>` element itself will be replaced.
+  `<validator>` 元素用来在表单元素(input, select, textarea等)上引入验证器。`<validator>` 元素本身会被替换。
 
-  The validation results keep to scope name prefixed with `$`, specified by the `name` attribute of the `<validator>` element.
+  验证结果会关联到验证器元素上，字段名是由 `validator` 元素的 `name` 属性值加 `$` 前缀组成。
   
-> :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
+> :小心: 验证器名称不要与 Vue.js 中的自带属性重复，如 `$event` 等。
 
-- **Example:**
+- **示例:**
 
   ```html
   <!-- basic -->
@@ -358,27 +359,27 @@
   </validator>
   ```
 
-- **See also:**
-  - [Validation result structure](structure.html)
-  - [Grouping](grouping.html)
-  - [Lazy initialization](lazy.html)
-  - [Validation timing customization](timing.html)
-  - [Async validation](async.html)
+- **另见:**
+  - [验证结果结构](structure.html)
+  - [分组](grouping.html)
+  - [延迟初始化](lazy.html)
+  - [自定义验证时机](timing.html)
+  - [异步验证](async.html)
 
 ### validator-errors
 
-- **Attributes:**
+- **属性:**
   - `validation` (required with v-bind)
   - `component`
   - `partial`
   - `group`
   - `field`
 
-- **Usage:**
+- **用法:**
 
-  `<validator-errors>` elements serve as outlets for validation error message template. The `<validator-errors>`element itself will be replaced with validator internal default template. If you are specified with `component` attribute or `partial` attribute, validation error message rendered it.
+  `<validator-errors>` 可以作为错误消息的出口。`<validator-errors>` 元素会被替换成默认的错误消息模板。可以通过 `component` 和 `partial` 属性来自定义错误消息的显示方式。
 
-- **Example:**
+- **示例:**
 
   ```html
   <!-- basic -->
@@ -426,5 +427,5 @@
   </validator>
   ```
 
-- **See also:**
-  - [Error messages](errors.html)
+- **另见:**
+  - [错误](errors.html)
