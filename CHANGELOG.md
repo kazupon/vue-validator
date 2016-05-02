@@ -1,7 +1,7 @@
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/vuejs/vue-validator/compare/v2.1.0...v2.1.1) (2016-05-02)
 
-### :star: Bug Fixes
+### :bug: Bug Fixes
 
 * **timing:** fix the initiali timing when use v-model integration ([0579685](https://github.com/vuejs/vue-validator/commit/0579685)), closes [#214](https://github.com/vuejs/vue-validator/issues/214)
 
