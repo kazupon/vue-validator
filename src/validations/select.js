@@ -38,7 +38,7 @@ export default class SelectValidation extends BaseValidation {
             return
           }
 
-          this.handleValidate(el, this._initial)
+          this.handleValidate(el, { noopable: this._initial })
           if (this._initial) {
             this._initial = null
           }
