@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.0
+ * vue-validator v2.1.1
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -433,6 +433,7 @@ var validators = Object.freeze({
   var PRIORITY_VALIDATE_CLASS = 32;
   var REGEX_FILTER = /[^|]\|[^|]/;
   var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
+  var REGEX_EVENT = /^v-on:|^@/;
 
   var classId = 0; // ID for validation class
 
@@ -837,7 +838,7 @@ var validators = Object.freeze({
               return;
             }
 
-            _this.handleValidate(el, _this._initial);
+            _this.handleValidate(el, { noopable: _this._initial });
             if (_this._initial) {
               _this._initial = null;
             }
@@ -1746,7 +1747,7 @@ var validators = Object.freeze({
               return;
             }
 
-            _this2.handleValidate(el, _this2._initial);
+            _this2.handleValidate(el, { noopable: _this2._initial });
             if (_this2._initial) {
               _this2._initial = null;
             }
@@ -1800,8 +1801,6 @@ var validators = Object.freeze({
 
     return SelectValidation;
   }(BaseValidation);
-
-  var eventRE = /^v-on:|^@/;
 
   /**
    * Validator class
@@ -1861,8 +1860,8 @@ var validators = Object.freeze({
       var attrs = this._dir.el.attributes;
       for (var i = 0, l = attrs.length; i < l; i++) {
         var event = attrs[i].name;
-        if (eventRE.test(event)) {
-          event = event.replace(eventRE, '');
+        if (REGEX_EVENT.test(event)) {
+          event = event.replace(REGEX_EVENT, '');
           this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true);
         }
       }
@@ -2592,7 +2591,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.1.0';
+  plugin.version = '2.1.1';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
