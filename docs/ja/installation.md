@@ -1,8 +1,8 @@
-# Installation
+# インストール
 
-## Direct Download
+## 直接ダウンロード
 
-See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note the dist files are always the latest stable - it's not update-to-date with the dev branch source.
+[dist フォルダ](https://github.com/vuejs/vue-validator/tree/dev/dist)を参照してください。dist フォルダにあるファイルは常に最新の安定版であることに注意してください。 - `dev` ブランチのソースは最新ではありません。
 
 ## CDN
 
@@ -14,20 +14,20 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 
 ## NPM
 
-### stable version
+### 安定版
 
     $ npm install vue-validator
 
-### development version
+### 開発版
 
     $ git clone https://github.com/vuejs/vue-validator.git node_modules/vue-validator
     $ cd node_modules/vue-validator
     $ npm install
     $ npm run build
 
-When used in CommonJS, you must explicitly install the validator via `Vue.use()`:
+CommonJS で使用されるとき、明示的に `Vue.use()` 経由でバリデーターをインストールしなければなりません:
 
-> :warning: if you are using `vue-router`, you must install with `Vue.use()` in advance of `router#start`.
+> :warning: もし `vue-router` を使用している場合は、 `router#start` の前に `Vue.use()` でインストールしなければなりません。
 
 ```javascript
 var Vue = require('vue')
@@ -36,4 +36,4 @@ var VueValidator = require('vue-validator')
 Vue.use(VueValidator)
 ```
 
-You don't need to do this when using the standalone build, as it installs itself automatically.
+スタンドアロンビルドを使用しているときは、それ自身自動的にインストールされるため、これを実行する必要はありません。
