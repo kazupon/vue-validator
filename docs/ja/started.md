@@ -1,4 +1,4 @@
-# Getting started
+# はじめに
 
 ```javascript
 new Vue({
@@ -6,7 +6,7 @@ new Vue({
 })
 ```
 
-We can use the `validator` element directive and `v-validate` directive, as follows:
+次の通り、私達は `validator` エレメントディレクティブ と `v-validate` ディレクティブを使用することができます。:
 
 ```html
 <div id="app">
@@ -29,6 +29,6 @@ We can use the `validator` element directive and `v-validate` directive, as foll
   </validator>
 ```
 
-The validation results are scoped to the validator element. In above case, the validation results keep to `$validation1` scope (prefixed with `$`), specified by the `name` attribute of the `validator` element.
+バリデーション結果はバリデーターエレメントにスコープされます。先ほどの例では、バリデーション結果は `validator` エレメントの `name` 属性で指定された `$validation1` スコープ ( 接頭辞 `$` で始まる ) に保持されます。
 
-> :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
+> :warning: もし `$event` のように vue.js で既に使用されたバリデーター名を指定すると、動作しないかもしれません。 

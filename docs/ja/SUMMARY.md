@@ -5,7 +5,7 @@
 **[CHANGELOG](https://github.com/vuejs/vue-validator/blob/dev/CHANGELOG.md)**
 
 - [インストール](installation.md)
-- [Getting started](started.md)
+- [はじめに](started.md)
 - [Validation result structure](structure.md)
 - [Validator syntax](syntax.md)
 - [v-model integration](model.md)
