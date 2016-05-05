@@ -27,7 +27,7 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 
 When used in CommonJS, you must explicitly install the validator via `Vue.use()`:
 
-> :warning: if you are using `vue-router`, you must install with `Vue.use()` in advance of `router#start`.
+> :warning: if you are using `vue-router`, you must install with `Vue.use()` in advance of instance methods (`router#map`, `router#start`, ...etc).
 
 ```javascript
 var Vue = require('vue')
