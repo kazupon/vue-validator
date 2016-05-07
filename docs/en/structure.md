@@ -76,8 +76,8 @@ The various top-level properties are in the validation scope, and each field val
 ## Top level validation properties
 - `valid`: whether **all** fields is valid. if so, then return `true`, else return `false`.
 - `invalid`: if invalid field exist even **one** in validate fields, return `true`, else `false`.
-- `touched`: whether **all** fields is touched, if so, return `true`, else `false`.
-- `untouched`: if untouched field exist even **one** in validate fields, return `true`, else `false`.
+- `touched`: if touched field exist **one** in validate fields, return `true`, else `false`.
+- `untouched`: whether **all** fields is untouched, if so, return `true`, else `false`.
 - `modified`: if modified field exist even **one** in validate fields, return `true`, else `false`.
 - `dirty`: if dirty field exist even **one** in validate fields, return `true`, else `false`.
 - `pristine`: whether **all** fields is pristine, if so, return `true`, else `false`.
