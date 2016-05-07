@@ -9,7 +9,7 @@
 - [バリデーション結果構造](structure.md)
 - [バリデーター文法](syntax.md)
 - [v-model インテグレーション](model.md)
-- [Reset validation results](reset.md)
+- [バリデーション結果の初期化](reset.md)
 - [Form validatable elements](elements.md)
 - [Validation classses](classes.md)
 - [Grouping](grouping.md)

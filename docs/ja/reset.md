@@ -1,6 +1,6 @@
-# Reset validation results
+# バリデーション結果の初期化
 
-You can reset the validation results with `$resetValidation()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
+バリデーション結果はバリデーターの Vue インスタンスのメソッドに動的に定義された `$resetValidation()` で初期化できます。下記に例を示します:
 
 ```html
 <div id="app">
