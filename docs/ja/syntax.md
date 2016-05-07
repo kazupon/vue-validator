@@ -1,10 +1,10 @@
-# Validator syntax
-`v-validate` directive syntax the below:
+# バリデーター文法
+`v-validate` ディレクティブの文法は以下です:
 
     v-validate[:field]="array literal | object literal | binding"
 
-## Field
-In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. In 2.0-alpha and later, use the `v-validate` directive instead.
+## フィールド
+vue-validator の 2.0-alpha 以前のバージョンでは、バリデーションは `v-model` に依存していました。 2.0-alpha 以降では `v-validate` ディレクティブを代わりに使います。
 
 ~v1.4.4:
 ```html
@@ -18,7 +18,7 @@ In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. I
 </form>
 ```
 
-v2.0-alpha later:
+v2.0-alpha以降:
 ```html
 <validator name="validation">
   <form novalidate>
@@ -32,8 +32,8 @@ v2.0-alpha later:
 </validator>
 ```
 
-### Camel-case property
-As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case for `v-validate` models:
+### キャメルケースプロパティ
+[Vue.js](https://jp.vuejs.org/guide/components.html#キャメルケース-対-ケバブケース) と同様に、ケバブケース( kebab-case : ハイフンで句切られた)を `v-validate` モデルに使用できます:
 
 ```html
 <validator name="validation">
@@ -46,10 +46,10 @@ As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-c
 </validator>
 ```
 
-### Attribute
-You can specify the field name to `field` params attribute. This is useful when you need to define the validatable form elements dynamically:
+### 属性
+あなたはフィールド名を `field` パラメーター属性で指定することができます。 これはあなたがバリデーション可能なフォーム要素を動的に定義する際に便利です:
 
-> NOTE: the field part of `v-validate` is optional, when you use `field` params attribute
+> 注: `field` パラメーター属性を利用する場合は、フィールド部分の `v-validate` は任意です。
 
 ```html
 <div id="app">
@@ -87,10 +87,10 @@ new Vue({
 ```
 
 
-## Literal
+## リテラル
 
-### Array
-The below example uses an array literal:
+### 配列
+下記の例では配列リテラルを使用しています:
 
 ```html
 <validator name="validation">
@@ -103,11 +103,11 @@ The below example uses an array literal:
 </validator>
 ```
 
-Since `required` doesn't need to specify any additional rules, this syntax is preferred.
+`required` で追加のルールを指定する必要が無いので、この文法は望ましいです。
 
 
-### Object
-The below example uses an object literal:
+### オブジェクト
+下記の例ではオブジェクトリテラルを使用しています:
 
 ```html
 <validator name="validation">
@@ -123,8 +123,9 @@ The below example uses an object literal:
 ```
 
 Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
+オブジェクトリテラルはルールを与えることができます。上記で示すように、 `required` にはルールが必要なく、 **ダミールール**を代わりに指定することができます。
 
-Alternatively, you can specify a strict object as follows:
+代わりに、次の通り厳格なオブジェクトを指定することができます:
 
 ```html
 <validator name="validation">
@@ -137,8 +138,8 @@ Alternatively, you can specify a strict object as follows:
   </form>
 ```
 
-## Binding
-The below example uses live binding:
+## バインディング
+下記の例はライブバインディングを使用しています:
 
 ```javascript
 new Vue({
@@ -166,12 +167,12 @@ new Vue({
 </div>
 ```
 
-You can also use computed properties or methods to retrieve rule sets, instead of a set data property.
+data プロパティの代わりに算出プロパティやメソッドもルールセットを取得するために使用することができます。
 
-## Using Terminal Directive Caveats
-Note that if you need to use terminal directive like `v-if` and `v-for`, you should be wrapped the validatable target element with the non-visiblity tag like `<template>` tag, because when used together with these terminal directive, `v-validate` directive does not work.
+## ターミナルディレクティブを使用する際の注意事項
+`v-if` と `v-for` のようなターミナルディレクティブを使う必要がある場合は、 `<template>` のような不可視タグでバリデートする対象エレメントでラップする必要がありますので注意してください。なぜならこれらのターミナルディレクティブを一緒に使うと、 `v-validate` ディレクティブが動作しません。
 
-The below example using `<div>` tag:
+下記の例は `<div>` タグを使用しています:
 
 ```javascript
 new Vue({

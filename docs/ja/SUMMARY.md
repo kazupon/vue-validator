@@ -7,7 +7,7 @@
 - [インストール](installation.md)
 - [はじめに](started.md)
 - [バリデーション結果構造](structure.md)
-- [Validator syntax](syntax.md)
+- [バリデーター文法](syntax.md)
 - [v-model integration](model.md)
 - [Reset validation results](reset.md)
 - [Form validatable elements](elements.md)
