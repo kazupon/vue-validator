@@ -122,10 +122,9 @@ new Vue({
 </validator>
 ```
 
-Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
 オブジェクトリテラルはルールを与えることができます。上記で示すように、 `required` にはルールが必要なく、 **ダミールール**を代わりに指定することができます。
 
-代わりに、次の通り厳格なオブジェクトを指定することができます:
+あるいは、次の通り厳格なオブジェクトを指定することができます:
 
 ```html
 <validator name="validation">
