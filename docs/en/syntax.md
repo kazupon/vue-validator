@@ -33,7 +33,7 @@ v2.0-alpha later:
 ```
 
 ### Camel-case property
-As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase_vs-_kebab-case), you can use the kebab-case for `v-validate` models:
+As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase-vs-kebab-case), you can use the kebab-case for `v-validate` models:
 
 ```html
 <validator name="validation">
