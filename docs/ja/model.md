@@ -1,5 +1,6 @@
-# v-model integration
-You can validate the field that updated with v-model:
+# v-model インテグレーション
+あなたは v-model で更新されたフィールドのバリデートができます:
+
 
 ```html
 <div id="app">

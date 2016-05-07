@@ -8,7 +8,7 @@
 - [はじめに](started.md)
 - [バリデーション結果構造](structure.md)
 - [バリデーター文法](syntax.md)
-- [v-model integration](model.md)
+- [v-model インテグレーション](model.md)
 - [Reset validation results](reset.md)
 - [Form validatable elements](elements.md)
 - [Validation classses](classes.md)
