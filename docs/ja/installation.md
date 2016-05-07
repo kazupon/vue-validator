@@ -27,7 +27,7 @@
 
 CommonJS で使用されるとき、明示的に `Vue.use()` 経由でバリデーターをインストールしなければなりません:
 
-> :warning: もし `vue-router` を使用している場合は、 `router#start` の前に `Vue.use()` でインストールしなければなりません。
+> :warning: もし `vue-router` を使用している場合は、 インスタンスメソッド (`router#map`, `router#start`, ...等) の前に `Vue.use()` でインストールしなければなりません。
 
 ```javascript
 var Vue = require('vue')
