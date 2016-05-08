@@ -1,8 +1,8 @@
-# Validation classes
+# バリデーションクラス
 
-> 2.1+
+>Validation classes 2.1+
 
-Sometimes, we need to be styling for each validation result to indicate the user interaction. vue-validator provide useful the auto classes insertion when was run the validation of formable elements. for example the below like the validation:
+時々、私達はユーザーインタラクションを表示するためバリデーション結果それぞれにスタイルを当てる必要があります。 vue-validator は フォーム要素のバリデーションが実行された時に、便利なクラス名自動挿入を提供します。例として下記のようなバリデーションです:
 
 ```html
 <input id="username" type="text" v-validate:username="{
@@ -10,25 +10,25 @@ Sometimes, we need to be styling for each validation result to indicate the user
 }">
 ```
 
-output the below below like the HTML:
+下記のようなHTMLを出力します:
 
 ```html
 <input id="username" type="text" class="invalid untouched pristine">
 ```
 
-## List of validation classes
-| validation type | class name (default) | description |
+## バリデーションクラス一覧
+| バリデーション種別 | クラス名 (default) | 説明|
 |:---:|---|---|
-| `valid` | `valid` | when target element became **valid** |
-| `invalid` | `invalid` | when target element became **invalid** |
-| `touched` | `touched` | when **touched** target element |
-| `undefined` | `untouched` | when still  **not be touching** target element |
-| `pristine` | `pristine` | when still **not be dirty** field of target element |
-| `dirty` | `dirty` | when **be dirty** field of target element |
-| `modified` | `modified` | when **be modified** field of target element |
+| `valid` | `valid` | 対象要素が**有効**になった時 |
+| `invalid` | `invalid` | 対象要素が**無効**になった時 |
+| `touched` | `touched` | 対象要素が**タッチされた**時 |
+| `undefined` | `untouched` | 対象要素が**一度もタッチされていない**時 |
+| `pristine` | `pristine` | 対象要素のフィールドが**一度も変更されていない**時 |
+| `dirty` | `dirty` | 対象要素のフィールドが**一度でも変更された**時 |
+| `modified` | `modified` | 対象要素のフィールドが **変更された**時 |
 
-## Applying validation custom classes
-You can configure the class name if default classs name is inconvenient as the above with the class name. You need to use the `classes` attributes in order to configure custom class names. e.g:
+## バリデーションのカスタムクラス名の適用 
+もし上に示すデフォルトのクラス名が不便な場合は、クラス名を設定することができます。 カスタムクラス名を設定するためには `classes` 属性を使用する必要があります。例:
 
 ```html
 <validator name="validation1" 
@@ -41,11 +41,12 @@ You can configure the class name if default classs name is inconvenient as the a
 </validator>
 ```
 
-The `classes` attribute need to use at the target element which specified with `v-validate` or `validator` element directive, and need to specify the object value.
+`classes` 属性は `v-validate` 又は `validator` エレメントディレクティブで指定された対象要素で使用する必要があり、オブジェクト値を指定する必要があります。 
 
-## Applying validation classes to another element
+## 別要素へのバリデーションクラスの適用
 
-Normally, validation classes is insert to the element that was validated with `v-validate` directive. However, sometimes, we need to insert the wrapped element rather than the elements. In that case , we can realize by indicating the `v-validate-class` to that element. the below example:
+普通は、 `v-validate` ディレクティブ でバリデートされた要素にバリデーションクラスが挿入されます。しかしながら、時々私達はラップされた要素に挿入する必要があります。そのような場合は、 `v-validate-class` をラップされた要素に指定することで実現できます。下記が例です:
+
 
 ```html
 <validator name="validation1" 
@@ -61,7 +62,7 @@ Normally, validation classes is insert to the element that was validated with `v
 </validator>
 ```
 
-output the below below like the HTML:
+下記のようなHTMLを出力します:
 
 ```html
 <div class="username invalid-username untouched pristine">

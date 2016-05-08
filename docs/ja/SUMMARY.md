@@ -11,7 +11,7 @@
 - [v-model インテグレーション](model.md)
 - [バリデーション結果の初期化](reset.md)
 - [バリデーション可能なフォーム要素](elements.md)
-- [Validation classses](classes.md)
+- [バリデーションクラス](classes.md)
 - [Grouping](grouping.md)
 - [Error messages](errors.md)
 - [Events](events.md)
