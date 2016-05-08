@@ -1,8 +1,8 @@
-# Form validatable elements
+# バリデーション可能なフォーム要素
 
-## Checkbox
+## チェックボックス
 
-Checkbox validation supports:
+チェックボックスのバリデーションに対応:
 
 ```html
 <div id="app">
@@ -51,9 +51,9 @@ new Vue({
 })
 ```
 
-## Radio button
+## ラジオボタン
 
-Radio button validation supports:
+ラジオボタンのバリデーションに対応:
 
 ```html
 <div id="app">
@@ -95,9 +95,9 @@ new Vue({
 ```
 
 
-## Selectbox
+## セレクトボックス
 
-Selectbox validation supports:
+セレクトボックスのバリデーションに対応:
 
 ```html
 <div id="app">
