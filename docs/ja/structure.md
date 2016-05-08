@@ -4,7 +4,7 @@
 
 ```
 {
-  // top-level validation properties
+  // トップレベルバリデーションプロパティ
   valid: true,
   invalid: false,
   touched: false,
@@ -18,14 +18,14 @@
     field: 'fieldX', validator: 'customValidator', message: 'invalid fieldX'
   }],
 
-  // field1 validation
+  // field1 バリデーション
   field1: {
-    required: false, // build-in validator, return `false` or `true`
-    email: true, // custom validator
-    url: 'invalid url format', // custom validator, if specify the error message in validation rule, set it
+    required: false, // ビルトインバリデーター、 `false` 又は `true` 返します
+    email: true, // カスタムバリデーター
+    url: 'invalid url format', // カスタムバリデーター、 もしバリデーションルールの中でエラーメッセージを指定したい場合は設定してください
     ...
-    customValidator1: false, // custom validator
-    // field validation properties
+    customValidator1: false, // カスタムバリデーター
+    // フィールドバリデーションプロパティ
     valid: false,
     invalid: true,
     touched: false,
@@ -40,13 +40,13 @@
 
   ...
 
-  // fieldX validation
+  // fieldX バリデーション
   fieldX: {
-    min: false, // validator
+    min: false, // バリデーター
     ...
     customValidator: true,
 
-    // fieldX validation properties
+    // fieldX バリデーションプロパティ
     valid: false,
     invalid: true,
     touched: true,
