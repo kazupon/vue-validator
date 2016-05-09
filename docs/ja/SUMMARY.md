@@ -12,7 +12,7 @@
 - [バリデーション結果の初期化](reset.md)
 - [バリデーション可能なフォーム要素](elements.md)
 - [バリデーションクラス](classes.md)
-- [Grouping](grouping.md)
+- [グループ化](grouping.md)
 - [Error messages](errors.md)
 - [Events](events.md)
 - [Lazy initialization](lazy.md)

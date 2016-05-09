@@ -1,6 +1,6 @@
-# Grouping
+# グルーピング
 
-The vue binding syntax can group inputs together:
+vue バインディング文法は input をグループ化することができます:
 
 ```html
 <validator name="validation1" :groups="['user', 'password']">
