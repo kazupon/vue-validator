@@ -1,10 +1,10 @@
-# Validator syntax
-`v-validate` directive syntax the below:
+# 验证器语法
+`v-validate` 指令用法如下:
 
     v-validate[:field]="array literal | object literal | binding"
 
-## Field
-In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. In 2.0-alpha and later, use the `v-validate` directive instead.
+## 字段
+2.0-alpha以前的版本中，验证器是依赖于 `v-model` 的。从2.0-alpha版本开始，`v-model` 是可选的。
 
 ~v1.4.4:
 ```html
@@ -18,7 +18,7 @@ In vue-validator version 2.0-alpha or earlier, validation relied on `v-model`. I
 </form>
 ```
 
-v2.0-alpha later:
+v2.0-alpha后:
 ```html
 <validator name="validation">
   <form novalidate>
@@ -32,8 +32,8 @@ v2.0-alpha later:
 </validator>
 ```
 
-### Camel-case property
-As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase-vs-kebab-case), you can use the kebab-case for `v-validate` models:
+### Caml-case 属性
+同 [Vue.js](http://vuejs.org.cn/guide/components.html#camelCase-vs-kebab-case)一样, `v-validate` 指令中的字段名可以使用 kebab-case:
 
 ```html
 <validator name="validation">
@@ -46,10 +46,10 @@ As well as [Vue.js](http://vuejs.org/guide/components.html#camelCase-vs-kebab-ca
 </validator>
 ```
 
-### Attribute
-You can specify the field name to `field` params attribute. This is useful when you need to define the validatable form elements dynamically:
+### 属性
+可以通过 `field` 属性来指定字段名。这在动态定义包含验证功能的表单时有用：
 
-> NOTE: the field part of `v-validate` is optional, when you use `field` params attribute
+> 注意: 当使用 `field` 属性指定字段名时不需要在 `v-validate` 指令中再次指定。
 
 ```html
 <div id="app">
@@ -87,10 +87,10 @@ new Vue({
 ```
 
 
-## Literal
+## 字面量
 
-### Array
-The below example uses an array literal:
+### 数组
+下例中使用了数组型字面量：
 
 ```html
 <validator name="validation">
@@ -103,11 +103,11 @@ The below example uses an array literal:
 </validator>
 ```
 
-Since `required` doesn't need to specify any additional rules, this syntax is preferred.
+因为 `required` 验证器不要额外的参数，这样写更简洁。
 
 
-### Object
-The below example uses an object literal:
+### 对象
+下例中使用了对象型字面量：
 
 ```html
 <validator name="validation">
@@ -122,9 +122,9 @@ The below example uses an object literal:
 </validator>
 ```
 
-Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
+使用对象型字面量允许你为验证器指定额外的参数。对于 `required`，因为它不需要参数，如上例中随便指定一个值即可。
 
-Alternatively, you can specify a strict object as follows:
+或者可以像下例一样使用严苛模式对象：
 
 ```html
 <validator name="validation">
@@ -137,8 +137,8 @@ Alternatively, you can specify a strict object as follows:
   </form>
 ```
 
-## Binding
-The below example uses live binding:
+## 绑定
+下例中展现了动态绑定：
 
 ```javascript
 new Vue({
@@ -166,12 +166,12 @@ new Vue({
 </div>
 ```
 
-You can also use computed properties or methods to retrieve rule sets, instead of a set data property.
+除数据属性外，也可以使用计算属性或事例方法来指定验证规则。
 
-## Using Terminal Directive Caveats
-Note that if you need to use terminal directive like `v-if` and `v-for`, you should be wrapped the validatable target element with the non-visiblity tag like `<template>` tag, because when used together with these terminal directive, `v-validate` directive does not work.
+## Terminal 指令问题
+请注意，当你想要使用如 `v-if` 和 `v-for` 这些 terminal 指令时，应把可验证的目标元素包裹在 `<template>` 之类的不可见标签内。因为 `v-validate` 指令不能与这些 terminal 指令使用在同一元素上。
 
-The below example using `<div>` tag:
+下例中使用了 `<div>` 标签：
 
 ```javascript
 new Vue({
