@@ -14,15 +14,17 @@ describe('select', () => {
   describe('single', () => {
     context('default selected', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select v-validate:lang="{ required: true }">'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select v-validate:lang="{ required: true }">
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -66,15 +68,17 @@ describe('select', () => {
 
     context('selected', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select v-validate:lang="{ required: true }">'
-          + '<option value="en">english</option>'
-          + '<option selected value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select v-validate:lang="{ required: true }">
+                <option value="en">english</option>
+                <option selected value="ja">japanese</option>
+                <option value="zh">chinese</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -135,16 +139,18 @@ describe('select', () => {
 
     context('placeholder', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select v-validate:lang="{ required: true }">'
-          + '<option value="">select a language</option>'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select v-validate:lang="{ required: true }">
+                <option value="">select a language</option>
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -208,17 +214,19 @@ describe('select', () => {
   describe('multiple', () => {
     context('nothing default selected', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select multiple v-validate:lang="{ required: true, minlength: 2 }">'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '<option value="fr">french</option>'
-          + '<option value="de">German</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select multiple v-validate:lang="{ required: true, minlength: 2 }">
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+                <option value="fr">french</option>
+                <option value="de">German</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -266,17 +274,19 @@ describe('select', () => {
 
     context('default selected', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select multiple v-validate:lang="{ required: true, minlength: 2 }">'
-          + '<option selected value="en">english</option>'
-          + '<option selected value="ja">japanese</option>'
-          + '<option selected value="zh">chinese</option>'
-          + '<option value="fr">french</option>'
-          + '<option value="de">German</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select multiple v-validate:lang="{ required: true, minlength: 2 }">
+                <option selected value="en">english</option>
+                <option selected value="ja">japanese</option>
+                <option selected value="zh">chinese</option>
+                <option value="fr">french</option>
+                <option value="de">German</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -342,18 +352,20 @@ describe('select', () => {
 
     context('placeholder', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select multiple="true" v-validate:lang="{ required: true, minlength: 2 }">'
-          + '<option value="">select languages</option>'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '<option value="fr">french</option>'
-          + '<option value="de">German</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select multiple="true" v-validate:lang="{ required: true, minlength: 2 }">
+                <option value="">select languages</option>
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+                <option value="fr">french</option>
+                <option value="de">German</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })

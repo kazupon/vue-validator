@@ -13,11 +13,13 @@ describe('validator-errors', () => {
 
   describe('basic', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validation">'
-        + '<input type="text" v-validate:field1="field1">'
-        + '<input type="text" v-validate:field2="field2">'
-        + '<validator-errors :validation="$validation"></validator-errors>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validation">
+          <input type="text" v-validate:field1="field1">
+          <input type="text" v-validate:field2="field2">
+          <validator-errors :validation="$validation"></validator-errors>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {
@@ -55,11 +57,13 @@ describe('validator-errors', () => {
 
   describe('partial', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validation">'
-        + '<input type="text" v-validate:field1="field1">'
-        + '<input type="text" v-validate:field2="field2">'
-        + '<validator-errors :partial="\'custom-error\'":validation="$validation"></validator-errors>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validation">
+          <input type="text" v-validate:field1="field1">
+          <input type="text" v-validate:field2="field2">'
+          <validator-errors :partial="'custom-error'":validation="$validation"></validator-errors>
+        </validator>'
+      `
       Vue.partial('custom-error', '<span>{{field}}:{{validator}}:{{message}}</span>')
       vm = new Vue({
         el: el,
@@ -98,11 +102,13 @@ describe('validator-errors', () => {
 
   describe('component', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validation">'
-        + '<input type="text" v-validate:field1="field1">'
-        + '<input type="text" v-validate:field2="field2">'
-        + '<validator-errors :component="\'custom-error\'" :validation="$validation"></validator-errors>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validation">
+          <input type="text" v-validate:field1="field1">
+          <input type="text" v-validate:field2="field2">
+          <validator-errors :component="'custom-error'" :validation="$validation"></validator-errors>
+        </validator>
+      `
       Vue.component('custom-error', {
         props: ['field', 'validator', 'message'],
         template: '<div>{{field}}:{{validator}}:{{message}}</div>'
@@ -144,15 +150,17 @@ describe('validator-errors', () => {
 
   describe('group', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator :groups="[\'group1\', \'group2\']" name="validation">'
-        + '<input type="text" group="group1" v-validate:field1="field1">'
-        + '<input type="text" group="group1" v-validate:field2="field2">'
-        + '<input type="text" group="group2" v-validate:field3="field3">'
-        + '<input type="text" group="group2" v-validate:field4="field4">'
-        + '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">'
-        + '<input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">'
-        + '<validator-errors :group="\'group1\'" :validation="$validation"></validator-errors>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator :groups="['group1', 'group2']" name="validation">
+          <input type="text" group="group1" v-validate:field1="field1">
+          <input type="text" group="group1" v-validate:field2="field2">
+          <input type="text" group="group2" v-validate:field3="field3">
+          <input type="text" group="group2" v-validate:field4="field4">
+          <input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">
+          <input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">
+          <validator-errors :group="'group1'" :validation="$validation"></validator-errors>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {
@@ -199,11 +207,13 @@ describe('validator-errors', () => {
 
   describe('field', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validation">'
-        + '<input type="text" v-validate:field1="field1">'
-        + '<input type="text" v-validate:field2="field2">'
-        + '<validator-errors :field="\'field2\'" :validation="$validation"></validator-errors>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validation">
+          <input type="text" v-validate:field1="field1">
+          <input type="text" v-validate:field2="field2">
+          <validator-errors :field="'field2'" :validation="$validation"></validator-errors>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {

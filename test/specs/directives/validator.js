@@ -269,15 +269,19 @@ describe('validator element directive', () => {
 
   describe('v-for', () => {
     beforeEach((done) => {
-      el.innerHTML = '<ul><li v-for="task in tasks">'
-        + '<button :id="del + $index" @click="onDelete(task)">delete</button>'
-        + '<validator :name="\'validator\' + $index">'
-        + '<form novalidate>'
-        + '<input type="text" :value="task.name" v-validate:name="{ required: true, minlength: calculate($index) }">'
-        + '</form>'
-        + '</validator>'
-        + '</li></ul>'
-        + '<button id="add" @click="onAdd">add</button>'
+      el.innerHTML = `
+        <ul>
+          <li v-for="task in tasks">
+            <button :id="del + $index" @click="onDelete(task)">delete</button>
+            <validator :name="'validator' + $index">
+              <form novalidate>
+                <input type="text" :value="task.name" v-validate:name="{ required: true, minlength: calculate($index) }">
+              </form>
+            </validator>
+          </li>
+        </ul>
+        <button id="add" @click="onAdd">add</button>
+      `
       vm = new Vue({
         el: el,
         data: {
@@ -370,36 +374,38 @@ describe('validator element directive', () => {
   // # issue #177
   describe('multiple validator error', () => {
     beforeEach((done) => {
-      el.innerHTML = '<div id="page">'
-        + '<validator name="validation1" @valid="onValid">'
-        + '<form novalidate>'
-        + '<div class="username-field">'
-        + '<label for="username">username:</label>'
-        + '<input id="username" type="text" v-validate:username="[\'required\']">'
-        + '</div>'
-        + '<div class="password-field">'
-        + '<label for="password">password:</label>'
-        + '<input id="password" type="text" v-validate:password="{ minlength: 8 }">'
-        + '</div>'
-        + '<div class="errors">'
-        + '<p v-if="$validation1.username.required">Required your name.</p>'
-        + '<p v-if="$validation1.password.minlength">Your password is too short.</p>'
-        + '</div>'
-        + '<input type="submit" value="send" v-if="$validation1.valid">'
-        + '</form>'
-        + '</validator>'
-        + '<validator name="validation2" @valid="onValid">'
-        + '<form novalidate>'
-        + '<div class="comment-field">'
-        + '<label for="comment">comment:</label>'
-        + '<input id="comment" type="text" v-validate:comment="[\'required\']">'
-        + '</div>'
-        + '<div class="errors">'
-        + '<p v-if="$validation2.comment.required">Required your comment.</p>'
-        + '</div>'
-        + '<input type="submit" value="send" v-if="$validation2.valid">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <div id="page">
+        <validator name="validation1" @valid="onValid">
+          <form novalidate>
+            <div class="username-field">
+              <label for="username">username:</label>
+              <input id="username" type="text" v-validate:username="['required']">
+            </div>
+            <div class="password-field">
+              <label for="password">password:</label>
+              <input id="password" type="text" v-validate:password="{ minlength: 8 }">
+            </div>
+            <div class="errors">
+              <p v-if="$validation1.username.required">Required your name.</p>
+              <p v-if="$validation1.password.minlength">Your password is too short.</p>
+            </div>
+            <input type="submit" value="send" v-if="$validation1.valid">
+          </form>
+        </validator>
+        <validator name="validation2" @valid="onValid">
+          <form novalidate>
+            <div class="comment-field">
+              <label for="comment">comment:</label>
+              <input id="comment" type="text" v-validate:comment="['required']">
+            </div>
+            <div class="errors">
+              <p v-if="$validation2.comment.required">Required your comment.</p>
+            </div>
+            <input type="submit" value="send" v-if="$validation2.valid">
+          </form>
+        </validator>
+      `
       let Component = Vue.extend({
         methods: {
           onValid () { }

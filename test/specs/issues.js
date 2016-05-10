@@ -13,12 +13,14 @@ describe('github issues', () => {
 
   describe('#195', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" v-model="value" number>'
-        + '<input type="text" v-model="value" number v-validate:value="[\'required\']">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" v-model="value" number>
+            <input type="text" v-model="value" number v-validate:value="['required']">
+          </form>
+        </validator>
+      `
       vm = new Vue({ el: el, data: { value: 0 } })
       vm.$nextTick(done)
     })
@@ -35,25 +37,27 @@ describe('github issues', () => {
   describe('#208', () => {
     describe('radio', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<h1>Survey</h1>'
-          + '<fieldset>'
-          + '<legend>Which do you like fruit ?</legend>'
-          + '<input id=\"apple\" type=\"radio\" name=\"fruit\" initial=\"off\" value=\"apple\" v-validate:fruits=\"{'
-          + '  required: true'
-          + '}\">'
-          + '<label for=\"apple\">Apple</label>'
-          + '<input id=\"orange\" type=\"radio\" name=\"fruit\" value=\"orange\" initial=\"off\" v-validate:fruits>' 
-          + '<label for=\"orange\">Orage</label>'
-          + '<input id=\"grape\" type=\"radio\" name=\"fruit\" value=\"grape\" initial=\"off\" v-validate:fruits>'
-          + '<label for=\"grape\">Grape</label>'
-          + '<input id=\"banana\" type=\"radio\" name=\"fruit\" value=\"banana\" initial=\"off\" v-validate:fruits>'
-          + '<label for=\"banana\">Banana</label>'
-          + '<p v-if=\"$validator1.fruits.required\">required fields</p>'
-          + '</fieldset>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          '<validator name="validator1">
+            <form novalidate>
+              <h1>Survey</h1>
+              <fieldset>
+                <legend>Which do you like fruit ?</legend>
+                <input id="apple" type="radio" name="fruit" initial="off" value="apple" v-validate:fruits="{
+                  required: true
+                }">
+                <label for="apple">Apple</label>
+                <input id="orange" type="radio" name="fruit" value="orange" initial="off" v-validate:fruits> 
+                <label for="orange">Orage</label>
+                <input id="grape" type="radio" name="fruit" value="grape" initial="off" v-validate:fruits>
+                <label for="grape">Grape</label>
+                <input id="banana" type="radio" name="fruit" value="banana" initial="off" v-validate:fruits>
+                <label for="banana">Banana</label>
+                <p v-if="$validator1.fruits.required">required fields</p>
+              </fieldset>
+            </form>
+          </validator>
+        `
         vm = new Vue({ el: el })
         vm.$nextTick(done)
       })
@@ -70,12 +74,14 @@ describe('github issues', () => {
 
     describe('checkbox', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="checkbox" initial="off" value="foo" v-validate:field1="{ required: true, minlength: 1 }">'
-          + '<input type="checkbox" initial="off" value="bar" v-validate:field1="{ required: true, minlength: 1 }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="checkbox" initial="off" value="foo" v-validate:field1="{ required: true, minlength: 1 }">
+              <input type="checkbox" initial="off" value="bar" v-validate:field1="{ required: true, minlength: 1 }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el
         })
@@ -95,15 +101,17 @@ describe('github issues', () => {
 
     describe('select', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select initial="off" v-validate:lang="{ required: true }">'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select initial="off" v-validate:lang="{ required: true }">
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({ el: el })
         vm.$nextTick(done)
       })
@@ -128,11 +136,13 @@ describe('github issues', () => {
   describe('#214', () => {
     describe('text v-model', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" v-model="msg" initial="off" v-validate:field1="{ required: true, minlength: 10 }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-model="msg" initial="off" v-validate:field1="{ required: true, minlength: 10 }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { msg: 'hello' }
@@ -182,13 +192,15 @@ describe('github issues', () => {
 
     describe('checkbox v-model', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="checkbox" v-model="checkedNames" initial="off" value="foo" v-validate:field1="{ required: true, minlength: 2 }">'
-          + '<input type="checkbox" v-model="checkedNames" initial="off" value="bar" v-validate:field1>'
-          + '<input type="checkbox" v-model="checkedNames" initial="off" value="buz" v-validate:field1>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="checkbox" v-model="checkedNames" initial="off" value="foo" v-validate:field1="{ required: true, minlength: 2 }">
+              <input type="checkbox" v-model="checkedNames" initial="off" value="bar" v-validate:field1>
+              <input type="checkbox" v-model="checkedNames" initial="off" value="buz" v-validate:field1>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { checkedNames: [] }
@@ -244,12 +256,14 @@ describe('github issues', () => {
 
     describe('radio v-model', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="radio" v-model="picked" name="r1" value="foo" initial="off" v-validate:field1="{ required: true }">'
-          + '<input type="radio" v-model="picked" name="r1" value="bar" initial="off" v-validate:field1>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="radio" v-model="picked" name="r1" value="foo" initial="off" v-validate:field1="{ required: true }">
+              <input type="radio" v-model="picked" name="r1" value="bar" initial="off" v-validate:field1>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { picked: 'foo' }
@@ -312,15 +326,17 @@ describe('github issues', () => {
 
     describe('select v-model', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<select v-model="lang" initial="off" v-validate:lang="{ required: true }">'
-          + '<option value="en">english</option>'
-          + '<option selected value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <select v-model="lang" initial="off" v-validate:lang="{ required: true }">
+                <option value="en">english</option>
+                <option selected value="ja">japanese</option>
+                <option value="zh">chinese</option>
+              </select>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { lang: 'ja' }

@@ -8,12 +8,14 @@ describe('initial', () => {
 
   beforeEach((done) => {
     el = document.createElement('div')
-    el.innerHTML = '<validator name="validator1">'
-      + '<form novalidate>'
-      + '<input type="number" v-validate:field1="{ required: { rule: true, initial: \'off\' }, min: 0, max: 10 }">'
-      + '<input type="text" value="hello" v-validate:field2="{ minlength: 4 }">'
-      + '</form>'
-      + '</validator>'
+    el.innerHTML = `
+      <validator name="validator1">
+        <form novalidate>
+          <input type="number" v-validate:field1="{ required: { rule: true, initial: 'off' }, min: 0, max: 10 }">
+          <input type="text" value="hello" v-validate:field2="{ minlength: 4 }">
+        </form>
+      </validator>
+    `
     vm = new Vue({ el: el })
     vm.$nextTick(done)
   })

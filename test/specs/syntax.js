@@ -13,11 +13,13 @@ describe('syntax', () => {
 
   context('simple', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" v-validate:field1="{ minlength: 2 }">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" v-validate:field1="{ minlength: 2 }">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el
       })
@@ -42,11 +44,13 @@ describe('syntax', () => {
   
   context('array', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" v-validate:field1="[\'required\']">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" v-validate:field1="['required']">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el
       })
@@ -71,11 +75,13 @@ describe('syntax', () => {
 
   context('strict', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" value="foo" v-validate:field1="{ minlength: { rule: 2 }, maxlength: { rule: 5 } }">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" value="foo" v-validate:field1="{ minlength: { rule: 2 }, maxlength: { rule: 5 } }">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el
       })
@@ -110,11 +116,13 @@ describe('syntax', () => {
   context('binding', () => {
     context('primitive', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" value="0" v-validate:field1="{ max: number }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" value="0" v-validate:field1="{ max: number }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { number: 10 }
@@ -139,11 +147,13 @@ describe('syntax', () => {
 
     context('function', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" value="5" v-validate:field1="{ max: getMax(condition) }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" value="5" v-validate:field1="{ max: getMax(condition) }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { condition: '' },
@@ -183,11 +193,13 @@ describe('syntax', () => {
 
     context('object', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" v-validate:field1="rules">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-validate:field1="rules">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { rules: { required: true, pattern: '/foo/' } }
@@ -215,11 +227,13 @@ describe('syntax', () => {
 
   context('kebab-case', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" v-validate:my-property="[\'required\']">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" v-validate:my-property="['required']">
+          </form>
+        </validator>
+      `
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })

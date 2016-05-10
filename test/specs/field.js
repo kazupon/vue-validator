@@ -13,12 +13,14 @@ describe('field', () => {
 
   describe('static', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<input type="text" field="field1" v-validate="{ required: true }">'
-        + '<input type="text" value="hello" v-validate:field2="{ minlength: 4 }">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" field="field1" v-validate="{ required: true }">
+            <input type="text" value="hello" v-validate:field2="{ minlength: 4 }">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el
       })
@@ -59,13 +61,15 @@ describe('field', () => {
 
   describe('dynamic', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<template v-for="field in fields">'
-        + '<input type="text" :field="field.name" v-validate="field.validate">'
-        + '</template>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <template v-for="field in fields">
+              <input type="text" :field="field.name" v-validate="field.validate">
+            </template>
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {
