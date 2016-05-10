@@ -13,7 +13,7 @@
 - [バリデーション可能なフォーム要素](elements.md)
 - [バリデーションクラス](classes.md)
 - [グループ化](grouping.md)
-- [Error messages](errors.md)
+- [エラーメッセージ](errors.md)
 - [Events](events.md)
 - [Lazy initialization](lazy.md)
 - [Custom validator](custom.md)

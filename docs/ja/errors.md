@@ -1,6 +1,6 @@
-# Error messages
+# エラーメッセージ
 
-Error messages can be stored directly in the validation rules, and can be use error message on `v-show` or `v-if`:
+エラーメッセージはバリデーションルールの中から直接格納することができ、そして `v-show` 又は `v-if` で使用することができます:
 
 ```html
 <validator name="validation1">
@@ -23,7 +23,7 @@ Error messages can be stored directly in the validation rules, and can be use er
 </validator>
 ```
 
-Also, Error message can be used with `v-for`:
+エラーメッセージは `v-for` でも使用することができます:
 
 ```html
 <validator name="validation1">
@@ -50,11 +50,11 @@ Also, Error message can be used with `v-for`:
 </validator>
 ```
 
-Data property or computed properties can help reduce clutter, rather than using inline rule sets.
+インラインでルールを指定するよりも、データプロパティ又は算出プロパティを使用することで煩雑な状態を減らすことができます。
 
-## Error message enumeration component
+## エラーメッセージ列挙コンポーネント
 
-In the above example, we used `v-for` directive to enumerate `errors` of validator. But, we can't be bothered to do it. So, vue-validator provide the convenient `validator-errors` component to enumerate error info. the following the example:
+上の例で私達は `v-for` ディレクティブを使いバリデータの `errors` を列挙しました。しかし、私達はそれに邪魔されることは出来ません。 なので、 vue-validator は便利なエラー情報を列挙する `validator-errors` コンポーネントを提供します。 例は次の通りです:
 
 ```html
 <validator name="validation1">
@@ -77,7 +77,7 @@ In the above example, we used `v-for` directive to enumerate `errors` of validat
 </validator>
 ```
 
-In the above example, it's rendered the following:
+上の例は次の通りにレンダリングされます:
 
 ```html
 <div class="username">
@@ -101,13 +101,13 @@ In the above example, it's rendered the following:
 </div>
 ```
 
-## Custom error message templating
+## カスタムエラーメッセージテンプレート
 
-If you don't like the default error message format of `validator-errors`, you can specify the custom error message template with your component or your partial template.
+もし標準の`validator-errors` エラーメッセージ書式が好みでは無い場合は、あなたのコンポーネントや部分テンプレートにカスタムエラーメッセージテンプレートを指定することができます。
 
-### Component template
+### コンポーネントテンプレート
 
-the below component example:
+下記はコンポーネントの例です:
 
 ```html
 <div id="app">
@@ -143,9 +143,9 @@ Vue.component('custom-error', {
 new Vue({ el: '#app' })
 ```
   
-### Partial template
+### 部分テンプレート
 
-the below partial template example:
+下記は部分テンプレートの例です:
 
 ```html
 <div id="app">
@@ -177,14 +177,14 @@ Vue.partial('myErrorTemplate', '<p>{{field}}: {{validator}}: {{message}}</p>')
 new Vue({ el: '#app' })
 ```
 
-### Error messages focusing
+### エラーメッセージフォーカス
 
-Sometimes, you need to output the part of error messages. You can focus the part of validation results when you use the `group` or `field` attributes.
+時々、エラーメッセージの一部分だけを出力したい時があります。 `group` 又は `field` 属性を使うと、バリデーション結果の一部分のみに焦点を当てることができます。
 
-- `group`: error messages of the group in validation results (e.g. $validation.group1.errors)
-- `field`: error messages of the field in validation results (e.g. $validation.field1.errors)
+- `group`: バリデーション結果内のエラーメッセージのグループ (例: $validation.group1.errors)
+- `field`: バリデーション結果のエラーメッセージのフィールド (例: $validation.field1.errors)
 
-the below `group` attribute example:
+ `group` 属例の例は下記です:
 
 ```html
 <div id="app">
@@ -238,9 +238,9 @@ Vue.validator('url', function (val) {
 new Vue({ el: '#app' })
 ```
 
-## Manually error message settings
+## 手動エラーメッセージ設定
 
-Sometimes, you need to manually set the validation error message such as server-side validation error. At that time, you can apply some error messages to validation results with using `$setValidationErrors` meta method. example:
+時々、サーバーサイドのバリデーションエラーのようなエラーメッセージを手動で設定したい場合があります。そのような場合は、 `$setValidationErrors` メタメソッドを使うことでバリデーション結果にエラーメッセージを与えることができます。例はこちらです: 
 
 ```html
 <div id="app">
