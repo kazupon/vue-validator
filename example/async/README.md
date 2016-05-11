@@ -17,5 +17,6 @@ npm run build
 
 ## Run the Demo
 ``` bash
+# serve at localhost:8000
 npm run start
 ```
