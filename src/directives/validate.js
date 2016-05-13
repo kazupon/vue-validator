@@ -51,8 +51,7 @@ export default function (Vue) {
       const el = this.el
 
       if ((process.env.NODE_ENV !== 'production') && el.__vue__) {
-        warn('v-validate="' + this.expression + '" cannot be '
-          + 'used on an instance root element.')
+        warn(`v-validate="${this.expression}" cannot be used on an instance root element.`)
         this._invalid = true
         return
       }

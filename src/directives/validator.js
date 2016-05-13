@@ -23,7 +23,7 @@ export default function (Vue) {
 
       if (process.env.NODE_ENV !== 'production' && !params.name) {
         warn('validator element requires a \'name\' attribute: '
-            + '(e.g. <validator name="validator1">...</validator>)'
+          + '(e.g. <validator name="validator1">...</validator>)'
         )
         return
       }
