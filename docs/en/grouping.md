@@ -3,15 +3,15 @@
 The vue binding syntax can group inputs together:
 
 ```html
-<validator name="validation1" :groups="['user', 'password']">
-  username: <input type="text" group="user" v-validate:username="['required']"><br />
-  password: <input type="password" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
-  password (confirm): <input type="password" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
-  <div class="user">
-    <span v-if="$validation1.user.invalid">Invalid yourname !!</span>
-  </div>
-  <div class="password">
-    <span v-if="$validation1.password.invalid">Invalid password input !!</span>
-  </div>
+<validator name="validation1" :groups="['passwordGroup']">
+  username: <input type="text" v-validate:username="['required']"><br>
+  
+  password: <input type="password" group="passwordGroup" v-validate:password="{ minlength: 8, required: true }"/><br>
+
+  confirm password: <input type="password" group="passwordGroup" v-validate:password-confirm="{ minlength: 8, required: true }"/><br>
+  
+  <span v-if="$validation1.username.invalid">Invalid username!</span><br>
+
+  <span v-if="$validation1.passwordGroup.invalid">Invalid password input!</span>
 </validator>
 ```
