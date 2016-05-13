@@ -91,6 +91,7 @@ As mentioned above, You need to implement custom validation that return a promis
 ## Using error message
 As mentioned above, when server-side validation error occured, you can use the server-side error message.
 
+> :warning: You must return a **ES6 compatible** promise.
 
 # Validator function context
 Validator function context is bind with Validation object. Validation object expose the some properties. These properties is useful when you need to implement specially validation.
