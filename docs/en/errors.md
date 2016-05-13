@@ -1,6 +1,6 @@
 # Error messages
 
-Error messages can be stored directly in the validation rules, and can be use error message on `v-show` or `v-if`:
+Error messages can be stored directly in the validation rules:
 
 ```html
 <validator name="validation1">
@@ -23,7 +23,7 @@ Error messages can be stored directly in the validation rules, and can be use er
 </validator>
 ```
 
-Also, Error message can be used with `v-for`:
+If you want to output all error messages for currently invalid rules that have a message defined, you can loop over the errors array with `v-for`:
 
 ```html
 <validator name="validation1">
