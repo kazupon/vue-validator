@@ -79,7 +79,7 @@ export default function (Vue) {
 
       let validatorName = this.vm.$options._validator
       if ((process.env.NODE_ENV !== 'production') && !validatorName) {
-        warn('v-validate need to use into validator element directive: '
+        warn('you need to wrap the elements to be validated in a <validator> element: '
           + '(e.g. <validator name="validator">'
           + '<input type="text" v-validate:field1="[\'required\']">'
           + '</validator>).')

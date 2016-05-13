@@ -9,7 +9,7 @@
 ### jsdelivr
 
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.0.2/vue-validator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.validator/2.1.1/vue-validator.min.js"></script>
 ```
 
 ## NPM
