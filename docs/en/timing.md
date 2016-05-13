@@ -3,7 +3,7 @@
 vue-validator validate automatically with `validator` element directive and `v-validate` directive. However, sometimes, we are disabling automatically validation, and there are times we want to validate manually.
 
 ## `initial`
-When vue-validator completed initial compilation, each `v-validate` directive automatically validate target element. if you don't hope that behavior, you can specify with `initial` attribute, or  `v-validate` syntax:
+When vue-validator completed initial compilation, each `v-validate` directive automatically validate target element. If you don't want that behavior, you can use the `initial` attribute to turn it off for all rules on an element. If you want to turn it off for a specific rule on an element, you can use the `v-validate` syntax:
 
 ```html
 <div id="app">
