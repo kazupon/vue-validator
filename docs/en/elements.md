@@ -2,7 +2,7 @@
 
 ## Checkbox
 
-Checkbox validation supports:
+Checkboxes are supported:
 
 ```html
 <div id="app">
@@ -53,7 +53,7 @@ new Vue({
 
 ## Radio button
 
-Radio button validation supports:
+Radio buttons are supported:
 
 ```html
 <div id="app">
@@ -95,9 +95,9 @@ new Vue({
 ```
 
 
-## Selectbox
+## Select box
 
-Selectbox validation supports:
+Select boxes are supported:
 
 ```html
 <div id="app">
@@ -114,7 +114,7 @@ Selectbox validation supports:
         <option value="rust">Rust</option>
         <option value="elixir">Elixir</option>
         <option value="c">C</option>
-        <option value="none">Not a nothing here</option>
+        <option value="none">Not listed here</option>
       </select>
       <div class="errors">
         <p v-if="$validation1.lang.required">Required !!</p>
