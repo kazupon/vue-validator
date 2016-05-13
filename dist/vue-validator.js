@@ -590,7 +590,7 @@ var validators = Object.freeze({
 
         var validatorName = this.vm.$options._validator;
         if ('development' !== 'production' && !validatorName) {
-          warn('v-validate need to use into validator element directive: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
+          warn('you need to wrap the elements to be validated in a <validator> element: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
           this._invalid = true;
           return;
         }
@@ -2381,7 +2381,7 @@ var validators = Object.freeze({
         var params = this.params;
 
         if ('development' !== 'production' && !params.name) {
-          warn('validator element directive need to specify \'name\' param attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
+          warn('validator element requires a \'name\' attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
           return;
         }
 
