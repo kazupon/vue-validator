@@ -15,7 +15,7 @@
 - [グループ化](grouping.md)
 - [エラーメッセージ](errors.md)
 - [イベント](events.md)
-- [Lazy initialization](lazy.md)
+- [遅延初期化](lazy.md)
 - [Custom validator](custom.md)
 - [Validation timing customization](timing.md)
 - [Async validation](async.md)

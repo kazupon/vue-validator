@@ -1,8 +1,8 @@
-# Lazy initialization
+# 遅延初期化
 
-The `lazy` attribute on the `validator` element will delay initialization of the validator until `$activateValidator()` is called. This is useful for data that must first be loaded in asynchronously, preventing the validator from reporting invalid data until ready.
+`validator` エレメント上の `lazy` 属性は `$activateValidator()` が呼ばれるまでバリデーターの初期化を遅らせます。これはデータが初回時に非同期的で読み込みされなければいけない場合に便利で、用意完了するまでバリデーターから無効データの通知が来るのを防止します。
 
-The following example waits for the comment contents to be loaded before evaluating; without `lazy`, the component would show errors until the data loads in.
+次の例ではコメントコンテンツが評価される前に読み込みされるまで待ちます。 `lazy` 無しだとデータが読み込みされるまでコンポーネントはエラーを表示します。
 
 ```html
 <!-- comment component -->
