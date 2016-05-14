@@ -14,7 +14,7 @@
 - [バリデーションクラス](classes.md)
 - [グループ化](grouping.md)
 - [エラーメッセージ](errors.md)
-- [Events](events.md)
+- [イベント](events.md)
 - [Lazy initialization](lazy.md)
 - [Custom validator](custom.md)
 - [Validation timing customization](timing.md)

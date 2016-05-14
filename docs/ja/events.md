@@ -1,16 +1,16 @@
-# Events
+# イベント
 
-Using regular vue event bindings, you can be bound the event that has occured with validator.
+一般的な Vue イベントのバインディングを使うことで、バリデーターの中で発生したイベントをバインドさせることができます。
 
-## Field validation event
+## フィールドバリデーションイベント
 
-You can be handled the event to each field properties, like `v-validate` directive  specified to `input` tag:
+`input` タグの中で指定した `v-validate` ディレクティブと同じように、それぞれのフィールドプロパティに対してイベントを実行することができます:
 
-- `valid`: occure when validation result of **each field** became valid
-- `invalid`: occure when validation result of **each field** became invalid
-- `touched`: occure when **each field** detected `blur` at least once
-- `dirty`: occure when the value of **each field** changed from initial value at least once
-- `modified`: occure when the value of **each field** changed from initial value
+- `valid`: **各フィールド**のバリデーション結果が有効になると発生
+- `invalid`: **各フィールド**のバリデーション結果が無効になると発生
+- `touched`: **各フィールド**でひとつでも `blur` を検知すると発生
+- `dirty`: **各フィールド**の値がひとつでも初期値から変更されたら発生
+- `modified`: **各フィールド**の値が初期値から変更されたら発生
 
 ```html
 <div id="app">
@@ -68,15 +68,15 @@ new Vue({
 })
 ```
 
-## Top level validation event
+## トップレベルバリデーションイベント
 
-You can be handled the event that has occured in the various top-level validation properties:
+トップレベルバリデーションプロパティで発生したイベントを発生させることができます:
 
-- `valid`: occurs when validation result of **top-level** became valid
-- `invalid`: occurs when validation result of **top-level** became invalid
-- `touched`: occurs when **top-level** detected `blur` at least once
-- `dirty`: occurs when the value of **top-level** changed from initial value at least once
-- `modified`: occurs when the value of **top-level** changed from initial value
+- `valid`: **トップレベル**のバリデーション結果が有効になると発生
+- `invalid`: **トップレベル**のバリデーション結果が無効になると発生
+- `touched`: **トップレベル**でひとつでも `blur` を検知すると発生
+- `dirty`: **トップレベル**の値がひとつでも初期値から変更されたら発生
+- `modified`: **トップレベル**の値が初期値から変更されたら発生
 
 ```html
 <div id="app">
