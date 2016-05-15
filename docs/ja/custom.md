@@ -1,16 +1,16 @@
-# Custom validator
+# カスタムバリデーター
 
-## Global registration
-You can register your custom validator with using `Vue.validator` method. 
+## グローバル登録
+`Vue.validator` メソッドを使うことでカスタムバリデータを登録することができます。
 
-> **NOTE:** `Vue.validator` asset is extended from Vue.js' asset managment system.
+> **注意:** `Vue.validator` アセットは Vue.js のアセット管理システムからの拡張です。
 
-Detail of the `Vue.validator` method.
+`Vue.validator` メソッドを詳しく述べます。
 
-The below the `email` custom validator exmpale:
+下記は `email` カスタムバリデーターの例です:
 
 ```javascript
-// Register email validator function. 
+// メールアドレスのバリデーター関数を登録する
 Vue.validator('email', function (val) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
@@ -33,17 +33,17 @@ new Vue({
 </div>
 ```
 
-## Local registration
-You can register your custom validator to component with using `validators` option.
+## ローカル登録
+`validators` オプションを使うことでカスタムバリデーターをコンポーネントに登録することができます。
 
-Custom validators are registered to Vue constructor `validators` option using a callback function; return true upon passing.
+カスタムバリデーターは判別して true を返すコールバック関数を使うことで、 Vue コンストラクターの `validators` オプションに登録されます。
 
-the below the `numeric` or `url`  custom validator exmpale:
+下記は `numeric` 又は `url` カスタムバリデーターの例です:
 
 ```javascript
 new Vue({
   el: '#app',
-  validators: { // `numeric` and `url` custom validator is local registration
+  validators: { // `numeric` と `url` のカスタムバリデーターはローカル登録です。
     numeric: function (val/*,rule*/) {
       return /^[-+]?[0-9]+$/.test(val)
     },
@@ -74,37 +74,37 @@ new Vue({
 </div>
 ```
 
-## Error message
+## エラーメッセージ
 
-Custom validators may have default error messages attached:
+カスタムバリデーターはデフォルトのエラーメッセージを持っているかもしれません:
 
 ```javascript
-// `email` custom validator global registration
+// グローバル登録の `email` カスタムバリデーター
 Vue.validator('email', {
-  message: 'invalid email address', // error message with plain string
+  message: 'invalid email address', // 文字列によるエラーメッセージ
   check: function (val) { // define validator
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
   }
 })
 
-// build-in `required` validator customization
+// ビルトイン `required` カスタムバリデーター
 Vue.validator('required', {
-  message: function (field) { // error message with function
+  message: function (field) { // 関数によるエラーメッセージ
     return 'required "' + field + '" field'
   },
-  check: Vue.validator('required') // re-use validator logic
+  check: Vue.validator('required') // バリデーターロジックの再利用
 })
 
 new Vue({
   el: '#app',
   validators: {
-    numeric: { // `numeric` custom validator local registration
+    numeric: { // ローカル登録 `numeric` カスタムバリデーター
       message: 'invalid numeric value',
       check: function (val) {
         return /^[-+]?[0-9]+$/.test(val)
       }
     },
-    url: { // `url` custom validator local registration
+    url: { // ローカル登録 `url` カスタムバリデーター
       message: function (field) {
         return 'invalid "' + field + '" url format field'
       },

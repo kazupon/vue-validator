@@ -16,7 +16,7 @@
 - [エラーメッセージ](errors.md)
 - [イベント](events.md)
 - [遅延初期化](lazy.md)
-- [Custom validator](custom.md)
+- [カスタムバリデーター](custom.md)
 - [Validation timing customization](timing.md)
 - [Async validation](async.md)
 - [API](api.md)
