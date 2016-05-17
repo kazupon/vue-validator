@@ -17,6 +17,6 @@
 - [イベント](events.md)
 - [遅延初期化](lazy.md)
 - [カスタムバリデーター](custom.md)
-- [Validation timing customization](timing.md)
+- [バリデーションタイミング変更](timing.md)
 - [Async validation](async.md)
 - [API](api.md)

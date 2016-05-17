@@ -1,9 +1,9 @@
-# Validation timing customization
+# バリデーションタイミング設定
 
-vue-validator validate automatically with `validator` element directive and `v-validate` directive. However, sometimes, we are disabling automatically validation, and there are times we want to validate manually.
+vue-validator は `validator` エレメントディレクティブと `v-validate` ディレクティブで自動的にバリデートを実行します。しかしながら時々、自動バリデーションを無効化し手動でバリデートを実行したい時があります。
 
 ## `initial`
-When vue-validator completed initial compilation, each `v-validate` directive automatically validate target element. if you don't hope that behavior, you can specify with `initial` attribute, or  `v-validate` syntax:
+vue-validator は初回コンパイルを終えると、それぞれの `v-validate` ディレクティブは自動的に対象エレメントのバリデートを実行します。もしこの挙動を望まない場合は、 `initial` 属性又は `v-validate` で指定ができます:
 
 ```html
 <div id="app">
@@ -11,12 +11,12 @@ When vue-validator completed initial compilation, each `v-validate` directive au
     <form novalidate>
       <div class="username-field">
         <label for="username">username:</label>
-        <!-- 'inital' attribute is applied the all validators of target element (e.g. required, exist) -->
+        <!-- 'inital' 属性は対象エレメントの全てのバリデーターに対して適用されます (例えば required, exist) -->
         <input id="username" type="text" initial="off" v-validate:username="['required', 'exist']">
       </div>
       <div class="password-field">
         <label for="password">password:</label>
-        <!-- 'initial' optional is applied with `v-validate` validator (e.g. required only) -->
+        <!-- 任意の'initial' は `v-validate` バリデーターに適用されます。(例えば required のみ) -->
         <input id="password" type="password" v-validate:passowrd="{ required: { rule: true, initial: 'off' }, minlength: 8 }">
       </div>
       <input type="submit" value="send" v-if="$validation1.valid">
@@ -25,10 +25,10 @@ When vue-validator completed initial compilation, each `v-validate` directive au
 </div>
 ```
 
-This is useful, when you need to suppress the validation (like the server-side validation) with async validation feature (explain later).
+これは非同期的な特徴のバリデーション(サーバーサイドバリデーションのような)を抑制する必要がある場合に便利です。(後ほど説明します)
 
-## `detect-blur` and `detect-change`
-vue-validator validate automatically when detect DOM event (`input`, `blur`, `change`) in formalable elements (input, checkbox, select, etc).  In the case, use the `detect-change`, `detect-blur` attributes:
+## `detect-blur` と `detect-change`
+vue-validator はフォーム要素(input, checkbox, select, 等)のDOMイベント (`input`, `blur`, `change`)を検知したら自動的にバリデートを実行します。このような場合は、`detect-change`, `detect-blur` 属性を使ってください:
 
 ```html
 <div id="app">
