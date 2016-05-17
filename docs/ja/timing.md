@@ -16,7 +16,7 @@ vue-validator は初回コンパイルを終えると、それぞれの `v-valid
       </div>
       <div class="password-field">
         <label for="password">password:</label>
-        <!-- 任意の'initial' は `v-validate` バリデーターに適用されます。(例えば required のみ) -->
+        <!-- 任意の 'initial' は `v-validate` バリデーターに適用されます。(例えば required のみ) -->
         <input id="password" type="password" v-validate:passowrd="{ required: { rule: true, initial: 'off' }, minlength: 8 }">
       </div>
       <input type="submit" value="send" v-if="$validation1.valid">
