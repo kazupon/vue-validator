@@ -11,7 +11,7 @@
 - [v-model integration](model.md)
 - [Reset validation results](reset.md)
 - [Form validatable elements](elements.md)
-- [Validation classses](classes.md)
+- [Validation classes](classes.md)
 - [Grouping](grouping.md)
 - [Error messages](errors.md)
 - [Events](events.md)
