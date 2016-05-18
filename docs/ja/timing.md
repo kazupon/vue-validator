@@ -25,7 +25,7 @@ vue-validator は初回コンパイルを終えると、それぞれの `v-valid
 </div>
 ```
 
-これは非同期的な特徴のバリデーション(サーバーサイドバリデーションのような)を抑制する必要がある場合に便利です。(後ほど説明します)
+これはサーバサイドバリデーションのように非同期にバリデーションする必要がある場合は便利です。
 
 ## `detect-blur` と `detect-change`
 vue-validator はフォーム要素(input, checkbox, select, 等)のDOMイベント (`input`, `blur`, `change`)を検知したら自動的にバリデートを実行します。このような場合は、`detect-change`, `detect-blur` 属性を使ってください:
