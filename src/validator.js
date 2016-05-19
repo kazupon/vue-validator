@@ -50,11 +50,16 @@ export default class Validator {
 
   disableReactive () {
     let vm = this._dir.vm
-    vm.$setValidationErrors = undefined
-    vm.$validate = undefined
-    vm.$validatorReset = undefined
+    vm.$setValidationErrors = null
+    delete vm['$setValidationErrors']
+    vm.$validate = null
+    delete vm['$validate']
+    vm.$validatorReset = null
+    delete vm['$validatorReset']
     vm._validatorMaps[this.name] = null
+    delete vm._validatorMaps[this.name]
     vm[this.name] = null
+    delete vm[this.name]
   }
 
   registerEvents () {

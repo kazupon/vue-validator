@@ -384,4 +384,72 @@ describe('github issues', () => {
       })
     })
   })
+
+  describe('#236', () => {
+    beforeEach((done) => {
+      el.innerHTML = `
+        <div v-if='show'>
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-model="name" v-validate:name="['required']">
+              <span v-if="!$validator1.valid">Name is required</span>
+              <pre>{{$validator1 | json}}</pre>
+            </form>
+          </validator>
+        </div>
+        <button @click="toogle">Toogle</button>{{ show }}
+        <pre>{{$validator1 | json}}</pre>
+      `
+      vm = new Vue({
+        el: el,
+        data: {
+          name: 'test',
+          show: true
+        },
+        methods: {
+          toogle () {
+            if (this.$data.show) {
+              this.$data.show = false
+            } else {
+              this.show = true
+            }
+          }
+        }
+      })
+      vm.$nextTick(done)
+    })
+
+    it('should be validated', (done) => {
+      assert(vm.validator1 !== null)
+
+      let button = el.getElementsByTagName('button')[0]
+      let input = el.getElementsByTagName('input')[0]
+      input.value = ''
+      trigger(input, 'input')
+      trigger(input, 'blur')
+      trigger(button, 'click')
+      vm.$nextTick(() => {
+        assert(vm['$validator1'] === undefined)
+        assert(vm._validatorMaps['$validator1'] === undefined)
+
+        trigger(button, 'click')
+        vm.$nextTick(() => {
+          assert(vm.$validator1 !== null)
+          assert(vm.$validator1.name.invalid === true)
+          assert(vm.$validator1.name.required)
+
+          input = el.getElementsByTagName('input')[0]
+          input.value = 'test'
+          trigger(input, 'input')
+          trigger(input, 'blur')
+          vm.$nextTick(() => {
+            assert(vm.$validator1.name.invalid === false)
+            assert(vm.$validator1.name.required === false)
+
+            done()
+          })
+        })
+      })
+    })
+  })
 })

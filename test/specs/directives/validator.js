@@ -260,7 +260,7 @@ describe('validator element directive', () => {
         })
 
         it('validator scope should not be assigned', () => {
-          assert(vm.$validator1 === null)
+          assert(vm.$validator1 === undefined)
         })
       })
     })
@@ -363,8 +363,8 @@ describe('validator element directive', () => {
         })
 
         it('should not be assigned', () => {
-          assert(vm.$validator0 === null)
-          assert(vm.$validator1 === null)
+          assert(vm.$validator0 === undefined)
+          assert(vm.$validator1 === undefined)
         })
       })
     })
