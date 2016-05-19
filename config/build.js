@@ -6,7 +6,6 @@ var babel = require('rollup-plugin-babel')
 var replace = require('rollup-plugin-replace')
 var pack = require('../package.json')
 var banner = require('./banner')
-var path = require('path')
 
 // update main file
 var main = fs
@@ -15,17 +14,9 @@ var main = fs
 fs.writeFileSync('src/index.js', main)
 
 // update installation.md
-var docDir = 'docs'
-var transDirs = fs
-  .readdirSync(docDir)
-  .map(function (transDir) {
-    return path.join(docDir, transDir)
-  }).filter(function (transDir) {
-    return fs.statSync(transDir).isDirectory()
-      && fs.statSync(transDir + '/installation.md').isFile()
-  })
-transDirs.forEach(function (transDir) {
-  var installationPath = transDir + '/installation.md'
+var langs = ['en', 'zh-cn']
+langs.forEach(function (lang) {
+  var installationPath = './docs/' + lang + '/installation.md'
   var installation = fs
     .readFileSync(installationPath, 'utf-8')
     .replace(
