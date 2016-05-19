@@ -58,12 +58,17 @@ export default class Validator {
   }
 
   registerEvents () {
+    const { isSimplePath } = util.Vue.parsers.expression
     const attrs = this._dir.el.attributes
     for (let i = 0, l = attrs.length; i < l; i++) {
       let event = attrs[i].name
       if (REGEX_EVENT.test(event)) {
+        let value = attrs[i].value
+        if (isSimplePath(value)) {
+          value += '.apply(this, $arguments)'
+        }
         event = event.replace(REGEX_EVENT, '')
-        this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true)
+        this._events[this._getEventName(event)] = this._dir.vm.$eval(value, true)
       }
     }
   }
@@ -381,7 +386,9 @@ export default class Validator {
 
   _fireEvent (type, ...args) {
     const handler = this._events[this._getEventName(type)]
-    handler && handler.apply(null, args)
+    handler && this._dir.vm.$nextTick(() => {
+      handler.apply(null, args)
+    })
   }
 
   _fireEvents () {
