@@ -141,21 +141,16 @@ export default class Validator {
   }
 
   addGroupValidation (group, field) {
-    const indexOf = util.Vue.util.indexOf
-
-    const validation = this._validations[field] 
-      || (this._checkboxValidations[field] && this._checkboxValidations[field].validation)
-      || (this._radioValidations[field] && this._radioValidations[field].validation)
-    let validations = this._groupValidations[group]
+    const { indexOf } = util.Vue.util
+    const validation = this._getValidationFrom(field)
+    const validations = this._groupValidations[group]
 
     validations && !~indexOf(validations, validation) && validations.push(validation)
   }
 
   removeGroupValidation (group, field) {
-    const validation = this._validations[field] 
-      || (this._checkboxValidations[field] && this._checkboxValidations[field].validation)
-      || (this._radioValidations[field] && this._radioValidations[field].validation)
-    let validations = this._groupValidations[group]
+    const validation = this._getValidationFrom(field)
+    const validations = this._groupValidations[group]
 
     validations && pull(validations, validation)
   }
@@ -255,13 +250,9 @@ export default class Validator {
 
 
   _getValidationFrom (field) {
-    let validation = this._validations[field]
-    if (!validation && this._checkboxValidations[field]) {
-      validation = this._checkboxValidations[field].validation
-    } else if (!validation && this._radioValidations[field]) {
-      validation = this._radioValidations[field].validation
-    }
-    return validation
+    return this._validations[field]
+      || (this._checkboxValidations[field] && this._checkboxValidations[field].validation)
+      || (this._radioValidations[field] && this._radioValidations[field].validation)
   }
 
   _resetValidation (cb) {
