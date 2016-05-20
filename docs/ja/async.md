@@ -1,6 +1,6 @@
-# Async validation
+# 非同期バリデーション
 
-You can use the async validation. This is useful, when you need to use the server-side validation. the below the example:
+非同期のバリデーションを使用することができます。これはサーバーサイドバリデーションのように使用するときに便利です。下記は例です:
 
 ```html
 <template>
@@ -39,7 +39,7 @@ function ValidationError () {
 ValidationError.prototype = Object.create(Error.prototype)
 ValidationError.prototype.constructor = ValidationError
 
-// exmpale with ES2015
+// ES2015 での例
 export default {
   validators: {
     data () {
@@ -75,30 +75,30 @@ export default {
 }
 ```
 
-## Async validation interfaces
-In async validation, You can use the two type interfaces:
+## 非同期バリデーションインターフェース
+非同期バリデーションでは、２種類のインターフェースを使用することができます:
 
 ### 1. function
-You need to implement custom validator that return function have `function (resolve, reject)` like promise (future). The following, those argument of the function, you need to use according to validation result.
+promise のように `function (resolve, reject)` を持つ関数を返すカスタムバリデーターを実装する必要があります。関数の引数では、次の通りのバリデーション結果に従って使う必要があります。
 
-- validation result
-  - successful: `resolve`
-  - failed: `reject`
+- バリデーション結果
+  - 成功: `resolve`
+  - 失敗: `reject`
 
 ### 2. promise
-As mentioned above, You need to implement custom validation that return a promise. you need to `resolve` or `reject` according to validation result.
+上記で指摘した通り、 promise を返すカスタムバリデーションを実装する必要があります。バリデーション結果に従って `resolve` 又は `reject` する必要があります。
 
-## Using error message
-As mentioned above, when server-side validation error occured, you can use the server-side error message.
+## エラーメッセージの使い方
+上記で指摘したとおり、サーバーサイドバリデーションのエラーを発生させた場合は、サーバーサイドのエラーメッセージを使用することができます。
 
 
-# Validator function context
-Validator function context is bind with Validation object. Validation object expose the some properties. These properties is useful when you need to implement specially validation.
+# バリデーター関数コンテキスト
+バリデーター関数のコンテキストはバリデーションオブジェクトにバインドされます。バリデーションオブジェクトはいくつかのプロパティを公開します。これらのプロパティは特別なバリデーションを実装する必要がある場合に便利です。
 
-## `vm` property
-Expose the vue instance of current validation.
+## `vm` プロパティ
+現在のバリデーションの vue インスタンスを公開してください。
 
-the following ES2015 example:
+ES2015 の例は次の通りです:
 ```javascript
 new Vue({
   data () { return { checking: false } },
@@ -120,8 +120,8 @@ new Vue({
 })
 ```
 
-## `el` property
-Expose the target DOM element of current validation. In the case, use [International Telephone Input](https://github.com/jackocnr/intl-tel-input) jQuery plugin example:
+## `el` プロパティ
+現在のバリデーションの対象 DOM エレメントを公開してください。この場合では jQuery プラグインの [International Telephone Input](https://github.com/jackocnr/intl-tel-input)を例に使用します:
 
 ```javascript
 new Vue({
