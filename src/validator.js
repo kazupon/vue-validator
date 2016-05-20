@@ -272,10 +272,10 @@ export default class Validator {
   }
 
   _setValidationErrors (errors) {
-    const extend = util.Vue.util.extend
+    const { extend } = util.Vue.util
 
     // make tempolaly errors
-    let temp = {}
+    const temp = {}
     each(errors, (error, index) => {
       if (!temp[error.field]) {
         temp[error.field] = []
@@ -285,18 +285,24 @@ export default class Validator {
 
     // set errors
     each(temp, (values, field) => {
-      let validation = this._scope[field]
-      let newValidation = {}
+      const results = this._scope[field]
+      const newResults = {}
+
       each(values, (error) => {
         if (error.validator) {
-          validation[error.validator] = error.message
+          results[error.validator] = error.message
         }
       })
-      validation.valid = false
-      validation.invalid = true
-      validation.errors = values
-      extend(newValidation, validation)
-      util.Vue.set(this._scope, field, newValidation)
+
+      results.valid = false
+      results.invalid = true
+      results.errors = values
+      extend(newResults, results)
+
+      const validation = this._getValidationFrom(field)
+      validation.willUpdateClasses(newResults, validation.el)
+
+      util.Vue.set(this._scope, field, newResults)
     })
   }
 

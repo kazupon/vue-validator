@@ -1,5 +1,6 @@
 import assert from 'power-assert'
 import Vue from 'vue'
+import classes from 'component-classes'
 import { each, empty, trigger } from '../../src/util'
 
 
@@ -252,6 +253,15 @@ describe('errors', () => {
         assert(!empty(vm.$validation.errors))
         assert(vm.$validation.group1.errors.length === 2)
         assert(empty(vm.$validation.group2.errors))
+        each(['0', '4'], (val) => {
+          const cls = classes(el.getElementsByTagName('input')[parseInt(val)])
+          assert(!cls.has('valid'))
+          assert(cls.has('invalid'))
+          assert(cls.has('touched'))
+          assert(!cls.has('untouched'))
+          assert(cls.has('dirty'))
+          assert(cls.has('modified'))
+        })
         done()
       })
     })
