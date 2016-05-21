@@ -1,3 +1,27 @@
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/vuejs/vue-validator/compare/v2.1.1...v2.1.2) (2016-05-21)
+
+
+### :bug: Bug Fixes
+
+* **cleanup:** fix cannot get validation result ([33c71d1](https://github.com/vuejs/vue-validator/commit/33c71d1))
+* **errors:** fix cannot apply validation classes ([af91d57](https://github.com/vuejs/vue-validator/commit/af91d57)), closes [#239](https://github.com/vuejs/vue-validator/issues/239)
+* **event:** fix cannot fire top level events ([b91d36a](https://github.com/vuejs/vue-validator/commit/b91d36a)), closes [#233](https://github.com/vuejs/vue-validator/issues/233)
+* **group:** fix group validation for radio ([1fbfc53](https://github.com/vuejs/vue-validator/commit/1fbfc53)), closes [#234](https://github.com/vuejs/vue-validator/issues/234)
+
+
+### :zap: Improvements
+
+* **async:** update async validator for function I/F ([974cf61](https://github.com/vuejs/vue-validator/commit/974cf61))
+* **errors:** error messages order ([b1add7d](https://github.com/vuejs/vue-validator/commit/b1add7d)), closes [#240](https://github.com/vuejs/vue-validator/issues/240)
+* **warning:** changed warning for when the elements under validation are not wrapped in a <validator> element. ([#224](https://github.com/vuejs/vue-validator/issues/224)) by [@SERVANT14](https://github.com/SERVANT14) ([ec1f223](https://github.com/vuejs/vue-validator/commit/ec1f223))
+
+
+### NOTE
+
+* cleanup: warning: not fixes validation result outside available yet
+
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/vuejs/vue-validator/compare/v2.1.0...v2.1.1) (2016-05-02)
 

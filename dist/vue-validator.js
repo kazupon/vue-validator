@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.1
+ * vue-validator v2.1.2
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -571,7 +571,7 @@ var validators = Object.freeze({
         var el = this.el;
 
         if ('development' !== 'production' && el.__vue__) {
-          warn('v-validate="' + this.expression + '" cannot be ' + 'used on an instance root element.');
+          warn('v-validate="' + this.expression + '" cannot be used on an instance root element.');
           this._invalid = true;
           return;
         }
@@ -1249,28 +1249,13 @@ var validators = Object.freeze({
       var future = validator.call(this, val, arg);
       if (typeof future === 'function') {
         // function
-        if (future.resolved) {
-          // cached
-          cb(future.resolved);
-        } else if (future.requested) {
-          // pool callbacks
-          future.pendingCallbacks.push(cb);
-        } else {
-          (function () {
-            future.requested = true;
-            var cbs = future.pendingCallbacks = [cb];
-            future(function () {
-              // resolve
-              future.resolved = true;
-              for (var i = 0, l = cbs.length; i < l; i++) {
-                cbs[i](true);
-              }
-            }, function (msg) {
-              // reject
-              cb(false, msg);
-            });
-          })();
-        }
+        future(function () {
+          // resolve
+          cb(true);
+        }, function (msg) {
+          // reject
+          cb(false, msg);
+        });
       } else if (isPromise(future)) {
         // promise
         future.then(function () {
@@ -1849,20 +1834,31 @@ var validators = Object.freeze({
 
     Validator.prototype.disableReactive = function disableReactive() {
       var vm = this._dir.vm;
-      vm.$setValidationErrors = undefined;
-      vm.$validate = undefined;
-      vm.$validatorReset = undefined;
+      vm.$setValidationErrors = null;
+      delete vm['$setValidationErrors'];
+      vm.$validate = null;
+      delete vm['$validate'];
+      vm.$validatorReset = null;
+      delete vm['$validatorReset'];
       vm._validatorMaps[this.name] = null;
+      delete vm._validatorMaps[this.name];
       vm[this.name] = null;
+      delete vm[this.name];
     };
 
     Validator.prototype.registerEvents = function registerEvents() {
+      var isSimplePath = exports$1.Vue.parsers.expression.isSimplePath;
+
       var attrs = this._dir.el.attributes;
       for (var i = 0, l = attrs.length; i < l; i++) {
         var event = attrs[i].name;
         if (REGEX_EVENT.test(event)) {
+          var value = attrs[i].value;
+          if (isSimplePath(value)) {
+            value += '.apply(this, $arguments)';
+          }
           event = event.replace(REGEX_EVENT, '');
-          this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true);
+          this._events[this._getEventName(event)] = this._dir.vm.$eval(value, true);
         }
       }
     };
@@ -1909,14 +1905,14 @@ var validators = Object.freeze({
     Validator.prototype.addGroupValidation = function addGroupValidation(group, field) {
       var indexOf = exports$1.Vue.util.indexOf;
 
-      var validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation;
+      var validation = this._getValidationFrom(field);
       var validations = this._groupValidations[group];
 
       validations && ! ~indexOf(validations, validation) && validations.push(validation);
     };
 
     Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
-      var validation = this._validations[field] || this._checkboxValidations[field].validation || this._radioValidations[field].validation;
+      var validation = this._getValidationFrom(field);
       var validations = this._groupValidations[group];
 
       validations && pull(validations, validation);
@@ -2061,13 +2057,7 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._getValidationFrom = function _getValidationFrom(field) {
-      var validation = this._validations[field];
-      if (!validation && this._checkboxValidations[field]) {
-        validation = this._checkboxValidations[field].validation;
-      } else if (!validation && this._radioValidations[field]) {
-        validation = this._radioValidations[field].validation;
-      }
-      return validation;
+      return this._validations[field] || this._checkboxValidations[field] && this._checkboxValidations[field].validation || this._radioValidations[field] && this._radioValidations[field].validation;
     };
 
     Validator.prototype._resetValidation = function _resetValidation(cb) {
@@ -2083,6 +2073,7 @@ var validators = Object.freeze({
       var extend = exports$1.Vue.util.extend;
 
       // make tempolaly errors
+
       var temp = {};
       each(errors, function (error, index) {
         if (!temp[error.field]) {
@@ -2093,18 +2084,24 @@ var validators = Object.freeze({
 
       // set errors
       each(temp, function (values, field) {
-        var validation = _this9._scope[field];
-        var newValidation = {};
+        var results = _this9._scope[field];
+        var newResults = {};
+
         each(values, function (error) {
           if (error.validator) {
-            validation[error.validator] = error.message;
+            results[error.validator] = error.message;
           }
         });
-        validation.valid = false;
-        validation.invalid = true;
-        validation.errors = values;
-        extend(newValidation, validation);
-        exports$1.Vue.set(_this9._scope, field, newValidation);
+
+        results.valid = false;
+        results.invalid = true;
+        results.errors = values;
+        extend(newResults, results);
+
+        var validation = _this9._getValidationFrom(field);
+        validation.willUpdateClasses(newResults, validation.el);
+
+        exports$1.Vue.set(_this9._scope, field, newResults);
       });
     };
 
@@ -2193,13 +2190,14 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._fireEvent = function _fireEvent(type) {
-      var handler = this._events[this._getEventName(type)];
-
       for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
         args[_key2 - 1] = arguments[_key2];
       }
 
-      handler && handler.apply(null, args);
+      var handler = this._events[this._getEventName(type)];
+      handler && this._dir.vm.$nextTick(function () {
+        handler.apply(null, args);
+      });
     };
 
     Validator.prototype._fireEvents = function _fireEvents() {
@@ -2334,7 +2332,9 @@ var validators = Object.freeze({
         }
       });
 
-      return empty(errors) ? undefined : errors;
+      return empty(errors) ? undefined : errors.sort(function (a, b) {
+        return a.field < b.field ? -1 : 1;
+      });
     };
 
     babelHelpers.createClass(Validator, [{
@@ -2591,7 +2591,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.1.1';
+  plugin.version = '2.1.2';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
