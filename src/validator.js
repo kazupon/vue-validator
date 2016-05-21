@@ -517,6 +517,8 @@ export default class Validator {
       }
     })
 
-    return empty(errors) ? undefined : errors
+    return empty(errors) ? undefined : errors.sort((a, b) => {
+      return (a.field < b.field) ? -1 : 1
+    })
   }
 }

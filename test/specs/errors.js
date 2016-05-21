@@ -125,6 +125,15 @@ describe('errors', () => {
         assert(testMatches(group2Targets, vm.$validation.group2.errors) === 3)
       })
     })
+
+    describe('order', () => {
+      it('should be ascending', () => {
+        for (let i = 0; i < 6; i++) {
+          const name = 'field' + (i + 1).toString()
+          assert(vm.$validation.errors[i].field === name)
+        }
+      })
+    })
   })
 
 
