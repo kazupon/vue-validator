@@ -1,91 +1,91 @@
 # API Reference
 
-## Global API
+## グローバルAPI
 
 ### Vue.validator( id, [definition] )
 
-- **Arguments:**
+- **引数:**
     - `{String} id`
     - `{Function | Object} [definition]`
-- **Return:**
+- **戻り値:**
     - validator definition function or object
 
-- **Usage:**
+- **使用方法:**
 
-  Register or retrieve a global validator.
+  グローバルパリデーターの登録又は取得します。
 
   ```javascript
   /*
-   * Register custom validator 
+   * カスタムバリデーターを登録する
    *
-   * Arguments:
-   *   - first argument: field value
-   *   - second argument: rule value (optional). this argument is being passed from specified validator rule with v-validate
-   * Return:
-   *   `true` if valid, else return `false`
+   * 引数:
+   *   - 第一引数: フィールド値
+   *   - 第二引数: ルール値 (任意). この引数は v-validate 用の特別なバリデーションルールを指定できます。
+   * 戻り値:
+   *   有効の場合は `true` を、そうでない場合は `false` を返します。
    */
   Vue.validator('zip', function (val, rule) {
     return /^\d{3}-\d{4}$/.test(val)
   })
 
   /*
-   * Register custom validator for async
+   * 非同期のカスタムバリデータを登録する
    * 
-   * You can use the `Promise` or promise like `function (resolve, reject)`
+   * `Promise` 又は promise の `function (resolve, reject)` のように使用することができます
    */
   Vue.validator('exist', function (val) {
     return fetch('/validations/exist', {
       method: 'post',
       // ...
     }).then(function (json) {
-      return Promise.resolve() // valid
+      return Promise.resolve() // 有効
     }).catch(function (error) {
-      return Promise.reject(error.message) // invalid
+      return Promise.reject(error.message) // 無効
     })
   })
 
   /*
-   * Register validator definition object
+   * バリデーター定義オブジェクトを登録する
    *
-   * You need to specify the `check` custom validator function.
-   * If you need to error message, you can specify the `message` string or function together.
+   * `check` カスタムバリデーター関数を指定する必要があります。
+   * もしエラーメッセージが必要な場合は、 `message` 文字列又は関数を一緒に指定することができます。
    */
   Vue.validator('email', {
-    message: 'invalid email address', // error message
-    check: function (val) { // custome validator
+    message: 'invalid email address', // エラーメッセージ
+    check: function (val) { // カスタムバリデーター
       return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
     }
   })
   ```
 
-- **See also:**
-  - [Custom validator](custom.html)
+- **参照:**
+  - [カスタムバリデーター](custom.html)
 
-## Constructor Options
+## コンストラクタオプション
 
 ### validators
 
-- **Type:** `Object`
+- **型:** `Object`
 
-- **Details:**
+- **概要:**
 
-  A validator definition object to be made available to the Vue instance only.
+  Vue インスタンスのみで利用可能なバリデーター定義オブジェクト。
 
-- **See also:**
+- **参照:**
   - [Vue.validator()](#vuevalidator-id-definition-)
 
-## Instance Meta Methods
+## インスタンスメタ関数
 
 ### $activateValidator()
 
-- **Arguments:**
-  Nothing
+- **引数:**
+  無し
 
-- **Usage:**
+- **使用方法:**
 
-  Activate a validator that was delaying initialization with `lazy` attribute of `validator` element.
+  `validator` エレメントの `lazy` 属性で遅延初期化されたバリデーターを作動させる。
 
-- **Example:**
+- **例:**
 
   ```javascript
   Vue.component('comment', {
@@ -100,12 +100,12 @@
       resource.get({ id: this.id }, function (comment, stat, req) {
         this.commont =  comment.body
   
-        // activate validator
+        // バリデーターを作動させる
         this.$activateValidator()
         done()
   
       }.bind(this)).error(function (data, stat, req) {
-        // handle error ...
+        // エラー処理
         done()
       })
     },
@@ -113,28 +113,28 @@
       onSave: function () {
         var resource = this.$resource('/comments/:id');
         resource.save({ id: this.id }, { body: this.comment }, function (data, stat, req) {
-          // handle success
+          // 成功処理
         }).error(function (data, sta, req) {
-          // handle error
+          // エラー処理
         })
       }
     }
   })
   ```
   
-- **See also:**
-  - [Lazy initialization](lazy.html)
+- **参照:**
+  - [遅延初期化](lazy.html)
 
 ### $resetValidation( [cb] )
 
-- **Arguments:**
+- **引数:**
   - `{Function} [cb]`
 
-- **Usage:**
+- **使用方法:**
 
-  Reset the validation results.
+  バリデーション結果をリセットする。
 
-- **Example:**
+- **例:**
 
   ```javascript
   new Vue({
@@ -149,34 +149,35 @@
   })
   ```
 
-- **See also:**
-  - [Reset validation results](reset.html)
+- **参照:**
+  - [バリデーション結果の初期化](reset.html)
 
 ### $setValidationErrors( errors )
 
-- **Arguments:**
+- **引数:**
   - `Array<Object>` errors
     - `{String}` field
     - `{String}` message
-    - `{String}` validator [optional]
+    - `{String}` validator [任意]
 
-- **Argument: field**
+- **引数: field**
 
   To detect as validation field error, you need to pass in `field` argument.
+  バリデーションフィールドエラーを検知するため、引数 `field` を渡す必要があります。 
 
-- **Argument: message**
+- **引数: message**
 
-  To output as validation error messsage, you need to pass in `message` argument.
+  バリデーションエラーメッセージを出力するため、引数 `message` を渡す必要があります。
 
-- **Argument: validator**
+- **引数: validator**
 
-  In order to detect where the validator error occurred, you pass in `validator` argument.
+  バリデーターエラーがどこで発生したのかを検知させるために、引数 `validator` を渡します。
 
-- **Usage:**
+- **使用方法:**
 
-  Set the `errors` to validation result errors. This is useful when you want to set manually some errors of server-side validation.
+  `errors` にバリデーション結果のエラーを設定してください。これは手動でサーバーサイドバリデーションを設定したい場合に便利です。
 
-- **Example:**
+- **例:**
 
   ```javascript
   new Vue({
@@ -215,25 +216,26 @@
   })
   ```
 
-- **See also:**
-  - [Error messages](errors.html)
+- **参照:**
+  - [エラーメッセージ](errors.html)
 
 ### $validate( [field], [touched], [cb] )
 
-- **Arguments:**
+- **引数:**
   - `{String} [field]`
   - `{Boolean} [touched]`
   - `{Function} [cb]`
 
-- **Usage:**
+- **使用方法:**
 
-  Validate the target formalable element fields. 
+  対象のエレメントフィールドをバリデートする。
 
-  - If no `field` argument, validate the all fields;
+  - もし引数 `field` がない場合は、全てのフィールドをバリデートします;
 
   - If `touched` argument pass to `true`, `touched` of validation result set `true`;
+  - もし引数 `touched` に `true` が渡された場合は、`touched` のバリデーション結果に `true` を設定します;
 
-- **Example:**
+- **例:**
 
   ```javascript
   new Vue({
@@ -259,16 +261,16 @@
   })
   ```
 
-- **See also:**
-  - [Validation timing customization](timing.html)
+- **参照:**
+  - [バリデーションタイミング変更](timing.html)
 
-## Directives
+## ディレクティブ
 
 ### v-validate
 
-- **Expects:** `Array | Object`
+- **要求事項:** `Array | Object`
 
-- **Param Attributes:**
+- **パラメーター属性:**
   - `group`
   - `field`
   - `detect-blur`
@@ -276,11 +278,11 @@
   - `initial`
   - `classes` (required with v-bind, object)
 
-- **Usage:**
+- **使用方法:**
 
-  Validate form element. For detailed usage, the following the above examples.
+  フォーム要素をバリデートします。より詳細な使い方は次の例をご覧ください。
 
-- **Example:**
+- **例:**
 
   ```html
   <!-- array syntax -->
@@ -308,27 +310,27 @@
   <input type="text" :name="{ valid: 'valid-custom-class' }" v-validate:username="['required']">
   ```
 
-- **See also:**
-  - [Validator syntax](syntax.html)
-  - [Grouping](grouping.html)
-  - [Events](events.html)
-  - [v-model integration](model.html)
-  - [Validation timing customization](timing.html)
-  - [Validation classes](classes.html)
+- **参照:**
+  - [バリデーション文法](syntax.html)
+  - [グループ化](grouping.html)
+  - [イベント](events.html)
+  - [v-model インテグレーション](model.html)
+  - [バリデーションタイミング変更](timing.html)
+  - [バリデーションクラス](classes.html)
 
 ### v-validate-class
 
 > 2.1+
 
-- **Does not expect expression**
+- **式を受け付けません**
 
-- **Limited to:** directive that expect `v-validate` used together
+- **制約:** `v-validate` 時に一緒に使用するディレクティブを要求。
 
-- **Usage:**
+- **使用方法:**
 
-  Indicate automatically validation class insertion.
+  バリデーション時で自動挿入されるクラスを示す。
 
-- **Example:**
+- **例:**
 
   ```html
   <fieldset v-validate-class>
@@ -337,25 +339,26 @@
   </fieldset>
   ```
 
-## Special Elements
+## 特殊要素
 
 ### validator
 
-- **Attributes:**
+- **属性:**
   - `name` (required)
   - `groups`
   - `lazy`
   - `classes` (required with v-bind, object)
  
-- **Usage:**
+- **使用方法:**
 
-  `<validator>` elements serve as validation in formable (input, select and textarea) elements. The `<validator>` element itself will be replaced.
+  `<validator>` 要素はバリデーションするフォーム要素(input, select and textarea)として役に立ちます。 `<validator>` はそれ自身が置き換わります。
 
   The validation results keep to scope name prefixed with `$`, specified by the `name` attribute of the `<validator>` element.
+  バリデーション結果は `$` で始まる名前のスコープに保持され、`<validator>` 要素の`name` 属性で指定されています。
   
-> :warning: Like `$event`, If you specified the validator name that are used with vue.js, it may not work.
+> :注意: `$event`のように vue.js で既に使用されたバリデーション名を指定すると、動作しません。
 
-- **Example:**
+- **例:**
 
   ```html
   <!-- basic -->
@@ -391,28 +394,28 @@
   </validator>
   ```
 
-- **See also:**
-  - [Validation result structure](structure.html)
-  - [Grouping](grouping.html)
-  - [Lazy initialization](lazy.html)
-  - [Validation timing customization](timing.html)
-  - [Async validation](async.html)
-  - [Validation classes](classes.html)
+- **参照:**
+  - [バリデーション結果構造](structure.html)
+  - [グループ化](grouping.html)
+  - [遅延初期化](lazy.html)
+  - [バリデーションタイミング変更](timing.html)
+  - [非同期バリデーション](async.html)
+  - [バリデーションクラス](classes.html)
 
 ### validator-errors
 
-- **Attributes:**
+- **属性:**
   - `validation` (required with v-bind)
   - `component`
   - `partial`
   - `group`
   - `field`
 
-- **Usage:**
+- **使用方法:**
 
-  `<validator-errors>` elements serve as outlets for validation error message template. The `<validator-errors>`element itself will be replaced with validator internal default template. If you are specified with `component` attribute or `partial` attribute, validation error message rendered it.
+  `<validator-errors>` 要素はバリデーションエラーメッセージのテンプレートでアウトレットとして役に立ちます。  `<validator-errors>` 要素それ自身はバリデーターの内部の標準テンプレートに置き換わります。もし `component` 属性又は `partial` 属性を指定した場合は、バリデーションエラーメッセージをレンダリングします。
 
-- **Example:**
+- **例:**
 
   ```html
   <!-- basic -->
@@ -460,5 +463,5 @@
   </validator>
   ```
 
-- **See also:**
-  - [Error messages](errors.html)
+- **参照:**
+  - [エラーメッセージ](errors.html)
