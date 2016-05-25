@@ -8,7 +8,7 @@
     - `{String} id`
     - `{Function | Object} [definition]`
 - **戻り値:**
-    - validator definition function or object
+    - バリデーター定義関数又はオブジェクト
 
 - **使用方法:**
 
@@ -162,7 +162,6 @@
 
 - **引数: field**
 
-  To detect as validation field error, you need to pass in `field` argument.
   バリデーションフィールドエラーを検知するため、引数 `field` を渡す必要があります。 
 
 - **引数: message**
@@ -230,10 +229,9 @@
 
   対象のエレメントフィールドをバリデートする。
 
-  - もし引数 `field` がない場合は、全てのフィールドをバリデートします;
+  - もし引数 `field` がない場合は、全てのフィールドをバリデートします。
 
-  - If `touched` argument pass to `true`, `touched` of validation result set `true`;
-  - もし引数 `touched` に `true` が渡された場合は、`touched` のバリデーション結果に `true` を設定します;
+  - もし引数 `touched` に `true` が渡された場合は、`touched` のバリデーション結果に `true` を設定します。
 
 - **例:**
 
@@ -353,7 +351,6 @@
 
   `<validator>` 要素はバリデーションするフォーム要素(input, select and textarea)として役に立ちます。 `<validator>` はそれ自身が置き換わります。
 
-  The validation results keep to scope name prefixed with `$`, specified by the `name` attribute of the `<validator>` element.
   バリデーション結果は `$` で始まる名前のスコープに保持され、`<validator>` 要素の`name` 属性で指定されています。
   
 > :注意: `$event`のように vue.js で既に使用されたバリデーション名を指定すると、動作しません。
