@@ -50,20 +50,30 @@ export default class Validator {
 
   disableReactive () {
     let vm = this._dir.vm
-    vm.$setValidationErrors = undefined
-    vm.$validate = undefined
-    vm.$validatorReset = undefined
+    vm.$setValidationErrors = null
+    delete vm['$setValidationErrors']
+    vm.$validate = null
+    delete vm['$validate']
+    vm.$validatorReset = null
+    delete vm['$validatorReset']
     vm._validatorMaps[this.name] = null
+    delete vm._validatorMaps[this.name]
     vm[this.name] = null
+    delete vm[this.name]
   }
 
   registerEvents () {
+    const { isSimplePath } = util.Vue.parsers.expression
     const attrs = this._dir.el.attributes
     for (let i = 0, l = attrs.length; i < l; i++) {
       let event = attrs[i].name
       if (REGEX_EVENT.test(event)) {
+        let value = attrs[i].value
+        if (isSimplePath(value)) {
+          value += '.apply(this, $arguments)'
+        }
         event = event.replace(REGEX_EVENT, '')
-        this._events[this._getEventName(event)] = this._dir.vm.$eval(attrs[i].value, true)
+        this._events[this._getEventName(event)] = this._dir.vm.$eval(value, true)
       }
     }
   }
@@ -131,21 +141,16 @@ export default class Validator {
   }
 
   addGroupValidation (group, field) {
-    const indexOf = util.Vue.util.indexOf
-
-    const validation = this._validations[field] 
-      || this._checkboxValidations[field].validation 
-      || this._radioValidations[field].validation
-    let validations = this._groupValidations[group]
+    const { indexOf } = util.Vue.util
+    const validation = this._getValidationFrom(field)
+    const validations = this._groupValidations[group]
 
     validations && !~indexOf(validations, validation) && validations.push(validation)
   }
 
   removeGroupValidation (group, field) {
-    const validation = this._validations[field] 
-      || this._checkboxValidations[field].validation 
-      || this._radioValidations[field].validation
-    let validations = this._groupValidations[group]
+    const validation = this._getValidationFrom(field)
+    const validations = this._groupValidations[group]
 
     validations && pull(validations, validation)
   }
@@ -245,13 +250,9 @@ export default class Validator {
 
 
   _getValidationFrom (field) {
-    let validation = this._validations[field]
-    if (!validation && this._checkboxValidations[field]) {
-      validation = this._checkboxValidations[field].validation
-    } else if (!validation && this._radioValidations[field]) {
-      validation = this._radioValidations[field].validation
-    }
-    return validation
+    return this._validations[field]
+      || (this._checkboxValidations[field] && this._checkboxValidations[field].validation)
+      || (this._radioValidations[field] && this._radioValidations[field].validation)
   }
 
   _resetValidation (cb) {
@@ -262,10 +263,10 @@ export default class Validator {
   }
 
   _setValidationErrors (errors) {
-    const extend = util.Vue.util.extend
+    const { extend } = util.Vue.util
 
     // make tempolaly errors
-    let temp = {}
+    const temp = {}
     each(errors, (error, index) => {
       if (!temp[error.field]) {
         temp[error.field] = []
@@ -275,18 +276,24 @@ export default class Validator {
 
     // set errors
     each(temp, (values, field) => {
-      let validation = this._scope[field]
-      let newValidation = {}
+      const results = this._scope[field]
+      const newResults = {}
+
       each(values, (error) => {
         if (error.validator) {
-          validation[error.validator] = error.message
+          results[error.validator] = error.message
         }
       })
-      validation.valid = false
-      validation.invalid = true
-      validation.errors = values
-      extend(newValidation, validation)
-      util.Vue.set(this._scope, field, newValidation)
+
+      results.valid = false
+      results.invalid = true
+      results.errors = values
+      extend(newResults, results)
+
+      const validation = this._getValidationFrom(field)
+      validation.willUpdateClasses(newResults, validation.el)
+
+      util.Vue.set(this._scope, field, newResults)
     })
   }
 
@@ -381,7 +388,9 @@ export default class Validator {
 
   _fireEvent (type, ...args) {
     const handler = this._events[this._getEventName(type)]
-    handler && handler.apply(null, args)
+    handler && this._dir.vm.$nextTick(() => {
+      handler.apply(null, args)
+    })
   }
 
   _fireEvents () {
@@ -508,6 +517,8 @@ export default class Validator {
       }
     })
 
-    return empty(errors) ? undefined : errors
+    return empty(errors) ? undefined : errors.sort((a, b) => {
+      return (a.field < b.field) ? -1 : 1
+    })
   }
 }

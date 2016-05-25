@@ -22,8 +22,8 @@ export default function (Vue) {
       const params = this.params
 
       if (process.env.NODE_ENV !== 'production' && !params.name) {
-        warn('validator element directive need to specify \'name\' param attribute: '
-            + '(e.g. <validator name="validator1">...</validator>)'
+        warn('validator element requires a \'name\' attribute: '
+          + '(e.g. <validator name="validator1">...</validator>)'
         )
         return
       }

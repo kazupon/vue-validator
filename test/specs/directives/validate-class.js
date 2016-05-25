@@ -14,13 +14,15 @@ describe('validate-class directive', () => {
 
   describe('text', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<div v-validate-class>'
-        + '<input type="text" v-validate:field1="{ required: true, minlength: 4 }">'
-        + '</div>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <div v-validate-class>
+              <input type="text" v-validate:field1="{ required: true, minlength: 4 }">
+            </div>
+          </form>
+        </validator>
+      `
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })
@@ -57,15 +59,17 @@ describe('validate-class directive', () => {
 
   describe('checkbox', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<div v-validate-class>'
-        + '<input type="checkbox" value="foo" v-validate:field1="{ required: true, minlength: 2 }">'
-        + '<input type="checkbox" value="bar" v-validate:field1>'
-        + '<input type="checkbox" value="buz" v-validate:field1>'
-        + '</div>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <div v-validate-class>
+              <input type="checkbox" value="foo" v-validate:field1="{ required: true, minlength: 2 }">
+              <input type="checkbox" value="bar" v-validate:field1>
+              <input type="checkbox" value="buz" v-validate:field1>
+            </div>
+          </form>
+        </validator>
+      ` 
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })
@@ -117,22 +121,24 @@ describe('validate-class directive', () => {
 
   describe('radio', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<fieldset v-validate-class>'
-        + '<label for="radio1">radio1</label>'
-        + '<input type="radio" id="radio1" name="r1" checked value="foo" v-validate:field1="{ required: true }">'
-        + '<label for="radio2">radio2</label>'
-        + '<input type="radio" id="radio2" name="r1" value="bar" v-validate:field1="{ required: true }">'
-        + '</fieldset>'
-        + '<fieldset v-validate-class>'
-        + '<label for="radio3">radio3</label>'
-        + '<input type="radio" id="radio3" name="r2" value="buz" v-validate:field2="{ required: true }">'
-        + '<label for="radio4">radio4</label>'
-        + '<input type="radio" id="radio4" name="r2" value="hoge" v-validate:field2="{ required: true }">'
-        + '</fieldset>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <fieldset v-validate-class>
+              <label for="radio1">radio1</label>
+              <input type="radio" id="radio1" name="r1" checked value="foo" v-validate:field1="{ required: true }">
+              <label for="radio2">radio2</label>
+              <input type="radio" id="radio2" name="r1" value="bar" v-validate:field1="{ required: true }">
+            </fieldset>
+            <fieldset v-validate-class>
+              <label for="radio3">radio3</label>
+              <input type="radio" id="radio3" name="r2" value="buz" v-validate:field2="{ required: true }">
+              <label for="radio4">radio4</label>
+              <input type="radio" id="radio4" name="r2" value="hoge" v-validate:field2="{ required: true }">
+            </fieldset>
+          </form>
+        </validator>
+      ` 
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })
@@ -193,19 +199,21 @@ describe('validate-class directive', () => {
 
   describe('select', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<div v-validate-class>'
-        + '<select multiple v-validate:lang="{ required: true, minlength: 2 }">'
-        + '<option value="en">english</option>'
-        + '<option value="ja">japanese</option>'
-        + '<option value="zh">chinese</option>'
-        + '<option value="fr">french</option>'
-        + '<option value="de">German</option>'
-        + '</select>'
-        + '</div>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <div v-validate-class>
+              <select multiple v-validate:lang="{ required: true, minlength: 2 }">
+                <option value="en">english</option>
+                <option value="ja">japanese</option>
+                <option value="zh">chinese</option>
+                <option value="fr">french</option>
+                <option value="de">German</option>
+              </select>
+            </div>
+          </form>
+        </validator>
+      ` 
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })

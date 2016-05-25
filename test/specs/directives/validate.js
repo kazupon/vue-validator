@@ -16,11 +16,13 @@ describe('validate directive', () => {
     beforeEach((done) => {
       vm = new Vue({
         el: el,
-        template: '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" v-validate:field1="{ required: true }">'
-          + '</form>'
-          + '</validator>'
+        template: `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-validate:field1="{ required: true }">
+            </form>
+          </validator>
+        `
       })
       vm.$nextTick(done)
     })
@@ -42,18 +44,20 @@ describe('validate directive', () => {
   describe('expression evaluate error', () => {
     // TODO: should be tested with spy library (we try to use sinon.js, however it not work ... )
     it('should not be called warn', (done) => {
-      el.innerHTML = '<validator name="validator">'
-        + '<form novalidate>'
-        + '<input type="text" v-validate:field1="{ required: true }">'
-        + '<p>field1 value: {{ $validator.field1.valid }}</p>'
-        + '<div v-for="index in indexes">'
-        + '<input type="text" :field="\'field\' + index" v-validate="{ minlength: 4 }">'
-        + '<p>field{{index}} valid: {{ $validator[\'field\' + index].valid }}</p>'
-        + '<span v-if="$validator[\'field\' + index].valid"> valid !!</span>'
-        + '</div>'
-        + '<input type="submit" v-if="$validator.valid">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator">
+          <form novalidate>
+            <input type="text" v-validate:field1="{ required: true }">
+            <p>field1 value: {{ $validator.field1.valid }}</p>
+            <div v-for="index in indexes">
+              <input type="text" :field="'field' + index" v-validate="{ minlength: 4 }">
+              <p>field{{index}} valid: {{ $validator['field' + index].valid }}</p>
+              <span v-if="$validator['field' + index].valid"> valid !!</span>
+            </div>
+            <input type="submit" v-if="$validator.valid">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {
@@ -71,11 +75,13 @@ describe('validate directive', () => {
   describe('v-if specify error', () => {
     // TODO: should be tested with spy library (we try to use sinon.js, however it not work ... )
     it('should not be called warn', (done) => {
-      el.innerHTML = '<validator name="validator">'
-        + '<form novalidate>'
-        + '<input type="text" v-if="show" v-validate:field1="{ required: true }">'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator">
+          <form novalidate>
+            <input type="text" v-if="show" v-validate:field1="{ required: true }">
+          </form>
+        </validator>
+      `
       vm = new Vue({
         el: el,
         data: {
@@ -97,11 +103,13 @@ describe('validate directive', () => {
         data: {
           hidden: false
         },
-        template: '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" v-show="hidden" v-validate:field1="{ min: 0, max: 10 }">'
-          + '</form>'
-          + '</validator>'
+        template: `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-show="hidden" v-validate:field1="{ min: 0, max: 10 }">
+            </form>
+          </validator>
+        `
       })
     })
 
@@ -170,14 +178,16 @@ describe('validate directive', () => {
   describe('v-if', () => {
     context('text', () => {
       beforeEach(() => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<template v-if="hidden">'
-          + '<input type="text" v-validate:field1="{ minlength: 0, maxlength: 10 }">'
-          + '</template>'
-          + '</form>'
-          + '<pre>{{ $validator1 | json }}</pre>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <template v-if="hidden">
+                <input type="text" v-validate:field1="{ minlength: 0, maxlength: 10 }">
+              </template>
+            </form>
+            <pre>{{ $validator1 | json }}</pre>
+          </validator>
+        ` 
         vm = new Vue({
           el: el,
           data: { hidden: false }
@@ -238,14 +248,16 @@ describe('validate directive', () => {
 
     context('checkbox', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<template v-if="hidden">'
-          + '<input type="checkbox" v-validate:field1="[\'required\']">'
-          + '</template>'
-          + '</form>'
-          + '<pre>{{ $validator1 | json }}</pre>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <template v-if="hidden">
+                <input type="checkbox" v-validate:field1="['required']">
+              </template>
+            </form>
+            <pre>{{ $validator1 | json }}</pre>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { hidden: false }
@@ -276,14 +288,16 @@ describe('validate directive', () => {
 
     context('radio', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<template v-if="hidden">'
-          + '<input type="radio" value="one" v-validate:field1="[\'required\']">'
-          + '</template>'
-          + '</form>'
-          + '<pre>{{ $validator1 | json }}</pre>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <template v-if="hidden">
+                <input type="radio" value="one" v-validate:field1="['required']">
+              </template>
+            </form>
+            <pre>{{ $validator1 | json }}</pre>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { hidden: false }
@@ -314,18 +328,20 @@ describe('validate directive', () => {
 
     context('select', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<template v-if="hidden">'
-          + '<select v-validate:lang="{ required: true }">'
-          + '<option value="en">english</option>'
-          + '<option value="ja">japanese</option>'
-          + '<option value="zh">chinese</option>'
-          + '</select>'
-          + '</template>'
-          + '</form>'
-          + '<pre>{{ $validator1 | json }}</pre>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <template v-if="hidden">
+                <select v-validate:lang="{ required: true }">
+                  <option value="en">english</option>
+                  <option value="ja">japanese</option>
+                  <option value="zh">chinese</option>
+                </select>
+              </template>
+            </form>
+            <pre>{{ $validator1 | json }}</pre>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { hidden: false }
@@ -359,11 +375,13 @@ describe('validate directive', () => {
   describe('v-model', () => {
     describe('text', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" v-model="msg" v-validate:field1="{ required: true, minlength: 10 }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" v-model="msg" v-validate:field1="{ required: true, minlength: 10 }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { msg: 'hello' }
@@ -414,11 +432,13 @@ describe('validate directive', () => {
     describe('checkbox', () => {
       context('single', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<input type="checkbox" v-model="checked" v-validate:field1="[\'required\']">'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <input type="checkbox" v-model="checked" v-validate:field1="['required']">
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { checked: true }
@@ -461,13 +481,15 @@ describe('validate directive', () => {
 
       context('multiple', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<input type="checkbox" v-model="checkedNames" value="foo" v-validate:field1="{ required: true, minlength: 2 }">'
-            + '<input type="checkbox" v-model="checkedNames" value="bar" v-validate:field1>'
-            + '<input type="checkbox" v-model="checkedNames" value="buz" v-validate:field1>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <input type="checkbox" v-model="checkedNames" value="foo" v-validate:field1="{ required: true, minlength: 2 }">
+                <input type="checkbox" v-model="checkedNames" value="bar" v-validate:field1>
+                <input type="checkbox" v-model="checkedNames" value="buz" v-validate:field1>
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { checkedNames: [] }
@@ -525,12 +547,14 @@ describe('validate directive', () => {
 
     describe('radio', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="radio" v-model="picked" name="r1" value="foo" v-validate:field1="{ required: true }">'
-          + '<input type="radio" v-model="picked" name="r1" value="bar" v-validate:field1>'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="radio" v-model="picked" name="r1" value="foo" v-validate:field1="{ required: true }">
+              <input type="radio" v-model="picked" name="r1" value="bar" v-validate:field1>
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { picked: 'foo' }
@@ -595,15 +619,17 @@ describe('validate directive', () => {
     describe('select', () => {
       context('single', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<select v-model="lang" v-validate:lang="{ required: true }">'
-            + '<option value="en">english</option>'
-            + '<option selected value="ja">japanese</option>'
-            + '<option value="zh">chinese</option>'
-            + '</select>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <select v-model="lang" v-validate:lang="{ required: true }">
+                  <option value="en">english</option>
+                  <option selected value="ja">japanese</option>
+                  <option value="zh">chinese</option>
+                </select>
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { lang: 'ja' }
@@ -653,18 +679,20 @@ describe('validate directive', () => {
 
       context('multiple', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<select multiple v-model="langs" v-validate:langs="{ required: true, minlength: 2 }">'
-            + '<option value="">select a language</option>'
-            + '<option selected value="en">english</option>'
-            + '<option value="ja">japanese</option>'
-            + '<option value="zh">chinese</option>'
-            + '<option value="fr">french</option>'
-            + '<option value="de">german</option>'
-            + '</select>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <select multiple v-model="langs" v-validate:langs="{ required: true, minlength: 2 }">
+                  <option value="">select a language</option>
+                  <option selected value="en">english</option>
+                  <option value="ja">japanese</option>
+                  <option value="zh">chinese</option>
+                  <option value="fr">french</option>
+                  <option value="de">german</option>
+                </select>
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { langs: [] }
@@ -736,14 +764,16 @@ describe('validate directive', () => {
 
     describe('v-for', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator">'
-          + '<form novalidate>'
-          + '<div v-for="item in items">'
-          + '<input type="text" :field="\'name\' + ($index + 1)" v-model="item.name" v-validate="{ required: true }">'
-          + '</div>'
-          + '<input type="submit" v-if="$validator.valid">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator">
+            <form novalidate>
+              <div v-for="item in items">
+                <input type="text" :field="'name' + ($index + 1)" v-model="item.name" v-validate="{ required: true }">
+              </div>
+              <input type="submit" v-if="$validator.valid">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: { items: [{}, {}] }
@@ -838,13 +868,15 @@ describe('validate directive', () => {
     describe('filter', () => {
       describe('text', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<template v-if="show">'
-            + '<input type="text" v-model="msg | filter1" v-validate:field1="{ required: true }">'
-            + '</template>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <template v-if="show">
+                  <input type="text" v-model="msg | filter1" v-validate:field1="{ required: true }">
+                </template>
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { msg: 'test', show: true },
@@ -903,11 +935,13 @@ describe('validate directive', () => {
   describe('params', () => {
     describe('initial', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" initial="off" v-validate:field1="{ required: true, minlength: 5 }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" initial="off" v-validate:field1="{ required: true, minlength: 5 }">
+            </form>
+          </validator>
+        `
         vm = new Vue({ el: el })
         vm.$nextTick(done)
       })
@@ -940,11 +974,13 @@ describe('validate directive', () => {
 
     describe('detect-blur', () => {
       beforeEach((done) => {
-        el.innerHTML = '<validator name="validator1">'
-          + '<form novalidate>'
-          + '<input type="text" :detect-blur="blur" v-validate:field1="{ required: true, minlength: 5 }">'
-          + '</form>'
-          + '</validator>'
+        el.innerHTML = `
+          <validator name="validator1">
+            <form novalidate>
+              <input type="text" :detect-blur="blur" v-validate:field1="{ required: true, minlength: 5 }">
+            </form>
+          </validator>
+        `
         vm = new Vue({
           el: el,
           data: {
@@ -999,16 +1035,18 @@ describe('validate directive', () => {
     describe('detect-change', () => {
       describe('normal', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<select :detect-change="change" v-validate:lang="{ required: true }">'
-            + '<option value="">select a language</option>'
-            + '<option value="en">english</option>'
-            + '<option value="ja">japanese</option>'
-            + '<option value="zh">chinese</option>'
-            + '</select>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <select :detect-change="change" v-validate:lang="{ required: true }">
+                  <option value="">select a language</option>
+                  <option value="en">english</option>
+                  <option value="ja">japanese</option>
+                  <option value="zh">chinese</option>
+                </select>
+              </form>
+            </validator>
+          ` 
           vm = new Vue({
             el: el,
             data: { change: 'off' }
@@ -1057,13 +1095,15 @@ describe('validate directive', () => {
 
       describe('v-model', () => {
         beforeEach((done) => {
-          el.innerHTML = '<validator name="validator1">'
-            + '<form novalidate>'
-            + '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="foo" v-validate:field1="{ required: true, minlength: 2 }">'
-            + '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="bar" v-validate:field1>'
-            + '<input type="checkbox" :detect-change="change" v-model="checkedNames" value="buz" v-validate:field1>'
-            + '</form>'
-            + '</validator>'
+          el.innerHTML = `
+            <validator name="validator1">
+              <form novalidate>
+                <input type="checkbox" :detect-change="change" v-model="checkedNames" value="foo" v-validate:field1="{ required: true, minlength: 2 }">
+                <input type="checkbox" :detect-change="change" v-model="checkedNames" value="bar" v-validate:field1>
+                <input type="checkbox" :detect-change="change" v-model="checkedNames" value="buz" v-validate:field1>
+              </form>
+            </validator>
+          `
           vm = new Vue({
             el: el,
             data: { checkedNames: [], change: 'off' }
@@ -1120,11 +1160,13 @@ describe('validate directive', () => {
   // # issue 172
   describe('textarea', () => {
     beforeEach((done) => {
-      el.innerHTML = '<validator name="validator1">'
-        + '<form novalidate>'
-        + '<textarea v-validate:field1="{  maxlength: 100 }" placeholder="this is placeholder"></textarea>'
-        + '</form>'
-        + '</validator>'
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <textarea v-validate:field1="{ maxlength: 100 }" placeholder="this is placeholder"></textarea>
+          </form>
+        </validator>
+      ` 
       vm = new Vue({ el: el })
       vm.$nextTick(done)
     })

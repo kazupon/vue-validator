@@ -8,12 +8,14 @@ describe('modified', () => {
 
   beforeEach((done) => {
     el = document.createElement('div')
-    el.innerHTML = '<validator name="validator1">'
-      + '<form novalidate>'
-      + '<input type="text" v-validate:field1="{ required: true }">'
-      + '<input type="text" v-validate:field2="{ required: true }">'
-      + '</form>'
-      + '</validator>'
+    el.innerHTML = `
+      <validator name="validator1">
+        <form novalidate>
+          <input type="text" v-validate:field1="{ required: true }">
+          <input type="text" v-validate:field2="{ required: true }">
+        </form>
+      </validator>
+    `
     vm = new Vue({
       el: el
     })

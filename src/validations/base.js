@@ -421,24 +421,11 @@ export default class BaseValidation {
   _invokeValidator (vm, validator, val, arg, cb) {
     let future = validator.call(this, val, arg)
     if (typeof future === 'function') { // function 
-      if (future.resolved) {
-        // cached
-        cb(future.resolved)
-      } else if (future.requested) {
-        // pool callbacks
-        future.pendingCallbacks.push(cb)
-      } else {
-        future.requested = true
-        let cbs = future.pendingCallbacks = [cb]
-        future(() => { // resolve
-          future.resolved = true
-          for (let i = 0, l = cbs.length; i < l; i++) {
-            cbs[i](true)
-          }
-        }, (msg) => { // reject
-          cb(false, msg)
-        })
-      }
+      future(() => { // resolve
+        cb(true)
+      }, (msg) => { // reject
+        cb(false, msg)
+      })
     } else if (isPromise(future)) { // promise
       future.then(() => { // resolve
         cb(true)

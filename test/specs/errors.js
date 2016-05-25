@@ -1,5 +1,6 @@
 import assert from 'power-assert'
 import Vue from 'vue'
+import classes from 'component-classes'
 import { each, empty, trigger } from '../../src/util'
 
 
@@ -23,17 +24,21 @@ describe('errors', () => {
 
   beforeEach((done) => {
     el = document.createElement('div')
-    el.innerHTML = '<validator :groups="[\'group1\', \'group2\']" name="validation">'
-      + '<input type="text" group="group1" v-validate:field1="field1">'
-      + '<input type="text" group="group1" v-validate:field2="field2">'
-      + '<input type="text" group="group2" v-validate:field3="field3">'
-      + '<input type="text" group="group2" v-validate:field4="field4">'
-      + '<input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">'
-      + '<input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">'
-      + '<ul><li v-for="error in $validation.errors">'
-      + '<p>{{error.field}}:{{error.message}}</p></div>'
-      + '</li></ul>'
-      + '</validator>'
+    el.innerHTML = `
+      <validator :groups="['group1', 'group2']" name="validation">
+        <input type="text" group="group1" v-validate:field1="field1">
+        <input type="text" group="group1" v-validate:field2="field2">
+        <input type="text" group="group2" v-validate:field3="field3">
+        <input type="text" group="group2" v-validate:field4="field4">
+        <input type="text" group="group1" value="0" v-validate:field5="{ min: { rule :1, message: message1 } }">
+        <input type="text" group="group2" value="foo" v-validate:field6="{ minlength: { rule: 4, message: onMessage2 } }">
+        <ul>
+          <li v-for="error in $validation.errors">
+            <p>{{error.field}}:{{error.message}}</p></div>
+          </li>
+        </ul>
+      </validator>
+    `
     vm = new Vue({
       el: el,
       data: {
@@ -118,6 +123,15 @@ describe('errors', () => {
 
         assert(testMatches(group1Targets, vm.$validation.group1.errors) === 3)
         assert(testMatches(group2Targets, vm.$validation.group2.errors) === 3)
+      })
+    })
+
+    describe('order', () => {
+      it('should be ascending', () => {
+        for (let i = 0; i < 6; i++) {
+          const name = 'field' + (i + 1).toString()
+          assert(vm.$validation.errors[i].field === name)
+        }
       })
     })
   })
@@ -248,6 +262,15 @@ describe('errors', () => {
         assert(!empty(vm.$validation.errors))
         assert(vm.$validation.group1.errors.length === 2)
         assert(empty(vm.$validation.group2.errors))
+        each(['0', '4'], (val) => {
+          const cls = classes(el.getElementsByTagName('input')[parseInt(val)])
+          assert(!cls.has('valid'))
+          assert(cls.has('invalid'))
+          assert(cls.has('touched'))
+          assert(!cls.has('untouched'))
+          assert(cls.has('dirty'))
+          assert(cls.has('modified'))
+        })
         done()
       })
     })
