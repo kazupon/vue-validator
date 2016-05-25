@@ -11,8 +11,8 @@ vue-validator の 2.0-alpha 以前のバージョンでは、バリデーショ�
 <form novalidate>
   <input type="text" v-model="comment" v-validate="minLength: 16, maxLength: 128">
   <div>
-    <span v-show="validation.comment.minLength">Your comment is too short.</span>
-    <span v-show="validation.comment.maxLength">Your comment is too long.</span>
+    <span v-show="validation.comment.minLength">あなたのコメントは短すぎです。</span>
+    <span v-show="validation.comment.maxLength">あなたのコメントは長すぎです。</span>
   </div>
   <input type="submit" value="send" v-if="valid">
 </form>
@@ -24,8 +24,8 @@ v2.0-alpha以降:
   <form novalidate>
     <input type="text" v-validate:comment="{ minlength: 16, maxlength: 128 }">
     <div>
-      <span v-show="$validation.comment.minlength">Your comment is too short.</span>
-      <span v-show="$validation.comment.maxlength">Your comment is too long.</span>
+      <span v-show="$validation.comment.minlength">あなたのコメントは短すぎです。</span>
+      <span v-show="$validation.comment.maxlength">あなたのコメントは長すぎです。</span>
     </div>
     <input type="submit" value="send" v-if="valid">
   </form>
@@ -40,7 +40,7 @@ v2.0-alpha以降:
   <form novalidate>
     <input type="text" v-validate:user-name="{ minlength: 16 }">
     <div>
-      <span v-if="$validation.userName.minlength">Your user name is too short.</span>
+      <span v-if="$validation.userName.minlength">あなたのユーザー名は短すぎです。</span>
     </div>
   </form>
 </validator>
@@ -114,9 +114,9 @@ new Vue({
   <form novalidate>
     ID: <input type="text" v-validate:id="{ required: true, minlength: 3, maxlength: 16 }"><br />
     <div>
-      <span v-if="$validation.id.required">ID is required</span>
-      <span v-if="$validation.id.minlength">Your ID is too short.</span>
-      <span v-if="$validation.id.maxlength">Your ID is too long.</span>
+      <span v-if="$validation.id.required">IDは必須です。</span>
+      <span v-if="$validation.id.minlength">あなたのIDは短すぎです。</span>
+      <span v-if="$validation.id.maxlength">あなたのIDは長すぎです。</span>
     </div>
   </form>
 </validator>
@@ -131,8 +131,8 @@ new Vue({
   <form novalidate>
     ID: <input type="text" v-validate:id="{ minlength: { rule: 3 }, maxlength: { rule: 16 } }"><br />
     <div>
-      <span v-if="$validation.id.minlength">Your ID is too short.</span>
-      <span v-if="$validation.id.maxlength">Your ID is too long.</span>
+      <span v-if="$validation.id.minlength">あなたのIDは短すぎです。</span>
+      <span v-if="$validation.id.maxlength">あなたのIDは長すぎです。</span>
     </div>
   </form>
 ```
@@ -158,8 +158,8 @@ new Vue({
     <form novalidate>
       ID: <input type="text" v-validate:id="rules"><br />
       <div>
-        <span v-if="$validation.id.minlength">Your ID is too short.</span>
-        <span v-if="$validation.id.maxlength">Your ID is too long.</span>
+        <span v-if="$validation.id.minlength">あなたのIDは短すぎです。</span>
+        <span v-if="$validation.id.maxlength">あなたのIDは長すぎです。</span>
       </div>
     </form>
   </validator>

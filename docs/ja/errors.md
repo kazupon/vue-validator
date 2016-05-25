@@ -14,8 +14,8 @@
   <div class="password">
     <label for="password">password:</label>
     <input id="password" type="password" v-validate:password="{
-      required: { rule: true, message: 'required you password !!' },
-      minlength: { rule: 8, message: 'your password short too !!' }
+      required: { rule: true, message: 'パスワードは必須です!!' },
+      minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
     }"/>
     <span v-if="$validation1.password.required">{{ $validation1.password.required }}</span>
     <span v-if="$validation1.password.minlength">{{ $validation1.password.minlength }}</span>
@@ -30,14 +30,14 @@
   <div class="username">
     <label for="username">username:</label>
     <input id="username" type="text" v-validate:username="{
-      required: { rule: true, message: 'required you name !!' }
+      required: { rule: true, message: '名前は必須です!!' }
     }">
   </div>
   <div class="password">
     <label for="password">password:</label>
     <input id="password" type="password" v-validate:password="{
-      required: { rule: true, message: 'required you password !!' },
-      minlength: { rule: 8, message: 'your password short too !!' }
+      required: { rule: true, message: 'パスワードは必須です!!' },
+      minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
     }"/>
   </div>
   <div class="errors">
@@ -61,14 +61,14 @@
   <div class="username">
     <label for="username">username:</label>
     <input id="username" type="text" v-validate:username="{
-      required: { rule: true, message: 'required you name !!' }
+      required: { rule: true, message: '名前は必須です!!' }
     }">
   </div>
   <div class="password">
     <label for="password">password:</label>
     <input id="password" type="password" v-validate:password="{
-      required: { rule: true, message: 'required you password !!' },
-      minlength: { rule: 8, message: 'your password short too !!' }
+      required: { rule: true, message: 'パスワードは必須です!!' },
+      minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
     }"/>
   </div>
   <div class="errors">
@@ -90,13 +90,13 @@
 </div>
 <div class="errors">
   <div>
-    <p>password: your password short too !!</p>
+    <p>password: パスワードが短すぎです !!</p>
   </div>
   <div>
-    <p>password: required you password !!</p>
+    <p>password: パスワードは必須です !!</p>
   </div>
   <div>
-    <p>username: required you name !!</p>
+    <p>username: 名前は必須です !!</p>
   </div>
 </div>
 ```
@@ -115,14 +115,14 @@
     <div class="username">
       <label for="username">username:</label>
       <input id="username" type="text" v-validate:username="{
-        required: { rule: true, message: 'required you name !!' }
+        required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="password">
       <label for="password">password:</label>
       <input id="password" type="password" v-validate:password="{
-        required: { rule: true, message: 'required you password !!' },
-        minlength: { rule: 8, message: 'your password short too !!' }
+        required: { rule: true, message: 'パスワードは必須です!!' },
+        minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="errors">
@@ -153,14 +153,14 @@ new Vue({ el: '#app' })
     <div class="username">
       <label for="username">username:</label>
       <input id="username" type="text" v-validate:username="{
-        required: { rule: true, message: 'required you name !!' }
+        required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="password">
       <label for="password">password:</label>
       <input id="password" type="password" v-validate:password="{
-        required: { rule: true, message: 'required you password !!' },
-        minlength: { rule: 8, message: 'your password short too !!' }
+        required: { rule: true, message: 'パスワードは必須です!!' },
+        minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="errors">
@@ -192,35 +192,35 @@ new Vue({ el: '#app' })
     <div class="username">
       <label for="username">username:</label>
       <input id="username" type="text" group="profile" v-validate:username="{
-        required: { rule: true, message: 'required you name !!' }
+        required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="url">
       <label for="url">url:</label>
       <input id="url" type="text" group="profile" v-validate:url="{
-        required: { rule: true, message: 'required you name !!' },
-        url: { rule: true, message: 'invalid url format' }
+        required: { rule: true, message: '名前は必須です!!' },
+        url: { rule: true, message: 'URLの書式が不正です' }
       }">
     </div>
      <div class="old">
      <label for="old">old password:</label>
       <input id="old" type="password" group="password" v-validate:old="{
-        required: { rule: true, message: 'required you old password !!' },
-        minlength: { rule: 8, message: 'your old password short too !!' }
+        required: { rule: true, message: '古いパスワードは必須です !!' },
+        minlength: { rule: 8, message: '古いパスワードが短すぎです !!' }
       }"/>
     </div>
     <div class="new">
       <label for="new">new password:</label>
       <input id="new" type="password" group="password" v-validate:new="{
-        required: { rule: true, message: 'required you new password !!' },
-        minlength: { rule: 8, message: 'your new password short too !!' }
+        required: { rule: true, message: '新しいパスワードは必須です!!' },
+        minlength: { rule: 8, message: '新しいパスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="confirm">
       <label for="confirm">confirm password:</label>
       <input id="confirm" type="password" group="password" v-validate:confirm="{
-        required: { rule: true, message: 'required you confirm password !!' },
-        minlength: { rule: 8, message: 'your confirm password short too !!' }
+        required: { rule: true, message: '確認用パスワードは必須です!!' },
+        minlength: { rule: 8, message: '確認用パスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="errors">
@@ -248,27 +248,27 @@ new Vue({ el: '#app' })
     <div class="username">
       <label for="username">username:</label>
       <input id="username" type="text" v-model="username" v-validate:username="{
-        required: { rule: true, message: 'required you name !!' }
+        required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="old">
       <label for="old">old password:</label>
       <input id="old" type="password" v-model="passowrd.old" v-validate:old="{
-        required: { rule: true, message: 'required you old password !!' }
+        required: { rule: true, message: '古いパスワードは必須です!!' }
       }"/>
     </div>
     <div class="new">
       <label for="new">new password:</label>
       <input id="new" type="password" v-model="password.new" v-validate:new="{
-        required: { rule: true, message: 'required you new password !!' },
-        minlength: { rule: 8, message: 'your new password short too !!' }
+        required: { rule: true, message: '新しいパスワードは必須です!!' },
+        minlength: { rule: 8, message: '新しいパスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="confirm">
       <label for="confirm">confirm password:</label>
       <input id="confirm" type="password" v-validate:confirm="{
-        required: { rule: true, message: 'required you confirm password !!' },
-        confirm: { rule: passowd.new, message: 'your confirm password incorrect !!' }
+        required: { rule: true, message: '確認用パスワードは必須です!!' },
+        confirm: { rule: passowd.new, message: '確認用パスワードが無効です!!' }
       }"/>
     </div>
     <div class="errors">

@@ -27,7 +27,7 @@ new Vue({
   <validator name="validation1">
     address: <input type="text" v-validate:address="['email']"><br />
     <div>
-      <p v-show="$validation1.address.email">Invalid your mail address format.</p>
+      <p v-show="$validation1.address.email">メールアドレスの書式が無効です</p>
     </div>
   </validator>
 </div>
@@ -65,10 +65,10 @@ new Vue({
     age: <input type="text" v-validate:age="['numeric']"><br />
     site: <input type="text" v-validate:site="['url']"><br />
     <div class="errors">
-      <p v-if="$validation1.username.required">required username</p>
-      <p v-if="$validation1.address.email">invalid email address</p>
-      <p v-if="$validation1.age.numeric">invalid age value</p>
-      <p v-if="$validation1.site.url">invalid site uril format</p>
+      <p v-if="$validation1.username.required">ユーザー名は必須です</p>
+      <p v-if="$validation1.address.email">メールアドレスが無効です</p>
+      <p v-if="$validation1.age.numeric">年齢が無効です</p>
+      <p v-if="$validation1.site.url">サイトURLが無効です</p>
     </div>
   </validator>
 </div>
@@ -99,7 +99,7 @@ new Vue({
   el: '#app',
   validators: {
     numeric: { // ローカル登録 `numeric` カスタムバリデーター
-      message: 'invalid numeric value',
+      message: '無効な数値です',
       check: function (val) {
         return /^[-+]?[0-9]+$/.test(val)
       }

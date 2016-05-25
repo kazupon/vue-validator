@@ -6,7 +6,7 @@
 
 ```html
 <input id="username" type="text" v-validate:username="{
-  required: { rule: true, message: 'required you name !!' }
+  required: { rule: true, message: '名前は必須です!!' }
 }">
 ```
 
@@ -37,7 +37,7 @@
   <input id="username" 
          type="text" 
          :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
-         v-validate:username="{ required: { rule: true, message: 'required you name !!' } }">
+         v-validate:username="{ required: { rule: true, message: '名前は必須です!!' } }">
 </validator>
 ```
 
@@ -56,7 +56,7 @@
     <input id="username" 
            type="text" 
            :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
-           v-validate:username="{ required: { rule: true, message: 'required you name !!' }
+           v-validate:username="{ required: { rule: true, message: '名前は必須です!!' }
     }">
   </div>
 </validator>

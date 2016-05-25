@@ -8,8 +8,8 @@
     <form novalidate>
       message: <input type="text" v-model="msg" v-validate:message="{ required: true, minlength: 8 }"><br />
       <div>
-        <p v-if="$validation1.message.required">Required your message.</p>
-        <p v-if="$validation1.message.minlength">Too short message.</p>
+        <p v-if="$validation1.message.required">メッセージは必須です。</p>
+        <p v-if="$validation1.message.minlength">メッセージは短すぎです。</p>
       </div>
     </form>
   </validator>

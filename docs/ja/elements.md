@@ -8,21 +8,21 @@
 <div id="app">
   <validator name="validation1">
     <form novalidate>
-      <h1>Survey</h1>
+      <h1>調査</h1>
       <fieldset>
-        <legend>Which do you like fruit ?</legend>
+        <legend>どのフルーツが好きですか?</legend>
         <input id="apple" type="checkbox" value="apple" v-validate:fruits="{
           required: { rule: true, message: requiredErrorMsg },
           minlength: { rule: 1, message: minlengthErrorMsg },
           maxlength: { rule: 2, message: maxlengthErrorMsg }
         }">
-        <label for="apple">Apple</label>
+        <label for="apple">りんご</label>
         <input id="orange" type="checkbox" value="orange" v-validate:fruits>
-        <label for="orange">Orage</label>
+        <label for="orange">オレンジ</label>
         <input id="grape" type="checkbox" value="grape" v-validate:fruits>
-        <label for="grape">Grape</label>
+        <label for="grape">ぶどう</label>
         <input id="banana" type="checkbox" value="banana" v-validate:fruits>
-        <label for="banana">Banana</label>
+        <label for="banana">バナナ</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
             <p>{{msg}}</p>
@@ -39,13 +39,13 @@ new Vue({
   el: '#app',
   computed: {
     requiredErrorMsg: function () {
-      return 'Required fruit !!'
+      return 'フルーツは必須です!!'
     },
     minlengthErrorMsg: function () {
-      return 'Please chose at least 1 fruit !!'
+      return 'フルーツは最低でも1つは選択してください!!'
     },
     maxlengthErrorMsg: function () {
-      return 'Please chose at most 2 fruits !!'
+      return 'フルーツは最大で2つ選択してください!!'
     }
   }
 })
@@ -59,19 +59,19 @@ new Vue({
 <div id="app">
   <validator name="validation1">
     <form novalidate>
-      <h1>Survey</h1>
+      <h1>調査</h1>
       <fieldset>
-        <legend>Which do you like fruit ?</legend>
+        <legend>どのフルーツが好きですか?</legend>
         <input id="apple" type="radio" name="fruit" value="apple" v-validate:fruits="{
           required: { rule: true, message: requiredErrorMsg }
         }">
-        <label for="apple">Apple</label>
+        <label for="apple">りんご</label>
         <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
-        <label for="orange">Orage</label>
+        <label for="orange">オレンジ</label>
         <input id="grape" type="radio" name="fruit" value="grape" v-validate:fruits>
-        <label for="grape">Grape</label>
+        <label for="grape">ぶどう</label>
         <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
-        <label for="banana">Banana</label>
+        <label for="banana">バナナ</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
             <p>{{msg}}</p>
@@ -88,7 +88,7 @@ new Vue({
   el: '#app',
   computed: {
     requiredErrorMsg: function () {
-      return 'Required fruit !!'
+      return 'フルーツは必須です!!'
     }
   }
 })

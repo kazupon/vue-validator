@@ -11,8 +11,8 @@
   <p>{{comment}}</p>
   <validator lazy name="validation1">
     <input type="text" :value="comment" v-validate:comment="{ required: true, maxlength: 256 }"/>
-    <span v-if="$validation1.comment.required">Required your comment</span>
-    <span v-if="$validation1.comment.maxlength">Too long comment !!</span>
+    <span v-if="$validation1.comment.required">コメントは必須です</span>
+    <span v-if="$validation1.comment.maxlength">コメントが長すぎです!!</span>
     <button type="button" value="save" @click="onSave" v-if="$validation1.valid">
   </validator>
 </div>
@@ -31,12 +31,12 @@ Vue.component('comment', {
     resource.get({ id: this.id }, function (comment, stat, req) {
       this.commont =  comment.body
 
-      // activate validator
+      // バリデーターを作動させる
       this.$activateValidator()
       done()
 
     }.bind(this)).error(function (data, stat, req) {
-      // handle error ...
+      // エラー処理を対応する
       done()
     })
   },
@@ -44,9 +44,9 @@ Vue.component('comment', {
     onSave: function () {
       var resource = this.$resource('/comments/:id');
       resource.save({ id: this.id }, { body: this.comment }, function (data, stat, req) {
-        // handle success
+        // 成功処理を対応する
       }).error(function (data, sta, req) {
-        // handle error
+        // エラー処理を対応する
       })
     }
   }

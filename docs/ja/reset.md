@@ -15,8 +15,8 @@
         <input id="comment" type="text" v-validate:comment="{ maxlength: 256 }">
       </div>
       <div class="errors">
-        <p v-if="$validation1.username.required">Required your name.</p>
-        <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
+        <p v-if="$validation1.username.required">名前は必須です。</p>
+        <p v-if="$validation1.comment.maxlength">コメントは長すぎです。</p>
       </div>
       <input type="submit" value="send" v-if="$validation1.valid">
       <button type="button" @click="onReset">Reset Validation</button>

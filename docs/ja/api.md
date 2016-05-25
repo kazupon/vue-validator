@@ -274,7 +274,7 @@
   - `detect-blur`
   - `detect-change`
   - `initial`
-  - `classes` (required with v-bind, object)
+  - `classes` (v-bind, object の場合は必須)
 
 - **使用方法:**
 
@@ -287,7 +287,7 @@
   <input type="text" v-validate:username="['required']">
 
   <!-- object syntax -->
-  <input type="text" v-validate:zip="{ required: true, pattern: { rule: '/^\d{3}-\d{4}$/', message: 'invalid zip pattern' }}">
+  <input type="text" v-validate:zip="{ required: true, pattern: { rule: '/^\d{3}-\d{4}$/', message: '無効な郵便番号です' }}">
 
   <!-- binding -->
   <input type="text" v-validate:zip="zipRule">
@@ -342,10 +342,10 @@
 ### validator
 
 - **属性:**
-  - `name` (required)
+  - `name` (必須)
   - `groups`
   - `lazy`
-  - `classes` (required with v-bind, object)
+  - `classes` (v-bind, object の場合は必須)
  
 - **使用方法:**
 
@@ -372,22 +372,22 @@
     <input type="password" group="password" v-validate:password1="{ minlength: 8, required: true }"/>
     <label for="confirm">password (confirm):</label>
     <input type="password" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
-    <p v-if="$validation.user.invalid">Invalid yourname !!</p>
-    <p v-if="$validation.password.invalid">Invalid password input !!</p>
+    <p v-if="$validation.user.invalid">無効なユーザー名です!!</p>
+    <p v-if="$validation.password.invalid">無効なパスワード入力です!!</p>
   </validator>
 
   <!-- lazy initialization -->
   <validator lazy name="validation">
     <input type="text" :value="comment" v-validate:comment="{ required: true, maxlength: 256 }"/>
-    <span v-if="$validation.comment.required">Required your comment</span>
-    <span v-if="$validation.comment.maxlength">Too long comment !!</span>
+    <span v-if="$validation.comment.required">コメントは必須です</span>
+    <span v-if="$validation.comment.maxlength">コメントが長すぎです!!</span>
     <button type="button" value="save" @click="onSave" v-if="valid">
   </validator>
 
   <!-- validation custom class -->
   <validator :classes="{ valid: 'valid-custom-class' }" name="validation">
     <input type="text" v-validate:username="['required']">
-    <p v-if="$validation.invalid">invalid !!<p>
+    <p v-if="$validation.invalid">無効です!!<p>
   </validator>
   ```
 
@@ -402,7 +402,7 @@
 ### validator-errors
 
 - **属性:**
-  - `validation` (required with v-bind)
+  - `validation` (v-bind の場合は必須)
   - `component`
   - `partial`
   - `group`
@@ -445,12 +445,12 @@
   <validator :groups="['profile', 'password']" name="validation1">
     ...
     <input id="username" type="text" group="profile" v-validate:username="{
-      required: { rule: true, message: 'required you name !!' }
+      required: { rule: true, message: '名前は必須です!!' }
     }">
     ...
     <input id="old" type="password" group="password" v-validate:old="{
-      required: { rule: true, message: 'required you old password !!' },
-      minlength: { rule: 8, message: 'your old password short too !!' }
+      required: { rule: true, message: '古いパスワードは必須です!!' },
+      minlength: { rule: 8, message: '古いパスワードが短すぎです!!' }
     }"/>
     ...
     <div class="errors">

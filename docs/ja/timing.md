@@ -39,23 +39,23 @@ vue-validator はフォーム要素(input, checkbox, select, 等)のDOMイベン
         <label for="username">username:</label>
         <input id="username" type="text" 
           detect-change="off" detect-blur="off" v-validate:username="{
-          required: { rule: true, message: 'required you name !!' }
+          required: { rule: true, message: '名前は必須です!!' }
         }" />
       </div>
       <div class="password">
         <label for="password">password:</label>
         <input id="password" type="password" v-model="password" 
           detect-change="off" detect-blur="off" v-validate:password="{
-          required: { rule: true, message: 'required you new password !!' },
-          minlength: { rule: 8, message: 'your new password short too !!' }
+          required: { rule: true, message: '新しいパスワードは必須です!!' },
+          minlength: { rule: 8, message: '新しいパスワードが短すぎです!!' }
         }" />
       </div>
       <div class="confirm">
         <label for="confirm">confirm password:</label>
         <input id="confirm" type="password" 
           detect-change="off" detect-blur="off" v-validate:confirm="{
-          required: { rule: true, message: 'required you confirm password !!' },
-          confirm: { rule: password, message: 'your confirm password incorrect !!' }
+          required: { rule: true, message: '確認用パスワードは必須です!!' },
+          confirm: { rule: password, message: '確認用パスワードが正しくありません!!' }
         }" />
       </div>
       <div class="errors" v-if="$validation.touched">

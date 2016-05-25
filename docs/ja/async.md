@@ -11,7 +11,7 @@
         <label for="username">username:</label>
         <input id="username" type="text" 
           detect-change="off" v-validate:username="{
-          required: { rule: true, message: 'required your name !!' },
+          required: { rule: true, message: '名前は必須です!!' },
           exist: { rule: true, initial: 'off' }
         }" />
         <span v-if="checking">checking ...</span>
