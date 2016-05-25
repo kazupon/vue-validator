@@ -29,7 +29,7 @@ new Vue({
     <div>
       <p v-show="$validation1.address.email">Invalid your mail address format.</p>
     </div>
-  <validator>
+  </validator>
 </div>
 ```
 
@@ -70,7 +70,7 @@ new Vue({
       <p v-if="$validation1.age.numeric">invalid age value</p>
       <p v-if="$validation1.site.url">invalid site uril format</p>
     </div>
-  <validator>
+  </validator>
 </div>
 ```
 
@@ -129,6 +129,6 @@ new Vue({
     <div class="errors">
       <validator-errors :validation="$validation1"></validator-errors>
     </div>
-  <validator>
+  </validator>
 </div>
 ```

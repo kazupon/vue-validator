@@ -13,7 +13,7 @@
     <input type="text" :value="comment" v-validate:comment="{ required: true, maxlength: 256 }"/>
     <span v-if="$validation1.comment.required">Required your comment</span>
     <span v-if="$validation1.comment.maxlength">Too long comment !!</span>
-    <button type="button" value="save" @click="onSave" v-if="valid">
+    <button type="button" value="save" @click="onSave" v-if="$validation1.valid">
   </validator>
 </div>
 ```
