@@ -36,7 +36,7 @@ Vue.component('comment', {
       done()
 
     }.bind(this)).error(function (data, stat, req) {
-      // エラー処理を対応する
+      // エラー時の対処をする
       done()
     })
   },
@@ -44,9 +44,9 @@ Vue.component('comment', {
     onSave: function () {
       var resource = this.$resource('/comments/:id');
       resource.save({ id: this.id }, { body: this.comment }, function (data, stat, req) {
-        // 成功処理を対応する
+        // 成功時の対処をする
       }).error(function (data, sta, req) {
-        // エラー処理を対応する
+        // エラー時を対処をする
       })
     }
   }
