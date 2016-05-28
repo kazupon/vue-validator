@@ -141,7 +141,7 @@ export default function (Vue) {
       this.field = camelize(this.arg ? this.arg : params.field)
 
       this.validation = validator.manageValidation(
-        this.field, model, this.vm, this.frag.node, 
+        this.field, model, this.vm, this.getElementFrom(this.frag), 
         this._scope, filters, params.initial,
         this.isDetectBlur(params.detectBlur), 
         this.isDetectChange(params.detectChange)
@@ -159,7 +159,7 @@ export default function (Vue) {
     listen () {
       const model = this.model
       const validation = this.validation
-      const el = this.frag.node
+      const el = this.getElementFrom(this.frag)
 
       this.onBlur = bind(validation.listener, validation)
       on(el, 'blur', this.onBlur)
@@ -184,7 +184,7 @@ export default function (Vue) {
     },
 
     unlisten () {
-      const el = this.frag.node
+      const el = this.getElementFrom(this.frag)
 
       if (this.onInput) {
         off(el, 'input', this.onInput)
@@ -209,7 +209,7 @@ export default function (Vue) {
 
     teardownValidate () {
       if (this.validator && this.validation) {
-        let el = this.frag.node
+        const el = this.getElementFrom(this.frag)
 
         this.params.group 
           && this.validator.removeGroupValidation(this.params.group, this.field)
@@ -289,6 +289,10 @@ export default function (Vue) {
         }
       }
       return ret
+    },
+
+    getElementFrom (frag) {
+      return frag.single ? frag.node : frag.node.nextSibling
     }
   })
 }

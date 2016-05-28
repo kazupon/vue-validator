@@ -452,4 +452,40 @@ describe('github issues', () => {
       })
     })
   })
+
+  describe('#243', () => {
+    beforeEach((done) => {
+      el.innerHTML = `
+        <validator name="validator1">
+          <form novalidate>
+            <input type="text" v-pickadate="'date'" v-validate:name="['required']">
+          </form>
+        </validator>
+      `
+      vm = new Vue({
+        el,
+        directives: {
+          pickadate: {
+            bind () {
+              const elm = document.createElement('div')
+              elm.innerHTML = '<p>hello world</p>'
+              Vue.util.after(elm, this.el)
+            }
+          }
+        }
+      })
+      vm.$nextTick(done)
+    })
+
+    it('should be validated', (done) => {
+      const field1 = vm.$el.querySelector('input')
+      field1.value = 'hello'
+      trigger(field1, 'input')
+      trigger(field1, 'blur')
+      vm.$nextTick(() => {
+        assert(vm.$validator1.name.required === false)
+        done()
+      })
+    })
+  })
 })
