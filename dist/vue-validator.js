@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.2
+ * vue-validator v2.1.3
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -654,7 +654,7 @@ var validators = Object.freeze({
 
         this.field = camelize(this.arg ? this.arg : params.field);
 
-        this.validation = validator.manageValidation(this.field, model, this.vm, this.frag.node, this._scope, filters, params.initial, this.isDetectBlur(params.detectBlur), this.isDetectChange(params.detectChange));
+        this.validation = validator.manageValidation(this.field, model, this.vm, this.getElementFrom(this.frag), this._scope, filters, params.initial, this.isDetectBlur(params.detectBlur), this.isDetectChange(params.detectChange));
 
         isPlainObject(params.classes) && this.validation.setValidationClasses(params.classes);
 
@@ -665,7 +665,7 @@ var validators = Object.freeze({
       listen: function listen() {
         var model = this.model;
         var validation = this.validation;
-        var el = this.frag.node;
+        var el = this.getElementFrom(this.frag);
 
         this.onBlur = bind(validation.listener, validation);
         on(el, 'blur', this.onBlur);
@@ -688,7 +688,7 @@ var validators = Object.freeze({
         }
       },
       unlisten: function unlisten() {
-        var el = this.frag.node;
+        var el = this.getElementFrom(this.frag);
 
         if (this.onInput) {
           off(el, 'input', this.onInput);
@@ -712,7 +712,7 @@ var validators = Object.freeze({
       },
       teardownValidate: function teardownValidate() {
         if (this.validator && this.validation) {
-          var el = this.frag.node;
+          var el = this.getElementFrom(this.frag);
 
           this.params.group && this.validator.removeGroupValidation(this.params.group, this.field);
 
@@ -785,6 +785,9 @@ var validators = Object.freeze({
           }
         }
         return ret;
+      },
+      getElementFrom: function getElementFrom(frag) {
+        return frag.single ? frag.node : frag.node.nextSibling;
       }
     });
   }
@@ -2591,7 +2594,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.1.2';
+  plugin.version = '2.1.3';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);

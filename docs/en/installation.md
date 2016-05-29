@@ -9,7 +9,7 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 ### jsdelivr
 
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.1.2/vue-validator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.validator/2.1.3/vue-validator.min.js"></script>
 ```
 
 ## NPM
