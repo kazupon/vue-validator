@@ -104,7 +104,7 @@ new Vue({
   <validator name="validation1">
     <form novalidate>
       <select v-validate:lang="{ required: true }">
-        <option value="">----- select your favorite programming language -----</option>
+        <option value="">----- お気入りのプログラミング言語を選択してください -----</option>
         <option value="javascript">JavaScript</option>
         <option value="ruby">Ruby</option>
         <option value="python">Python</option>
@@ -114,10 +114,10 @@ new Vue({
         <option value="rust">Rust</option>
         <option value="elixir">Elixir</option>
         <option value="c">C</option>
-        <option value="none">Not a nothing here</option>
+        <option value="none">ここにはありません</option>
       </select>
       <div class="errors">
-        <p v-if="$validation1.lang.required">Required !!</p>
+        <p v-if="$validation1.lang.required">必須!!</p>
       </div>
     </form>
   </validator>

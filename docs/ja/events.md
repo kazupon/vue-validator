@@ -1,6 +1,6 @@
 # イベント
 
-一般的な Vue イベントのバインディングを使うことで、バリデーターの中で発生したイベントをバインドさせることができます。
+一般的な Vue イベントのバインディングを使うことで、バリデータの中で発生したイベントをバインドさせることができます。
 
 ## フィールドバリデーションイベント
 
@@ -16,7 +16,7 @@
 <div id="app">
   <validator name="validation1">
     <div class="comment-field">
-      <label for="comment">comment:</label>
+      <label for="comment">コメント:</label>
       <input type="text" 
              @valid="onValid" 
              @invalid="onInvalid" 
@@ -87,12 +87,12 @@ new Vue({
              @dirty="onDirty"
              @modified="onModified">
     <div class="comment-field">
-      <label for="username">username:</label>
+      <label for="username">ユーザー名:</label>
       <input type="text" 
              v-validate:username="['required']"/>
     </div>
     <div class="password-field">
-      <label for="password">password:</label>
+      <label for="password">パスワード:</label>
       <input type="password" 
              v-validate:password="{ required: true, minlength: 8 }"/>
     </div>
