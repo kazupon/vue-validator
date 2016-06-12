@@ -1,5 +1,133 @@
 # API Reference
 
+## ビルドインバリデータ
+
+### required
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="radio"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **使用方法:**
+
+    値が指定されているかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <!-- array syntax -->
+    <input type="text" v-validate:zip="['required']">
+
+    <!-- object syntax -->
+    <!-- NOTE: 'rule' need the dummy value -->
+    <input type="text" v-validate:zip="{ required: { rule: true } }">
+    ```
+
+### pattern
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された値が正規表現かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:zip="{ pattern: '/^\d{3}-\d{4}$/' }">
+    ```
+
+### minlength
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された文字列値が最初以下の長さかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="password" v-validate:password="{ minlength: 8 }"/>
+    ```
+
+### maxlength
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された文字列値が最大以上の長さかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:comment="{ maxlength: 256 }"/>
+    ```
+
+### min
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された数値が最小以下かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:age="{ min: 18 }"/>
+    ```
+
+### max
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された数値が最大以下かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:limit="{ max: 100 }"/>
+    ```
+
 ## グローバルAPI
 
 ### Vue.validator( id, [definition] )

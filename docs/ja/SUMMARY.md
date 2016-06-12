@@ -8,6 +8,7 @@
 - [はじめに](started.md)
 - [バリデーション結果の構造](structure.md)
 - [バリデータシンタックス](syntax.md)
+- [ビルドインバリデータ](validators.md)
 - [v-model インテグレーション](model.md)
 - [バリデーション結果の初期化](reset.md)
 - [バリデーション可能なフォーム要素](elements.md)
