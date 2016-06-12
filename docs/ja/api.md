@@ -248,13 +248,13 @@
       onSubmit: function (e) {
         // 全てのフィールドを手動的にタッチされたものとしてバリデート
         // validate the all fields manually with touched
+        var self = this
         this.$validate(true, function () {
           console.log('validate done !!')
+          if (self.$validation.invalid) {
+            e.preventDefault()
+          }
         })
-  
-        if (this.$validation.invalid) {
-          e.preventDefault()
-        }
       }
     }
   })
