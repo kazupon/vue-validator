@@ -1,5 +1,133 @@
 # API 手册
 
+## Build-in Validators
+
+### required
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="radio"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the value has been specified.
+
+- **Example:**
+
+    ```html
+    <!-- array syntax -->
+    <input type="text" v-validate:zip="['required']">
+
+    <!-- object syntax -->
+    <!-- NOTE: 'rule' need the dummy value -->
+    <input type="text" v-validate:zip="{ required: { rule: true } }">
+    ```
+
+### pattern
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the pattern of the regular expression.
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:zip="{ pattern: '/^\d{3}-\d{4}$/' }">
+    ```
+
+### minlength
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified string value is minimum length.
+
+- **Example:**
+
+    ```html
+    <input type="password" v-validate:password="{ minlength: 8 }"/>
+    ```
+
+### maxlength
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified string value is maximum length.
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:comment="{ maxlength: 256 }"/>
+    ```
+
+### min
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified numerical value is minimum.
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:age="{ min: 18 }"/>
+    ```
+
+### max
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified numerical value is maximum
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:limit="{ max: 100 }"/>
+    ```
+
 ## 全局 API
 
 ### Vue.validator( id, [definition] )
