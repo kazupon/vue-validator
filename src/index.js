@@ -1,11 +1,17 @@
 /* @flow */
-function plugin (Vue, options: Object = {}): number {
-  Vue.prototype.$add = (a: number, b: number) => {
-    return a + b
+import { warn } from './util'
+import Asset from './asset'
+
+function plugin (Vue: GlobalAPI, options: Object = {}) {
+  if (plugin.installed) {
+    warn('already installed.')
+    return
   }
+
+  Asset(Vue)
 }
 
-plugin.version = '2.1.3'
+plugin.version = '3.0.0-alpha.1'
 
 export default plugin
 
