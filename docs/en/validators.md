@@ -1,6 +1,6 @@
-# Build-in validators
+# Built-in validators
 
-You can be used build-in validators of below:
+You can be used built-in validators of below:
 
 - `required`: whether the value has been specified
 - `pattern`: whether the pattern of the regular expression
