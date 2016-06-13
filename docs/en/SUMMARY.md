@@ -8,7 +8,7 @@
 - [Getting started](started.md)
 - [Validation result structure](structure.md)
 - [Validator syntax](syntax.md)
-- [Build-in validators](validators.md)
+- [Built-in validators](validators.md)
 - [v-model integration](model.md)
 - [Reset validation results](reset.md)
 - [Form validatable elements](elements.md)
