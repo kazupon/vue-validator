@@ -1,30 +1,24 @@
-var fs = require('fs')
-var zlib = require('zlib')
-var rollup = require('rollup')
-var uglify = require('uglify-js')
-var babel = require('rollup-plugin-babel')
-var replace = require('rollup-plugin-replace')
-var pack = require('../package.json')
-var banner = require('./banner')
+const zlib = require('zlib')
+const rollup = require('rollup')
+const uglify = require('uglify-js')
+const babel = require('rollup-plugin-babel')
+const replace = require('rollup-plugin-replace')
+const pack = require('../package.json')
+const banner = require('./banner')
+const fs = require('fs')
+const readFile = fs.readFileSync
+const writeFile = fs.writeFileSync
+const exist = fs.existsSync
+const mkdir = fs.mkdirSync
+
+if (!exist('dist')) {
+  mkdir('dist')
+}
 
 // update main file
-var main = fs
-  .readFileSync('src/index.js', 'utf-8')
-  .replace(/plugin\.version = '[\d\.]+[\d]+'/, "plugin.version = '" + pack.version + "'")
-fs.writeFileSync('src/index.js', main)
-
-// update installation.md
-var langs = ['en', 'zh-cn']
-langs.forEach(function (lang) {
-  var installationPath = './docs/' + lang + '/installation.md'
-  var installation = fs
-    .readFileSync(installationPath, 'utf-8')
-    .replace(
-      /\<script src=\"https\:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js\"\>\<\/script\>/,
-      '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
-    )
-  fs.writeFileSync(installationPath, installation)
-})
+const main = readFile('src/index.js', 'utf-8')
+  .replace(/plugin\.version = '[\d\.]+'/, `plugin.version = '${pack.version}'`)
+writeFile('src/index.js', main)
 
 // CommonJS build.
 // this is used as the "main" field in package.json
@@ -32,78 +26,56 @@ langs.forEach(function (lang) {
 rollup.rollup({
   entry: 'src/index.js',
   plugins: [
-    babel({
-      presets: ['es2015-loose-rollup']
-    })
+    babel()
   ]
-})
-.then(function (bundle) {
-  return write('dist/' + pack.name + '.common.js', bundle.generate({
-    format: 'cjs',
-    banner: banner
-  }).code)
-})
-// Standalone Dev Build
-.then(function () {
+}).then(bundle => {
+  return write(
+    `dist/${pack.name}.common.js`,
+    bundle.generate({ format: 'cjs', banner }).code
+  )
+}).then(() => { // Standalone Dev Build
   return rollup.rollup({
     entry: 'src/index.js',
     plugins: [
-      replace({
-        'process.env.NODE_ENV': "'development'"
-      }),
-      babel({
-        presets: ['es2015-loose-rollup']
-      })
+      replace({ 'process.env.NODE_ENV': "'development'" }),
+      babel()
     ]
+  }).then(bundle => {
+    return write(
+      `dist/${pack.name}.js`,
+      bundle.generate({
+        format: 'umd', banner, moduleName: classify(pack.name)
+      }).code
+    )
   })
-  .then(function (bundle) {
-    return write('dist/' + pack.name + '.js', bundle.generate({
-      format: 'umd',
-      banner: banner,
-      moduleName: classify(pack.name)
-    }).code)
-  })
-})
-.then(function () {
-  // Standalone Production Build
+}).then(() => { // Standalone Production Build
   return rollup.rollup({
     entry: 'src/index.js',
     plugins: [
-      replace({
-        'process.env.NODE_ENV': "'production'"
-      }),
-      babel({
-        presets: ['es2015-loose-rollup']
-      })
+      replace({ 'process.env.NODE_ENV': "'production'" }),
+      babel()
     ]
-  })
-  .then(function (bundle) {
-    var code = bundle.generate({
+  }).then(bundle => {
+    const code = bundle.generate({
       format: 'umd',
       moduleName: classify(pack.name)
     }).code
-    var minified = banner + '\n' + uglify.minify(code, {
+    const minified = banner + '\n' + uglify.minify(code, {
       fromString: true
     }).code
-    return write('dist/' + pack.name + '.min.js', minified)
-  })
-  .then(zip)
-})
-.catch(logError)
+    return write(`dist/${pack.name}.min.js`, minified)
+  }).then(zip)
+}).catch(logError)
 
-function toUpper (_, c) {
-  return c ? c.toUpperCase() : ''
-}
+function toUpper (_, c) { return c ? c.toUpperCase() : '' }
 
 const classifyRE = /(?:^|[-_\/])(\w)/g
-function classify (str) {
-  return str.replace(classifyRE, toUpper)
-}
+function classify (str) { return str.replace(classifyRE, toUpper) }
 
 function write (dest, code) {
-  return new Promise(function (resolve, reject) {
-    fs.writeFile(dest, code, function (err) {
-      if (err) return reject(err)
+  return new Promise((resolve, reject) => {
+    fs.writeFile(dest, code, err => {
+      if (err) { return reject(err) }
       console.log(blue(dest) + ' ' + getSize(code))
       resolve()
     })
@@ -111,25 +83,19 @@ function write (dest, code) {
 }
 
 function zip () {
-  return new Promise(function (resolve, reject) {
-    fs.readFile('dist/' + pack.name + '.min.js', function (err, buf) {
-      if (err) return reject(err)
-      zlib.gzip(buf, function (err, buf) {
-        if (err) return reject(err)
-        write('dist/' + pack.name + '.min.js.gz', buf).then(resolve)
+  return new Promise((resolve, reject) => {
+    fs.readFile(`dist/${pack.name}.min.js`, (err, buf) => {
+      if (err) { return reject(err) }
+      zlib.gzip(buf, (err, buf) => {
+        if (err) { return reject(err) }
+        write(`dist/${pack.name}.min.js.gz`, buf).then(resolve)
       })
     })
   })
 }
 
-function getSize (code) {
-  return (code.length / 1024).toFixed(2) + 'kb'
-}
+function getSize (code) { return (code.length / 1024).toFixed(2) + 'kb' }
 
-function logError (e) {
-  console.log(e)
-}
+function logError (e) { console.log(e) }
 
-function blue (str) {
-  return '\x1b[1m\x1b[34m' + str + '\x1b[39m\x1b[22m'
-}
+function blue (str) { return '\x1b[1m\x1b[34m' + str + '\x1b[39m\x1b[22m' }

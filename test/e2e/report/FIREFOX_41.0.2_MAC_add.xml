@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="1">
+
+  <testsuite name="add"
+    errors="0" failures="1" hostname="" id="" package="add" skipped="0"
+    tests="1" time="4.728" timestamp="Mon, 13 Jun 2016 02:23:11 GMT">
+  
+    <testcase name="add" time="4.728" assertions="1">  <failure message="Timed out while waiting for element &lt;p&gt; to be present for 1000 milliseconds.">    at Object.module.exports.add (/Users/kazupon/Projects/opensource/vue/vue-validator/test/e2e/test/add.js:5:8)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>
