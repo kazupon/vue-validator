@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import * as validators from '../../src/validators'
 
 describe('asset', () => {
