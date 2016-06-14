@@ -76,7 +76,9 @@ module.exports = config => {
   config.set(Object.assign(base, {
     browsers: Object.keys(batch),
     customLaunchers: batch,
-    reporters: ['progress', 'saucelabs'],
+    reporters: process.env.CI
+      ? ['dots', 'saucelabs'] // avoid spamming CI output
+      : ['progress', 'saucelabs'],
     sauceLabs: {
       testName: `${pack.name} unit tests`,
       recordScreenshots: false,
