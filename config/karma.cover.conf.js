@@ -3,7 +3,7 @@ const base = require('./karma.base.conf')
 module.exports = config => {
   const options = Object.assign(base, {
     browsers: ['PhantomJS'],
-    reporters: ['progress', 'coverage'],
+    reporters: ['mocha', 'coverage'],
     coverageReporter: {
       reporters: [{
         type: 'lcov', dir: '../coverage'
