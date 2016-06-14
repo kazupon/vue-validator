@@ -16,7 +16,7 @@ if (args.indexOf('--env') === -1) {
 }
 const i = args.indexOf('--test')
 if (i > -1) {
-  args[i + 1] = 'test/e2e/specs/' + args[i + 1]
+  args[i + 1] = 'test/e2e/test/' + args[i + 1]
 }
 
 const runner = spawn('./node_modules/.bin/nightwatch', args, {
