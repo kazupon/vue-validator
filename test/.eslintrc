@@ -4,7 +4,9 @@
   },
   "globals": {
     "waitForUpdate": true,
-    "assert": true
+    "assert": true,
+    "Vue": true,
+    "compileToFunctions": true
   },
   "extends": "vue"
 }
