@@ -1,4 +1,5 @@
 const path = require('path')
+const spawn = require('cross-spawn')
 const httpServer = require('http-server')
 const server = httpServer.createServer({
   root: path.resolve(__dirname, '../../')
@@ -6,14 +7,16 @@ const server = httpServer.createServer({
 
 server.listen(8080)
 
-const spawn = require('cross-spawn')
-const args = [
-  '--config', 'config/nightwatch.conf.js',
-  '--env', 'chrome,firefox'
-]
-
-if (process.argv[2]) {
-  args.push('--test', 'test/e2e/test/' + process.argv[2])
+let args = process.argv.slice(2)
+if (args.indexOf('--config') === -1) {
+  args = args.concat(['--config', 'config/nightwatch.conf.js'])
+}
+if (args.indexOf('--env') === -1) {
+  args = args.concat(['--env', 'chrome,firefox,phantomjs'])
+}
+const i = args.indexOf('--test')
+if (i > -1) {
+  args[i + 1] = 'test/e2e/specs/' + args[i + 1]
 }
 
 const runner = spawn('./node_modules/.bin/nightwatch', args, {
