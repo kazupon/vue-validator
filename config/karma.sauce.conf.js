@@ -44,14 +44,12 @@ const batches = [
       browserName: 'internet explorer',
       platform: 'Windows 8.1',
       version: '11'
-    }
-    /*
+    },
     sl_edge: {
       base: 'SauceLabs',
       platform: 'Windows 10',
-      browserName: 'microsoftedge'
+      browserName: 'MicrosoftEdge'
     }
-    */
   },
   // mobile
   {
@@ -74,6 +72,7 @@ module.exports = config => {
   const batch = batches[process.argv[5] || 0]
 
   config.set(Object.assign(base, {
+    singleRun: true,
     browsers: Object.keys(batch),
     customLaunchers: batch,
     reporters: process.env.CI
