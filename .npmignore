@@ -4,6 +4,7 @@
 *.yml
 coverage
 docs/_book
+test/e2e/report
 config
 dist/*.map
 lib

@@ -2,6 +2,7 @@ lib
 coverage
 dist/*.gz
 docs/_book
+test/e2e/report/
 node_modules
 .DS_Store
 *.log
