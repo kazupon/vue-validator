@@ -57,7 +57,7 @@ You can specify the field name to `field` params attribute. This is useful when 
     <form novalidate>
       <p class="validate-field" v-for="field in fields">
       <label :for="field.id">{{field.label}}</label>
-      <input type="text" :id="field.id" :placeholder="field.placeholder" field="{{field.name}}" v-validate="field.validate">
+      <input type="text" :id="field.id" :placeholder="field.placeholder" :field="field.name" v-validate="field.validate">
       </p>
       <pre>{{ $validation | json }}</pre>
     </form>
