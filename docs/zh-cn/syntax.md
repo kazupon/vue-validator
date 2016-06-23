@@ -57,7 +57,7 @@ v2.0-alpha后:
     <form novalidate>
       <p class="validate-field" v-for="field in fields">
       <label :for="field.id">{{field.label}}</label>
-      <input type="text" :id="field.id" :placeholder="field.placeholder" field="{{field.name}}" v-validate="field.validate">
+      <input type="text" :id="field.id" :placeholder="field.placeholder" :field="field.name" v-validate="field.validate">
       </p>
       <pre>{{ $validation | json }}</pre>
     </form>
