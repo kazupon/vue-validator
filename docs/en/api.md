@@ -523,7 +523,7 @@
   <input type="text" group="profile" v-validate:user="['required']">
 
   <!-- field -->
-  <input type="text" filed="field1" v-validate="['required']">
+  <input type="text" field="field1" v-validate="['required']">
 
   <!-- disable validation with DOM event -->
   <input type="password" detect-blur="off" detect-change="off" v-validate:password="['required']">
