@@ -9,6 +9,62 @@
   (global.VueValidator = factory());
 }(this, function () { 'use strict';
 
+  var babelHelpers = {};
+  babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  };
+
+  babelHelpers.classCallCheck = function (instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  babelHelpers.createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
+  babelHelpers.inherits = function (subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  };
+
+  babelHelpers.possibleConstructorReturn = function (self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  };
+
+  babelHelpers;
   /**
    * Utilties
    */
@@ -155,60 +211,6 @@
     }
   }
 
-  var typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  };
-
-  var classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-
-  var createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-
-  var inherits = function (subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  };
-
-  var possibleConstructorReturn = function (self, call) {
-    if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
-  };
-
   /**
    * Fundamental validate functions
    */
@@ -242,7 +244,7 @@
       return val;
     } else if (typeof val === 'string') {
       return val.length > 0;
-    } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : typeof(val)) === 'object') {
+    } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers.typeof(val)) === 'object') {
       return Object.keys(val).length > 0;
     } else if (val === null || val === undefined) {
       return false;
@@ -355,9 +357,7 @@
     );
   }
 
-
-
-  var validators = Object.freeze({
+var validators = Object.freeze({
     required: required,
     pattern: pattern,
     minlength: minlength,
@@ -797,7 +797,7 @@
 
   var BaseValidation = function () {
     function BaseValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      classCallCheck(this, BaseValidation);
+      babelHelpers.classCallCheck(this, BaseValidation);
 
       this.field = field;
       this.touched = false;
@@ -1280,7 +1280,7 @@
       return resolveAsset(this._vm.$options, 'validators', name);
     };
 
-    createClass(BaseValidation, [{
+    babelHelpers.createClass(BaseValidation, [{
       key: 'vm',
       get: function get() {
         return this._vm;
@@ -1315,12 +1315,12 @@
    */
 
   var CheckboxValidation = function (_BaseValidation) {
-    inherits(CheckboxValidation, _BaseValidation);
+    babelHelpers.inherits(CheckboxValidation, _BaseValidation);
 
     function CheckboxValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      classCallCheck(this, CheckboxValidation);
+      babelHelpers.classCallCheck(this, CheckboxValidation);
 
-      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._inits = [];
       return _this;
@@ -1474,7 +1474,7 @@
           };
         }();
 
-        if ((typeof _ret === 'undefined' ? 'undefined' : typeof(_ret)) === "object") return _ret.v;
+        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
       }
     };
 
@@ -1506,7 +1506,7 @@
           };
         }();
 
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : typeof(_ret2)) === "object") return _ret2.v;
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
       }
     };
 
@@ -1518,12 +1518,12 @@
    */
 
   var RadioValidation = function (_BaseValidation) {
-    inherits(RadioValidation, _BaseValidation);
+    babelHelpers.inherits(RadioValidation, _BaseValidation);
 
     function RadioValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      classCallCheck(this, RadioValidation);
+      babelHelpers.classCallCheck(this, RadioValidation);
 
-      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._inits = [];
       return _this;
@@ -1653,7 +1653,7 @@
           };
         }();
 
-        if ((typeof _ret === 'undefined' ? 'undefined' : typeof(_ret)) === "object") return _ret.v;
+        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
       }
     };
 
@@ -1685,7 +1685,7 @@
           };
         }();
 
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : typeof(_ret2)) === "object") return _ret2.v;
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
       }
     };
 
@@ -1697,12 +1697,12 @@
    */
 
   var SelectValidation = function (_BaseValidation) {
-    inherits(SelectValidation, _BaseValidation);
+    babelHelpers.inherits(SelectValidation, _BaseValidation);
 
     function SelectValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      classCallCheck(this, SelectValidation);
+      babelHelpers.classCallCheck(this, SelectValidation);
 
-      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._multiple = _this._el.hasAttribute('multiple');
       return _this;
@@ -1797,7 +1797,7 @@
     function Validator(name, dir, groups, classes) {
       var _this = this;
 
-      classCallCheck(this, Validator);
+      babelHelpers.classCallCheck(this, Validator);
 
       this.name = name;
 
@@ -2006,10 +2006,11 @@
             cb = arg;
           }
         });
-        // add multiple validator validate method with format $${{validator_name}}
-        _this5._dir.vm['$' + _this5.name];
+
         _this5.validate({ field: field, touched: touched, cb: cb });
       };
+      // add multiple validator validate method with format $validate_{{validator_name}}
+      this._dir.vm['$validate_' + this.name.substr(1)] = this._dir.vm.$validate;
     };
 
     Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
@@ -2340,7 +2341,7 @@
       });
     };
 
-    createClass(Validator, [{
+    babelHelpers.createClass(Validator, [{
       key: 'validations',
       get: function get() {
         var extend = exports$1.Vue.util.extend;

@@ -198,7 +198,7 @@ export default class Validator {
       let field = null
       let touched = false
       let cb = null
-      
+
       each(args, (arg, index) => {
         if (typeof arg === 'string') {
           field = arg
@@ -208,10 +208,11 @@ export default class Validator {
           cb = arg
         }
       })
-      // add multiple validator validate method with format $${{validator_name}} 
-      this._dir.vm['$'+this.name]
+
       this.validate({ field: field, touched: touched, cb: cb })
     }
+    // add multiple validator validate method with format $validate_{{validator_name}}
+    this._dir.vm['$validate_' + this.name.substr(1)] = this._dir.vm.$validate;
   }
 
   _defineSetValidationErrors () {
