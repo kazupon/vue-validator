@@ -42,7 +42,7 @@
   <div class="errors">
     <ul>
       <li v-for="error in $validation1.errors">
-        <p>{{error.field}}: {{error.mesage}}</p>
+        <p>{{error.field}}: {{error.message}}</p>
       </li>
     </ul>
   </div>
