@@ -122,7 +122,7 @@ The below example uses an object literal:
 </validator>
 ```
 
-Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specily a **dummy rule** instead, as shown.
+Object literals allow you to provide rule values. For `required`, as it doesn't need a rule value, you can specify a **dummy rule** instead, as shown.
 
 Alternatively, you can specify a strict object as follows:
 

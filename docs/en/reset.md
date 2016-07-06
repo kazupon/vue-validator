@@ -1,6 +1,6 @@
 # Reset validation results
 
-You can reset the validation results with `$resetValidation()` Vue instance meta method that defined with validator dynamically. the below the exmpale:
+You can reset the validation results with `$resetValidation()` Vue instance meta method that defined with validator dynamically. the below the example:
 
 ```html
 <div id="app">
