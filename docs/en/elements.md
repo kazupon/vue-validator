@@ -25,7 +25,7 @@ Checkboxes are supported:
         <label for="banana">Banana</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
-            <p>{{msg}}</p>
+            <p>{{msg.message}}</p>
           </li>
         </ul>
       </fieldset>
@@ -74,7 +74,7 @@ Radio buttons are supported:
         <label for="banana">Banana</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
-            <p>{{msg}}</p>
+            <p>{{msg.message}}</p>
           </li>
         </ul>
       </fieldset>
