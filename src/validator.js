@@ -211,6 +211,8 @@ export default class Validator {
 
       this.validate({ field: field, touched: touched, cb: cb })
     }
+    // add multiple validator validate method with format $validate_{{validator_name}}
+    this._dir.vm['$validate_' + this.name.substr(1)] = this._dir.vm.$validate;
   }
 
   _defineSetValidationErrors () {

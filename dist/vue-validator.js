@@ -65,7 +65,6 @@
   };
 
   babelHelpers;
-
   /**
    * Utilties
    */
@@ -1911,7 +1910,7 @@ var validators = Object.freeze({
       var validation = this._getValidationFrom(field);
       var validations = this._groupValidations[group];
 
-      validations && ! ~indexOf(validations, validation) && validations.push(validation);
+      validations && !~indexOf(validations, validation) && validations.push(validation);
     };
 
     Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -2010,6 +2009,8 @@ var validators = Object.freeze({
 
         _this5.validate({ field: field, touched: touched, cb: cb });
       };
+      // add multiple validator validate method with format $validate_{{validator_name}}
+      this._dir.vm['$validate_' + this.name.substr(1)] = this._dir.vm.$validate;
     };
 
     Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
