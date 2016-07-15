@@ -10,7 +10,7 @@ Sometimes, we need to be styling for each validation result to indicate the user
 }">
 ```
 
-output the below below like the HTML:
+output the below like the HTML:
 
 ```html
 <input id="username" type="text" class="invalid untouched pristine">
@@ -28,7 +28,7 @@ output the below below like the HTML:
 | `modified` | `modified` | when **be modified** field of target element |
 
 ## Applying validation custom classes
-You can configure the class name if default classs name is inconvenient as the above with the class name. You need to use the `classes` attributes in order to configure custom class names. e.g:
+You can configure the class name if default class name is inconvenient as the above with the class name. You need to use the `classes` attributes in order to configure custom class names. e.g:
 
 ```html
 <validator name="validation1" 
@@ -45,7 +45,7 @@ The `classes` attribute need to use at the target element which specified with `
 
 ## Applying validation classes to another element
 
-Normally, validation classes is insert to the element that was validated with `v-validate` directive. However, sometimes, we need to insert the wrapped element rather than the elements. In that case , we can realize by indicating the `v-validate-class` to that element. the below example:
+Normally, validation classes is insert to the element that was validated with `v-validate` directive. However, sometimes, we need to insert the wrapped element rather than the elements. In that case, we can realize by indicating the `v-validate-class` to that element. the below example:
 
 ```html
 <validator name="validation1" 
@@ -61,7 +61,7 @@ Normally, validation classes is insert to the element that was validated with `v
 </validator>
 ```
 
-output the below below like the HTML:
+output the below like the HTML:
 
 ```html
 <div class="username invalid-username untouched pristine">
