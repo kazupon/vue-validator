@@ -10,6 +10,7 @@ declare type CompilerOptions = {
   mustUseProp?: (attr: string) => ?boolean, // check if an attribute should be bound as a property
   getTagNamespace?: (tag: string) => ?string, // check the namespace for a tag
   transforms?: Array<Function>, // a list of transforms on parsed AST before codegen
+  preserveWhitespace?: boolean,
 
   // runtime user-configurable
   delimiters?: [string, string] // template delimiters
@@ -64,6 +65,7 @@ declare type ASTElement = {
 
   static?: boolean,
   staticRoot?: boolean,
+  staticProcessed?: boolean,
 
   text?: string,
   attrs?: Array<{ name: string, value: string }>,
@@ -83,18 +85,17 @@ declare type ASTElement = {
   ref?: string,
   refInFor?: boolean,
 
-  render?: true,
-  renderMethod?: ?string,
-  renderArgs?: ?string,
-
-  if?: string | null,
+  if?: string,
+  ifProcessed?: boolean,
   else?: true,
   elseBlock?: ASTElement,
 
-  for?: string | null,
+  for?: string,
+  forProcessed?: boolean,
   key?: string,
   alias?: string,
-  iterator?: string,
+  iterator1?: string,
+  iterator2?: string,
 
   staticClass?: string,
   classBinding?: string,
@@ -126,20 +127,6 @@ declare type ASTText = {
 
 // SFC-parser related declarations
 
-declare module 'de-indent' {
-  declare var exports: {
-    (str: string): string;
-  }
-}
-
-declare module 'source-map' {
-  declare class SourceMapGenerator {
-    setSourceContent(filename: string, content: string): void;
-    addMapping(mapping: Object): void;
-    toString(): string;
-  }
-}
-
 // an object format describing a single-file component.
 declare type SFCDescriptor = {
   template: ?SFCBlock,
@@ -154,6 +141,5 @@ declare type SFCBlock = {
   end?: number,
   lang?: string,
   src?: string,
-  scoped?: boolean,
-  map?: Object
+  scoped?: boolean
 }
