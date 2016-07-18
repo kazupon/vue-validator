@@ -25,10 +25,10 @@ Validator component for Vue.js
 
 ## Contributing
 - Fork it !
-- Create your top branch from `dev`: `git branch my-new-topic origin/dev`
+- Create your top branch from `2.x`: `git branch my-new-topic origin/dev`
 - Commit your changes: `git commit -am 'Add some topic'`
 - Push to the branch: `git push origin my-new-topic`
-- Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
+- Submit a pull request to `2.x` branch of `vuejs/vue-validator` repository !
 
 ### Branch
 - 2.x (maintance branch for v2 later)
