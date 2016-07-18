@@ -30,6 +30,9 @@ Validator component for Vue.js
 - Push to the branch: `git push origin my-new-topic`
 - Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
 
+### Branch
+- 2.x (maintance branch for v2 later)
+
 
 ## Development Setup
 
