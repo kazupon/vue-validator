@@ -1,0 +1,11 @@
+{
+  "env": {
+    "development": {
+      "presets": ["es2015", "flow-vue"],
+      "plugins": ["babel-plugin-espower"]
+    },
+    "production": {
+      "presets": ["es2015-rollup-vue", "flow-vue"]
+    }
+  }
+}

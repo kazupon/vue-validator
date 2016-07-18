@@ -6,16 +6,24 @@
 
 Validator component for Vue.js
 
-
-# Compatibility
-- Vue.js `1.0.20`+
+>:warning: NOTE: WIP for Vue.js 2.0 :construction:
 
 
-# Documentation
-See [here](http://vuejs.github.io/vue-validator/)
+## Compatibility
+- v2 later
+    - Vue.js `1.0.20`+
+- v3 (**WIP** :construction:)
+    - Vue.js `2.0 beta`+
 
 
-# Contributing
+## Documentation
+- v2 later
+    - See [here](http://vuejs.github.io/vue-validator/)
+- v3
+    - **Not yet** (Progress: https://github.com/vuejs/vue-validator/issues/257)
+
+
+## Contributing
 - Fork it !
 - Create your top branch from `dev`: `git branch my-new-topic origin/dev`
 - Commit your changes: `git commit -am 'Add some topic'`
@@ -23,7 +31,7 @@ See [here](http://vuejs.github.io/vue-validator/)
 - Submit a pull request to `dev` branch of `vuejs/vue-validator` repository !
 
 
-# Development Setup
+## Development Setup
 
     # install deps
     npm install
@@ -44,21 +52,21 @@ See [here](http://vuejs.github.io/vue-validator/)
     npm test
 
 
-# Issues
+## Issues
 
 Please make sure to read the [Issue Reporting Checklist](https://github.com/vuejs/vue/blob/dev/CONTRIBUTING.md#issue-reporting-guidelines) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
 
 
-# Contribution
+## Contribution
 
 Please make sure to read the [Contributing Guide](https://github.com/vuejs/vue/blob/dev/CONTRIBUTING.md) before making a pull request.
 
 
-# Changelog
+## Changelog
 
 Details changes for each release are documented in the [CHANGELOG.md](https://github.com/vuejs/vue-validator/blob/dev/CHANGELOG.md).
 
 
-# License
+## License
 
 [MIT](http://opensource.org/licenses/MIT)

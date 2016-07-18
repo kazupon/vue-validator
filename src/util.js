@@ -1,21 +1,17 @@
+/* @flow */
+
 /**
  * Utilties
  */
 
 // export default for holding the Vue reference
-const exports = {}
+var exports: any = {}
 export default exports
-
 
 /**
  * warn
- *
- * @param {String} msg
- * @param {Error} [err]
- *
  */
-
-export function warn (msg, err) {
+export function warn (msg: string, err?: Error) {
   if (window.console) {
     console.warn('[vue-validator] ' + msg)
     if (err) {
@@ -26,19 +22,16 @@ export function warn (msg, err) {
 
 /**
  * empty
- *
- * @param {Array|Object} target
- * @return {Boolean}
  */
-
-export function empty (target) {
+export function empty (target: Array<any> | Object): boolean {
   if (target === null || target === undefined) { return true }
 
   if (Array.isArray(target)) {
     if (target.length > 0) { return false }
     if (target.length === 0) { return true }
   } else if (exports.Vue.util.isPlainObject(target)) {
-    for (let key in target) {
+    let key
+    for (key in target) {
       if (exports.Vue.util.hasOwn(target, key)) { return false }
     }
   }
@@ -48,20 +41,16 @@ export function empty (target) {
 
 /**
  * each
- *
- * @param {Array|Object} target
- * @param {Function} iterator
- * @param {Object} [context]
  */
-
-export function each (target, iterator, context) {
+export function each (target: Array<any> | Object, iterator: Function, context?: Object) {
   if (Array.isArray(target)) {
     for (let i = 0; i < target.length; i++) {
       iterator.call(context || target[i], target[i], i)
     }
   } else if (exports.Vue.util.isPlainObject(target)) {
     const hasOwn = exports.Vue.util.hasOwn
-    for (let key in target) {
+    let key
+    for (key in target) {
       if (hasOwn(target, key)) {
         iterator.call(context || target[key], target[key], key)
       }
@@ -71,43 +60,30 @@ export function each (target, iterator, context) {
 
 /**
  * pull
- *
- * @param {Array} arr
- * @param {Object} item
- * @return {Object|null}
  */
-
-export function pull (arr, item) {
-  let index = exports.Vue.util.indexOf(arr, item)
+export function pull (arr: Array<any>, item: Object): any | null {
+  const index = exports.Vue.util.indexOf(arr, item)
   return ~index ? arr.splice(index, 1) : null
 }
 
 /**
  * attr
  *
- * @param {Element} el
- * @param {String} name
- * @return {String|null}
  */
-
-export function attr (el, name) {
+export function attr (el: any, name: string): string | null {
   return el ? el.getAttribute(name) : null
 }
 
 /**
  * trigger
- *
- * @param {Element} el
- * @param {String} event
- * @param {Object} [args]
  */
-
-export function trigger (el, event, args) {
-  let e = document.createEvent('HTMLEvents')
+export function trigger (el: any, event: string, args?: Object) {
+  const e: any = document.createEvent('HTMLEvents')
   e.initEvent(event, true, false)
 
   if (args) {
-    for (let prop in args) {
+    let prop
+    for (prop in args) {
       e[prop] = args[prop]
     }
   }
@@ -119,31 +95,22 @@ export function trigger (el, event, args) {
 
 /**
  * Forgiving check for a promise
- *
- * @param {Object} p
- * @return {Boolean}
  */
-
-export function isPromise (p) {
+export function isPromise (p: Object): boolean {
   return p && typeof p.then === 'function'
 }
 
 /**
  * Togging classes
- *
- * @param {Element} el
- * @param {String} key
- * @param {Function} fn
  */
-
-export function toggleClasses (el, key, fn) {
+export function toggleClasses (el: Element, key: string, fn: Function) {
   key = key.trim()
   if (key.indexOf(' ') === -1) {
     fn(el, key)
     return
   }
 
-  let keys = key.split(/\s+/)
+  const keys = key.split(/\s+/)
   for (let i = 0, l = keys.length; i < l; i++) {
     fn(el, keys[i])
   }

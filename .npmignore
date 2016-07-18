@@ -2,8 +2,9 @@
 *.log
 *.swp
 *.yml
-bower.json
 coverage
+docs/_book
+test/e2e/report
 config
 dist/*.map
 lib
