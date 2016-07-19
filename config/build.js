@@ -14,7 +14,7 @@ var main = fs
 fs.writeFileSync('src/index.js', main)
 
 // update installation.md
-var langs = ['en', 'zh-cn']
+var langs = ['en', 'ja', 'zh-cn']
 langs.forEach(function (lang) {
   var installationPath = './docs/' + lang + '/installation.md'
   var installation = fs
