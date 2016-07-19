@@ -1,5 +1,232 @@
 # API Reference
 
+## ビルドインバリデータ
+
+### required
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="radio"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **使用方法:**
+
+    値が指定されているかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <!-- array syntax -->
+    <input type="text" v-validate:zip="['required']">
+
+    <!-- object syntax -->
+    <!-- NOTE: 'rule' need the dummy value -->
+    <input type="text" v-validate:zip="{ required: { rule: true } }">
+
+    <!-- radio -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="radio" name="fruit" value="apple" v-validate:fruits="{ required: { rule: true } }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="radio" name="fruit" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- checkbox -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ required: { rule: true } }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- select -->
+    <select v-validate:lang="{ required: true }">
+      <option value="">----- select your favorite programming language -----</option>
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### pattern
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された値が正規表現かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:zip="{ pattern: '/^\d{3}-\d{4}$/' }">
+    ```
+
+### minlength
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された値の長さが最初以下の長さかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="password" v-validate:password="{ minlength: 8 }"/>
+
+    <!-- checkbox (multiple) -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ minlength: 1 }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- select (multiple) -->
+    <select multiple size="10" v-validate:lang="{ minlength: 3 }">
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### maxlength
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された値の長さが最大以上の長さかどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:comment="{ maxlength: 256 }"/>
+
+    <!-- checkbox (multiple) -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ maxlength: 3 }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- you can use the `select` -->
+    <select multiple size="10" v-validate:lang="{ maxlength: 3 }">
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### min
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された数値が最小以下かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:age="{ min: 18 }"/>
+    ```
+
+### max
+
+- **要素:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **使用方法:**
+
+    指定された数値が最大以下かどうかチェックします。
+
+- **例:**
+
+    ```html
+    <input type="text" v-validate:limit="{ max: 100 }"/>
+    ```
+
 ## グローバルAPI
 
 ### Vue.validator( id, [definition] )
@@ -8,15 +235,15 @@
     - `{String} id`
     - `{Function | Object} [definition]`
 - **戻り値:**
-    - バリデーター定義関数又はオブジェクト
+    - バリデータ定義関数又はオブジェクト
 
 - **使用方法:**
 
-  グローバルパリデーターの登録又は取得します。
+  グローバルバリデータの登録又は取得します。
 
   ```javascript
   /*
-   * カスタムバリデーターを登録する
+   * カスタムバリデータを登録する
    *
    * 引数:
    *   - 第一引数: フィールド値
@@ -31,7 +258,7 @@
   /*
    * 非同期のカスタムバリデータを登録する
    * 
-   * `Promise` 又は promise の `function (resolve, reject)` のように使用することができます
+   * `Promise` 又は promise の `function (resolve, reject)` のように使用することができます。
    */
   Vue.validator('exist', function (val) {
     return fetch('/validations/exist', {
@@ -45,21 +272,21 @@
   })
 
   /*
-   * バリデーター定義オブジェクトを登録する
+   * バリデータ定義オブジェクトを登録する
    *
-   * `check` カスタムバリデーター関数を指定する必要があります。
+   * `check` カスタムバリデータ関数を指定する必要があります。
    * もしエラーメッセージが必要な場合は、 `message` 文字列又は関数を一緒に指定することができます。
    */
   Vue.validator('email', {
     message: 'invalid email address', // エラーメッセージ
-    check: function (val) { // カスタムバリデーター
+    check: function (val) { // カスタムバリデータ
       return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
     }
   })
   ```
 
 - **参照:**
-  - [カスタムバリデーター](custom.html)
+  - [カスタムバリデータ](custom.html)
 
 ## コンストラクタオプション
 
@@ -69,7 +296,7 @@
 
 - **概要:**
 
-  Vue インスタンスのみで利用可能なバリデーター定義オブジェクト。
+  Vue インスタンスのみで利用可能なバリデータ定義オブジェクト。
 
 - **参照:**
   - [Vue.validator()](#vuevalidator-id-definition-)
@@ -83,7 +310,7 @@
 
 - **使用方法:**
 
-  `validator` エレメントの `lazy` 属性で遅延初期化されたバリデーターを作動させる。
+  `validator` エレメントの `lazy` 属性で遅延初期化されたバリデータを作動させます。
 
 - **例:**
 
@@ -98,9 +325,9 @@
     activate: function (done) {
       var resource = this.$resource('/comments/:id');
       resource.get({ id: this.id }, function (comment, stat, req) {
-        this.commont =  comment.body
+        this.comment =  comment.body
   
-        // バリデーターを作動させる
+        // バリデータを作動させる
         this.$activateValidator()
         done()
   
@@ -132,7 +359,7 @@
 
 - **使用方法:**
 
-  バリデーション結果をリセットする。
+  バリデーション結果をリセットします。
 
 - **例:**
 
@@ -170,7 +397,7 @@
 
 - **引数: validator**
 
-  バリデーターエラーがどこで発生したのかを検知させるために、引数 `validator` を渡します。
+  バリデータエラーがどこで発生したのかを検知させるために、引数 `validator` を渡します。
 
 - **使用方法:**
 
@@ -202,7 +429,7 @@
           username: this.username,
           password: this.password.new
         }, function (data, stat, req) {
-          // something handle success ...
+          // 何かの処理...
           // ...
         }).error(function (data, stat, req) {
           // handle server error
@@ -227,7 +454,7 @@
 
 - **使用方法:**
 
-  対象のエレメントフィールドをバリデートする。
+  対象のエレメントフィールドをバリデートします。
 
   - もし引数 `field` がない場合は、全てのフィールドをバリデートします。
 
@@ -246,14 +473,15 @@
     },
     methods: {
       onSubmit: function (e) {
+        // 全てのフィールドを手動的にタッチされたものとしてバリデート
         // validate the all fields manually with touched
+        var self = this
         this.$validate(true, function () {
           console.log('validate done !!')
+          if (self.$validation.invalid) {
+            e.preventDefault()
+          }
         })
-  
-        if (this.$validation.invalid) {
-          e.preventDefault()
-        }
       }
     }
   })
@@ -278,7 +506,7 @@
 
 - **使用方法:**
 
-  フォーム要素をバリデートします。より詳細な使い方は次の例をご覧ください。
+  フォーム要素をバリデートします。より詳細な使い方は次の例を参照してください。
 
 - **例:**
 
@@ -296,7 +524,7 @@
   <input type="text" group="profile" v-validate:user="['required']">
 
   <!-- field -->
-  <input type="text" filed="field1" v-validate="['required']">
+  <input type="text" field="field1" v-validate="['required']">
 
   <!-- disable validation with DOM event -->
   <input type="password" detect-blur="off" detect-change="off" v-validate:password="['required']">
@@ -322,11 +550,11 @@
 
 - **式を受け付けません**
 
-- **制約:** `v-validate` 時に一緒に使用するディレクティブを要求。
+- **制約:** `v-validate` 時に一緒に使用するディレクティブを要求します。
 
 - **使用方法:**
 
-  バリデーション時で自動挿入されるクラスを示す。
+  バリデーション時で自動挿入されるクラスを示します。
 
 - **例:**
 
@@ -410,7 +638,7 @@
 
 - **使用方法:**
 
-  `<validator-errors>` 要素はバリデーションエラーメッセージのテンプレートでアウトレットとして役に立ちます。  `<validator-errors>` 要素それ自身はバリデーターの内部の標準テンプレートに置き換わります。もし `component` 属性又は `partial` 属性を指定した場合は、バリデーションエラーメッセージをレンダリングします。
+  `<validator-errors>` 要素はバリデーションエラーメッセージのテンプレートでアウトレットとして役に立ちます。  `<validator-errors>` 要素それ自身はバリデータの内部の標準テンプレートに置き換わります。もし `component` 属性又は `partial` 属性を指定した場合は、バリデーションエラーメッセージをレンダリングします。
 
 - **例:**
 

@@ -1,5 +1,5 @@
-# バリデーター文法
-`v-validate` ディレクティブの文法は以下です:
+# バリデータシンタックス
+`v-validate` ディレクティブのシンタックスは以下です:
 
     v-validate[:field]="array literal | object literal | binding"
 
@@ -57,7 +57,7 @@ v2.0-alpha以降:
     <form novalidate>
       <p class="validate-field" v-for="field in fields">
       <label :for="field.id">{{field.label}}</label>
-      <input type="text" :id="field.id" :placeholder="field.placeholder" field="{{field.name}}" v-validate="field.validate">
+      <input type="text" :id="field.id" :placeholder="field.placeholder" :field="field.name" v-validate="field.validate">
       </p>
       <pre>{{ $validation | json }}</pre>
     </form>
@@ -103,7 +103,7 @@ new Vue({
 </validator>
 ```
 
-`required` で追加のルールを指定する必要が無いので、この文法は望ましいです。
+`required` で追加のルールを指定する必要が無いので、このシンタックスは望ましいです。
 
 
 ### オブジェクト
@@ -169,7 +169,7 @@ new Vue({
 data プロパティの代わりに算出プロパティやメソッドもルールセットを取得するために使用することができます。
 
 ## ターミナルディレクティブを使用する際の注意事項
-`v-if` と `v-for` のようなターミナルディレクティブを使う必要がある場合は、 `<template>` のような不可視タグでバリデートする対象エレメントでラップする必要がありますので注意してください。なぜならこれらのターミナルディレクティブを一緒に使うと、 `v-validate` ディレクティブが動作しません。
+`v-if` と `v-for` のようなターミナルディレクティブを使う必要がある場合は、 `<template>` のような不可視タグでバリデートする対象要素でラップする必要がありますので注意してください。なぜならこれらのターミナルディレクティブを一緒に使うと、 `v-validate` ディレクティブが動作しません。
 
 下記の例は `<div>` タグを使用しています:
 

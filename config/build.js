@@ -14,13 +14,13 @@ var main = fs
 fs.writeFileSync('src/index.js', main)
 
 // update installation.md
-var langs = ['en', 'zh-cn']
+var langs = ['en', 'ja', 'zh-cn']
 langs.forEach(function (lang) {
   var installationPath = './docs/' + lang + '/installation.md'
   var installation = fs
     .readFileSync(installationPath, 'utf-8')
     .replace(
-      /\<script src=\"https\:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js\"\>\<\/script\>/,
+      /<script src="https:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js"><\/script>/,
       '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
     )
   fs.writeFileSync(installationPath, installation)

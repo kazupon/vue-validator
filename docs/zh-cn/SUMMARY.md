@@ -8,6 +8,7 @@
 - [入门](started.md)
 - [验证结果结构](structure.md)
 - [验证器语法](syntax.md)
+- [Build-in validators](validators.md)
 - [结合 v-model](model.md)
 - [重置验证结果](reset.md)
 - [可验证的表单元素](elements.md)

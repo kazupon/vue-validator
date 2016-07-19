@@ -81,11 +81,12 @@ new Vue({
   methods: {
     onSubmit: function (e) {
       // validate manually
-      this.$validate(true)
-
-      if (this.$validation.invalid) {
-        e.preventDefault()
-      }
+      var self = this
+      this.$validate(true, function () {
+        if (self.$validation.invalid) {
+          e.preventDefault()
+        }
+      })
     }
   }
 })

@@ -1,5 +1,232 @@
 # API Reference
 
+## Build-in Validators
+
+### required
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="radio"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the value has been specified.
+
+- **Example:**
+
+    ```html
+    <!-- array syntax -->
+    <input type="text" v-validate:zip="['required']">
+
+    <!-- object syntax -->
+    <!-- NOTE: 'rule' need the dummy value -->
+    <input type="text" v-validate:zip="{ required: { rule: true } }">
+
+    <!-- radio -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="radio" name="fruit" value="apple" v-validate:fruits="{ required: { rule: true } }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="radio" name="fruit" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- checkbox -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ required: { rule: true } }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- select -->
+    <select v-validate:lang="{ required: true }">
+      <option value="">----- select your favorite programming language -----</option>
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### pattern
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the pattern of the regular expression.
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:zip="{ pattern: '/^\d{3}-\d{4}$/' }">
+    ```
+
+### minlength
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the length of specified value is less than or equal minimum length
+
+- **Example:**
+
+    ```html
+    <input type="password" v-validate:password="{ minlength: 8 }"/>
+
+    <!-- checkbox (multiple) -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ minlength: 1 }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- select (multiple) -->
+    <select multiple size="10" v-validate:lang="{ minlength: 3 }">
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### maxlength
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="checkbox"]`
+    - `input[type="number"]`
+    - `input[type="password"]`
+    - `input[type="email"]`
+    - `input[type="tel"]`
+    - `input[type="url"]`
+    - `select`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the length of specified value is less more or equal maximum length
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:comment="{ maxlength: 256 }"/>
+
+    <!-- checkbox (multiple) -->
+    <fieldset>
+      <legend>Which do you like fruit ?</legend>
+      <input id="apple" type="checkbox" value="apple" v-validate:fruits="{ maxlength: 3 }">
+      <label for="apple">Apple</label>
+      <input id="orange" type="checkbox" value="orange" v-validate:fruits>
+      <label for="orange">Orage</label>
+      <input id="grape" type="checkbox" value="grage" v-validate:fruits>
+      <label for="grape">Grape</label>
+      <input id="banana" type="checkbox" value="banana" v-validate:fruits>
+      <label for="banana">Banana</label>
+    </fieldset>
+
+    <!-- you can use the `select` -->
+    <select multiple size="10" v-validate:lang="{ maxlength: 3 }">
+      <option value="javascript">JavaScript</option>
+      <option value="ruby">Ruby</option>
+      <option value="python">Python</option>
+      <option value="perl">Perl</option>
+      <option value="lua">Lua</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="elixir">Elixir</option>
+      <option value="c">C</option>
+      <option value="none">Not a nothing here</option>
+    </select>
+    ```
+
+### min
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified numerical value is less than or equal minimum
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:age="{ min: 18 }"/>
+    ```
+
+### max
+
+- **Elements:**
+    - `input[type="text"]`
+    - `input[type="number"]`
+    - `textarea`
+
+- **Usage:**
+
+    Check whether the specified numerical value is more than or equal maximum
+
+- **Example:**
+
+    ```html
+    <input type="text" v-validate:limit="{ max: 100 }"/>
+    ```
+
 ## Global API
 
 ### Vue.validator( id, [definition] )
@@ -98,7 +325,7 @@
     activate: function (done) {
       var resource = this.$resource('/comments/:id');
       resource.get({ id: this.id }, function (comment, stat, req) {
-        this.commont =  comment.body
+        this.comment =  comment.body
   
         // activate validator
         this.$activateValidator()
@@ -247,13 +474,13 @@
     methods: {
       onSubmit: function (e) {
         // validate the all fields manually with touched
+        var self = this
         this.$validate(true, function () {
           console.log('validate done !!')
+          if (self.$validation.invalid) {
+            e.preventDefault()
+          }
         })
-  
-        if (this.$validation.invalid) {
-          e.preventDefault()
-        }
       }
     }
   })
@@ -296,7 +523,7 @@
   <input type="text" group="profile" v-validate:user="['required']">
 
   <!-- field -->
-  <input type="text" filed="field1" v-validate="['required']">
+  <input type="text" field="field1" v-validate="['required']">
 
   <!-- disable validation with DOM event -->
   <input type="password" detect-blur="off" detect-change="off" v-validate:password="['required']">

@@ -18,14 +18,14 @@ Checkboxes are supported:
         }">
         <label for="apple">Apple</label>
         <input id="orange" type="checkbox" value="orange" v-validate:fruits>
-        <label for="orange">Orage</label>
+        <label for="orange">Orange</label>
         <input id="grape" type="checkbox" value="grape" v-validate:fruits>
         <label for="grape">Grape</label>
         <input id="banana" type="checkbox" value="banana" v-validate:fruits>
         <label for="banana">Banana</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
-            <p>{{msg}}</p>
+            <p>{{msg.message}}</p>
           </li>
         </ul>
       </fieldset>
@@ -74,7 +74,7 @@ Radio buttons are supported:
         <label for="banana">Banana</label>
         <ul class="errors">
           <li v-for="msg in $validation1.fruits.errors">
-            <p>{{msg}}</p>
+            <p>{{msg.message}}</p>
           </li>
         </ul>
       </fieldset>

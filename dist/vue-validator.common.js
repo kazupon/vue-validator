@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.3
+ * vue-validator v2.1.4
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -61,7 +61,6 @@ babelHelpers.possibleConstructorReturn = function (self, call) {
 };
 
 babelHelpers;
-
 /**
  * Utilties
  */
@@ -609,10 +608,10 @@ function Validate (Vue) {
         return;
       }
 
-      if (isPlainObject(value)) {
-        this.handleObject(value);
-      } else if (Array.isArray(value)) {
-        this.handleArray(value);
+      if (isPlainObject(value) || old && isPlainObject(old)) {
+        this.handleObject(value, old);
+      } else if (Array.isArray(value) || old && Array.isArray(old)) {
+        this.handleArray(value, old);
       }
 
       var options = { field: this.field, noopable: this._initialNoopValidation };
@@ -737,15 +736,19 @@ function Validate (Vue) {
       replace(this.anchor, this.el);
       this.anchor = null;
     },
-    handleArray: function handleArray(value) {
+    handleArray: function handleArray(value, old) {
       var _this = this;
+
+      old && this.validation.resetValidation();
 
       each(value, function (val) {
         _this.validation.setValidation(val);
       });
     },
-    handleObject: function handleObject(value) {
+    handleObject: function handleObject(value, old) {
       var _this2 = this;
+
+      old && this.validation.resetValidation();
 
       each(value, function (val, key) {
         if (isPlainObject(val)) {
@@ -850,6 +853,16 @@ var BaseValidation = function () {
     this._unwatch && this._unwatch();
   };
 
+  BaseValidation.prototype.resetValidation = function resetValidation() {
+    var _this2 = this;
+
+    var keys = Object.keys(this._validators);
+    each(keys, function (key, index) {
+      _this2._validators[key] = null;
+      delete _this2._validators[key];
+    });
+  };
+
   BaseValidation.prototype.setValidation = function setValidation(name, arg, msg, initial) {
     var validator = this._validators[name];
     if (!validator) {
@@ -869,10 +882,10 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.setValidationClasses = function setValidationClasses(classes) {
-    var _this2 = this;
+    var _this3 = this;
 
     each(classes, function (value, key) {
-      _this2._classes[key] = value;
+      _this3._classes[key] = value;
     });
   };
 
@@ -930,7 +943,7 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.validate = function validate(cb) {
-    var _this3 = this;
+    var _this4 = this;
 
     var noopable = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
     var el = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
@@ -942,7 +955,7 @@ var BaseValidation = function () {
     var valid = true;
 
     this._runValidators(function (descriptor, name, done) {
-      var asset = _this3._resolveValidator(name);
+      var asset = _this4._resolveValidator(name);
       var validator = null;
       var msg = null;
 
@@ -973,8 +986,8 @@ var BaseValidation = function () {
       }
 
       if (validator) {
-        var value = _this3._getValue(_this3._el);
-        _this3._invokeValidator(_this3._vm, validator, value, descriptor.arg, function (ret, err) {
+        var value = _this4._getValue(_this4._el);
+        _this4._invokeValidator(_this4._vm, validator, value, descriptor.arg, function (ret, err) {
           if (!ret) {
             valid = false;
             if (err) {
@@ -983,7 +996,7 @@ var BaseValidation = function () {
               results[name] = err;
             } else if (msg) {
               var error = { validator: name };
-              error.message = typeof msg === 'function' ? msg.call(_this3._vm, _this3.field, descriptor.arg) : msg;
+              error.message = typeof msg === 'function' ? msg.call(_this4._vm, _this4.field, descriptor.arg) : msg;
               errors.push(error);
               results[name] = error.message;
             } else {
@@ -1000,23 +1013,23 @@ var BaseValidation = function () {
       }
     }, function () {
       // finished
-      _this3._fireEvent(_this3._el, valid ? 'valid' : 'invalid');
+      _this4._fireEvent(_this4._el, valid ? 'valid' : 'invalid');
 
       var props = {
         valid: valid,
         invalid: !valid,
-        touched: _this3.touched,
-        untouched: !_this3.touched,
-        dirty: _this3.dirty,
-        pristine: !_this3.dirty,
-        modified: _this3.modified
+        touched: _this4.touched,
+        untouched: !_this4.touched,
+        dirty: _this4.dirty,
+        pristine: !_this4.dirty,
+        modified: _this4.modified
       };
       if (!empty(errors)) {
         props.errors = errors;
       }
       _.extend(results, props);
 
-      _this3.willUpdateClasses(results, el);
+      _this4.willUpdateClasses(results, el);
 
       cb(results);
     });
@@ -1040,15 +1053,15 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.willUpdateClasses = function willUpdateClasses(results) {
-    var _this4 = this;
+    var _this5 = this;
 
     var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
     if (this._checkClassIds(el)) {
       (function () {
-        var classIds = _this4._getClassIds(el);
-        _this4.vm.$nextTick(function () {
-          _this4.vm.$emit(VALIDATE_UPDATE, classIds, _this4, results);
+        var classIds = _this5._getClassIds(el);
+        _this5.vm.$nextTick(function () {
+          _this5.vm.$emit(VALIDATE_UPDATE, classIds, _this5, results);
         });
       })();
     } else {
@@ -2590,7 +2603,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.3';
+plugin.version = '2.1.4';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);

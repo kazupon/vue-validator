@@ -1,4 +1,4 @@
-# カスタムバリデーター
+# カスタムバリデータ
 
 ## グローバル登録
 `Vue.validator` メソッドを使うことでカスタムバリデータを登録することができます。
@@ -7,10 +7,10 @@
 
 `Vue.validator` メソッドを詳しく述べます。
 
-下記は `email` カスタムバリデーターの例です:
+下記は `email` カスタムバリデータの例です:
 
 ```javascript
-// メールアドレスのバリデーター関数を登録する
+// メールアドレスのバリデータ関数を登録する
 Vue.validator('email', function (val) {
   return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 })
@@ -34,16 +34,16 @@ new Vue({
 ```
 
 ## ローカル登録
-`validators` オプションを使うことでカスタムバリデーターをコンポーネントに登録することができます。
+`validators` オプションを使うことでカスタムバリデータをコンポーネントに登録することができます。
 
-カスタムバリデーターは判別して true を返すコールバック関数を使うことで、 Vue コンストラクターの `validators` オプションに登録されます。
+カスタムバリデータは判別して true を返すコールバック関数を使うことで、 Vue コンストラクタの `validators` オプションに登録されます。
 
-下記は `numeric` 又は `url` カスタムバリデーターの例です:
+下記は `numeric` 又は `url` カスタムバリデータの例です:
 
 ```javascript
 new Vue({
   el: '#app',
-  validators: { // `numeric` と `url` のカスタムバリデーターはローカル登録です。
+  validators: { // `numeric` と `url` のカスタムバリデータはローカル登録です。
     numeric: function (val/*,rule*/) {
       return /^[-+]?[0-9]+$/.test(val)
     },
@@ -76,10 +76,10 @@ new Vue({
 
 ## エラーメッセージ
 
-カスタムバリデーターはデフォルトのエラーメッセージを持っているかもしれません:
+カスタムバリデータはデフォルトのエラーメッセージを持っているかもしれません:
 
 ```javascript
-// グローバル登録の `email` カスタムバリデーター
+// グローバル登録の `email` カスタムバリデータ
 Vue.validator('email', {
   message: 'invalid email address', // 文字列によるエラーメッセージ
   check: function (val) { // define validator
@@ -87,24 +87,24 @@ Vue.validator('email', {
   }
 })
 
-// ビルトイン `required` カスタムバリデーター
+// ビルトイン `required` カスタムバリデータ
 Vue.validator('required', {
   message: function (field) { // 関数によるエラーメッセージ
     return 'required "' + field + '" field'
   },
-  check: Vue.validator('required') // バリデーターロジックの再利用
+  check: Vue.validator('required') // バリデータロジックの再利用
 })
 
 new Vue({
   el: '#app',
   validators: {
-    numeric: { // ローカル登録 `numeric` カスタムバリデーター
+    numeric: { // ローカル登録 `numeric` カスタムバリデータ
       message: '無効な数値です',
       check: function (val) {
         return /^[-+]?[0-9]+$/.test(val)
       }
     },
-    url: { // ローカル登録 `url` カスタムバリデーター
+    url: { // ローカル登録 `url` カスタムバリデータ
       message: function (field) {
         return 'invalid "' + field + '" url format field'
       },

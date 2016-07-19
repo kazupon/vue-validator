@@ -5,14 +5,14 @@
 ```html
 <validator name="validation1">
   <div class="username">
-    <label for="username">username:</label>
+    <label for="username">名前:</label>
     <input id="username" type="text" v-validate:username="{
-      required: { rule: true, message: 'required you name !!' }
+      required: { rule: true, message: '名前は必須です!!' }
     }">
     <span v-if="$validation1.username.required">{{ $validation1.username.required }}</span>
   </div>
   <div class="password">
-    <label for="password">password:</label>
+    <label for="password">パスワード:</label>
     <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'パスワードは必須です!!' },
       minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
@@ -28,13 +28,13 @@
 ```html
 <validator name="validation1">
   <div class="username">
-    <label for="username">username:</label>
+    <label for="username">名前:</label>
     <input id="username" type="text" v-validate:username="{
       required: { rule: true, message: '名前は必須です!!' }
     }">
   </div>
   <div class="password">
-    <label for="password">password:</label>
+    <label for="password">パスワード:</label>
     <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'パスワードは必須です!!' },
       minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
@@ -59,13 +59,13 @@
 ```html
 <validator name="validation1">
   <div class="username">
-    <label for="username">username:</label>
+    <label for="username">名前:</label>
     <input id="username" type="text" v-validate:username="{
       required: { rule: true, message: '名前は必須です!!' }
     }">
   </div>
   <div class="password">
-    <label for="password">password:</label>
+    <label for="password">パスワード:</label>
     <input id="password" type="password" v-validate:password="{
       required: { rule: true, message: 'パスワードは必須です!!' },
       minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
@@ -81,11 +81,11 @@
 
 ```html
 <div class="username">
-  <label for="username">username:</label>
+  <label for="username">名前:</label>
   <input id="username" type="text">
 </div>
 <div class="password">
-  <label for="password">password:</label>
+  <label for="password">パスワード:</label>
   <input id="password" type="password">
 </div>
 <div class="errors">
@@ -113,13 +113,13 @@
 <div id="app">
   <validator name="validation1">
     <div class="username">
-      <label for="username">username:</label>
+      <label for="username">名前:</label>
       <input id="username" type="text" v-validate:username="{
         required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="password">
-      <label for="password">password:</label>
+      <label for="password">パスワード:</label>
       <input id="password" type="password" v-validate:password="{
         required: { rule: true, message: 'パスワードは必須です!!' },
         minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
@@ -134,7 +134,7 @@
 ```
 
 ```javascript
-// register the your component with Vue.component
+// コンポーネントを Vue.component で登録する
 Vue.component('custom-error', {
   props: ['field', 'validator', 'message'],
   template: '<p class="error-{{field}}-{{validator}}">{{message}}</p>'
@@ -143,21 +143,21 @@ Vue.component('custom-error', {
 new Vue({ el: '#app' })
 ```
   
-### 部分テンプレート
+### パーシャルテンプレート
 
-下記は部分テンプレートの例です:
+下記はパーシャル(partial)テンプレートの例です:
 
 ```html
 <div id="app">
   <validator name="validation1">
     <div class="username">
-      <label for="username">username:</label>
+      <label for="username">名前:</label>
       <input id="username" type="text" v-validate:username="{
         required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="password">
-      <label for="password">password:</label>
+      <label for="password">パスワード:</label>
       <input id="password" type="password" v-validate:password="{
         required: { rule: true, message: 'パスワードは必須です!!' },
         minlength: { rule: 8, message: 'パスワードが短すぎです!!' }
@@ -172,12 +172,12 @@ new Vue({ el: '#app' })
 ```
 
 ```javascript
-// register custom error template
+// カスタムエラーテンプレートを登録
 Vue.partial('myErrorTemplate', '<p>{{field}}: {{validator}}: {{message}}</p>')
 new Vue({ el: '#app' })
 ```
 
-### エラーメッセージフォーカス
+### エラーメッセージのフォーカス
 
 時々、エラーメッセージの一部分だけを出力したい時があります。 `group` 又は `field` 属性を使うと、バリデーション結果の一部分のみに焦点を当てることができます。
 
@@ -190,7 +190,7 @@ new Vue({ el: '#app' })
 <div id="app">
   <validator :groups="['profile', 'password']" name="validation1">
     <div class="username">
-      <label for="username">username:</label>
+      <label for="username">名前:</label>
       <input id="username" type="text" group="profile" v-validate:username="{
         required: { rule: true, message: '名前は必須です!!' }
       }">
@@ -203,21 +203,21 @@ new Vue({ el: '#app' })
       }">
     </div>
      <div class="old">
-     <label for="old">old password:</label>
+     <label for="old">古いパスワード:</label>
       <input id="old" type="password" group="password" v-validate:old="{
         required: { rule: true, message: '古いパスワードは必須です !!' },
         minlength: { rule: 8, message: '古いパスワードが短すぎです !!' }
       }"/>
     </div>
     <div class="new">
-      <label for="new">new password:</label>
+      <label for="new">新しいパスワード:</label>
       <input id="new" type="password" group="password" v-validate:new="{
         required: { rule: true, message: '新しいパスワードは必須です!!' },
         minlength: { rule: 8, message: '新しいパスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="confirm">
-      <label for="confirm">confirm password:</label>
+      <label for="confirm">確認用パスワード:</label>
       <input id="confirm" type="password" group="password" v-validate:confirm="{
         required: { rule: true, message: '確認用パスワードは必須です!!' },
         minlength: { rule: 8, message: '確認用パスワードが短すぎです!!' }
@@ -238,34 +238,34 @@ Vue.validator('url', function (val) {
 new Vue({ el: '#app' })
 ```
 
-## 手動エラーメッセージ設定
+## 手動によるエラーメッセージの設定
 
-時々、サーバーサイドのバリデーションエラーのようなエラーメッセージを手動で設定したい場合があります。そのような場合は、 `$setValidationErrors` メタメソッドを使うことでバリデーション結果にエラーメッセージを与えることができます。例はこちらです: 
+時々、サーバーサイドのバリデーションエラーのようなエラーメッセージを手動で設定したい場合があります。そのような場合は、 `$setValidationErrors` メタメソッドを使うことでバリデーション結果にエラーメッセージを与えることができます。以下は例です:
 
 ```html
 <div id="app">
   <validator name="validation">
     <div class="username">
-      <label for="username">username:</label>
+      <label for="username">名前:</label>
       <input id="username" type="text" v-model="username" v-validate:username="{
         required: { rule: true, message: '名前は必須です!!' }
       }">
     </div>
     <div class="old">
-      <label for="old">old password:</label>
+      <label for="old">古いパスワード:</label>
       <input id="old" type="password" v-model="passowrd.old" v-validate:old="{
         required: { rule: true, message: '古いパスワードは必須です!!' }
       }"/>
     </div>
     <div class="new">
-      <label for="new">new password:</label>
+      <label for="new">新しいパスワード:</label>
       <input id="new" type="password" v-model="password.new" v-validate:new="{
         required: { rule: true, message: '新しいパスワードは必須です!!' },
         minlength: { rule: 8, message: '新しいパスワードが短すぎです!!' }
       }"/>
     </div>
     <div class="confirm">
-      <label for="confirm">confirm password:</label>
+      <label for="confirm">確認用パスワード:</label>
       <input id="confirm" type="password" v-validate:confirm="{
         required: { rule: true, message: '確認用パスワードは必須です!!' },
         confirm: { rule: passowd.new, message: '確認用パスワードが無効です!!' }
@@ -302,10 +302,10 @@ new Vue({
         username: this.username,
         password: this.new
       }, function (data, stat, req) {
-        // something handle success ...
+        // 何か成功したときの処理...
         // ...
       }).error(function (data, stat, req) {
-        // handle server error
+        // サーバエラーの処理
         self.$setValidationErrors([
           { field: data.field, message: data.message }
         ])

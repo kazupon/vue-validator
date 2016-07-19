@@ -166,17 +166,19 @@ describe('validators', () => {
         })
       })
 
+      /* eslint-disable */
       describe('single quote in pattern', () => {
         it('should not be validate', () => {
-          assert(pattern("f'oo", "'/f\'oo/'") === false)
+          assert(pattern(`f'oo`, `/f'oo'/`) === false)
         })
       })
 
       describe('double quote in pattern', () => {
         it('should not be validate', () => {
-          assert(pattern('f"oo', '"/f\"oo/"') === false)
+          assert(pattern(`f"oo`, `/f"oo"/`) === false)
         })
       })
+      /* eslint-enable */
 
       describe('alternation in pattern', () => {
         it('should be validate', () => {
