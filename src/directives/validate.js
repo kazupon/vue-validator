@@ -98,10 +98,10 @@ export default function (Vue) {
     update (value, old) {
       if (!value || this._invalid) { return }
 
-      if (isPlainObject(value)) {
-        this.handleObject(value)
-      } else if (Array.isArray(value)) {
-        this.handleArray(value)
+      if (isPlainObject(value) || (old && isPlainObject(old))) {
+        this.handleObject(value, old)
+      } else if (Array.isArray(value) || (old && Array.isArray(old))) {
+        this.handleArray(value, old)
       }
 
       let options = { field: this.field, noopable: this._initialNoopValidation }
@@ -242,13 +242,17 @@ export default function (Vue) {
       this.anchor = null
     },
 
-    handleArray (value) {
+    handleArray (value, old) {
+      old && this.validation.resetValidation()
+
       each(value, (val) => {
         this.validation.setValidation(val)
       })
     },
 
-    handleObject (value) {
+    handleObject (value, old) {
+      old && this.validation.resetValidation()
+
       each(value, (val, key) => {
         if (isPlainObject(val)) {
           if ('rule' in val) {

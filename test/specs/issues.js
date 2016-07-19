@@ -488,4 +488,85 @@ describe('github issues', () => {
       })
     })
   })
+
+  describe('#274', () => {
+    beforeEach((done) => {
+      el.innerHTML = `
+        <validator name="validation1">
+          <form novalidate>
+            <div class="inputs">
+              <input type="text" id="username" v-validate:username="customeValidator">
+              <input type="text" id="comment" v-validate:comment="{ maxlength: 4 }">
+            </div>
+            <div class="errors">
+              <p v-if="$validation1.username.required">Required your name.</p>
+              <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
+            </div>
+            <input type="submit" value="send" v-if="$validation1.valid">
+            <button id="buttonCustom1" type="button" @click="onCustomValidator1">custom1</button>
+            <button id="buttonCustom2" type="button" @click="onCustomValidator2">custom2</button>
+          </form>
+        </validator>
+      `
+      vm = new Vue({
+        el,
+        data: {
+          customeValidator: ['custom1']
+        },
+        validators: {
+          custom1 (val) {
+            return val === 'custom1'
+          },
+          custom2 (val) {
+            return val === 'custom2'
+          }
+        },
+        methods: {
+          onCustomValidator1 () {
+            this.customeValidator = ['custom1']
+          },
+          onCustomValidator2 () {
+            this.customeValidator = ['custom2']
+          }
+        }
+      })
+      vm.$nextTick(done)
+    })
+
+    it('should be validated', (done) => {
+      let username = el.querySelector('#username')
+      let buttonCustom2 = el.querySelector('#buttonCustom2')
+
+      assert(vm.$validation1.invalid === true)
+      assert(vm.$validation1.username.custom1 === true)
+      assert(vm.$validation1.username.custom2 === undefined)
+
+      username.value = 'custom1'
+      trigger(username, 'input')
+      trigger(username, 'blur')
+      vm.$nextTick(() => {
+        assert(vm.$validation1.valid === true)
+        assert(vm.$validation1.username.custom1 === false)
+        assert(vm.$validation1.username.custom2 === undefined)
+
+        buttonCustom2.click()
+        vm.$nextTick(() => {
+          assert(vm.$validation1.invalid === true)
+          assert(vm.$validation1.username.custom1 === undefined)
+          assert(vm.$validation1.username.custom2 === true)
+
+          username.value = 'custom2'
+          trigger(username, 'input')
+          trigger(username, 'blur')
+          vm.$nextTick(() => {
+            assert(vm.$validation1.valid === true)
+            assert(vm.$validation1.username.custom1 === undefined)
+            assert(vm.$validation1.username.custom2 === false)
+
+            done()
+          })
+        })
+      })
+    })
+  })
 })

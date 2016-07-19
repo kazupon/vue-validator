@@ -71,6 +71,14 @@ export default class BaseValidation {
     this._unwatch && this._unwatch()
   }
 
+  resetValidation () {
+    const keys = Object.keys(this._validators)
+    each(keys, (key, index) => {
+      this._validators[key] = null
+      delete this._validators[key]
+    })
+  }
+
   setValidation (name, arg, msg, initial) {
     let validator = this._validators[name]
     if (!validator) {
