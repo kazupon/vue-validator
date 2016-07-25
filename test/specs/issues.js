@@ -569,4 +569,50 @@ describe('github issues', () => {
       })
     })
   })
+
+  describe('#284', () => {
+    beforeEach(done => {
+      el.innerHTML = `
+        <validator name="validation">
+          <input id="foo" type="text" v-model="foo" v-validate:foo="rules">
+        </validator>
+      `
+      vm = new Vue({
+        el,
+        data: {
+          foo: '',
+          rules: {
+            maxlength: {
+              rule: 4,
+              message: 'too long!!'
+            },
+            required: {
+              rule: true,
+              message: 'required!!'
+            }
+          }
+        }
+      })
+      vm.$nextTick(done)
+    })
+
+    it('should be validated', done => {
+      let input = el.querySelector('#foo')
+      vm.rules.required.message = 'required "foo" field!!'
+      vm.$nextTick(() => {
+        assert.equal(vm.$validation.foo.required, 'required "foo" field!!')
+        input.value = 'hello'
+        trigger(input, 'input')
+        trigger(input, 'blur')
+        vm.$nextTick(() => {
+          assert.equal(vm.$validation.foo.maxlength, 'too long!!')
+          vm.rules.maxlength.rule = 10
+          vm.$nextTick(() => {
+            assert(vm.$validation.foo.maxlength === false)
+            done()
+          })
+        })
+      })
+    })
+  })
 })

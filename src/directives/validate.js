@@ -29,6 +29,7 @@ export default function (Vue) {
    */
 
   Vue.directive('validate', {
+    deep: true,
     terminal: true,
     priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
