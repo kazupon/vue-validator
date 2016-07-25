@@ -1,6 +1,9 @@
-import type { Config } from '../src/core/config'
-import type VNode from '../src/core/vdom/vnode'
-import type Watcher from '../src/core/observer/watcher'
+// TODO: should be provided from vue.js 
+declare type VNode = {}
+declare type Watcher = {}
+declare type Config = {
+  [key: string]: any
+}
 
 declare interface Component {
   // constructor information
@@ -45,6 +48,9 @@ declare interface Component {
     namespace?: string
   ) => VNode;
 
+  /*
+   * NOTE: should not be published internal interface ...
+   *
   // private properties
   _uid: number;
   _isVue: true;
@@ -107,6 +113,7 @@ declare interface Component {
   _b: (vnode: VNodeWithData, value: any) => void;
   // retrive custom keyCode
   _k: (key: string) => ?number;
+  */
 
   // allow dynamic method registration
   [key: string]: any
