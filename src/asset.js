@@ -2,7 +2,7 @@
 import * as validators from './validators'
 
 export default function (Vue: GlobalAPI): void {
-  const extend = Vue.util.extend
+  const { extend } = Vue.util
 
   // set global validators asset
   const assets: Object = Object.create(null)
