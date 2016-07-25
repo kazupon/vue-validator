@@ -1,3 +1,13 @@
+<a name="2.1.5"></a>
+## [2.1.5](https://github.com/vuejs/vue-validator/compare/v2.1.4...v2.1.5) (2016-07-25)
+
+
+### :bug: Bug Fixes
+
+* **validate:** fix cannot change validation rule and error message ([7013c4e](https://github.com/vuejs/vue-validator/commit/7013c4e))
+
+
+
 <a name="2.1.4"></a>
 ## [2.1.4](https://github.com/vuejs/vue-validator/compare/v2.1.3...v2.1.4) (2016-07-19)
 

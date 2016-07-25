@@ -30,7 +30,7 @@ function plugin (Vue, options = {}) {
   Validate(Vue)
 }
 
-plugin.version = '2.1.4'
+plugin.version = '2.1.5'
 
 export default plugin
 

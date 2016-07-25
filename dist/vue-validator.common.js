@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.4
+ * vue-validator v2.1.5
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -541,6 +541,7 @@ function Validate (Vue) {
    */
 
   Vue.directive('validate', {
+    deep: true,
     terminal: true,
     priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
@@ -2603,7 +2604,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.4';
+plugin.version = '2.1.5';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
