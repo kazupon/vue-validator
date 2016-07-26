@@ -3,6 +3,8 @@ declare type ValidatorDefinition = {
   message?: string|Function // error message
 }
 
+declare type ValidatorAsset = Function|ValidatorDefinition
+
 declare type ValidationError = {
   field: string,
   validator: string,
