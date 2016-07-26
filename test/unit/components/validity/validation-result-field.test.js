@@ -1,7 +1,7 @@
-import States from '../../src/components/validity/states'
-import Computed from '../../src/components/validity/computed'
-import Lifecycles from '../../src/components/validity/lifecycles'
-import Methods from '../../src/components/validity/methods'
+import States from '../../../../src/components/validity/states'
+import Computed from '../../../../src/components/validity/computed'
+import Lifecycles from '../../../../src/components/validity/lifecycles'
+import Methods from '../../../../src/components/validity/methods'
 
 const { props, data } = States(Vue)
 const computed = Computed(Vue)
