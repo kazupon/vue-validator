@@ -31,7 +31,7 @@ export default function (Vue: GlobalAPI): void {
   function validator (
     id: string,
     def?: ValidatorAsset
-  ): ValidatorAsset|void {
+  ): ValidatorAsset | void {
     if (def === undefined) {
       return Vue.options['validators'][id]
     } else {

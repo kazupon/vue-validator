@@ -2,7 +2,7 @@
 
 declare type ValidationRawResult = {
   name: string, // validator name
-  value: boolean|string // validation result 
+  value: boolean | string // validation result 
 }
 
 export default function (Vue: GlobalAPI): Object {
@@ -12,7 +12,7 @@ export default function (Vue: GlobalAPI): Object {
   ): boolean|string {
     if (results.length === 0) { return false }
 
-    let ret: boolean|string = false
+    let ret: boolean | string = false
     for (let i = 0; i < results.length; i++) {
       const result: ValidationRawResult = results[i]
       if (result.name !== validator) {
@@ -75,7 +75,7 @@ export default function (Vue: GlobalAPI): Object {
     }
 
     this._validators.forEach((validator: string) => {
-      const result: boolean|string = getValidatorResult(validator, this.results)
+      const result: boolean | string = getValidatorResult(validator, this.results)
       if (result === false) { // success
         ret[validator] = false
       } else { // failed

@@ -1,9 +1,9 @@
 declare type ValidatorDefinition = {
   check: Function, // validator function
-  message?: string|Function // error message
+  message?: string | Function // error message
 }
 
-declare type ValidatorAsset = Function|ValidatorDefinition
+declare type ValidatorAsset = Function | ValidatorDefinition
 
 declare type ValidationError = {
   field: string,
@@ -19,5 +19,6 @@ declare type ValidationResult = {
   touched: boolean,
   untouched: boolean,
   modified: boolean,
-  [key: string]: Array<ValidationError>|boolean|string // validator result
+  // `errors` or validator result
+  [key: string]: Array<ValidationError> | boolean | string
 }
