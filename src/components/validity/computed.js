@@ -2,7 +2,7 @@
 
 declare type ValidationRawResult = {
   name: string, // validator name
-  value: boolean | string // validation result 
+  value: boolean | string // validation result
 }
 
 export default function (Vue: GlobalAPI): Object {

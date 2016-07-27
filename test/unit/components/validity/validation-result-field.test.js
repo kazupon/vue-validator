@@ -23,7 +23,7 @@ describe('validation result field', () => {
         validators: {
           required: true
         }
-      },
+      }
     })
     done()
   })
