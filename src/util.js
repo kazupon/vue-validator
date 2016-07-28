@@ -94,13 +94,6 @@ export function trigger (el: any, event: string, args?: Object) {
 }
 
 /**
- * Forgiving check for a promise
- */
-export function isPromise (p: Object): boolean {
-  return p && typeof p.then === 'function'
-}
-
-/**
  * Togging classes
  */
 export function toggleClasses (el: Element, key: string, fn: Function) {
