@@ -12,12 +12,14 @@ export default function (Vue: GlobalAPI): Object {
   function willUpdateTouched (options?: Object): void {
     if (!this.touched) {
       this.touched = true
+      this.fireEvent('touched')
     }
   }
 
   function willUpdateDirty (options?: Object): void {
     if (!this.dirty && this.checkModified(options)) {
       this.dirty = true
+      this.fireEvent('dirty')
     }
   }
 
@@ -25,6 +27,7 @@ export default function (Vue: GlobalAPI): Object {
     const modified = this.modified = this.checkModified(options)
     if (this._modified !== modified) {
       this._modified = modified
+      this.fireEvent('modified', modified)
     }
   }
 
