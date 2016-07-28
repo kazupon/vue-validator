@@ -37,8 +37,7 @@ describe('validity component: validation result', () => {
       waitForUpdate(() => {
         assert(vm.valid === false)
         // set valid validation raw result
-        vm.results = []
-        vm.results.push({ name: 'required', value: true })
+        Vue.set(vm.results, 0, { name: 'required', value: true })
       }).then(() => {
         assert(vm.valid === true)
       }).then(done)
@@ -54,8 +53,7 @@ describe('validity component: validation result', () => {
       waitForUpdate(() => {
         assert(vm.invalid === true)
         // set valid validation raw result
-        vm.results = []
-        vm.results.push({ name: 'required', value: true })
+        Vue.set(vm.results, 0, { name: 'required', value: true })
       }).then(() => {
         assert(vm.invalid === false)
       }).then(done)
@@ -190,8 +188,7 @@ describe('validity component: validation result', () => {
         }])
 
         // set invalid validation raw result
-        vm.results = []
-        vm.results.push({ name: 'required', value: 'required field1' })
+        Vue.set(vm.results, 0, { name: 'required', value: 'required field1' })
       }).then(() => {
         result = vm.result
         assert(result.valid === false)
