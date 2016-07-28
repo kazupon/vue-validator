@@ -8,7 +8,6 @@ declare type ValidateDescriptor = {
   msg?: string | Function
 }
 
-
 /**
  * Forgiving check for a promise
  */
