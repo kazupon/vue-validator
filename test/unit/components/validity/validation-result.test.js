@@ -8,7 +8,7 @@ const computed = Computed(Vue)
 const { created } = Lifecycles(Vue)
 const methods = Methods(Vue)
 
-describe('validation result field', () => {
+describe('validity component: validation result', () => {
   let vm
   beforeEach(done => {
     vm = new Vue({
