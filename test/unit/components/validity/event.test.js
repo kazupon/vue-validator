@@ -21,7 +21,8 @@ describe('validity component: event', () => {
         field: 'field1',
         child: {}, // dummy
         validators: {
-          required: true
+          required: true,
+          min: 4
         }
       }
     })
@@ -29,9 +30,37 @@ describe('validity component: event', () => {
   })
 
   describe('valid / invalid', () => {
-    xit('should be fired', done => {
-      // TODO:
-      done()
+    it('should be fired', done => {
+      const validHandler = jasmine.createSpy()
+      const invalidHandler = jasmine.createSpy()
+      vm.$on('valid', validHandler)
+      vm.$on('invalid', invalidHandler)
+      waitForUpdate(() => {
+        assert(validHandler.calls.count() === 0)
+        assert(invalidHandler.calls.count() === 0)
+        // simulate invalid
+        vm.results['required'] = false
+      }).then(() => {
+        assert(validHandler.calls.count() === 0)
+        assert(invalidHandler.calls.count() === 1)
+        // simulate valid
+        vm.results['required'] = true
+      }).then(() => {
+        assert(validHandler.calls.count() === 1)
+        assert(invalidHandler.calls.count() === 1)
+        // simulate valid and invalid
+        vm.results['required'] = false
+        vm.results['min'] = 'too short!!'
+      }).then(() => {
+        assert(validHandler.calls.count() === 1)
+        assert(invalidHandler.calls.count() === 2)
+        // simulate both valid
+        vm.results['required'] = true
+        vm.results['min'] = true
+      }).then(() => {
+        assert(validHandler.calls.count() === 2)
+        assert(invalidHandler.calls.count() === 2)
+      }).then(done)
     })
   })
 

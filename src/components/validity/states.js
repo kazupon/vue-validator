@@ -34,6 +34,7 @@ export default function (Vue: GlobalAPI): Object {
 
     return {
       results,
+      valid: true,
       dirty: false,
       touched: false,
       modified: false

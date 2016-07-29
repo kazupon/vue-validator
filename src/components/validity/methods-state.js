@@ -1,4 +1,5 @@
 /* @flow */
+import type { ValidationRawResult } from './type'
 
 export default function (Vue: GlobalAPI): Object {
   function getValue (options?: Object): any {
@@ -31,11 +32,30 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
+  function watchValidationRawResults (val) {
+    let valid: boolean = true
+    const keys = this._keysCached(this._uid.toString(), this.results)
+    for (let i = 0; i < keys.length; i++) {
+      const result: ValidationRawResult = this.results[keys[i]]
+      if (typeof result === 'boolean' && !result) {
+        valid = false
+        break
+      }
+      if (typeof result === 'string' && result) {
+        valid = false
+        break
+      }
+    }
+    this.valid = valid
+    this.fireEvent(valid ? 'valid' : 'invalid')
+  }
+
   return {
     getValue,
     checkModified,
     willUpdateTouched,
     willUpdateDirty,
-    willUpdateModified
+    willUpdateModified,
+    watchValidationRawResults
   }
 }
