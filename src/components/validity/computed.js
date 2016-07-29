@@ -1,54 +1,23 @@
 /* @flow */
-
-declare type ValidationRawResult = {
-  name: string, // validator name
-  value: boolean | string // validation result
-}
+import type { ValidationRawResult } from './type'
 
 export default function (Vue: GlobalAPI): Object {
-  function getValidatorResult (
-    validator: string,
-    results: Array<ValidationRawResult>
-  ): boolean|string {
-    if (results.length === 0) { return false }
-
-    let ret: boolean | string = false
-    for (let i = 0; i < results.length; i++) {
-      const result: ValidationRawResult = results[i]
-      if (result.name !== validator) {
-        continue
-      } else {
-        if (typeof result.value === 'boolean' && !result.value) {
-          ret = true
-          break
-        }
-        if (typeof result.value === 'string' && result.value) {
-          ret = result.value
-          break
-        }
-      }
-    }
-
-    return ret
-  }
+  const keysCached = memoize(results => {
+    return Object.keys(results)
+  })
 
   function valid (): boolean {
-    if (this.results.length === 0) { return true }
-
-    let ret: boolean = true
-    for (let i = 0; i < this.results.length; i++) {
-      const result: ValidationRawResult = this.results[i]
-      if (typeof result.value === 'boolean' && !result.value) {
-        ret = false
-        break
+    const keys = keysCached(this._uid.toString(), this.results)
+    for (let i = 0; i < keys.length; i++) {
+      const result: ValidationRawResult = this.results[keys[i]]
+      if (typeof result === 'boolean' && !result) {
+        return false
       }
-      if (typeof result.value === 'string' && result.value) {
-        ret = false
-        break
+      if (typeof result === 'string' && result) {
+        return false
       }
     }
-
-    return ret
+    return true
   }
 
   function invalid (): boolean {
@@ -74,8 +43,9 @@ export default function (Vue: GlobalAPI): Object {
       modified: this.modified
     }
 
-    this._validators.forEach((validator: string) => {
-      const result: boolean | string = getValidatorResult(validator, this.results)
+    const keys = keysCached(this._uid.toString(), this.results)
+    keys.forEach((validator: string) => {
+      const result: boolean | string = getValidatorResult(validator, this.results[validator])
       if (result === false) { // success
         ret[validator] = false
       } else { // failed
@@ -103,4 +73,27 @@ export default function (Vue: GlobalAPI): Object {
     untouched,
     result
   }
+}
+
+function memoize (fn: Function): Function {
+  const cache = Object.create(null)
+  return function memoizeFn (id: string, ...args): any {
+    const hit = cache[id]
+    return hit || (cache[id] = fn(...args))
+  }
+}
+
+function getValidatorResult (
+  validator: string,
+  result: ValidationRawResult
+): boolean | string {
+  if (typeof result === 'boolean' && !result) {
+    return true
+  }
+
+  if (typeof result === 'string' && result) {
+    return result
+  }
+
+  return false
 }
