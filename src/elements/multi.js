@@ -1,4 +1,5 @@
 /* @flow */
+import { looseEqual } from './util'
 
 export default class MultiElement {
   _vm: Component
@@ -14,7 +15,7 @@ export default class MultiElement {
   }
 
   checkModified (): boolean {
-    return false
+    return !looseEqual(this.initValue, getCheckedValue(this._vm.$el))
   }
 }
 

@@ -1,4 +1,5 @@
 /* @flow */
+import { looseEqual } from './util'
 
 export default class SingleElement {
   _vm: Component
@@ -45,7 +46,23 @@ export default class SingleElement {
   }
 
   checkModified (): boolean {
-    return false
+    if (this.isBuiltIn) {
+      const el = this._vm.$el
+      if (el.tagName === 'SELECT') {
+        return !looseEqual(this.initValue, getSelectValue(el))
+      } else {
+        if (el.type === 'checkbox') {
+          return !looseEqual(this.initValue, el.checked)
+        } else {
+          return !looseEqual(this.initValue, el.value)
+        }
+      }
+    } else if (this.isComponent) {
+      return !looseEqual(this.initValue, this._vnode.child.value)
+    } else {
+      // TODO: should be warn !!
+      return false
+    }
   }
 
   listenToucheableEvent () {
