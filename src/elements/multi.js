@@ -1,5 +1,5 @@
 /* @flow */
-import { looseEqual } from './util'
+import { looseEqual } from '../util'
 
 export default class MultiElement {
   _vm: Component
