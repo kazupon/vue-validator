@@ -32,6 +32,20 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
+  function reset (): void {
+    this._unwatch()
+    const keys = this._keysCached(this._uid.toString(), this.results)
+    for (let i = 0; i < keys.length; i++) {
+      this.results[keys[i]] = undefined
+    }
+    this.valid = true
+    this.dirty = false
+    this.touched = false
+    this.modified = false
+    this._modified = false
+    this._unwatch = this.$watch('results', this.watchValidationRawResults, { deep: true })
+  }
+
   function watchValidationRawResults (val) {
     let valid: boolean = true
     const keys = this._keysCached(this._uid.toString(), this.results)
@@ -56,6 +70,7 @@ export default function (Vue: GlobalAPI): Object {
     willUpdateTouched,
     willUpdateDirty,
     willUpdateModified,
+    reset,
     watchValidationRawResults
   }
 }
