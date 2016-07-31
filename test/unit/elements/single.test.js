@@ -1,8 +1,14 @@
 import States from '../../../src/components/validity/states'
+import Computed from '../../../src/components/validity/computed'
+import Lifecycles from '../../../src/components/validity/lifecycles'
+import Methods from '../../../src/components/validity/methods'
 import Render from '../../../src/components/validity/render'
 import SingleElement from '../../../src/elements/single'
 
 const { props, data } = States(Vue)
+const computed = Computed(Vue)
+const { created } = Lifecycles(Vue)
+const methods = Methods(Vue)
 const { render } = Render(Vue)
 
 describe('SingleElement class', () => {
@@ -230,6 +236,41 @@ describe('SingleElement class', () => {
           assert(single.checkModified() === false)
         }).then(done)
       })
+    })
+  })
+
+  describe('#listenToucheableEvent / #unlistenToucheableEvent', () => {
+    it('should be work', done => {
+      const vm = new Vue({
+        props,
+        data,
+        computed,
+        created,
+        methods,
+        propsData: {
+          field: 'field1',
+          child: {},
+          validators: {
+            required: true
+          }
+        },
+        render (h) {
+          const child = this.child = h('input', { staticAttrs: { type: 'text' }})
+          return child
+        }
+      }).$mount()
+      const single = new SingleElement(vm, vm.child)
+      single.listenToucheableEvent()
+      triggerEvent(vm.$el, 'focusout')
+      waitForUpdate(() => {
+      }).then(() => {
+        assert(vm.touched === true)
+        vm.reset()
+        single.unlistenToucheableEvent()
+        triggerEvent(vm.$el, 'focusout')
+      }).then(() => {
+        assert(vm.touched === false)
+      }).then(done)
     })
   })
 })

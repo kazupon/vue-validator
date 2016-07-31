@@ -17,6 +17,14 @@ export default class MultiElement {
   checkModified (): boolean {
     return !looseEqual(this.initValue, getCheckedValue(this._vm.$el))
   }
+
+  listenToucheableEvent () {
+    this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched)
+  }
+
+  unlistenToucheableEvent () {
+    this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
+  }
 }
 
 function getCheckedValue (el): Array<any> {

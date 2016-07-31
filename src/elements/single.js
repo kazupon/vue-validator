@@ -66,17 +66,12 @@ export default class SingleElement {
   }
 
   listenToucheableEvent () {
-    /*
-    this._el.addEventListener('focusout', this._vm.willUpdateTouched)
-    */
+    this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched)
   }
 
   unlistenToucheableEvent () {
-    /*
-    this._el.removeEventListener('focusout', this._vm.willUpdateTouched)
-    */
+    this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
   }
-
 }
 
 function getSelectValue (el): Array<any> {
