@@ -1,5 +1,4 @@
 /* @flow */
-import type { ValidationRawResult } from './type'
 
 export default function (Vue: GlobalAPI): Object {
   function invalid (): boolean {
@@ -58,7 +57,7 @@ export default function (Vue: GlobalAPI): Object {
 
 function getValidatorResult (
   validator: string,
-  result: ValidationRawResult
+  result: $ValidationRawResult
 ): boolean | string {
   if (typeof result === 'boolean' && !result) {
     return true

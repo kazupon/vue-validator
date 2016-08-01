@@ -22,3 +22,16 @@ declare type ValidationResult = {
   // `errors` or validator result
   [key: string]: Array<ValidationError> | boolean | string
 }
+
+declare type $ValidationRawResult = {
+  [key: string]: boolean | string | void
+}
+
+declare type $ValidateDescriptor = {
+  fn: Function,
+  value: any,
+  field: string,
+  rule?: any,
+  msg?: string | Function
+}
+

@@ -1,13 +1,5 @@
 /* @flow */
 
-declare type ValidateDescriptor = {
-  fn: Function,
-  value: any,
-  field: string,
-  rule?: any,
-  msg?: string | Function
-}
-
 /**
  * Forgiving check for a promise
  */
@@ -25,7 +17,7 @@ export default function (Vue: GlobalAPI): Object {
     validator: string,
     field: string,
     value: any
-  ): ValidateDescriptor | null {
+  ): $ValidateDescriptor | null {
     const { isPlainObject } = this.constructor.util
 
     const asset: ValidatorAsset = this.resolveValidator(validator)
@@ -69,7 +61,7 @@ export default function (Vue: GlobalAPI): Object {
       }
     }
 
-    const descriptor: ValidateDescriptor = { fn, value, field }
+    const descriptor: $ValidateDescriptor = { fn, value, field }
     if (rule) {
       descriptor.rule = rule
     }
@@ -94,7 +86,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function invokeValidator (
-    { fn, value, field, rule, msg }: ValidateDescriptor,
+    { fn, value, field, rule, msg }: $ValidateDescriptor,
     cb: Function
   ): void {
     const future: any = fn.call(this, value, rule)

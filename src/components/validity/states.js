@@ -1,5 +1,4 @@
 /* @flow */
-import type { ValidationRawResult } from './type'
 
 export default function (Vue: GlobalAPI): Object {
   const props: Object = {
@@ -27,7 +26,7 @@ export default function (Vue: GlobalAPI): Object {
       validators = Object.keys(this.validators)
     }
 
-    const results: ValidationRawResult = {}
+    const results: $ValidationRawResult = {}
     validators.forEach((validator: string) => {
       results[validator] = undefined
     })
