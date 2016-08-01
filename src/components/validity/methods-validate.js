@@ -17,7 +17,7 @@ function isPromise (p: Object): boolean {
 
 export default function (Vue: GlobalAPI): Object {
   function resolveValidator (name: string): ValidatorAsset | void {
-    const { resolveAsset } = Vue.util
+    const { resolveAsset } = this.constructor.util
     return resolveAsset(this.$options, 'validators', name)
   }
 
@@ -26,7 +26,7 @@ export default function (Vue: GlobalAPI): Object {
     field: string,
     value: any
   ): ValidateDescriptor | null {
-    const { isPlainObject } = Vue.util
+    const { isPlainObject } = this.constructor.util
 
     const asset: ValidatorAsset = this.resolveValidator(validator)
     if (!asset) {
