@@ -5,7 +5,8 @@
   "globals": {
     "waitForUpdate": true,
     "assert": true,
-    "Vue": true
+    "Vue": true,
+    "triggerEvent": true
   },
   "extends": "vue"
 }
