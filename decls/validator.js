@@ -23,6 +23,8 @@ declare type ValidationResult = {
   [key: string]: Array<ValidationError> | boolean | string
 }
 
+declare type ValidityComponent = $Validity & Component
+
 declare type $ValidationRawResult = {
   [key: string]: boolean | string | void
 }
@@ -35,3 +37,14 @@ declare type $ValidateDescriptor = {
   msg?: string | Function
 }
 
+declare interface $Validity {
+  willUpdateTouched (options?: Object): void
+}
+
+declare interface ValidityElement {
+  initValue: any,
+  getValue (): any,
+  checkModified (): boolean,
+  listenToucheableEvent (): void,
+  unlistenToucheableEvent (): void
+}

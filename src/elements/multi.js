@@ -2,10 +2,9 @@
 import { looseEqual } from '../util'
 
 export default class MultiElement {
-  _vm: Component
+  _vm: ValidityComponent
   initValue: any
-
-  constructor (vm: Component) {
+  constructor (vm: ValidityComponent) {
     this._vm = vm
     this.initValue = this.getValue()
   }
@@ -18,11 +17,11 @@ export default class MultiElement {
     return !looseEqual(this.initValue, getCheckedValue(this._vm.$el))
   }
 
-  listenToucheableEvent () {
+  listenToucheableEvent (): void {
     this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched)
   }
 
-  unlistenToucheableEvent () {
+  unlistenToucheableEvent (): void {
     this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
   }
 }

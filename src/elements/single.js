@@ -2,10 +2,10 @@
 import { looseEqual } from '../util'
 
 export default class SingleElement {
-  _vm: Component
+  _vm: ValidityComponent
   _vnode: any
   initValue: any
-  constructor (vm: Component, vnode: any) {
+  constructor (vm: ValidityComponent, vnode: any) {
     this._vm = vm
     this._vnode = vnode
     this.initValue = this.getValue()
@@ -65,11 +65,11 @@ export default class SingleElement {
     }
   }
 
-  listenToucheableEvent () {
+  listenToucheableEvent (): void {
     this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched)
   }
 
-  unlistenToucheableEvent () {
+  unlistenToucheableEvent (): void {
     this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
   }
 }
