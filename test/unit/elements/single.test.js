@@ -92,7 +92,7 @@ describe('SingleElement class', () => {
                 }
               },
               render (h) {
-                return h('input', { staticAttrs: { type: 'text'}})
+                return h('input', { staticAttrs: { type: 'text' }})
               }
             }
           },
@@ -208,7 +208,7 @@ describe('SingleElement class', () => {
                 }
               },
               render (h) {
-                return h('input', { staticAttrs: { type: 'text'}})
+                return h('input', { staticAttrs: { type: 'text' }})
               }
             }
           },
