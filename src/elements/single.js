@@ -4,6 +4,7 @@ import { looseEqual } from '../util'
 export default class SingleElement {
   _vm: ValidityComponent
   _vnode: any
+  _unwatchInputable: Function | void
   initValue: any
   constructor (vm: ValidityComponent, vnode: any) {
     this._vm = vm
@@ -71,6 +72,48 @@ export default class SingleElement {
 
   unlistenToucheableEvent (): void {
     this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
+  }
+
+  listenInputableEvent (): void {
+    if (this.isBuiltIn) {
+      const el = this._vm.$el
+      if (el.tagName === 'SELECT') {
+        el.addEventListener('change', this._vm.handleInputable)
+      } else {
+        if (el.type === 'checkbox') {
+          el.addEventListener('change', this._vm.handleInputable)
+        } else {
+          el.addEventListener('input', this._vm.handleInputable)
+        }
+      }
+    } else if (this.isComponent) {
+      this._unwatchInputable = this._vnode.child.$watch('value', this._vm.watchInputable)
+    } else {
+      // TODO: should be warn !!
+    }
+  }
+
+  unlistenInputableEvent (): void {
+    if (this.isBuiltIn) {
+      const el = this._vm.$el
+      if (el.tagName === 'SELECT') {
+        el.removeEventListener('change', this._vm.handleInputable)
+      } else {
+        if (el.type === 'checkbox') {
+          el.removeEventListener('change', this._vm.handleInputable)
+        } else {
+          el.removeEventListener('input', this._vm.handleInputable)
+        }
+      }
+    } else if (this.isComponent) {
+      if (this._unwatchInputable) {
+        this._unwatchInputable()
+        this._unwatchInputable = undefined
+        delete this['_unwatchInputable']
+      }
+    } else {
+      // TODO: should be warn !!
+    }
   }
 }
 

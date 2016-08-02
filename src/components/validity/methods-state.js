@@ -31,6 +31,21 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
+  function handleInputable (e: Event): void {
+    const el = e.target
+    /*
+    const value: any = this.getValue({ el, vnode: this.child })
+    */
+
+    this.willUpdateDirty({ el, vnode: this.child })
+    this.willUpdateModified({ el, vnode: this.child })
+  }
+
+  function watchInputable (val: any): void {
+    this.willUpdateDirty({ el: this.$el, vnode: this.child })
+    this.willUpdateModified({ el: this.$el, vnode: this.child })
+  }
+
   function reset (): void {
     this.unwatchValidationRawResults()
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
@@ -77,6 +92,8 @@ export default function (Vue: GlobalAPI): Object {
     willUpdateTouched,
     willUpdateDirty,
     willUpdateModified,
+    handleInputable,
+    watchInputable,
     reset,
     watchValidationRawResults,
     unwatchValidationRawResults

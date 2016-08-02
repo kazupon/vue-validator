@@ -19,9 +19,9 @@ describe('MultiElement class', () => {
           },
           render (h) {
             const child = this.child = h('fieldset', [
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'one' }}),
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'two' }}),
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'three' }})
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
             ])
             return child
           }
@@ -47,9 +47,9 @@ describe('MultiElement class', () => {
           },
           render (h) {
             const child = this.child = h('fieldset', [
-              h('input', { staticAttrs: { type: 'checkbox', value: 'one' }}),
-              h('input', { staticAttrs: { type: 'checkbox', value: 'two' }}),
-              h('input', { staticAttrs: { type: 'checkbox', value: 'three' }})
+              h('input', { attrs: { type: 'checkbox', value: 'one' }}),
+              h('input', { attrs: { type: 'checkbox', value: 'two' }}),
+              h('input', { attrs: { type: 'checkbox', value: 'three' }})
             ])
             return child
           }
@@ -77,9 +77,9 @@ describe('MultiElement class', () => {
           },
           render (h) {
             const child = this.child = h('fieldset', [
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'one' }}),
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'two' }}),
-              h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'three' }})
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
+              h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
             ])
             return child
           }
@@ -109,9 +109,9 @@ describe('MultiElement class', () => {
           },
           render (h) {
             const child = this.child = h('fieldset', [
-              h('input', { staticAttrs: { type: 'checkbox', value: 'one' }}),
-              h('input', { staticAttrs: { type: 'checkbox', value: 'two' }}),
-              h('input', { staticAttrs: { type: 'checkbox', value: 'three' }})
+              h('input', { attrs: { type: 'checkbox', value: 'one' }}),
+              h('input', { attrs: { type: 'checkbox', value: 'two' }}),
+              h('input', { attrs: { type: 'checkbox', value: 'three' }})
             ])
             return child
           }
@@ -151,9 +151,9 @@ describe('MultiElement class', () => {
         },
         render (h) {
           const child = this.child = h('fieldset', [
-            h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'one' }}),
-            h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'two' }}),
-            h('input', { staticAttrs: { type: 'radio', name: 'group', value: 'three' }})
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
           ])
           return child
         }
@@ -170,6 +170,49 @@ describe('MultiElement class', () => {
         triggerEvent(items[2], 'focusout')
       }).then(() => {
         assert(vm.touched === false)
+      }).then(done)
+    })
+  })
+
+  describe('#listenInputableEvent / #unlistenInputableEvent', () => {
+    it('should be work', done => {
+      methods.handleInputable = jasmine.createSpy()
+      const vm = new Vue({
+        props,
+        data,
+        computed,
+        created,
+        methods,
+        propsData: {
+          field: 'field1',
+          child: {},
+          validators: {
+            required: true
+          }
+        },
+        render (h) {
+          const child = this.child = h('fieldset', [
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
+            h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
+          ])
+          return child
+        }
+      }).$mount()
+      const multi = new MultiElement(vm)
+      multi.listenInputableEvent()
+      const items = (vm.$el.querySelectorAll('input[type="radio"]'))
+      triggerEvent(items[1], 'change')
+      waitForUpdate(() => {
+      }).then(() => {
+        assert(methods.handleInputable.calls.count() === 1)
+        triggerEvent(items[2], 'change')
+      }).then(() => {
+        assert(methods.handleInputable.calls.count() === 2)
+        multi.unlistenInputableEvent()
+        triggerEvent(items[0], 'change')
+      }).then(() => {
+        assert(methods.handleInputable.calls.count() === 2)
       }).then(done)
     })
   })

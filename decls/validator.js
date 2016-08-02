@@ -38,7 +38,9 @@ declare type $ValidateDescriptor = {
 }
 
 declare interface $Validity {
-  willUpdateTouched (options?: Object): void
+  willUpdateTouched (options?: Object): void,
+  handleInputable (e: Event): void,
+  watchInputable (val: any): void
 }
 
 declare interface ValidityElement {

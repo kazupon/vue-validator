@@ -29,7 +29,7 @@ describe('validity component: render', () => {
             props: {
               field: 'field1',
               validators: { required: true },
-              child: h('input', { staticAttrs: { type: 'text' }})
+              child: h('input', { attrs: { type: 'text' }})
             }
           })
         ])

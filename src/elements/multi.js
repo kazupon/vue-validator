@@ -24,6 +24,14 @@ export default class MultiElement {
   unlistenToucheableEvent (): void {
     this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched)
   }
+
+  listenInputableEvent (): void {
+    this._vm.$el.addEventListener('change', this._vm.handleInputable)
+  }
+
+  unlistenInputableEvent (): void {
+    this._vm.$el.removeEventListener('change', this._vm.handleInputable)
+  }
 }
 
 function getCheckedValue (el): Array<any> {
