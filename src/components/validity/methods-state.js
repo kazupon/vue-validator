@@ -24,7 +24,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function willUpdateModified (options?: Object): void {
-    const modified = this.modified = this.checkModified(options)
+    const modified: boolean = this.modified = this.checkModified(options)
     if (this._modified !== modified) {
       this._modified = modified
       this.fireEvent('modified', modified)
@@ -32,8 +32,8 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function reset (): void {
-    this._unwatch()
-    const keys = this._keysCached(this._uid.toString(), this.results)
+    this.unwatchValidationRawResults()
+    const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
     for (let i = 0; i < keys.length; i++) {
       this.results[keys[i]] = undefined
     }
@@ -42,25 +42,33 @@ export default function (Vue: GlobalAPI): Object {
     this.touched = false
     this.modified = false
     this._modified = false
-    this._unwatch = this.$watch('results', this.watchValidationRawResults, { deep: true })
+    this.watchValidationRawResults()
   }
 
-  function watchValidationRawResults (val) {
-    let valid: boolean = true
-    const keys = this._keysCached(this._uid.toString(), this.results)
-    for (let i = 0; i < keys.length; i++) {
-      const result: $ValidationRawResult = this.results[keys[i]]
-      if (typeof result === 'boolean' && !result) {
-        valid = false
-        break
+  function watchValidationRawResults (): void {
+    this._unwatch = this.$watch('results', (val: Object) => {
+      let valid: boolean = true
+      const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
+      for (let i = 0; i < keys.length; i++) {
+        const result: $ValidationRawResult = this.results[keys[i]]
+        if (typeof result === 'boolean' && !result) {
+          valid = false
+          break
+        }
+        if (typeof result === 'string' && result) {
+          valid = false
+          break
+        }
       }
-      if (typeof result === 'string' && result) {
-        valid = false
-        break
-      }
-    }
-    this.valid = valid
-    this.fireEvent(valid ? 'valid' : 'invalid')
+      this.valid = valid
+      this.fireEvent(valid ? 'valid' : 'invalid')
+    }, { deep: true })
+  }
+
+  function unwatchValidationRawResults (): void {
+    this._unwatch()
+    this._unwatch = undefined
+    delete this['_unwatch']
   }
 
   return {
@@ -70,6 +78,7 @@ export default function (Vue: GlobalAPI): Object {
     willUpdateDirty,
     willUpdateModified,
     reset,
-    watchValidationRawResults
+    watchValidationRawResults,
+    unwatchValidationRawResults
   }
 }

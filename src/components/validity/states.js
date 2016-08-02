@@ -16,23 +16,9 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
-  const data = function (): Object {
-    let validators: Array<string>
-    if (typeof this.validators === 'string') {
-      validators = [this.validators]
-    } else if (Array.isArray(this.validators)) {
-      validators = this.validators
-    } else {
-      validators = Object.keys(this.validators)
-    }
-
-    const results: $ValidationRawResult = {}
-    validators.forEach((validator: string) => {
-      results[validator] = undefined
-    })
-
+  function data (): Object {
     return {
-      results,
+      results: getInitialResults(this.validators),
       valid: true,
       dirty: false,
       touched: false,
@@ -44,4 +30,22 @@ export default function (Vue: GlobalAPI): Object {
     props,
     data
   }
+}
+
+function getInitialResults (prop: string | Object | Array<string>): $ValidationRawResult {
+  let validators: Array<string>
+  if (typeof prop === 'string') {
+    validators = [prop]
+  } else if (Array.isArray(prop)) {
+    validators = prop
+  } else {
+    validators = Object.keys(prop)
+  }
+
+  const results: $ValidationRawResult = {}
+  validators.forEach((validator: string) => {
+    results[validator] = undefined
+  })
+
+  return results
 }

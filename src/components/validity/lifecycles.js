@@ -11,10 +11,10 @@ export default function (Vue: GlobalAPI): Object {
       this._modified = false
 
       // watch validation raw results
-      this._unwatch = this.$watch('results', this.watchValidationRawResults, { deep: true })
+      this.watchValidationRawResults()
     },
     destroyed () {
-      this._unwatch()
+      this.unwatchValidationRawResults()
     }
   }
 }
