@@ -37,10 +37,11 @@ export default class MultiElement {
 function getCheckedValue (el): Array<any> {
   const value: Array<any> = []
   const items = el.querySelectorAll('input[type="checkbox"], input[type="radio"]')
-  items.forEach(item => {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
     if (!item.disabled && item.checked) {
       value.push(item.value)
     }
-  })
+  }
   return value
 }

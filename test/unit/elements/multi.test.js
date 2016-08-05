@@ -163,7 +163,6 @@ describe('MultiElement class', () => {
       const items = (vm.$el.querySelectorAll('input[type="radio"]'))
       triggerEvent(items[1], 'focusout')
       waitForUpdate(() => {
-      }).then(() => {
         assert(vm.touched === true)
         vm.reset()
         multi.unlistenToucheableEvent()
@@ -204,7 +203,6 @@ describe('MultiElement class', () => {
       const items = (vm.$el.querySelectorAll('input[type="radio"]'))
       triggerEvent(items[1], 'change')
       waitForUpdate(() => {
-      }).then(() => {
         assert(methods.handleInputable.calls.count() === 1)
         triggerEvent(items[2], 'change')
       }).then(() => {
