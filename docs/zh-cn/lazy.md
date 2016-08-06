@@ -29,7 +29,7 @@ Vue.component('comment', {
   activate: function (done) {
     var resource = this.$resource('/comments/:id');
     resource.get({ id: this.id }, function (comment, stat, req) {
-      this.commont =  comment.body
+      this.comment =  comment.body
 
       // activate validator
       this.$activateValidator()
