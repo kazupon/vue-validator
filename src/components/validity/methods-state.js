@@ -5,26 +5,26 @@ export default function (Vue: GlobalAPI): Object {
     return this._elementable.getValue()
   }
 
-  function checkModified (options?: Object): boolean {
+  function checkModified (): boolean {
     return this._elementable.checkModified()
   }
 
-  function willUpdateTouched (options?: Object): void {
+  function willUpdateTouched (options?: any): void {
     if (!this.touched) {
       this.touched = true
       this._fireEvent('touched')
     }
   }
 
-  function willUpdateDirty (options?: Object): void {
-    if (!this.dirty && this.checkModified(options)) {
+  function willUpdateDirty (): void {
+    if (!this.dirty && this.checkModified()) {
       this.dirty = true
       this._fireEvent('dirty')
     }
   }
 
-  function willUpdateModified (options?: Object): void {
-    const modified: boolean = this.modified = this.checkModified(options)
+  function willUpdateModified (): void {
+    const modified: boolean = this.modified = this.checkModified()
     if (this._modified !== modified) {
       this._modified = modified
       this._fireEvent('modified', modified)
@@ -37,13 +37,13 @@ export default function (Vue: GlobalAPI): Object {
     const value: any = this.getValue({ el, vnode: this.child })
     */
 
-    this.willUpdateDirty({ el, vnode: this.child })
-    this.willUpdateModified({ el, vnode: this.child })
+    this.willUpdateDirty()
+    this.willUpdateModified()
   }
 
   function watchInputable (val: any): void {
-    this.willUpdateDirty({ el: this.$el, vnode: this.child })
-    this.willUpdateModified({ el: this.$el, vnode: this.child })
+    this.willUpdateDirty()
+    this.willUpdateModified()
   }
 
   function reset (): void {
