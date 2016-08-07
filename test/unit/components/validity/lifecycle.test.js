@@ -28,7 +28,7 @@ describe('validity component: lifecycle', () => {
             }
           }
         }).$mount()
-        assert(vm._elementable.isBuiltIn !== undefined)
+        assert.equal(vm._elementable.constructor.name, 'SingleElement')
       })
     })
 
@@ -56,7 +56,7 @@ describe('validity component: lifecycle', () => {
             }
           }
         }).$mount()
-        assert(vm._elementable.getCheckedValue !== undefined)
+        assert.equal(vm._elementable.constructor.name, 'MultiElement')
       })
     })
   })
