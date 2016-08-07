@@ -95,9 +95,8 @@ describe('validity component: validation result', () => {
   describe('dirty', () => {
     it('should be validated', done => {
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('value', '')
+      spyOn(vm, 'checkModified').and.returnValues(true, false)
       // first state
-      vm._initValue = ''
       assert(vm.dirty === false)
       // simulate dirty updating
       vm.willUpdateDirty()
@@ -114,9 +113,8 @@ describe('validity component: validation result', () => {
   describe('pristine', () => {
     it('should be validated', done => {
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('value', '')
+      spyOn(vm, 'checkModified').and.returnValues(true, false)
       // first state
-      vm._initValue = ''
       assert(vm.pristine === true)
       // simulate pristine updating
       vm.willUpdateDirty()
@@ -133,9 +131,8 @@ describe('validity component: validation result', () => {
   describe('modified', () => {
     it('should be validated', done => {
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('value', '')
+      spyOn(vm, 'checkModified').and.returnValues(true, false)
       // first state
-      vm._initValue = ''
       assert(vm.modified === false)
       // simulate modified updating
       vm.willUpdateModified()
@@ -153,9 +150,8 @@ describe('validity component: validation result', () => {
     it('should be validated', done => {
       let result
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('', '', 'value', 'value')
+      spyOn(vm, 'checkModified').and.returnValues(true, true, false, false)
       // first state
-      vm._initValue = 'value'
       result = vm.result
       assert(result.valid === true)
       assert(result.invalid === false)

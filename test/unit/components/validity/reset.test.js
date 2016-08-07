@@ -30,8 +30,7 @@ describe('validity component: reset', () => {
 
   it('should be work', done => {
     // setup stub
-    spyOn(vm, 'getValue').and.returnValues('', '', 'value', 'value')
-    vm._initValue = 'value'
+    spyOn(vm, 'checkModified').and.returnValues(true, true, false, false)
     // simulate some updating
     vm.willUpdateDirty()
     vm.willUpdateModified()
@@ -108,10 +107,9 @@ describe('validity component: reset', () => {
   describe('dirty', () => {
     it('should be fired', done => {
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('', 'value', '')
+      spyOn(vm, 'checkModified').and.returnValues(false, true, false)
       const handler = jasmine.createSpy()
       vm.$on('dirty', handler)
-      vm._initValue = ''
       // simulate dirty updating
       vm.willUpdateDirty()
       waitForUpdate(() => {
@@ -131,10 +129,9 @@ describe('validity component: reset', () => {
   describe('modified', () => {
     it('should be fired', done => {
       // setup stub
-      spyOn(vm, 'getValue').and.returnValues('', 'value', '')
+      spyOn(vm, 'checkModified').and.returnValues(false, true, false)
       const handler = jasmine.createSpy()
       vm.$on('modified', handler)
-      vm._initValue = ''
       // simulate modified updating
       vm.willUpdateModified()
       waitForUpdate(() => {
