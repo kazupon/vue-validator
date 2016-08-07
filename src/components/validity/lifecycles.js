@@ -18,10 +18,15 @@ export default function (Vue: GlobalAPI): Object {
 
   function destroyed (): void {
     this.unwatchValidationRawResults()
+    this._elementable.unlistenInputableEvent()
+    this._elementable.unlistenToucheableEvent()
+    this._elementable = null
   }
 
   function mounted (): void {
     this._elementable = createValidityElement(this)
+    this._elementable.listenToucheableEvent()
+    this._elementable.listenInputableEvent()
   }
 
   return {

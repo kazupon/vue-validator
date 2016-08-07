@@ -2,11 +2,11 @@
 
 export default function (Vue: GlobalAPI): Object {
   function getValue (options?: Object): any {
-    return 'value'
+    return this._elementable.getValue()
   }
 
   function checkModified (options?: Object): boolean {
-    return this._initValue !== this.getValue(options)
+    return this._elementable.checkModified()
   }
 
   function willUpdateTouched (options?: Object): void {
