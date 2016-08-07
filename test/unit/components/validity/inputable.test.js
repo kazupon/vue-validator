@@ -10,7 +10,7 @@ const { created } = Lifecycles(Vue)
 const methods = Methods(Vue)
 const { render } = Render(Vue)
 
-describe('validity component: input data handling', () => {
+describe('validity component: inputable', () => {
   let orgUpdateDirty
   let orgUpdateModified
   beforeEach(() => {
@@ -23,8 +23,8 @@ describe('validity component: input data handling', () => {
     methods.willUpdateModified = orgUpdateModified
   })
 
-  describe('element: flag updating methods', () => {
-    it('should be called', () => {
+  describe('#handleInputable', () => {
+    it('should be work', () => {
       methods.willUpdateDirty = jasmine.createSpy()
       methods.willUpdateModified = jasmine.createSpy()
       const vm = new Vue({
@@ -51,8 +51,8 @@ describe('validity component: input data handling', () => {
     })
   })
 
-  describe('component: flag updating methods', () => {
-    it('should be called', () => {
+  describe('#watchInputable', () => {
+    it('should be work', () => {
       methods.willUpdateDirty = jasmine.createSpy()
       methods.willUpdateModified = jasmine.createSpy()
       const vm = new Vue({
