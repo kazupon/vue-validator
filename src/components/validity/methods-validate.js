@@ -8,19 +8,19 @@ function isPromise (p: Object): boolean {
 }
 
 export default function (Vue: GlobalAPI): Object {
-  function resolveValidator (name: string): ValidatorAsset | void {
+  function _resolveValidator (name: string): ValidatorAsset | void {
     const { resolveAsset } = this.constructor.util
     return resolveAsset(this.$options, 'validators', name)
   }
 
-  function getValidateDescriptor (
+  function _getValidateDescriptor (
     validator: string,
     field: string,
     value: any
   ): $ValidateDescriptor | null {
     const { isPlainObject } = this.constructor.util
 
-    const asset: ValidatorAsset = this.resolveValidator(validator)
+    const asset: ValidatorAsset = this._resolveValidator(validator)
     if (!asset) {
       // TODO: should be warned
       return null
@@ -72,7 +72,7 @@ export default function (Vue: GlobalAPI): Object {
     return descriptor
   }
 
-  function resolveMessage (
+  function _resolveMessage (
     field: string,
     msg: string | Function,
     override?: string
@@ -85,7 +85,7 @@ export default function (Vue: GlobalAPI): Object {
       : undefined
   }
 
-  function invokeValidator (
+  function _invokeValidator (
     { fn, value, field, rule, msg }: $ValidateDescriptor,
     cb: Function
   ): void {
@@ -94,25 +94,25 @@ export default function (Vue: GlobalAPI): Object {
       future(() => { // resolve
         cb(true)
       }, (err: string) => { // reject
-        cb(false, this.resolveMessage(field, msg, err))
+        cb(false, this._resolveMessage(field, msg, err))
       })
     } else if (isPromise(future)) { // promise
       future.then(() => { // resolve
         cb(true)
       }, (err: string) => { // reject
-        cb(false, this.resolveMessage(field, msg, err))
+        cb(false, this._resolveMessage(field, msg, err))
       }).catch((err: Error) => {
-        cb(false, this.resolveMessage(field, msg, err.message))
+        cb(false, this._resolveMessage(field, msg, err.message))
       })
     } else { // sync
-      cb(future, future === false ? this.resolveMessage(field, msg) : undefined)
+      cb(future, future === false ? this._resolveMessage(field, msg) : undefined)
     }
   }
 
   function validate (validator: string, value: any, cb: Function): void {
-    const descriptor = this.getValidateDescriptor(validator, this.field, value)
+    const descriptor = this._getValidateDescriptor(validator, this.field, value)
     if (descriptor) {
-      this.invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
+      this._invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
         cb(null, ret, msg)
       })
     } else {
@@ -122,10 +122,10 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   return {
-    resolveValidator,
-    getValidateDescriptor,
-    resolveMessage,
-    invokeValidator,
+    _resolveValidator,
+    _getValidateDescriptor,
+    _resolveMessage,
+    _invokeValidator,
     validate
   }
 }

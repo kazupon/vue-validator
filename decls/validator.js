@@ -48,7 +48,6 @@ declare type ValidityComponent = {
   modified: boolean,
   result: ValidatorAsset,
 
-  getValue (options?: Object): any,
   checkModified (options?: Object): boolean,
   willUpdateTouched (options?: Object): void,
   willUpdateDirty (options?: Object): void,
@@ -56,9 +55,6 @@ declare type ValidityComponent = {
   handleInputable (e: Event): void,
   watchInputable (val: any): void,
   reset (): void,
-  watchValidationRawResults (): void,
-  unwatchValidationRawResults (): void,
-  fireEvent (type: string, ...args: Array<any>): void
 } & Component
 
 declare interface ValidityElement {

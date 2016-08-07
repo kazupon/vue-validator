@@ -12,14 +12,14 @@ export default function (Vue: GlobalAPI): Object {
   function willUpdateTouched (options?: Object): void {
     if (!this.touched) {
       this.touched = true
-      this.fireEvent('touched')
+      this._fireEvent('touched')
     }
   }
 
   function willUpdateDirty (options?: Object): void {
     if (!this.dirty && this.checkModified(options)) {
       this.dirty = true
-      this.fireEvent('dirty')
+      this._fireEvent('dirty')
     }
   }
 
@@ -27,7 +27,7 @@ export default function (Vue: GlobalAPI): Object {
     const modified: boolean = this.modified = this.checkModified(options)
     if (this._modified !== modified) {
       this._modified = modified
-      this.fireEvent('modified', modified)
+      this._fireEvent('modified', modified)
     }
   }
 
@@ -47,7 +47,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function reset (): void {
-    this.unwatchValidationRawResults()
+    this._unwatchValidationRawResults()
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
     for (let i = 0; i < keys.length; i++) {
       this.results[keys[i]] = undefined
@@ -57,10 +57,10 @@ export default function (Vue: GlobalAPI): Object {
     this.touched = false
     this.modified = false
     this._modified = false
-    this.watchValidationRawResults()
+    this._watchValidationRawResults()
   }
 
-  function watchValidationRawResults (): void {
+  function _watchValidationRawResults (): void {
     this._unwatch = this.$watch('results', (val: Object) => {
       let valid: boolean = true
       const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
@@ -76,11 +76,11 @@ export default function (Vue: GlobalAPI): Object {
         }
       }
       this.valid = valid
-      this.fireEvent(valid ? 'valid' : 'invalid')
+      this._fireEvent(valid ? 'valid' : 'invalid')
     }, { deep: true })
   }
 
-  function unwatchValidationRawResults (): void {
+  function _unwatchValidationRawResults (): void {
     this._unwatch()
     this._unwatch = undefined
     delete this['_unwatch']
@@ -95,7 +95,7 @@ export default function (Vue: GlobalAPI): Object {
     handleInputable,
     watchInputable,
     reset,
-    watchValidationRawResults,
-    unwatchValidationRawResults
+    _watchValidationRawResults,
+    _unwatchValidationRawResults
   }
 }

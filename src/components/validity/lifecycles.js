@@ -13,11 +13,11 @@ export default function (Vue: GlobalAPI): Object {
     this._modified = false
 
     // watch validation raw results
-    this.watchValidationRawResults()
+    this._watchValidationRawResults()
   }
 
   function destroyed (): void {
-    this.unwatchValidationRawResults()
+    this._unwatchValidationRawResults()
     this._elementable.unlistenInputableEvent()
     this._elementable.unlistenToucheableEvent()
     this._elementable = null

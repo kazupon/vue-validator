@@ -6,20 +6,21 @@ export default class SingleElement {
   _vnode: any
   _unwatchInputable: Function | void
   initValue: any
+
   constructor (vm: ValidityComponent, vnode: any) {
     this._vm = vm
     this._vnode = vnode
     this.initValue = this.getValue()
   }
 
-  get isBuiltIn (): boolean {
+  get _isBuiltIn (): boolean {
     const vnode = this._vnode
     return !vnode.child &&
       !vnode.componentOptions &&
       vnode.tag
   }
 
-  get isComponent (): boolean {
+  get _isComponent (): boolean {
     const vnode = this._vnode
     return vnode.child &&
       vnode.componentOptions &&
@@ -27,7 +28,7 @@ export default class SingleElement {
   }
 
   getValue (): any {
-    if (this.isBuiltIn) {
+    if (this._isBuiltIn) {
       const el = this._vm.$el
       if (el.tagName === 'SELECT') {
         return getSelectValue(el)
@@ -38,7 +39,7 @@ export default class SingleElement {
           return el.value
         }
       }
-    } else if (this.isComponent) {
+    } else if (this._isComponent) {
       return this._vnode.child.value
     } else {
       // TODO: should be warn !!
@@ -47,7 +48,7 @@ export default class SingleElement {
   }
 
   checkModified (): boolean {
-    if (this.isBuiltIn) {
+    if (this._isBuiltIn) {
       const el = this._vm.$el
       if (el.tagName === 'SELECT') {
         return !looseEqual(this.initValue, getSelectValue(el))
@@ -58,7 +59,7 @@ export default class SingleElement {
           return !looseEqual(this.initValue, el.value)
         }
       }
-    } else if (this.isComponent) {
+    } else if (this._isComponent) {
       return !looseEqual(this.initValue, this._vnode.child.value)
     } else {
       // TODO: should be warn !!
@@ -75,7 +76,7 @@ export default class SingleElement {
   }
 
   listenInputableEvent (): void {
-    if (this.isBuiltIn) {
+    if (this._isBuiltIn) {
       const el = this._vm.$el
       if (el.tagName === 'SELECT') {
         el.addEventListener('change', this._vm.handleInputable)
@@ -86,7 +87,7 @@ export default class SingleElement {
           el.addEventListener('input', this._vm.handleInputable)
         }
       }
-    } else if (this.isComponent) {
+    } else if (this._isComponent) {
       this._unwatchInputable = this._vnode.child.$watch('value', this._vm.watchInputable)
     } else {
       // TODO: should be warn !!
@@ -94,7 +95,7 @@ export default class SingleElement {
   }
 
   unlistenInputableEvent (): void {
-    if (this.isBuiltIn) {
+    if (this._isBuiltIn) {
       const el = this._vm.$el
       if (el.tagName === 'SELECT') {
         el.removeEventListener('change', this._vm.handleInputable)
@@ -105,7 +106,7 @@ export default class SingleElement {
           el.removeEventListener('input', this._vm.handleInputable)
         }
       }
-    } else if (this.isComponent) {
+    } else if (this._isComponent) {
       if (this._unwatchInputable) {
         this._unwatchInputable()
         this._unwatchInputable = undefined
