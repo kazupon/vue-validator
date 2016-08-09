@@ -32,11 +32,6 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function handleInputable (e: Event): void {
-    const el = e.target
-    /*
-    const value: any = this.getValue({ el, vnode: this.child })
-    */
-
     this.willUpdateDirty()
     this.willUpdateModified()
   }

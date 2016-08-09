@@ -45,7 +45,7 @@ describe('validity component: inputable', () => {
           }
         }
       }).$mount()
-      vm.handleInputable({ target: vm.$el })
+      vm.handleInputable()
       assert(methods.willUpdateDirty.calls.count() === 1)
       assert(methods.willUpdateModified.calls.count() === 1)
     })
@@ -90,7 +90,7 @@ describe('validity component: inputable', () => {
           ])
         }
       }).$mount()
-      vm.$refs.validity.watchInputable({})
+      vm.$refs.validity.watchInputable()
       assert(methods.willUpdateDirty.calls.count() === 1)
       assert(methods.willUpdateModified.calls.count() === 1)
     })
