@@ -38,6 +38,9 @@ describe('validity component: reset', () => {
     // set invalid validation raw result
     vm.results['required'] = false
     waitForUpdate(() => {
+      // simulate progresses setting
+      vm.progresses.required = 'running'
+    }).then(() => {
       vm.reset()
     }).then(() => {
       const result = vm.result
@@ -50,6 +53,7 @@ describe('validity component: reset', () => {
       assert(result.modified === false)
       assert(result.required === false)
       assert(result.errors === undefined)
+      assert.equal(vm.progresses.required, '')
     }).then(done)
   })
 

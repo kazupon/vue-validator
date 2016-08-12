@@ -46,6 +46,7 @@ export default function (Vue: GlobalAPI): Object {
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
     for (let i = 0; i < keys.length; i++) {
       this.results[keys[i]] = undefined
+      this.progresses[keys[i]] = ''
     }
     this.valid = true
     this.dirty = false
