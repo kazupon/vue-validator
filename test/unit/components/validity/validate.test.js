@@ -17,67 +17,27 @@ describe('validity component: validate', () => {
     methods
   }
 
-  describe('validators prop', () => {
-    describe('object', () => {
-      it('should be work', done => {
-        baseOptions.propsData = {
-          field: 'field1',
-          child: {}, // dummy
-          validators: {
-            required: true,
-            maxlength: {
-              rule: 8,
-              message: 'too long!!'
-            }
-          }
+  describe('built-in validator', () => {
+    it('should be work', done => {
+      baseOptions.propsData = {
+        field: 'field1',
+        child: {}, // dummy
+        validators: {
+          required: true
         }
-        const vm = new Vue(baseOptions)
-        // invalid
-        vm.validate('required', '', (err, ret, msg) => {
+      }
+      const vm = new Vue(baseOptions)
+      // invalid
+      vm.validate('required', '', (err, ret, msg) => {
+        assert(err === null)
+        assert(ret === false)
+        assert(msg === undefined)
+        // valid
+        vm.validate('required', 'value', (err, ret, msg) => {
           assert(err === null)
-          assert(ret === false)
+          assert(ret === true)
           assert(msg === undefined)
-          vm.validate('maxlength', '123456789', (err, ret, msg) => {
-            assert(err === null)
-            assert(ret === false)
-            assert.equal(msg, 'too long!!')
-            // valid
-            vm.validate('required', 'value', (err, ret, msg) => {
-              assert(err === null)
-              assert(ret === true)
-              assert(msg === undefined)
-              vm.validate('maxlength', 'value', (err, ret, msg) => {
-                assert(err === null)
-                assert(ret === true)
-                assert(msg === undefined)
-                done()
-              })
-            })
-          })
-        })
-      })
-    })
-
-    describe('array', () => {
-      it('should be work', done => {
-        baseOptions.propsData = {
-          field: 'field1',
-          child: {}, // dummy
-          validators: ['required']
-        }
-        const vm = new Vue(baseOptions)
-        // invalid
-        vm.validate('required', '', (err, ret, msg) => {
-          assert(err === null)
-          assert(ret === false)
-          assert(msg === undefined)
-          // valid
-          vm.validate('required', 'value', (err, ret, msg) => {
-            assert(err === null)
-            assert(ret === true)
-            assert(msg === undefined)
-            done()
-          })
+          done()
         })
       })
     })
