@@ -109,16 +109,24 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
-  function validate (validator: string, value: any, cb: Function): void {
+  function validate (validator: string, value: any, cb: Function): boolean {
     const descriptor = this._getValidateDescriptor(validator, this.field, value)
     if (descriptor) {
-      this._invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
-        cb(null, ret, msg)
+      if (this.progresses[validator]) { return false }
+      this.progresses[validator] = 'running'
+      this.$nextTick(() => {
+        this._invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
+          this.progresses[validator] = ''
+          this.$nextTick(() => {
+            cb.call(this, null, ret, msg)
+          })
+        })
       })
     } else {
       // TODO:
-      cb(new Error())
+      cb.call(this, new Error())
     }
+    return true
   }
 
   return {

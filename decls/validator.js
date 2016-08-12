@@ -23,6 +23,10 @@ declare type ValidationResult = {
   [key: string]: Array<ValidationError> | boolean | string
 }
 
+declare type ValidatorProgresses = {
+  [key: string]: string
+}
+
 declare type $ValidationRawResult = {
   [key: string]: boolean | string | void
 }
@@ -47,6 +51,7 @@ declare type ValidityComponent = {
   untouched: boolean,
   modified: boolean,
   result: ValidatorAsset,
+  progresses: ValidatorProgresses,
 
   checkModified (): boolean,
   willUpdateTouched (options?: any): void,
@@ -55,6 +60,7 @@ declare type ValidityComponent = {
   handleInputable (e: Event): void,
   watchInputable (val: any): void,
   reset (): void,
+  validate (validator: string, value: any, cb: Function): boolean,
 } & Component
 
 declare interface ValidityElement {

@@ -181,5 +181,20 @@ describe('validity component: validate', () => {
         })
       })
     })
+
+    describe('already running', () => {
+      it('should be occured already error', done => {
+        baseOptions.validators = {
+          exist (val) {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => { resolve() }, 5)
+            })
+          }
+        }
+        const vm = new Vue(baseOptions)
+        assert(vm.validate('exist', 'foo', done) === true)
+        assert(vm.validate('exist', 'foo') === false)
+      })
+    })
   })
 })
