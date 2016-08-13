@@ -109,7 +109,7 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
-  function validate (validator: string, value: any, cb: Function): boolean {
+  function _validate (validator: string, value: any, cb: Function): boolean {
     const descriptor = this._getValidateDescriptor(validator, this.field, value)
     if (descriptor) {
       if (this.progresses[validator]) { return false }
@@ -117,16 +117,57 @@ export default function (Vue: GlobalAPI): Object {
       this.$nextTick(() => {
         this._invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
           this.progresses[validator] = ''
-          this.$nextTick(() => {
-            cb.call(this, null, ret, msg)
-          })
+          this.results[validator] = msg || ret
+          if (cb) {
+            this.$nextTick(() => {
+              cb.call(this, null, ret, msg)
+            })
+          } else {
+            const e: Object = { result: ret }
+            if (msg) {
+              e['msg'] = msg
+            }
+            this._fireEvent('validate', validator, e)
+          }
         })
       })
     } else {
       // TODO:
-      cb.call(this, new Error())
+      const err = new Error()
+      cb ? cb.call(this, err) : this._fireEvent('validate', validator, err)
     }
     return true
+  }
+
+  function validate (...args: Array<any>): boolean {
+    let validators: Array<string>
+    let value: any
+    let cb: ?Function
+    let ret: boolean = true
+
+    if (args.length === 3) {
+      validators = [args[0]]
+      value = args[1]
+      cb = args[2]
+    } else if (args.length === 2) {
+      validators = this._keysCached(this._uid.toString(), this.results)
+      value = args[0]
+      cb = args[1]
+    } else {
+      validators = this._keysCached(this._uid.toString(), this.results)
+      value = this.getValue()
+      cb = null
+    }
+
+    if (args.length === 3) {
+      ret = this._validate(validators[0], value, cb)
+    } else {
+      validators.forEach((validator: string) => {
+        ret = this._validate(validator, value, cb)
+      })
+    }
+
+    return ret
   }
 
   return {
@@ -134,6 +175,7 @@ export default function (Vue: GlobalAPI): Object {
     _getValidateDescriptor,
     _resolveMessage,
     _invokeValidator,
+    _validate,
     validate
   }
 }

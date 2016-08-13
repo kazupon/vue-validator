@@ -32,11 +32,21 @@ describe('validity component: validate', () => {
         assert(err === null)
         assert(ret === false)
         assert(msg === undefined)
+        assert(vm.valid === false)
+        assert(vm.invalid === true)
+        assert(vm.result.valid === false)
+        assert(vm.result.invalid === true)
+        assert(vm.result.required === true)
         // valid
         vm.validate('required', 'value', (err, ret, msg) => {
           assert(err === null)
           assert(ret === true)
           assert(msg === undefined)
+          assert(vm.valid === true)
+          assert(vm.invalid === false)
+          assert(vm.result.valid === true)
+          assert(vm.result.invalid === false)
+          assert(vm.result.required === false)
           done()
         })
       })
@@ -73,18 +83,38 @@ describe('validity component: validate', () => {
         assert(err === null)
         assert(ret === false)
         assert.equal(msg, 'invalid email')
+        assert(vm.valid === false)
+        assert(vm.invalid === true)
+        assert(vm.result.valid === false)
+        assert(vm.result.invalid === true)
+        assert.equal(vm.result.email, 'invalid email')
         vm.validate('numeric', 'foobar', (err, ret, msg) => {
           assert(err === null)
           assert(ret === false)
           assert.equal(msg, 'invalid field1 value')
+          assert(vm.valid === false)
+          assert(vm.invalid === true)
+          assert(vm.result.valid === false)
+          assert(vm.result.invalid === true)
+          assert.equal(vm.result.numeric, 'invalid field1 value')
           vm.validate('email', 'foo@domain.com', (err, ret, msg) => {
             assert(err === null)
             assert(ret === true)
             assert(msg === undefined)
+            assert(vm.valid === false)
+            assert(vm.invalid === true)
+            assert(vm.result.valid === false)
+            assert(vm.result.invalid === true)
+            assert(vm.result.email === false)
             vm.validate('numeric', '12345', (err, ret, msg) => {
               assert(err === null)
               assert(ret === true)
               assert(msg === undefined)
+              assert(vm.valid === true)
+              assert(vm.invalid === false)
+              assert(vm.result.valid === true)
+              assert(vm.result.invalid === false)
+              assert(vm.result.numeric === false)
               done()
             })
           })
@@ -117,6 +147,11 @@ describe('validity component: validate', () => {
             assert(err === null)
             assert(ret === true)
             assert(msg === undefined)
+            assert(vm.valid === true)
+            assert(vm.invalid === false)
+            assert(vm.result.valid === true)
+            assert(vm.result.invalid === false)
+            assert(vm.result.exist === false)
             done()
           })
         })
@@ -136,6 +171,11 @@ describe('validity component: validate', () => {
             assert(err === null)
             assert(ret === false)
             assert.equal(msg, 'already exist')
+            assert(vm.valid === false)
+            assert(vm.invalid === true)
+            assert(vm.result.valid === false)
+            assert(vm.result.invalid === true)
+            assert.equal(vm.result.exist, 'already exist')
             done()
           })
         })
@@ -157,6 +197,11 @@ describe('validity component: validate', () => {
             assert(err === null)
             assert(ret === true)
             assert(msg === undefined)
+            assert(vm.valid === true)
+            assert(vm.invalid === false)
+            assert(vm.result.valid === true)
+            assert(vm.result.invalid === false)
+            assert(vm.result.exist === false)
             done()
           })
         })
@@ -176,25 +221,73 @@ describe('validity component: validate', () => {
             assert(err === null)
             assert(ret === false)
             assert.equal(msg, 'already exist')
+            assert(vm.valid === false)
+            assert(vm.invalid === true)
+            assert(vm.result.valid === false)
+            assert(vm.result.invalid === true)
+            assert.equal(vm.result.exist, 'already exist')
             done()
           })
         })
       })
     })
+  })
 
-    describe('already running', () => {
-      it('should be occured already error', done => {
-        baseOptions.validators = {
-          exist (val) {
-            return new Promise((resolve, reject) => {
-              setTimeout(() => { resolve() }, 5)
-            })
+  describe('all validators running', () => {
+    it('should be work', done => {
+      baseOptions.propsData = {
+        field: 'field1',
+        child: {}, // dummy
+        validators: ['required', 'numeric', 'exist']
+      }
+      baseOptions.validators = {
+        numeric: {
+          check (val) {
+            return /^[-+]?[0-9]+$/.test(val)
           }
+        },
+        exist (val) {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => { resolve() }, 5)
+          })
         }
-        const vm = new Vue(baseOptions)
-        assert(vm.validate('exist', 'foo', done) === true)
-        assert(vm.validate('exist', 'foo') === false)
-      })
+      }
+      const vm = new Vue(baseOptions)
+      spyOn(vm, 'getValue').and.returnValues('12345')
+      const handler = jasmine.createSpy()
+      vm.$on('validate', handler)
+      waitForUpdate(() => {
+        vm.validate()
+      }).thenWaitFor(6).then(() => {
+        const calls = handler.calls
+        assert(calls.count() === 3)
+        assert.equal(calls.argsFor(0)[0], 'required')
+        assert(calls.argsFor(0)[1].result === true)
+        assert.equal(calls.argsFor(1)[0], 'numeric')
+        assert(calls.argsFor(1)[1].result === true)
+        assert.equal(calls.argsFor(2)[0], 'exist')
+        assert(calls.argsFor(2)[1].result === true)
+      }).then(done)
+    })
+  })
+
+  describe('already running', () => {
+    it('should be occured already error', done => {
+      baseOptions.propsData = {
+        field: 'field1',
+        child: {}, // dummy
+        validators: ['exist']
+      }
+      baseOptions.validators = {
+        exist (val) {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => { resolve() }, 5)
+          })
+        }
+      }
+      const vm = new Vue(baseOptions)
+      assert(vm.validate('exist', 'foo', done) === true)
+      assert(vm.validate('exist', 'foo') === false)
     })
   })
 })
