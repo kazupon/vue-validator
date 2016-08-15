@@ -60,7 +60,7 @@ declare type ValidityComponent = {
   handleInputable (e: Event): void,
   watchInputable (val: any): void,
   reset (): void,
-  validate (..args: Array<any>): boolean,
+  validate (...args: Array<any>): boolean,
 } & Component
 
 declare interface ValidityElement {
