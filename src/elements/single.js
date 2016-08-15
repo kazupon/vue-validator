@@ -11,6 +11,7 @@ export default class SingleElement {
     this._vm = vm
     this._vnode = vnode
     this.initValue = this.getValue()
+    this.attachValidity()
   }
 
   get _isBuiltIn (): boolean {
@@ -25,6 +26,10 @@ export default class SingleElement {
     return vnode.child &&
       vnode.componentOptions &&
       vnode.tag.match(/vue-component/)
+  }
+
+  attachValidity (): void {
+    this._vm.$el.$validity = this._vm
   }
 
   getValue (): any {

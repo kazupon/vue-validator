@@ -65,6 +65,7 @@ declare type ValidityComponent = {
 
 declare interface ValidityElement {
   initValue: any,
+  attachValidity (): void,
   getValue (): any,
   checkModified (): boolean,
   listenToucheableEvent (): void,

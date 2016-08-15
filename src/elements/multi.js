@@ -9,6 +9,14 @@ export default class MultiElement {
     // TODO: should be checked whether included radio or checkbox
     this._vm = vm
     this.initValue = this.getValue()
+    this.attachValidity()
+  }
+
+  attachValidity (): void {
+    this._vm.$el.$validity = this._vm
+    this._eachItems(item => {
+      item.$validity = this._vm
+    })
   }
 
   getValue (): any {
