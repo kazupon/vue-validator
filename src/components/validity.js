@@ -1,22 +1,12 @@
 /* @flow */
 
+import props from './validity/props'
 import Validity from './validity/index'
 
 export default function (Vue: GlobalAPI): Object {
   const { extend } = Vue.util
 
   const validity = Validity(Vue)
-  const props: Object = {
-    field: {
-      type: String,
-      required: true
-    },
-    validators: {
-      type: [String, Array, Object],
-      required: true
-    }
-  }
-
   return {
     functional: true,
     props,

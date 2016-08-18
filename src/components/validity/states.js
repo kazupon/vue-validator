@@ -1,20 +1,16 @@
 /* @flow */
 
+import baseProps from './props'
+
 export default function (Vue: GlobalAPI): Object {
-  const props: Object = {
-    field: {
-      type: String,
-      required: true
-    },
+  const { extend } = Vue.util
+
+  const props: Object = extend({
     child: {
       type: Object,
       required: true
-    },
-    validators: {
-      type: [String, Array, Object],
-      required: true
     }
-  }
+  }, baseProps)
 
   function data (): Object {
     const validators = nomalizeValidators(this.validators)
