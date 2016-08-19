@@ -8,9 +8,12 @@ function isPromise (p: Object): boolean {
 }
 
 export default function (Vue: GlobalAPI): Object {
-  function _resolveValidator (name: string): ValidatorAsset | void {
+  function _resolveValidator (name: string): ?ValidatorAsset {
     const { resolveAsset } = Vue.util
-    return resolveAsset(this.$options, 'validators', name)
+    const options = (this.child && this.child.context)
+      ? this.child.context.$options
+      : this.$options
+    return resolveAsset(options, 'validators', name)
   }
 
   function _getValidateDescriptor (

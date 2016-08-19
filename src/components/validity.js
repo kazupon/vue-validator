@@ -12,7 +12,7 @@ export default function (Vue: GlobalAPI): Object {
     props,
     render (
       h: Function,
-      { props, data, parent, children }
+      { props, data, children }
     ): Array<VNode> {
       return children.map((child: VNode): VNode => {
         if (!child.tag) { return child }
