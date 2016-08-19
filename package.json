@@ -91,7 +91,7 @@
     "clean": "rm -rf coverage && rm -rf dist/*.js* && rm ./*.log",
     "dev": "webpack-dev-server --quiet --config config/webpack.dev.conf.js --host 0.0.0.0",
     "docs": "cd docs && gitbook serve",
-    "docs:deploy": "cd docs && rm -rf _book && gitbook build && cd _book && git init && git add -A && git commit -m 'update book' && git push -f git@github.com:kazupon/vue-validator.git master:gh-pages && cd .. && cd ..",
+    "docs:deploy": "cd docs && rm -rf _book && gitbook build && cd _book && git init && git add -A && git commit -m 'update book' && git push -f git@github.com:vuejs/vue-validator.git master:gh-pages && cd .. && cd ..",
     "flow": "flow check",
     "lint": "eslint src test config",
     "postinstall": "cd docs && gitbook install && cd ..",
