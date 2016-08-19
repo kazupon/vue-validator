@@ -1,3 +1,13 @@
+<a name="2.1.6"></a>
+## [2.1.6](https://github.com/vuejs/vue-validator/compare/v2.1.5...v2.1.6) (2016-08-19)
+
+
+### :bug: Bug Fixes
+
+* **validate:** fix initial compilation error ([fa99a91](https://github.com/vuejs/vue-validator/commit/fa99a91)), closes [#288](https://github.com/vuejs/vue-validator/issues/288)
+
+
+
 <a name="2.1.5"></a>
 ## [2.1.5](https://github.com/vuejs/vue-validator/compare/v2.1.4...v2.1.5) (2016-07-25)
 

@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.5
+ * vue-validator v2.1.6
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -428,13 +428,14 @@ var validators = Object.freeze({
   }
 
   var VALIDATE_UPDATE = '__vue-validator-validate-update__';
-  var PRIORITY_VALIDATE = 16;
+  var PRIORITY_VALIDATE = 4096;
   var PRIORITY_VALIDATE_CLASS = 32;
   var REGEX_FILTER = /[^|]\|[^|]/;
   var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
   var REGEX_EVENT = /^v-on:|^@/;
 
   var classId = 0; // ID for validation class
+
 
   function ValidateClass (Vue) {
     var vIf = Vue.directive('if');
@@ -514,7 +515,6 @@ var validators = Object.freeze({
   }
 
   function Validate (Vue) {
-    var vIf = Vue.directive('if');
     var FragmentFactory = Vue.FragmentFactory;
     var parseDirective = Vue.parsers.directive.parseDirective;
     var _Vue$util = Vue.util;
@@ -547,7 +547,7 @@ var validators = Object.freeze({
     Vue.directive('validate', {
       deep: true,
       terminal: true,
-      priority: vIf.priority + PRIORITY_VALIDATE,
+      priority: PRIORITY_VALIDATE,
       params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
       paramWatchers: {
@@ -1265,7 +1265,7 @@ var validators = Object.freeze({
     BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
       var future = validator.call(this, val, arg);
       if (typeof future === 'function') {
-        // function
+        // function 
         future(function () {
           // resolve
           cb(true);
@@ -1925,7 +1925,7 @@ var validators = Object.freeze({
       var validation = this._getValidationFrom(field);
       var validations = this._groupValidations[group];
 
-      validations && ! ~indexOf(validations, validation) && validations.push(validation);
+      validations && !~indexOf(validations, validation) && validations.push(validation);
     };
 
     Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -2608,7 +2608,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.1.5';
+  plugin.version = '2.1.6';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
