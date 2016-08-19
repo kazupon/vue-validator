@@ -3,7 +3,6 @@ import { warn, each } from '../util'
 
 
 export default function (Vue) {
-  const vIf = Vue.directive('if')
   const FragmentFactory = Vue.FragmentFactory
   const parseDirective = Vue.parsers.directive.parseDirective
   const {
@@ -31,7 +30,7 @@ export default function (Vue) {
   Vue.directive('validate', {
     deep: true,
     terminal: true,
-    priority: vIf.priority + PRIORITY_VALIDATE,
+    priority: PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
