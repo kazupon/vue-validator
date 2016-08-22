@@ -1,10 +1,13 @@
+import ValidityControl from '../../../src/components/validity/index'
 import Validity from '../../../src/components/validity.js'
 
+const validityControl = ValidityControl(Vue)
 const validity = Validity(Vue)
 
 describe('validity functional component', () => {
   let el
   const components = {
+    validityControl,
     validity,
     comp: {
       props: {

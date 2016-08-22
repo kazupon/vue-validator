@@ -1,12 +1,10 @@
 /* @flow */
 
 import props from './validity/props'
-import Validity from './validity/index'
 
 export default function (Vue: GlobalAPI): Object {
   const { extend } = Vue.util
 
-  const validity = Validity(Vue)
   return {
     functional: true,
     props,
@@ -19,7 +17,7 @@ export default function (Vue: GlobalAPI): Object {
         const newData: Object = extend({}, data)
         newData.props = extend({}, props)
         newData.props.child = child
-        return h(validity, newData)
+        return h('validity-control', newData)
       })
     }
   }
