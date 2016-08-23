@@ -22,7 +22,7 @@
 | `valid` | `valid` | 当目标元素变为 **valid** 时 |
 | `invalid` | `invalid` | 当目标元素变为 **invalid** 时 |
 | `touched` | `touched` | 当 **touched** 目标元素时 |
-| `undefined` | `untouched` | 当目标元素还未被 **touched** 时 |
+| `untouched` | `untouched` | 当目标元素还未被 **touched** 时 |
 | `pristine` | `pristine` | 当目标元素还未 **dirty** 时 |
 | `dirty` | `dirty` | 当目标元素 **dirty** 时 |
 | `modified` | `modified` | 当目标元素 **modified** 时 |
@@ -31,12 +31,12 @@
 当默认的验证结果类名不方便使用时，你可以使用 `classes` 属性自定义相应的类名，如下所示：
 
 ```html
-<validator name="validation1" 
+<validator name="validation1"
            :classes="{ touched: 'touched-validator', dirty: 'dirty-validator' }">
   <label for="username">username:</label>
-  <input id="username" 
-         type="text" 
-         :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
+  <input id="username"
+         type="text"
+         :classes="{ valid: 'valid-username', invalid: 'invalid-username' }"
          v-validate:username="{ required: { rule: true, message: 'required you name !!' } }">
 </validator>
 ```
@@ -48,13 +48,13 @@
 通常情况下验证结果类会插入到定义 `v-validate` 指令的元素上。然而有时候我们需要把这些类插入到其他元素上。这时我们可以使用 `v-validate-class` 来实现，如下所示：
 
 ```html
-<validator name="validation1" 
+<validator name="validation1"
            :classes="{ touched: 'touched-validator', dirty: 'dirty-validator' }">
   <div v-validate-class class="username">
     <label for="username">username:</label>
-    <input id="username" 
-           type="text" 
-           :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
+    <input id="username"
+           type="text"
+           :classes="{ valid: 'valid-username', invalid: 'invalid-username' }"
            v-validate:username="{ required: { rule: true, message: 'required you name !!' }
     }">
   </div>

@@ -22,7 +22,7 @@ output the below like the HTML:
 | `valid` | `valid` | when target element became **valid** |
 | `invalid` | `invalid` | when target element became **invalid** |
 | `touched` | `touched` | when **touched** target element |
-| `undefined` | `untouched` | when still  **not be touching** target element |
+| `untouched` | `untouched` | when still  **not be touching** target element |
 | `pristine` | `pristine` | when still **not be dirty** field of target element |
 | `dirty` | `dirty` | when **be dirty** field of target element |
 | `modified` | `modified` | when **be modified** field of target element |
@@ -31,12 +31,12 @@ output the below like the HTML:
 You can configure the class name if default class name is inconvenient as the above with the class name. You need to use the `classes` attributes in order to configure custom class names. e.g:
 
 ```html
-<validator name="validation1" 
+<validator name="validation1"
            :classes="{ touched: 'touched-validator', dirty: 'dirty-validator' }">
   <label for="username">username:</label>
-  <input id="username" 
-         type="text" 
-         :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
+  <input id="username"
+         type="text"
+         :classes="{ valid: 'valid-username', invalid: 'invalid-username' }"
          v-validate:username="{ required: { rule: true, message: 'required you name !!' } }">
 </validator>
 ```
@@ -48,13 +48,13 @@ The `classes` attribute need to use at the target element which specified with `
 Normally, validation classes is insert to the element that was validated with `v-validate` directive. However, sometimes, we need to insert the wrapped element rather than the elements. In that case, we can realize by indicating the `v-validate-class` to that element. the below example:
 
 ```html
-<validator name="validation1" 
+<validator name="validation1"
            :classes="{ touched: 'touched-validator', dirty: 'dirty-validator' }">
   <div v-validate-class class="username">
     <label for="username">username:</label>
-    <input id="username" 
-           type="text" 
-           :classes="{ valid: 'valid-username', invalid: 'invalid-username' }" 
+    <input id="username"
+           type="text"
+           :classes="{ valid: 'valid-username', invalid: 'invalid-username' }"
            v-validate:username="{ required: { rule: true, message: 'required you name !!' }
     }">
   </div>
@@ -69,4 +69,3 @@ output the below like the HTML:
   <input id="username" type="text">
 </div>
 ```
-
