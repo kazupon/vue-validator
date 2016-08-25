@@ -1,6 +1,6 @@
 {
-  "gitbook": "2.x.x",
-  "plugins": ["edit-link", "github", "advanced-emoji"],
+  "gitbook": "3.x.x",
+  "plugins": ["edit-link", "github", "advanced-emoji@0.2.1"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/vuejs/vue-validator/tree/master/docs",
