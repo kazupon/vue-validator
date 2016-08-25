@@ -22,7 +22,7 @@ output the below like the HTML:
 | `valid` | `valid` | when target element became **valid** |
 | `invalid` | `invalid` | when target element became **invalid** |
 | `touched` | `touched` | when **touched** target element |
-| `undefined` | `untouched` | when still  **not be touching** target element |
+| `untouched` | `untouched` | when still  **not be touching** target element |
 | `pristine` | `pristine` | when still **not be dirty** field of target element |
 | `dirty` | `dirty` | when **be dirty** field of target element |
 | `modified` | `modified` | when **be modified** field of target element |

@@ -22,7 +22,7 @@
 | `valid` | `valid` | 対象要素が**有効**になった時 |
 | `invalid` | `invalid` | 対象要素が**無効**になった時 |
 | `touched` | `touched` | 対象要素が**タッチされた**時 |
-| `undefined` | `untouched` | 対象要素が**一度もタッチされていない**時 |
+| `untouched` | `untouched` | 対象要素が**一度もタッチされていない**時 |
 | `pristine` | `pristine` | 対象要素のフィールドが**一度も変更されていない**時 |
 | `dirty` | `dirty` | 対象要素のフィールドが**一度でも変更された**時 |
 | `modified` | `modified` | 対象要素のフィールドが **変更された**時 |

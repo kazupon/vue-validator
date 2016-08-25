@@ -22,7 +22,7 @@
 | `valid` | `valid` | 当目标元素变为 **valid** 时 |
 | `invalid` | `invalid` | 当目标元素变为 **invalid** 时 |
 | `touched` | `touched` | 当 **touched** 目标元素时 |
-| `undefined` | `untouched` | 当目标元素还未被 **touched** 时 |
+| `untouched` | `untouched` | 当目标元素还未被 **touched** 时 |
 | `pristine` | `pristine` | 当目标元素还未 **dirty** 时 |
 | `dirty` | `dirty` | 当目标元素 **dirty** 时 |
 | `modified` | `modified` | 当目标元素 **modified** 时 |
