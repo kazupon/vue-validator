@@ -94,7 +94,6 @@
     "docs:deploy": "cd docs && rm -rf _book && gitbook build && cd _book && git init && git add -A && git commit -m 'update book' && git push -f git@github.com:vuejs/vue-validator.git master:gh-pages && cd .. && cd ..",
     "flow": "flow check",
     "lint": "eslint src test config",
-    "postinstall": "cd docs && gitbook install && cd ..",
     "release": "conventional-github-releaser -n ./config/convention.js",
     "sauce": "npm run sauce:coolkids && npm run sauce:ie && npm run sauce:mobile",
     "sauce:coolkids": "NODE_ENV=development karma start config/karma.sauce.conf.js -- 0",
