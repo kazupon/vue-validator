@@ -41,10 +41,10 @@ ValidationError.prototype.constructor = ValidationError
 
 // ES2015 での例
 export default {
+  data () {
+    return { checking: false }
+  },
   validators: {
-    data () {
-      return { checking: false }
-    },
     exist (val) {
       this.vm.checking = true // spinner on
       return fetch('/validations/exist', {
