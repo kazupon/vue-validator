@@ -34,10 +34,10 @@ ValidationError.prototype = Object.create(Error.prototype)
 ValidationError.prototype.constructor = ValidationError
 
 export default {
+  data () {
+    return { checking: false }
+  },
   validators: {
-    data () {
-      return { checking: false }
-    },
     exist (val) {
       this.vm.checking = true // spinner on
       return fetch('/validations/exist', {
