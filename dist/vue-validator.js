@@ -1,5 +1,5 @@
 /*!
- * vue-validator v2.1.6
+ * vue-validator v2.1.7
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -614,20 +614,16 @@ var validators = Object.freeze({
         }
 
         if (isPlainObject(value) || old && isPlainObject(old)) {
-          this.handleObject(value, old);
+          this.handleObject(value, old, this.params.initial);
         } else if (Array.isArray(value) || old && Array.isArray(old)) {
-          this.handleArray(value, old);
+          this.handleArray(value, old, this.params.initial);
         }
 
-        var options = { field: this.field, noopable: this._initialNoopValidation };
+        var options = { field: this.field };
         if (this.frag) {
           options.el = this.frag.node;
         }
         this.validator.validate(options);
-
-        if (this._initialNoopValidation) {
-          this._initialNoopValidation = null;
-        }
       },
       unbind: function unbind() {
         if (this._invalid) {
@@ -659,8 +655,6 @@ var validators = Object.freeze({
         isPlainObject(params.classes) && this.validation.setValidationClasses(params.classes);
 
         params.group && validator.addGroupValidation(params.group, this.field);
-
-        this._initialNoopValidation = this.isInitialNoopValidation(params.initial);
       },
       listen: function listen() {
         var model = this.model;
@@ -741,16 +735,16 @@ var validators = Object.freeze({
         replace(this.anchor, this.el);
         this.anchor = null;
       },
-      handleArray: function handleArray(value, old) {
+      handleArray: function handleArray(value, old, initial) {
         var _this = this;
 
         old && this.validation.resetValidation();
 
         each(value, function (val) {
-          _this.validation.setValidation(val);
+          _this.validation.setValidation(val, undefined, undefined, initial);
         });
       },
-      handleObject: function handleObject(value, old) {
+      handleObject: function handleObject(value, old, initial) {
         var _this2 = this;
 
         old && this.validation.resetValidation();
@@ -759,11 +753,11 @@ var validators = Object.freeze({
           if (isPlainObject(val)) {
             if ('rule' in val) {
               var msg = 'message' in val ? val.message : null;
-              var initial = 'initial' in val ? val.initial : null;
-              _this2.validation.setValidation(key, val.rule, msg, initial);
+              var init = 'initial' in val ? val.initial : null;
+              _this2.validation.setValidation(key, val.rule, msg, init || initial);
             }
           } else {
-            _this2.validation.setValidation(key, val);
+            _this2.validation.setValidation(key, val, undefined, initial);
           }
         });
       },
@@ -865,6 +859,14 @@ var validators = Object.freeze({
       each(keys, function (key, index) {
         _this2._validators[key] = null;
         delete _this2._validators[key];
+      });
+    };
+
+    BaseValidation.prototype.resetValidationNoopable = function resetValidationNoopable() {
+      each(this._validators, function (descriptor, key) {
+        if (descriptor.initial && !descriptor._isNoopable) {
+          descriptor._isNoopable = true;
+        }
       });
     };
 
@@ -1048,11 +1050,7 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype.reset = function reset() {
-      each(this._validators, function (descriptor, key) {
-        if (descriptor.initial && !descriptor._isNoopable) {
-          descriptor._isNoopable = true;
-        }
-      });
+      this.resetValidationNoopable();
       this.resetFlags();
       this._init = this._getValue(this._el);
     };
@@ -1424,6 +1422,7 @@ var validators = Object.freeze({
     };
 
     CheckboxValidation.prototype.reset = function reset() {
+      this.resetValidationNoopable();
       this.resetFlags();
       each(this._inits, function (item, index) {
         item.init = item.el.checked;
@@ -1603,6 +1602,7 @@ var validators = Object.freeze({
     };
 
     RadioValidation.prototype.reset = function reset() {
+      this.resetValidationNoopable();
       this.resetFlags();
       each(this._inits, function (item, index) {
         item.init = item.el.checked;
@@ -1762,10 +1762,6 @@ var validators = Object.freeze({
       this._unwatch && this._unwatch();
     };
 
-    SelectValidation.prototype.reset = function reset() {
-      this.resetFlags();
-    };
-
     SelectValidation.prototype._getValue = function _getValue(el) {
       var ret = [];
 
@@ -1855,8 +1851,8 @@ var validators = Object.freeze({
       delete vm['$setValidationErrors'];
       vm.$validate = null;
       delete vm['$validate'];
-      vm.$validatorReset = null;
-      delete vm['$validatorReset'];
+      vm.$resetValidation = null;
+      delete vm['$resetValidation'];
       vm._validatorMaps[this.name] = null;
       delete vm._validatorMaps[this.name];
       vm[this.name] = null;
@@ -2608,7 +2604,7 @@ var validators = Object.freeze({
     Validate(Vue);
   }
 
-  plugin.version = '2.1.6';
+  plugin.version = '2.1.7';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
