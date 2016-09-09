@@ -20,8 +20,8 @@ langs.forEach(function (lang) {
   var installation = fs
     .readFileSync(installationPath, 'utf-8')
     .replace(
-      /<script src="https:\/\/cdn\.jsdelivr\.net\/vue\.validator\/[\d\.]+.[\d]+\/vue-validator\.min\.js"><\/script>/,
-      '<script src="https://cdn.jsdelivr.net/vue.validator/' + pack.version + '/vue-validator.min.js"></script>'
+      /<script src="https:\/\/unpkg\.com\/vue-validator@[\d\.]+.[\d]+\/dist\/vue-validator\.min\.js"><\/script>/,
+      '<script src="https://unpkg.com/vue-validator@' + pack.version + '/dist/vue-validator.min.js"></script>'
     )
   fs.writeFileSync(installationPath, installation)
 })
