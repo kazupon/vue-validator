@@ -1,3 +1,13 @@
+<a name="2.1.7"></a>
+## [2.1.7](https://github.com/vuejs/vue-validator/compare/v2.1.6...v2.1.7) (2016-09-09)
+
+
+### :bug: Bug Fixes
+
+* **reset:** fix cannot reset with using initial params and v-model ([4c6c793](https://github.com/vuejs/vue-validator/commit/4c6c793))
+
+
+
 <a name="2.1.6"></a>
 ## [2.1.6](https://github.com/vuejs/vue-validator/compare/v2.1.5...v2.1.6) (2016-08-19)
 
