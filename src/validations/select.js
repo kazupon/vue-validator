@@ -51,10 +51,6 @@ export default class SelectValidation extends BaseValidation {
     this._unwatch && this._unwatch()
   }
 
-  reset () {
-    this.resetFlags()
-  }
-
   _getValue (el) {
     let ret = []
 

@@ -21,7 +21,7 @@ describe('reset', () => {
           </form>
         </validator>
       `
-      vm = new Vue({ el: el })
+      vm = new Vue({ el })
       vm.$nextTick(done)
     })
 
@@ -42,9 +42,9 @@ describe('reset', () => {
       assert(vm.$validator1.dirty === false)
       assert(vm.$validator1.modified === false)
       assert(vm.$validator1.touched === false)
-
-      let field1 = el.getElementsByTagName('input')[0]
-      let field2 = el.getElementsByTagName('input')[1]
+      // change
+      const field1 = el.getElementsByTagName('input')[0]
+      const field2 = el.getElementsByTagName('input')[1]
       field1.value = '11'
       field2.value = 'hi'
       trigger(field1, 'input')
@@ -52,6 +52,7 @@ describe('reset', () => {
       trigger(field2, 'input')
       trigger(field2, 'blur')
       vm.$nextTick(() => {
+        // reset
         vm.$resetValidation(() => {
           assert(vm.$validator1.field1.required === false)
           assert(vm.$validator1.field1.min === false)
@@ -69,7 +70,6 @@ describe('reset', () => {
           assert(vm.$validator1.dirty === false)
           assert(vm.$validator1.modified === false)
           assert(vm.$validator1.touched === false)
-          
           done()
         })
       })
@@ -88,7 +88,7 @@ describe('reset', () => {
           </form>
         </validator>
       `
-      vm = new Vue({ el: el })
+      vm = new Vue({ el })
       vm.$nextTick(done)
     })
 
@@ -103,9 +103,9 @@ describe('reset', () => {
       assert(vm.$validator1.dirty === false)
       assert(vm.$validator1.modified === false)
       assert(vm.$validator1.touched === false)
-
-      let checkbox1 = el.getElementsByTagName('input')[0]
-      let checkbox2 = el.getElementsByTagName('input')[1]
+      // change
+      const checkbox1 = el.getElementsByTagName('input')[0]
+      const checkbox2 = el.getElementsByTagName('input')[1]
       checkbox1.checked = true
       checkbox2.checked = true
       trigger(checkbox1, 'change')
@@ -113,20 +113,20 @@ describe('reset', () => {
       trigger(checkbox2, 'change')
       trigger(checkbox2, 'blur')
       vm.$nextTick(() => {
-        vm.$resetValidation()
-
-        assert(vm.$validator1.field1.required === false)
-        assert(vm.$validator1.field1.minlength === false)
-        assert(vm.$validator1.field1.valid === true)
-        assert(vm.$validator1.field1.touched === false)
-        assert(vm.$validator1.field1.dirty === false)
-        assert(vm.$validator1.field1.modified === false)
-        assert(vm.$validator1.valid === true)
-        assert(vm.$validator1.dirty === false)
-        assert(vm.$validator1.modified === false)
-        assert(vm.$validator1.touched === false)
-
-        done()
+        // reset
+        vm.$resetValidation(() => {
+          assert(vm.$validator1.field1.required === false)
+          assert(vm.$validator1.field1.minlength === false)
+          assert(vm.$validator1.field1.valid === true)
+          assert(vm.$validator1.field1.touched === false)
+          assert(vm.$validator1.field1.dirty === false)
+          assert(vm.$validator1.field1.modified === false)
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.dirty === false)
+          assert(vm.$validator1.modified === false)
+          assert(vm.$validator1.touched === false)
+          done()
+        })
       })
     })
   })
@@ -152,7 +152,7 @@ describe('reset', () => {
           </form>
         </validator>
       `
-      vm = new Vue({ el: el })
+      vm = new Vue({ el })
       vm.$nextTick(done)
     })
 
@@ -172,10 +172,9 @@ describe('reset', () => {
       assert(vm.$validator1.touched === false)
       assert(vm.$validator1.dirty === false)
       assert(vm.$validator1.modified === false)
-
       // change
-      let radio2 = el.getElementsByTagName('input')[1]
-      let radio3 = el.getElementsByTagName('input')[2]
+      const radio2 = el.getElementsByTagName('input')[1]
+      const radio3 = el.getElementsByTagName('input')[2]
       radio2.checked = true
       radio3.checked = true
       trigger(radio2, 'change')
@@ -183,6 +182,7 @@ describe('reset', () => {
       trigger(radio3, 'change')
       trigger(radio3, 'blur')
       vm.$nextTick(() => {
+        // reset
         vm.$resetValidation(() => {
           assert(vm.$validator1.field1.required === false)
           assert(vm.$validator1.field1.valid === true)
@@ -198,7 +198,6 @@ describe('reset', () => {
           assert(vm.$validator1.touched === false)
           assert(vm.$validator1.dirty === false)
           assert(vm.$validator1.modified === false)
-
           done()
         })
       })
@@ -221,9 +220,7 @@ describe('reset', () => {
           </form>
         </validator>
       `
-      vm = new Vue({
-        el: el
-      })
+      vm = new Vue({ el })
       vm.$nextTick(done)
     })
 
@@ -239,30 +236,29 @@ describe('reset', () => {
       assert(vm.$validator1.touched === false)
       assert(vm.$validator1.dirty === false)
       assert(vm.$validator1.modified === false)
-
       // change
-      let select = el.getElementsByTagName('select')[0]
-      let option2 = el.getElementsByTagName('option')[1]
-      let option3 = el.getElementsByTagName('option')[2]
+      const select = el.getElementsByTagName('select')[0]
+      const option2 = el.getElementsByTagName('option')[1]
+      const option3 = el.getElementsByTagName('option')[2]
       option2.selected = true
       option3.selected = true
       trigger(select, 'change')
       trigger(select, 'blur')
       vm.$nextTick(() => {
-        vm.$resetValidation()
-
-        assert(vm.$validator1.lang.required === false)
-        assert(vm.$validator1.lang.minlength === false)
-        assert(vm.$validator1.lang.valid === true)
-        assert(vm.$validator1.lang.touched === false)
-        assert(vm.$validator1.lang.dirty === false)
-        assert(vm.$validator1.lang.modified === false)
-        assert(vm.$validator1.valid === true)
-        assert(vm.$validator1.touched === false)
-        assert(vm.$validator1.dirty === false)
-        assert(vm.$validator1.modified === false)
-
-        done()
+        // reset
+        vm.$resetValidation(() => {
+          assert(vm.$validator1.lang.required === false)
+          assert(vm.$validator1.lang.minlength === false)
+          assert(vm.$validator1.lang.valid === true)
+          assert(vm.$validator1.lang.touched === false)
+          assert(vm.$validator1.lang.dirty === false)
+          assert(vm.$validator1.lang.modified === false)
+          assert(vm.$validator1.valid === true)
+          assert(vm.$validator1.touched === false)
+          assert(vm.$validator1.dirty === false)
+          assert(vm.$validator1.modified === false)
+          done()
+        })
       })
     })
   })

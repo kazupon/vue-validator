@@ -54,8 +54,8 @@ export default class Validator {
     delete vm['$setValidationErrors']
     vm.$validate = null
     delete vm['$validate']
-    vm.$validatorReset = null
-    delete vm['$validatorReset']
+    vm.$resetValidation = null
+    delete vm['$resetValidation']
     vm._validatorMaps[this.name] = null
     delete vm._validatorMaps[this.name]
     vm[this.name] = null

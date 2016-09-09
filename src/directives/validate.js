@@ -99,20 +99,16 @@ export default function (Vue) {
       if (!value || this._invalid) { return }
 
       if (isPlainObject(value) || (old && isPlainObject(old))) {
-        this.handleObject(value, old)
+        this.handleObject(value, old, this.params.initial)
       } else if (Array.isArray(value) || (old && Array.isArray(old))) {
-        this.handleArray(value, old)
+        this.handleArray(value, old, this.params.initial)
       }
 
-      let options = { field: this.field, noopable: this._initialNoopValidation }
+      let options = { field: this.field }
       if (this.frag) {
         options.el = this.frag.node
       }
       this.validator.validate(options)
-
-      if (this._initialNoopValidation) {
-        this._initialNoopValidation = null
-      }
     },
 
     unbind () {
@@ -152,8 +148,6 @@ export default function (Vue) {
 
       params.group
         && validator.addGroupValidation(params.group, this.field)
-
-      this._initialNoopValidation = this.isInitialNoopValidation(params.initial)
     },
 
     listen () {
@@ -242,26 +236,26 @@ export default function (Vue) {
       this.anchor = null
     },
 
-    handleArray (value, old) {
+    handleArray (value, old, initial) {
       old && this.validation.resetValidation()
 
       each(value, (val) => {
-        this.validation.setValidation(val)
+        this.validation.setValidation(val, undefined, undefined, initial)
       })
     },
 
-    handleObject (value, old) {
+    handleObject (value, old, initial) {
       old && this.validation.resetValidation()
 
       each(value, (val, key) => {
         if (isPlainObject(val)) {
           if ('rule' in val) {
             let msg = 'message' in val ? val.message : null
-            let initial = 'initial' in val ? val.initial : null
-            this.validation.setValidation(key, val.rule, msg, initial)
+            let init = 'initial' in val ? val.initial : null
+            this.validation.setValidation(key, val.rule, msg, init || initial)
           }
         } else {
-          this.validation.setValidation(key, val)
+          this.validation.setValidation(key, val, undefined, initial)
         }
       })
     },

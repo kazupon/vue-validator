@@ -79,6 +79,14 @@ export default class BaseValidation {
     })
   }
 
+  resetValidationNoopable () {
+    each(this._validators, (descriptor, key) => {
+      if (descriptor.initial && !descriptor._isNoopable) {
+        descriptor._isNoopable = true
+      }
+    })
+  }
+
   setValidation (name, arg, msg, initial) {
     let validator = this._validators[name]
     if (!validator) {
@@ -243,11 +251,7 @@ export default class BaseValidation {
   }
 
   reset () {
-    each(this._validators, (descriptor, key) => {
-      if (descriptor.initial && !descriptor._isNoopable) {
-        descriptor._isNoopable = true
-      }
-    })
+    this.resetValidationNoopable()
     this.resetFlags()
     this._init = this._getValue(this._el)
   }

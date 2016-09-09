@@ -66,6 +66,7 @@ export default class RadioValidation extends BaseValidation {
   }
 
   reset () {
+    this.resetValidationNoopable()
     this.resetFlags()
     each(this._inits, (item, index) => {
       item.init = item.el.checked
