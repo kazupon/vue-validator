@@ -6,10 +6,10 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 
 ## CDN
 
-### jsdelivr
+### UNPKG
 
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.1.7/vue-validator.min.js"></script>
+<script src="https://unpkg.com/vue-validator@2.1.7/dist/vue-validator.min.js"></script>
 ```
 
 ## NPM
