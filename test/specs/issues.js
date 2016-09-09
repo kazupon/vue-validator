@@ -534,7 +534,7 @@ describe('github issues', () => {
   })
 
   describe('#284', () => {
-    beforeEach(done => {
+    beforeEach((done) => {
       el.innerHTML = `
         <validator name="validation">
           <input id="foo" type="text" v-model="foo" v-validate:foo="rules">
@@ -559,7 +559,7 @@ describe('github issues', () => {
       vm.$nextTick(done)
     })
 
-    it('should be validated', done => {
+    it('should be validated', (done) => {
       const input = el.querySelector('#foo')
       vm.rules.required.message = 'required "foo" field!!'
       vm.$nextTick(() => {
