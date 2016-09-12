@@ -12,7 +12,7 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       exclude: /node_modules|vue\/dist/,
-      loader: 'babel!eslint'
+      loader: 'babel'
     }],
     postLoaders: [{
       test: /\.json$/,

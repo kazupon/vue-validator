@@ -87,7 +87,7 @@
     "url": "git+https://github.com/vuejs/vue-validator.git"
   },
   "scripts": {
-    "build": "NODE_ENV=production node config/build.js",
+    "build": "node config/build.js",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./config/convention.js",
     "clean": "rm -rf coverage && rm -rf dist/*.js* && rm ./*.log",
     "dev": "webpack-dev-server --quiet --config config/webpack.dev.conf.js --host 0.0.0.0",
@@ -97,13 +97,13 @@
     "lint": "eslint src test config",
     "release": "conventional-github-releaser -n ./config/convention.js",
     "sauce": "npm run sauce:coolkids && npm run sauce:ie && npm run sauce:mobile",
-    "sauce:coolkids": "NODE_ENV=development karma start config/karma.sauce.conf.js -- 0",
-    "sauce:ie": "NODE_ENV=development karma start config/karma.sauce.conf.js -- 1",
-    "sauce:mobile": "NODE_ENV=development karma start config/karma.sauce.conf.js -- 2",
+    "sauce:coolkids": "karma start config/karma.sauce.conf.js -- 0",
+    "sauce:ie": "karma start config/karma.sauce.conf.js -- 1",
+    "sauce:mobile": "karma start config/karma.sauce.conf.js -- 2",
     "test": "npm run lint && npm run flow && npm run test:cover && npm run test:e2e -- --env phantomjs",
-    "test:cover": "NODE_ENV=development karma start config/karma.cover.conf.js",
-    "test:coveralls": "NODE_ENV=development karma start config/karma.coveralls.conf.js",
+    "test:cover": "karma start config/karma.cover.conf.js",
+    "test:coveralls": "karma start config/karma.coveralls.conf.js",
     "test:e2e": "npm run build && node test/e2e/runner.js",
-    "test:unit": "NODE_ENV=development karma start config/karma.unit.conf.js"
+    "test:unit": "karma start config/karma.unit.conf.js"
   }
 }
