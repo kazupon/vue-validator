@@ -40,6 +40,16 @@ export default function (Vue: GlobalAPI): Object {
       this._committing = false
       this.watchResults()
     },
+    destroyed () {
+      this.unwatchResults()
+      this._validityKeys.forEach(key => {
+        delete this._validityWatchers[key]
+        delete this._validities[key]
+      })
+      delete this['_validityWatchers']
+      delete this['_validities']
+      delete this['_validityKeys']
+    },
     methods: {
       register (name, validity) {
         this._validities[name] = validity
@@ -80,6 +90,10 @@ export default function (Vue: GlobalAPI): Object {
           this.touched = this.checkResults(keys, results, 'touched', false)
           this.modified = this.checkResults(keys, results, 'modified', false)
         }, { deep: true })
+      },
+      unwatchResults () {
+        this._unwatch()
+        delete this['_unwatch']
       },
       setResults (name, val) {
         const newVal = {}

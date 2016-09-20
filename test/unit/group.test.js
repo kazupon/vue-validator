@@ -303,4 +303,25 @@ describe('validity group', () => {
       }).then(done)
     })
   })
+
+  describe('destroy', () => {
+    it('should be clean resouces', (done) => {
+      const vm = createVM(components, 2).$mount(el)
+      const { validity1, validity2 } = vm.$refs
+      const field1 = vm.$el.querySelector('#field1')
+      const field2 = vm.$el.querySelector('#field2')
+      const group = new Vue(validityGroup)
+      group.register(validity1.field, validity1)
+      group.register(validity2.field, validity2)
+      let result = group.result
+      waitForUpdate(() => {
+        group.$destroy()
+      }).then(() => {
+        assert(!group._unwatch)
+        assert(!group._validityKeys)
+        assert(!group._validities)
+        assert(!group._validityWatchers)
+      }).then(done)
+    })
+  })
 })
