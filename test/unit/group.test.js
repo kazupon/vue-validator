@@ -228,4 +228,79 @@ describe('validity group', () => {
       }).then(done)
     })
   })
+
+  describe('unregister', () => {
+    it('should be work', done => {
+      const vm = createVM(components, 3).$mount(el)
+      const { validity1, validity2, validity3 } = vm.$refs
+      const field1 = vm.$el.querySelector('#field1')
+      const field2 = vm.$el.querySelector('#field2')
+      const field3 = vm.$el.querySelector('#field3')
+      const group1 = new Vue(validityGroup)
+      const group2 = new Vue(validityGroup)
+      const root = new Vue(validityGroup)
+      group1.register(validity1.field, validity1)
+      group1.register(validity2.field, validity2)
+      group2.register(validity3.field, validity3)
+      root.register('group1', group1)
+      root.register('group2', group2)
+      let result
+      waitForUpdate(() => {
+        // validate
+        validity1.validate()
+        validity2.validate()
+        validity3.validate()
+      }).thenWaitFor(1).then(() => {
+        result = root.result
+        assert(result.valid === false)
+        assert(result.invalid === true)
+        assert(result.dirty === false)
+        assert(result.pristine === true)
+        assert(result.touched === false)
+        assert(result.untouched === true)
+        assert(result.modified === false)
+        assert.deepEqual(result.group1, group1.result)
+        assert.deepEqual(result.group2, group2.result)
+        // validity2 unregsiter
+        group1.unregister(validity2.field)
+        field1.value = 'hello'
+        field2.value = 'hello'
+        field3.value = ''
+        triggerEvent(field1, 'input')
+        triggerEvent(field1, 'focusout')
+        triggerEvent(field2, 'input')
+        triggerEvent(field2, 'focusout')
+        triggerEvent(field3, 'input')
+        triggerEvent(field3, 'focusout')
+        // validate
+        validity1.validate()
+        validity2.validate()
+        validity3.validate()
+      }).thenWaitFor(1).then(() => {
+        result = root.result
+        assert(result.valid === false)
+        assert(result.invalid === true)
+        assert(result.dirty === true)
+        assert(result.pristine === false)
+        assert(result.touched === true)
+        assert(result.untouched === false)
+        assert(result.modified === true)
+        assert.deepEqual(result.group1, group1.result)
+        assert.deepEqual(result.group2, group2.result)
+        // group2 unregsiter
+        root.unregister('group2')
+      }).thenWaitFor(1).then(() => {
+        result = root.result
+        assert(result.valid === true)
+        assert(result.invalid === false)
+        assert(result.dirty === true)
+        assert(result.pristine === false)
+        assert(result.touched === true)
+        assert(result.untouched === false)
+        assert(result.modified === true)
+        assert.deepEqual(result.group1, group1.result)
+        assert(result.group2 === undefined)
+      }).then(done)
+    })
+  })
 })

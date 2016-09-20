@@ -51,6 +51,15 @@ export default function (Vue: GlobalAPI): Object {
           }, { deep: true, immediate: true })
         })
       },
+      unregister (name) {
+        this._validityWatchers[name]()
+        delete this._validityWatchers[name]
+        delete this._validities[name]
+        this._validityKeys = Object.keys(this._validities)
+        this.withCommit(() => {
+          this.resetResults(name)
+        })
+      },
       checkResults (keys, results, prop, checking) {
         let ret = checking
         for (let i = 0; i < keys.length; i++) {
@@ -74,10 +83,19 @@ export default function (Vue: GlobalAPI): Object {
       },
       setResults (name, val) {
         const newVal = {}
-        this._validityKeys.forEach((key) => {
+        this._validityKeys.forEach(key => {
           newVal[key] = extend({}, this.results[key])
         })
         newVal[name] = extend({}, val)
+        this.results = newVal
+      },
+      resetResults (ignore) {
+        const newVal = {}
+        this._validityKeys.forEach(key => {
+          if (ignore && ignore !== key) {
+            newVal[key] = extend({}, this.results[key])
+          }
+        })
         this.results = newVal
       },
       withCommit (fn) {
