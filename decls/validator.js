@@ -50,7 +50,7 @@ declare type ValidityComponent = {
   touched: boolean,
   untouched: boolean,
   modified: boolean,
-  result: ValidatorAsset,
+  result: ValidationResult,
   progresses: ValidatorProgresses,
 
   checkModified (): boolean,
