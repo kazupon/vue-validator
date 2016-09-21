@@ -11,17 +11,20 @@ declare type ValidationError = {
   message?: string
 }
 
-declare type ValidationResult = {
+declare type $ValidationCommonResult = {
   valid: boolean,
   invalid: boolean,
   dirty: boolean,
   pristine: boolean,
   touched: boolean,
   untouched: boolean,
-  modified: boolean,
+  modified: boolean
+}
+
+declare type ValidationResult = {
   // `errors` or validator result
   [key: string]: Array<ValidationError> | boolean | string
-}
+} & $ValidationCommonResult
 
 declare type ValidatorProgresses = {
   [key: string]: string
@@ -72,4 +75,47 @@ declare interface ValidityElement {
   unlistenToucheableEvent (): void,
   listenInputableEvent (): void,
   unlistenInputableEvent (): void
+}
+
+declare type $ValidityGroupResult = {
+  [key: string]: ValidationResult
+}
+
+declare type $ValidityGroupData = {
+  valid: boolean,
+  dirty: boolean,
+  touched: boolean,
+  modified: boolean,
+  results: $ValidityGroupResult
+}
+
+declare type $ValidationGroupResult = {
+  [key: string]: ValidationResult
+} & $ValidationCommonResult
+
+declare type $ValidityGroup = {
+  computed: {
+    invalid: () => boolean,
+    pristine: () => boolean,
+    untouched: () => boolean,
+    result: () => $ValidationGroupResult
+  },
+  data: () => $ValidityGroupData,
+  created: () => void,
+  destroyed: () => void,
+  methods: {
+    register: (name:string, validity: ValidityComponent | Component) => void,
+    unregister: (name: string) => void,
+    checkResults: (
+      keys: Array<string>,
+      results: $ValidityGroupResult,
+      prop: string,
+      checking: boolean
+    ) => boolean,
+    watchResults: () => void,
+    unwatchResults: () => void,
+    setResults: (name: string, val: Object | ValidationResult) => void,
+    resetResults: (ignore: string) => void,
+    withCommit: (fn: Function) => void
+  }
 }
