@@ -106,6 +106,7 @@ declare type $ValidityGroup = {
   methods: {
     register: (name:string, validity: ValidityComponent | Component) => void,
     unregister: (name: string) => void,
+    getValidityKeys: () => Array<string>,
     checkResults: (
       keys: Array<string>,
       results: $ValidityGroupResult,

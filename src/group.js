@@ -1,9 +1,9 @@
 /* @flow */
 
-export default function (Vue: GlobalAPI): $ValidityGroup {
+export default function (Vue: GlobalAPI): Object {
   const { extend } = Vue.util
 
-  const group: $ValidityGroup = {
+  return {
     data (): $ValidityGroupData {
       return {
         valid: true,
@@ -34,21 +34,31 @@ export default function (Vue: GlobalAPI): $ValidityGroup {
         return ret
       }
     },
+    watch: {
+      results (val, old) {
+        const keys = this._validityKeys
+        const results = this.results
+        this.valid = this.checkResults(keys, results, 'valid', true)
+        this.dirty = this.checkResults(keys, results, 'dirty', false)
+        this.touched = this.checkResults(keys, results, 'touched', false)
+        this.modified = this.checkResults(keys, results, 'modified', false)
+      }
+    },
     created (): void {
       this._validities = Object.create(null)
       this._validityWatchers = Object.create(null)
+      this._validityKeys = []
       this._committing = false
-      this.watchResults()
     },
     destroyed (): void {
-      this.unwatchResults()
       this._validityKeys.forEach((key: string) => {
+        this._validityWatchers[key]()
         delete this._validityWatchers[key]
         delete this._validities[key]
       })
-      delete this['_validityWatchers']
-      delete this['_validities']
-      delete this['_validityKeys']
+      delete this._validityWatchers
+      delete this._validities
+      delete this._validityKeys
     },
     methods: {
       register (name: string, validity: ValidityComponent | Component): void {
@@ -70,6 +80,9 @@ export default function (Vue: GlobalAPI): $ValidityGroup {
           this.resetResults(name)
         })
       },
+      getValidityKeys (): Array<string> {
+        return this._validityKeys
+      },
       checkResults (
         keys: Array<string>,
         results: $ValidityGroupResult,
@@ -85,20 +98,6 @@ export default function (Vue: GlobalAPI): $ValidityGroup {
           }
         }
         return ret
-      },
-      watchResults (): void {
-        this._unwatch = this.$watch('results', (val, old) => {
-          const keys = this._validityKeys
-          const results = this.results
-          this.valid = this.checkResults(keys, results, 'valid', true)
-          this.dirty = this.checkResults(keys, results, 'dirty', false)
-          this.touched = this.checkResults(keys, results, 'touched', false)
-          this.modified = this.checkResults(keys, results, 'modified', false)
-        }, { deep: true })
-      },
-      unwatchResults (): void {
-        this._unwatch()
-        delete this['_unwatch']
       },
       setResults (name: string, val: Object | ValidationResult): void {
         const newVal: $ValidityGroupResult = {}
@@ -125,6 +124,4 @@ export default function (Vue: GlobalAPI): $ValidityGroup {
       }
     }
   }
-
-  return group
 }
