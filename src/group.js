@@ -80,6 +80,9 @@ export default function (Vue: GlobalAPI): Object {
           this.resetResults(name)
         })
       },
+      isRegistered (name: string): boolean {
+        return name in this._validities
+      },
       getValidityKeys (): Array<string> {
         return this._validityKeys
       },

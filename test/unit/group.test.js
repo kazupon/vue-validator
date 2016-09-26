@@ -305,7 +305,7 @@ describe('validity group', () => {
   })
 
   describe('destroy', () => {
-    it('should be clean resouces', (done) => {
+    it('should be clean resouces', done => {
       const vm = createVM(components, 2).$mount(el)
       const { validity1, validity2 } = vm.$refs
       const group = new Vue(validityGroup)
@@ -318,6 +318,17 @@ describe('validity group', () => {
         assert(!group._validities)
         assert(!group._validityWatchers)
       }).then(done)
+    })
+  })
+
+  describe('isRegistered', () => {
+    it('should be work', () => {
+      const vm = createVM(components, 2).$mount(el)
+      const { validity1, validity2 } = vm.$refs
+      const group = new Vue(validityGroup)
+      group.register(validity1.field, validity1)
+      assert(group.isRegistered(validity1.field))
+      assert(!group.isRegistered(validity2.field))
     })
   })
 })
