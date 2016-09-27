@@ -286,7 +286,7 @@
   ```
 
 - **另见:**
-  - [自定义验证器](custom.html)
+  - [自定义验证器](custom.md)
 
 ## 构造器选项
 
@@ -350,7 +350,7 @@
   ```
   
 - **另见:**
-  - [延迟初始化](lazy.html)
+  - [延迟初始化](lazy.md)
 
 ### $resetValidation( [cb] )
 
@@ -377,7 +377,7 @@
   ```
 
 - **另见:**
-  - [重置验证结果](reset.html)
+  - [重置验证结果](reset.md)
 
 ### $setValidationErrors( errors )
 
@@ -443,7 +443,7 @@
   ```
 
 - **另见:**
-  - [错误消息](errors.html)
+  - [错误消息](errors.md)
 
 ### $validate( [field], [touched], [cb] )
 
@@ -488,7 +488,7 @@
   ```
 
 - **另见:**
-  - [自定义验证时机](timing.html)
+  - [自定义验证时机](timing.md)
 
 ## 指令
 
@@ -533,11 +533,11 @@
   ```
 
 - **另见:**
-  - [验证器语法](syntax.html)
-  - [分组](grouping.html)
-  - [事件](events.html)
-  - [结合 v-model](model.html)
-  - [自定义验证时机](timing.html)
+  - [验证器语法](syntax.md)
+  - [分组](grouping.md)
+  - [事件](events.md)
+  - [结合 v-model](model.md)
+  - [自定义验证时机](timing.md)
 
 ## Special Elements
 
@@ -587,11 +587,11 @@
   ```
 
 - **另见:**
-  - [验证结果结构](structure.html)
-  - [分组](grouping.html)
-  - [延迟初始化](lazy.html)
-  - [自定义验证时机](timing.html)
-  - [异步验证](async.html)
+  - [验证结果结构](structure.md)
+  - [分组](grouping.md)
+  - [延迟初始化](lazy.md)
+  - [自定义验证时机](timing.md)
+  - [异步验证](async.md)
 
 ### validator-errors
 
@@ -655,4 +655,4 @@
   ```
 
 - **另见:**
-  - [错误](errors.html)
+  - [错误](errors.md)
