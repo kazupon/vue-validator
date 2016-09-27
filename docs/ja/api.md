@@ -286,7 +286,7 @@
   ```
 
 - **参照:**
-  - [カスタムバリデータ](custom.html)
+  - [カスタムバリデータ](custom.md)
 
 ## コンストラクタオプション
 
@@ -350,7 +350,7 @@
   ```
   
 - **参照:**
-  - [遅延初期化](lazy.html)
+  - [遅延初期化](lazy.md)
 
 ### $resetValidation( [cb] )
 
@@ -377,7 +377,7 @@
   ```
 
 - **参照:**
-  - [バリデーション結果の初期化](reset.html)
+  - [バリデーション結果の初期化](reset.md)
 
 ### $setValidationErrors( errors )
 
@@ -443,7 +443,7 @@
   ```
 
 - **参照:**
-  - [エラーメッセージ](errors.html)
+  - [エラーメッセージ](errors.md)
 
 ### $validate( [field], [touched], [cb] )
 
@@ -488,7 +488,7 @@
   ```
 
 - **参照:**
-  - [バリデーションタイミング変更](timing.html)
+  - [バリデーションタイミング変更](timing.md)
 
 ## ディレクティブ
 
@@ -537,12 +537,12 @@
   ```
 
 - **参照:**
-  - [バリデーション文法](syntax.html)
-  - [グループ化](grouping.html)
-  - [イベント](events.html)
-  - [v-model インテグレーション](model.html)
-  - [バリデーションタイミング変更](timing.html)
-  - [バリデーションクラス](classes.html)
+  - [バリデーション文法](syntax.md)
+  - [グループ化](grouping.md)
+  - [イベント](events.md)
+  - [v-model インテグレーション](model.md)
+  - [バリデーションタイミング変更](timing.md)
+  - [バリデーションクラス](classes.md)
 
 ### v-validate-class
 
@@ -620,12 +620,12 @@
   ```
 
 - **参照:**
-  - [バリデーション結果構造](structure.html)
-  - [グループ化](grouping.html)
-  - [遅延初期化](lazy.html)
-  - [バリデーションタイミング変更](timing.html)
-  - [非同期バリデーション](async.html)
-  - [バリデーションクラス](classes.html)
+  - [バリデーション結果構造](structure.md)
+  - [グループ化](grouping.md)
+  - [遅延初期化](lazy.md)
+  - [バリデーションタイミング変更](timing.md)
+  - [非同期バリデーション](async.md)
+  - [バリデーションクラス](classes.md)
 
 ### validator-errors
 
@@ -689,4 +689,4 @@
   ```
 
 - **参照:**
-  - [エラーメッセージ](errors.html)
+  - [エラーメッセージ](errors.md)

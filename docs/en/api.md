@@ -286,7 +286,7 @@
   ```
 
 - **See also:**
-  - [Custom validator](custom.html)
+  - [Custom validator](custom.md)
 
 ## Constructor Options
 
@@ -350,7 +350,7 @@
   ```
   
 - **See also:**
-  - [Lazy initialization](lazy.html)
+  - [Lazy initialization](lazy.md)
 
 ### $resetValidation( [cb] )
 
@@ -377,7 +377,7 @@
   ```
 
 - **See also:**
-  - [Reset validation results](reset.html)
+  - [Reset validation results](reset.md)
 
 ### $setValidationErrors( errors )
 
@@ -443,7 +443,7 @@
   ```
 
 - **See also:**
-  - [Error messages](errors.html)
+  - [Error messages](errors.md)
 
 ### $validate( [field], [touched], [cb] )
 
@@ -487,7 +487,7 @@
   ```
 
 - **See also:**
-  - [Validation timing customization](timing.html)
+  - [Validation timing customization](timing.md)
 
 ## Directives
 
@@ -536,12 +536,12 @@
   ```
 
 - **See also:**
-  - [Validator syntax](syntax.html)
-  - [Grouping](grouping.html)
-  - [Events](events.html)
-  - [v-model integration](model.html)
-  - [Validation timing customization](timing.html)
-  - [Validation classes](classes.html)
+  - [Validator syntax](syntax.md)
+  - [Grouping](grouping.md)
+  - [Events](events.md)
+  - [v-model integration](model.md)
+  - [Validation timing customization](timing.md)
+  - [Validation classes](classes.md)
 
 ### v-validate-class
 
@@ -619,12 +619,12 @@
   ```
 
 - **See also:**
-  - [Validation result structure](structure.html)
-  - [Grouping](grouping.html)
-  - [Lazy initialization](lazy.html)
-  - [Validation timing customization](timing.html)
-  - [Async validation](async.html)
-  - [Validation classes](classes.html)
+  - [Validation result structure](structure.md)
+  - [Grouping](grouping.md)
+  - [Lazy initialization](lazy.md)
+  - [Validation timing customization](timing.md)
+  - [Async validation](async.md)
+  - [Validation classes](classes.md)
 
 ### validator-errors
 
@@ -688,4 +688,4 @@
   ```
 
 - **See also:**
-  - [Error messages](errors.html)
+  - [Error messages](errors.md)
