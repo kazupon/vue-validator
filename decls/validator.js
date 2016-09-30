@@ -93,30 +93,11 @@ declare type $ValidationGroupResult = {
   [key: string]: ValidationResult
 } & $ValidationCommonResult
 
-declare type $ValidityGroup = {
-  computed: {
-    invalid: () => boolean,
-    pristine: () => boolean,
-    untouched: () => boolean,
-    result: () => $ValidationGroupResult
-  },
-  data: () => $ValidityGroupData,
-  created: () => void,
-  destroyed: () => void,
-  methods: {
-    register: (name:string, validity: ValidityComponent | Component) => void,
-    unregister: (name: string) => void,
-    getValidityKeys: () => Array<string>,
-    checkResults: (
-      keys: Array<string>,
-      results: $ValidityGroupResult,
-      prop: string,
-      checking: boolean
-    ) => boolean,
-    watchResults: () => void,
-    unwatchResults: () => void,
-    setResults: (name: string, val: Object | ValidationResult) => void,
-    resetResults: (ignore: string) => void,
-    withCommit: (fn: Function) => void
-  }
-}
+declare type ValidityGroupComponent = {
+  results: $ValidityGroupResult,
+  register (name:string, validity: ValidityComponent | ValidityGroupComponent): void,
+  unregister (name: string): void,
+  isRegistered (name: string): boolean,
+  getValidityKeys (): Array<string>,
+  resetResults (ignore: ?string): void,
+} & Component

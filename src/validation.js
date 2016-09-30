@@ -5,15 +5,13 @@ export default function (Vue: any) {
   const ValidityGroup = Group(Vue)
 
   class Validation {
-    // TODO: should be defined type
-    _host: any
-    _validities: Object
-    _host: any
-    _result: Object
-    _named: Object
-    _group: Object
+    _host: Component
+    _result: { [key: string ]: Object }
+    _validities: { [key: string ]: ValidityComponent | ValidityGroupComponent }
+    _named: { [key: string ]: ValidityGroupComponent }
+    _group: { [key: string ]: ValidityGroupComponent }
     _watcher: Function
-    _validityManager: any
+    _validityManager: any // TODO: should be deinfed strict type
     _beginDestroy: boolean
 
     constructor (options: Object = {}) {
@@ -28,7 +26,7 @@ export default function (Vue: any) {
 
     register (
       field: string,
-      validity: ValidityComponent,
+      validity: ValidityComponent | ValidityGroupComponent,
       options: { named?: string, group?: string } = {}
     ): void {
       // NOTE: lazy setup (in constructor, occured callstack recursive errors ...)
@@ -43,14 +41,14 @@ export default function (Vue: any) {
       }
       this._validities[field] = validity
 
-      const { named, group } = options
-      const groupValidity = group 
+      const { named, group }: { named?: string, group?: string } = options
+      const groupValidity: ?ValidityGroupComponent = group 
         ? this._getValidityGroup('group', group) || this._registerValidityGroup('group', group)
         : null
-      const namedValidity = named
+      const namedValidity: ?ValidityGroupComponent = named
         ? this._getValidityGroup('named', named) || this._registerValidityGroup('named',named)
         : null
-      if (namedValidity && groupValidity) {
+      if (named && group && namedValidity && groupValidity) {
         groupValidity.register(field, validity)
         !namedValidity.isRegistered(group) && namedValidity.register(group, groupValidity)
         !this._validityManager.isRegistered(named) && this._validityManager.register(named, namedValidity)
@@ -80,10 +78,10 @@ export default function (Vue: any) {
       }
       delete this._validities[field]
 
-      const { named, group } = options
-      const groupValidity = group ? this._getValidityGroup('group', group) : null
-      const namedValidity = named ? this._getValidityGroup('named', named) : null
-      if (namedValidity && groupValidity) {
+      const { named, group }: { named?: string, group?: string } = options
+      const groupValidity: ?ValidityGroupComponent = group ? this._getValidityGroup('group', group) : null
+      const namedValidity: ?ValidityGroupComponent = named ? this._getValidityGroup('named', named) : null
+      if (named && group && namedValidity && groupValidity) {
         groupValidity.unregister(field)
         namedValidity.isRegistered(group) && namedValidity.unregister(group)
         this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
@@ -109,13 +107,13 @@ export default function (Vue: any) {
       // unregister validity
       validityKeys.forEach((validityKey: string) => {
         groupKeys.forEach((groupKey: string) => {
-          const group = this._getValidityGroup('group', groupKey)
-          if (group && group.isRegistered(validityKeys)) {
+          const group: ?ValidityGroupComponent = this._getValidityGroup('group', groupKey)
+          if (group && group.isRegistered(groupKey)) {
             group.unregister(validityKey)
           }
         })
         namedKeys.forEach((namedKey: string) => {
-          const named = this._getValidityGroup('named', namedKey)
+          const named: ?ValidityGroupComponent = this._getValidityGroup('named', namedKey)
           if (named && named.isRegistered(validityKey)) {
             named.unregister(validityKey)
           }
@@ -129,7 +127,7 @@ export default function (Vue: any) {
       // unregister grouped validity
       groupKeys.forEach((groupKey: string) => {
         namedKeys.forEach((namedKey: string) => {
-          const named = this._getValidityGroup('named', namedKey)
+          const named: ?ValidityGroupComponent = this._getValidityGroup('named', namedKey)
           if (named && named.isRegistered(groupKey)) {
             named.unregister(groupKey)
           }
