@@ -1,3 +1,5 @@
+declare type Dictionary<T> = { [key: string]: T }
+
 declare type ValidatorDefinition = {
   check: Function, // validator function
   message?: string | Function // error message
@@ -21,18 +23,11 @@ declare type $ValidationCommonResult = {
   modified: boolean
 }
 
-declare type ValidationResult = {
-  // `errors` or validator result
-  [key: string]: Array<ValidationError> | boolean | string
-} & $ValidationCommonResult
+declare type ValidationResult = Dictionary<Array<ValidationError> | boolean | string> & $ValidationCommonResult
 
-declare type ValidatorProgresses = {
-  [key: string]: string
-}
+declare type ValidatorProgresses = Dictionary<string>
 
-declare type $ValidationRawResult = {
-  [key: string]: boolean | string | void
-}
+declare type $ValidationRawResult = Dictionary<boolean | string | void>
 
 declare type $ValidateDescriptor = {
   fn: Function,
@@ -77,9 +72,7 @@ declare interface ValidityElement {
   unlistenInputableEvent (): void
 }
 
-declare type $ValidityGroupResult = {
-  [key: string]: ValidationResult
-}
+declare type $ValidityGroupResult = Dictionary<ValidationResult>
 
 declare type $ValidityGroupData = {
   valid: boolean,
@@ -89,9 +82,7 @@ declare type $ValidityGroupData = {
   results: $ValidityGroupResult
 }
 
-declare type $ValidationGroupResult = {
-  [key: string]: ValidationResult
-} & $ValidationCommonResult
+declare type $ValidationGroupResult = Dictionary<ValidationResult> & $ValidationCommonResult
 
 declare type ValidityGroupComponent = {
   results: $ValidityGroupResult,

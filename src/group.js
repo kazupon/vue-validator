@@ -61,7 +61,7 @@ export default function (Vue: GlobalAPI): Object {
       delete this._validityKeys
     },
     methods: {
-      register (name: string, validity: ValidityComponent | Component): void {
+      register (name: string, validity: ValidityComponent | ValidityGroupComponent): void {
         this._validities[name] = validity
         this._validityKeys = Object.keys(this._validities)
         this.setResults(name, {})

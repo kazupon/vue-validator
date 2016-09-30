@@ -6,10 +6,10 @@ export default function (Vue: any) {
 
   class Validation {
     _host: Component
-    _result: { [key: string ]: Object }
-    _validities: { [key: string ]: ValidityComponent | ValidityGroupComponent }
-    _named: { [key: string ]: ValidityGroupComponent }
-    _group: { [key: string ]: ValidityGroupComponent }
+    _result: Dictionary<Object>
+    _validities: Dictionary<ValidityComponent | ValidityGroupComponent>
+    _named: Dictionary<ValidityGroupComponent>
+    _group: Dictionary<ValidityGroupComponent>
     _watcher: Function
     _validityManager: any // TODO: should be deinfed strict type
     _beginDestroy: boolean
