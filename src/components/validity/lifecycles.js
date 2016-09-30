@@ -14,10 +14,23 @@ export default function (Vue: GlobalAPI): Object {
 
     // watch validation raw results
     this._watchValidationRawResults()
+
+    const validation = this.$options.propsData ? this.$options.propsData.validation : null
+    if (validation) {
+      const { instance, name } = validation
+      instance.register(this.field, this, { named: name })
+    }
   }
 
   function destroyed (): void {
+    const validation = this.$options.propsData ? this.$options.propsData.validation : null
+    if (validation) {
+      const { instance, name } = validation
+      instance.unregister(this.field, this, { named: name })
+    }
+
     this._unwatchValidationRawResults()
+
     this._elementable.unlistenInputableEvent()
     this._elementable.unlistenToucheableEvent()
     this._elementable = null
