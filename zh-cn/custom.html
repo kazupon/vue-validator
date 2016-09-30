@@ -1,0 +1,558 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-cn" >
+    <head>
+        <title>自定义验证器 · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.0">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-advanced-emoji/emoji-website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="timing.html" />
+    
+    
+    <link rel="prev" href="lazy.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="installation.html">
+            
+                <a href="installation.html">
+            
+                    
+                    安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="started.html">
+            
+                <a href="started.html">
+            
+                    
+                    入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="structure.html">
+            
+                <a href="structure.html">
+            
+                    
+                    验证结果结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="syntax.html">
+            
+                <a href="syntax.html">
+            
+                    
+                    验证器语法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="validators.html">
+            
+                <a href="validators.html">
+            
+                    
+                    Build-in validators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="model.html">
+            
+                <a href="model.html">
+            
+                    
+                    结合 v-model
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="reset.html">
+            
+                <a href="reset.html">
+            
+                    
+                    重置验证结果
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="elements.html">
+            
+                <a href="elements.html">
+            
+                    
+                    可验证的表单元素
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="classes.html">
+            
+                <a href="classes.html">
+            
+                    
+                    验证结果类
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="grouping.html">
+            
+                <a href="grouping.html">
+            
+                    
+                    分组
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="errors.html">
+            
+                <a href="errors.html">
+            
+                    
+                    错误
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="events.html">
+            
+                <a href="events.html">
+            
+                    
+                    事件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="lazy.html">
+            
+                <a href="lazy.html">
+            
+                    
+                    延迟初始化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.15" data-path="custom.html">
+            
+                <a href="custom.html">
+            
+                    
+                    自定义验证器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="timing.html">
+            
+                <a href="timing.html">
+            
+                    
+                    自定义验证时机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="async.html">
+            
+                <a href="async.html">
+            
+                    
+                    异步验证
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="api.html">
+            
+                <a href="api.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >自定义验证器</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;">&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;</h1><h2 id="&#x5168;&#x5C40;&#x6CE8;&#x518C;">&#x5168;&#x5C40;&#x6CE8;&#x518C;</h2><p>&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>Vue.validator</code> &#x65B9;&#x6CD5;&#x6CE8;&#x518C;&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#x3002;</p><blockquote><p><strong>&#x63D0;&#x793A;:</strong> <code>Vue.validator</code> asset &#x7EE7;&#x627F;&#x81EA; Vue.js &#x7684; asset &#x7BA1;&#x7406;&#x7CFB;&#x7EDF;.</p></blockquote><p>&#x901A;&#x8FC7;&#x4E0B;&#x4F8B;&#x4E2D;&#x7684; <code>email</code> &#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#x8BE6;&#x7EC6;&#x4E86;&#x89E3; <code>Vue.validator</code> &#x7684;&#x4F7F;&#x7528;&#x65B9;&#x6CD5;&#xFF1A;</p><pre><code class="lang-javascript"><span class="hljs-comment">// Register email validator function. </span>
+Vue.validator(<span class="hljs-string">&apos;email&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^(([^&lt;&gt;()[\]\\.,;:\s@\&quot;]+(\.[^&lt;&gt;()[\]\\.,;:\s@\&quot;]+)*)|(\&quot;.+\&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/</span>.test(val)
+})
+
+<span class="hljs-keyword">new</span> Vue({
+  el: <span class="hljs-string">&apos;#app&apos;</span>
+  data: {
+    email: <span class="hljs-string">&apos;&apos;</span>
+  }
+})</code></pre>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;validation1&quot;</span>&gt;</span>
+    address: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:address</span>=<span class="hljs-string">&quot;[&apos;email&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-show</span>=<span class="hljs-string">&quot;$validation1.address.email&quot;</span>&gt;</span>Invalid your mail address format.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h2 id="&#x5C40;&#x90E8;&#x6CE8;&#x518C;">&#x5C40;&#x90E8;&#x6CE8;&#x518C;</h2><p>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x7EC4;&#x4EF6;&#x7684; <code>validators</code> &#x9009;&#x9879;&#x6CE8;&#x518C;&#x53EA;&#x80FD;&#x5728;&#x7EC4;&#x4EF6;&#x5185;&#x4F7F;&#x7528;&#x7684;&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#x3002;</p><p>&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#x662F;&#x901A;&#x8FC7;&#x5728;&#x7EC4;&#x4EF6;&#x7684; <code>validators</code> &#x4E0B;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x901A;&#x8FC7;&#x8FD4;&#x56DE;&#x771F;&#x4E0D;&#x901A;&#x8FC7;&#x8FD4;&#x56DE;&#x5047;&#x7684;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x6765;&#x5B9E;&#x73B0;&#x3002;</p><p>&#x4E0B;&#x4F8B;&#x4E2D;&#x6CE8;&#x518C;&#x4E86; <code>numeric</code> &#x548C; <code>url</code> &#x4E24;&#x4E2A;&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#xFF1A;</p><pre><code class="lang-javascript"><span class="hljs-keyword">new</span> Vue({
+  el: <span class="hljs-string">&apos;#app&apos;</span>,
+  validators: { <span class="hljs-comment">// `numeric` and `url` custom validator is local registration</span>
+    numeric: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val<span class="hljs-comment">/*,rule*/</span></span>) </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^[-+]?[0-9]+$/</span>.test(val)
+    },
+    url: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^(http\:\/\/|https\:\/\/)(.{4,})$/</span>.test(val)
+    }
+  },
+  data: {
+    email: <span class="hljs-string">&apos;&apos;</span>
+  }
+})</code></pre>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;validation1&quot;</span>&gt;</span>
+    username: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:username</span>=<span class="hljs-string">&quot;[&apos;required&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    email: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:address</span>=<span class="hljs-string">&quot;[&apos;email&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    age: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:age</span>=<span class="hljs-string">&quot;[&apos;numeric&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    site: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:site</span>=<span class="hljs-string">&quot;[&apos;url&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;errors&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;$validation1.username.required&quot;</span>&gt;</span>required username<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;$validation1.address.email&quot;</span>&gt;</span>invalid email address<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;$validation1.age.numeric&quot;</span>&gt;</span>invalid age value<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;$validation1.site.url&quot;</span>&gt;</span>invalid site uril format<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h2 id="&#x9519;&#x8BEF;&#x6D88;&#x606F;">&#x9519;&#x8BEF;&#x6D88;&#x606F;</h2><p>&#x53EF;&#x4EE5;&#x4E3A;&#x81EA;&#x5B9A;&#x4E49;&#x9A8C;&#x8BC1;&#x5668;&#x6307;&#x5B9A;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x6D88;&#x606F;&#xFF1A;</p><pre><code class="lang-javascript"><span class="hljs-comment">// `email` custom validator global registration</span>
+Vue.validator(<span class="hljs-string">&apos;email&apos;</span>, {
+  message: <span class="hljs-string">&apos;invalid email address&apos;</span>, <span class="hljs-comment">// error message with plain string</span>
+  check: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{ <span class="hljs-comment">// define validator</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^(([^&lt;&gt;()[\]\\.,;:\s@\&quot;]+(\.[^&lt;&gt;()[\]\\.,;:\s@\&quot;]+)*)|(\&quot;.+\&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/</span>.test(val)
+  }
+})
+
+<span class="hljs-comment">// build-in `required` validator customization</span>
+Vue.validator(<span class="hljs-string">&apos;required&apos;</span>, {
+  message: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">field</span>) </span>{ <span class="hljs-comment">// error message with function</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;required &quot;&apos;</span> + field + <span class="hljs-string">&apos;&quot; field&apos;</span>
+  },
+  check: Vue.validator(<span class="hljs-string">&apos;required&apos;</span>) <span class="hljs-comment">// re-use validator logic</span>
+})
+
+<span class="hljs-keyword">new</span> Vue({
+  el: <span class="hljs-string">&apos;#app&apos;</span>,
+  validators: {
+    numeric: { <span class="hljs-comment">// `numeric` custom validator local registration</span>
+      message: <span class="hljs-string">&apos;invalid numeric value&apos;</span>,
+      check: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^[-+]?[0-9]+$/</span>.test(val)
+      }
+    },
+    url: { <span class="hljs-comment">// `url` custom validator local registration</span>
+      message: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">field</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;invalid &quot;&apos;</span> + field + <span class="hljs-string">&apos;&quot; url format field&apos;</span>
+      },
+      check: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^(http\:\/\/|https\:\/\/)(.{4,})$/</span>.test(val)
+      }
+    }
+  },
+  data: {
+    email: <span class="hljs-string">&apos;&apos;</span>
+  }
+})</code></pre>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;validation1&quot;</span>&gt;</span>
+    username: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:username</span>=<span class="hljs-string">&quot;[&apos;required&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    email: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:address</span>=<span class="hljs-string">&quot;[&apos;email&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    age: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:age</span>=<span class="hljs-string">&quot;[&apos;numeric&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    site: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">v-validate:site</span>=<span class="hljs-string">&quot;[&apos;url&apos;]&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;errors&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">validator-errors</span> <span class="hljs-attr">:validation</span>=<span class="hljs-string">&quot;$validation1&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">validator-errors</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="lazy.html" class="navigation navigation-prev " aria-label="Previous page: 延迟初始化">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="timing.html" class="navigation navigation-next " aria-label="Next page: 自定义验证时机">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"自定义验证器","level":"1.15","depth":1,"next":{"title":"自定义验证时机","level":"1.16","depth":1,"path":"timing.md","ref":"timing.md","articles":[]},"previous":{"title":"延迟初始化","level":"1.14","depth":1,"path":"lazy.md","ref":"lazy.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","github","advanced-emoji@0.2.1"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/vuejs/vue-validator/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"advanced-emoji":{"embedEmojis":false},"sharing":{"facebook":false,"twitter":false,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/vuejs/vue-validator/tree/master/docs"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh-cn","links":{"sharing":{"facebook":false,"twitter":false}},"gitbook":"*"},"file":{"path":"custom.md","mtime":"2016-07-28T03:29:54.000Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-09-30T17:14:10.193Z"},"basePath":".","book":{"language":"zh-cn"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

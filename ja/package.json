@@ -1,0 +1,15 @@
+{
+  "name": "ja",
+  "version": "1.0.0",
+  "description": "> Validator component for Vue.js",
+  "main": "index.js",
+  "scripts": {
+    "textlint": "textlint"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "textlint": "^6.5.1",
+    "textlint-rule-preset-jtf-style": "^2.2.0"
+  }
+}

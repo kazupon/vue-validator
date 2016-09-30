@@ -1,0 +1,560 @@
+
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head>
+        <title>Async validation · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.0">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-advanced-emoji/emoji-website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="api.html" />
+    
+    
+    <link rel="prev" href="timing.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="installation.html">
+            
+                <a href="installation.html">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="started.html">
+            
+                <a href="started.html">
+            
+                    
+                    Getting started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="structure.html">
+            
+                <a href="structure.html">
+            
+                    
+                    Validation result structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="syntax.html">
+            
+                <a href="syntax.html">
+            
+                    
+                    Validator syntax
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="validators.html">
+            
+                <a href="validators.html">
+            
+                    
+                    Built-in validators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="model.html">
+            
+                <a href="model.html">
+            
+                    
+                    v-model integration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="reset.html">
+            
+                <a href="reset.html">
+            
+                    
+                    Reset validation results
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="elements.html">
+            
+                <a href="elements.html">
+            
+                    
+                    Form validatable elements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="classes.html">
+            
+                <a href="classes.html">
+            
+                    
+                    Validation classes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="grouping.html">
+            
+                <a href="grouping.html">
+            
+                    
+                    Grouping
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="errors.html">
+            
+                <a href="errors.html">
+            
+                    
+                    Error messages
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="events.html">
+            
+                <a href="events.html">
+            
+                    
+                    Events
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="lazy.html">
+            
+                <a href="lazy.html">
+            
+                    
+                    Lazy initialization
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="custom.html">
+            
+                <a href="custom.html">
+            
+                    
+                    Custom validator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="timing.html">
+            
+                <a href="timing.html">
+            
+                    
+                    Validation timing customization
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.17" data-path="async.html">
+            
+                <a href="async.html">
+            
+                    
+                    Async validation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="api.html">
+            
+                <a href="api.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Async validation</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="async-validation">Async validation</h1><p>You can use the async validation. This is useful, when you need to use the server-side validation. the below the example:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">validator</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;validation&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">novalidate</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>user registration<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>username:<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;username&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> 
+          <span class="hljs-attr">detect-change</span>=<span class="hljs-string">&quot;off&quot;</span> <span class="hljs-attr">v-validate:username</span>=<span class="hljs-string">&quot;{
+          required: { rule: true, message: &apos;required your name !!&apos; },
+          exist: { rule: true, initial: &apos;off&apos; }
+        }&quot;</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;checking&quot;</span>&gt;</span>checking ...<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;errors&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">validator-errors</span> <span class="hljs-attr">:validation</span>=<span class="hljs-string">&quot;$validation&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">validator-errors</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;register&quot;</span> <span class="hljs-attr">:disabled</span>=<span class="hljs-string">&quot;!$validation.valid&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">validator</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copyOwnFrom</span> (<span class="hljs-params">target, source</span>) </span>{
+  <span class="hljs-built_in">Object</span>.getOwnPropertyNames(source).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">propName</span>) </span>{
+    <span class="hljs-built_in">Object</span>.defineProperty(target, propName, <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(source, propName))
+  })
+  <span class="hljs-keyword">return</span> target
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ValidationError</span> (<span class="hljs-params"></span>) </span>{
+  copyOwnFrom(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">Error</span>.apply(<span class="hljs-literal">null</span>, <span class="hljs-built_in">arguments</span>))
+}
+ValidationError.prototype = <span class="hljs-built_in">Object</span>.create(<span class="hljs-built_in">Error</span>.prototype)
+ValidationError.prototype.constructor = ValidationError
+
+<span class="hljs-comment">// exmpale with ES2015</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  data () {
+    <span class="hljs-keyword">return</span> { checking: <span class="hljs-literal">false</span> }
+  },
+  validators: {
+    exist (val) {
+      <span class="hljs-keyword">this</span>.vm.checking = <span class="hljs-literal">true</span> <span class="hljs-comment">// spinner on</span>
+      <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">&apos;/validations/exist&apos;</span>, {
+        method: <span class="hljs-string">&apos;post&apos;</span>,
+        headers: {
+          <span class="hljs-string">&apos;Accept&apos;</span>: <span class="hljs-string">&apos;application/json&apos;</span>,
+          <span class="hljs-string">&apos;Content-Type&apos;</span>: <span class="hljs-string">&apos;application/json&apos;</span>
+        },
+        body: <span class="hljs-built_in">JSON</span>.stringify({
+          username: val
+        })
+      }).then((res) =&gt; {
+        <span class="hljs-keyword">this</span>.vm.checking = <span class="hljs-literal">false</span> <span class="hljs-comment">// spinner off</span>
+        <span class="hljs-keyword">return</span> res.json()
+      }).then((json) =&gt; {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.keys(json).length &gt; <span class="hljs-number">0</span> 
+          ? <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> ValidationError(json.message))
+          : <span class="hljs-built_in">Promise</span>.resolve()
+      }).catch((error) =&gt; {
+        <span class="hljs-keyword">if</span> (error <span class="hljs-keyword">instanceof</span> ValidationError) {
+          <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.reject(error.message)
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-string">&apos;unexpected error&apos;</span>)
+        }
+      })
+    }
+  }
+}</code></pre>
+<h2 id="async-validation-interfaces">Async validation interfaces</h2><p>In async validation, You can use the two type interfaces:</p><h3 id="1-function">1. function</h3><p>You need to implement custom validator that return function have <code>function (resolve, reject)</code> like promise (future). The following, those argument of the function, you need to use according to validation result.</p><ul><li>validation result
+<ul><li>successful: <code>resolve</code>
+</li>
+<li>failed: <code>reject</code>
+</li></ul>
+</li></ul>
+<h3 id="2-promise">2. promise</h3><p>As mentioned above, You need to implement custom validation that return a promise. you need to <code>resolve</code> or <code>reject</code> according to validation result.</p><h2 id="using-error-message">Using error message</h2><p>As mentioned above, when server-side validation error occured, you can use the server-side error message.</p><blockquote><p><img align="absmiddle" alt=":warning:" class="emoji" src="../gitbook/gitbook-plugin-advanced-emoji/emojis/warning.png" title=":warning:"> You must return a <strong>ES6 compatible</strong> promise.</p></blockquote><h1 id="validator-function-context">Validator function context</h1><p>Validator function context is bind with Validation object. Validation object expose the some properties. These properties is useful when you need to implement specially validation.</p><h2 id="vm-property"><code>vm</code> property</h2><p>Expose the vue instance of current validation.</p><p>the following ES2015 example:</p><pre><code class="lang-javascript"><span class="hljs-keyword">new</span> Vue({
+  data () { <span class="hljs-keyword">return</span> { checking: <span class="hljs-literal">false</span> } },
+  validators: {
+    exist (val) {
+      <span class="hljs-keyword">this</span>.vm.checking = <span class="hljs-literal">true</span> <span class="hljs-comment">// spinner on</span>
+      <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">&apos;/validations/exist&apos;</span>, {
+        <span class="hljs-comment">// ...</span>
+      }).then((res) =&gt; { <span class="hljs-comment">// done</span>
+        <span class="hljs-keyword">this</span>.vm.checking = <span class="hljs-literal">false</span> <span class="hljs-comment">// spinner off</span>
+        <span class="hljs-keyword">return</span> res.json()
+      }).then((json) =&gt; {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve()
+      }).catch((error) =&gt; {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.reject(error.message)
+      })
+    }
+  }
+})</code></pre>
+<h2 id="el-property"><code>el</code> property</h2><p>Expose the target DOM element of current validation. In the case, use <a href="https://github.com/jackocnr/intl-tel-input" target="_blank">International Telephone Input</a> jQuery plugin example:</p><pre><code class="lang-javascript"><span class="hljs-keyword">new</span> Vue({
+  validators: {
+    phone: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">val</span>) </span>{
+      <span class="hljs-keyword">return</span> $(<span class="hljs-keyword">this</span>.el).intlTelInput(<span class="hljs-string">&apos;isValidNumber&apos;</span>)
+    }
+  }
+})</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="timing.html" class="navigation navigation-prev " aria-label="Previous page: Validation timing customization">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="api.html" class="navigation navigation-next " aria-label="Next page: API">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Async validation","level":"1.17","depth":1,"next":{"title":"API","level":"1.18","depth":1,"path":"api.md","ref":"api.md","articles":[]},"previous":{"title":"Validation timing customization","level":"1.16","depth":1,"path":"timing.md","ref":"timing.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","github","advanced-emoji@0.2.1"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/vuejs/vue-validator/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"advanced-emoji":{"embedEmojis":false},"sharing":{"facebook":false,"twitter":false,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/vuejs/vue-validator/tree/master/docs"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","links":{"sharing":{"facebook":false,"twitter":false}},"gitbook":"*"},"file":{"path":"async.md","mtime":"2016-09-30T17:08:57.000Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-09-30T17:14:10.193Z"},"basePath":".","book":{"language":"en"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
