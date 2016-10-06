@@ -18,7 +18,8 @@ export default function (Vue: GlobalAPI): Object {
     const validation = this.$options.propsData ? this.$options.propsData.validation : null
     if (validation) {
       const { instance, name } = validation
-      instance.register(this.field, this, { named: name })
+      const group = this.group
+      instance.register(this.field, this, { named: name, group })
     }
   }
 
@@ -26,7 +27,8 @@ export default function (Vue: GlobalAPI): Object {
     const validation = this.$options.propsData ? this.$options.propsData.validation : null
     if (validation) {
       const { instance, name } = validation
-      instance.unregister(this.field, this, { named: name })
+      const group = this.group
+      instance.unregister(this.field, this, { named: name, group })
     }
 
     this._unwatchValidationRawResults()

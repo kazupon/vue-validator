@@ -6,5 +6,8 @@ export default {
   validators: {
     type: [String, Array, Object],
     required: true
+  },
+  group: {
+    type: String
   }
 }
