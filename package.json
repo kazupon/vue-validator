@@ -59,7 +59,7 @@
     "rollup-plugin-replace": "^1.1.0",
     "selenium-server": "2.53.1",
     "uglify-js": "^2.6.1",
-    "vue": "git://github.com/vuejs/vue.git#next",
+    "vue": "^2.0.1",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1"
   },
