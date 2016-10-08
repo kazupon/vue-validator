@@ -1,4 +1,5 @@
 /* @flow */
+import { addClass, removeClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
   function getValue (options?: Object): any {
@@ -12,6 +13,8 @@ export default function (Vue: GlobalAPI): Object {
   function willUpdateTouched (options?: any): void {
     if (!this.touched) {
       this.touched = true
+      toggleClasses(this.$el, this.classes.touched, addClass)
+      toggleClasses(this.$el, this.classes.untouched, removeClass)
       this._fireEvent('touched')
     }
   }
@@ -19,6 +22,8 @@ export default function (Vue: GlobalAPI): Object {
   function willUpdateDirty (): void {
     if (!this.dirty && this.checkModified()) {
       this.dirty = true
+      toggleClasses(this.$el, this.classes.dirty, addClass)
+      toggleClasses(this.$el, this.classes.pristine, removeClass)
       this._fireEvent('dirty')
     }
   }
@@ -27,6 +32,7 @@ export default function (Vue: GlobalAPI): Object {
     const modified: boolean = this.modified = this.checkModified()
     if (this._modified !== modified) {
       this._modified = modified
+      toggleClasses(this.$el, this.classes.modified, modified ? addClass : removeClass)
       this._fireEvent('modified', modified)
     }
   }
@@ -48,6 +54,13 @@ export default function (Vue: GlobalAPI): Object {
       this.results[keys[i]] = undefined
       this.progresses[keys[i]] = ''
     }
+    toggleClasses(this.$el, this.classes.valid, removeClass)
+    toggleClasses(this.$el, this.classes.invalid, removeClass)
+    toggleClasses(this.$el, this.classes.touched, removeClass)
+    toggleClasses(this.$el, this.classes.untouched, addClass)
+    toggleClasses(this.$el, this.classes.dirty, removeClass)
+    toggleClasses(this.$el, this.classes.pristine, addClass)
+    toggleClasses(this.$el, this.classes.modified, removeClass)
     this.valid = true
     this.dirty = false
     this.touched = false
@@ -72,6 +85,15 @@ export default function (Vue: GlobalAPI): Object {
         }
       }
       this.valid = valid
+
+      if (valid) {
+        toggleClasses(this.$el, this.classes.valid, addClass)
+        toggleClasses(this.$el, this.classes.invalid, removeClass)
+      } else {
+        toggleClasses(this.$el, this.classes.valid, removeClass)
+        toggleClasses(this.$el, this.classes.invalid, addClass)
+      }
+
       this._fireEvent(valid ? 'valid' : 'invalid')
     }, { deep: true })
   }

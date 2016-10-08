@@ -1,5 +1,6 @@
 /* @flow */
 import { SingleElement, MultiElement } from '../../elements/index'
+import { addClass, removeClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
   function created (): void {
@@ -42,6 +43,9 @@ export default function (Vue: GlobalAPI): Object {
     this._elementable = createValidityElement(this)
     this._elementable.listenToucheableEvent()
     this._elementable.listenInputableEvent()
+
+    toggleClasses(this.$el, this.classes.untouched, addClass)
+    toggleClasses(this.$el, this.classes.pristine, addClass)
   }
 
   return {

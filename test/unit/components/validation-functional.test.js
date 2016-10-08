@@ -43,7 +43,7 @@ describe('validation functional component', () => {
             ])
           }
         }).$mount(el)
-        assert.equal(vm.$el.outerHTML, '<div><form novalidate="novalidate"><h1>username</h1><input id="username" type="text"></form></div>')
+        assert.equal(vm.$el.outerHTML, '<div><form novalidate="novalidate"><h1>username</h1><input id="username" type="text" class="untouched pristine"></form></div>')
       })
     })
 
@@ -66,7 +66,7 @@ describe('validation functional component', () => {
             ])
           }
         }).$mount(el)
-        assert.equal(vm.$el.outerHTML, '<div><div><h1>username</h1><input id="username" type="text"></div></div>')
+        assert.equal(vm.$el.outerHTML, '<div><div><h1>username</h1><input id="username" type="text" class="untouched pristine"></div></div>')
       })
     })
   })

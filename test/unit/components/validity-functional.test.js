@@ -1,5 +1,6 @@
 import ValidityControl from '../../../src/components/validity/index'
 import Validity from '../../../src/components/validity.js'
+import classes from 'component-classes'
 
 const validityControl = ValidityControl(Vue)
 const validity = Validity(Vue)
@@ -10,11 +11,8 @@ describe('validity functional component', () => {
     validityControl,
     validity,
     comp: {
-      props: {
-        value: {
-          type: String,
-          default: 'hello'
-        }
+      data () {
+        return { value: 'hello' }
       },
       render (h) {
         return h('input', { attrs: { type: 'text' }})
@@ -44,7 +42,7 @@ describe('validity functional component', () => {
         }
       }).$mount(el)
       waitForUpdate(() => {
-        assert.equal(vm.$el.outerHTML, '<div><input type="text"></div>')
+        assert.equal(vm.$el.outerHTML, '<div><input type="text" class="untouched pristine"></div>')
       }).then(done)
     })
   })
@@ -480,6 +478,382 @@ describe('validity functional component', () => {
         assert(result.valid === true)
         assert(result.invalid === false)
       }).then(done)
+    })
+  })
+
+  describe('classes', () => {
+    describe('basic', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required', 'numeric']
+                },
+                ref: 'validity1'
+              }, [
+                h('input', { class: ['class1'], attrs: { type: 'text' }})
+              ]),
+              h('validity', {
+                props: {
+                  field: 'field2',
+                  validators: ['required']
+                },
+                ref: 'validity2'
+              }, [
+                h('comp', { ref: 'my', class: ['class2'] })
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity1, validity2, my } = vm.$refs
+        let classes1, classes2
+        classes1 = classes(validity1.$el)
+        classes2 = classes(validity2.$el)
+        // initialized
+        assert(classes1.has('class1'))
+        assert(!classes1.has('touched'))
+        assert(classes1.has('untouched'))
+        assert(!classes1.has('dirty'))
+        assert(classes1.has('pristine'))
+        assert(!classes1.has('valid'))
+        assert(!classes1.has('invalid'))
+        assert(!classes1.has('modified'))
+        assert(classes2.has('class2'))
+        assert(!classes2.has('touched'))
+        assert(classes2.has('untouched'))
+        assert(!classes2.has('dirty'))
+        assert(classes2.has('pristine'))
+        assert(!classes2.has('valid'))
+        assert(!classes2.has('invalid'))
+        assert(!classes2.has('modified'))
+        waitForUpdate(() => {
+          // validate
+          validity1.validate()
+          validity2.validate()
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(!classes1.has('touched'))
+          assert(classes1.has('untouched'))
+          assert(!classes1.has('dirty'))
+          assert(classes1.has('pristine'))
+          assert(!classes1.has('modified'))
+          assert(!classes1.has('valid'))
+          assert(classes1.has('invalid'))
+          assert(classes2.has('class2'))
+          assert(!classes2.has('touched'))
+          assert(classes2.has('untouched'))
+          assert(!classes2.has('dirty'))
+          assert(classes2.has('pristine'))
+          assert(!classes2.has('modified'))
+          assert(classes2.has('valid'))
+          assert(!classes2.has('invalid'))
+          // focus
+          triggerEvent(validity1.$el, 'focusout')
+          triggerEvent(validity2.$el, 'focusout')
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(classes1.has('touched'))
+          assert(!classes1.has('untouched'))
+          assert(!classes1.has('dirty'))
+          assert(classes1.has('pristine'))
+          assert(!classes1.has('modified'))
+          assert(!classes1.has('valid'))
+          assert(classes1.has('invalid'))
+          assert(classes2.has('class2'))
+          assert(classes2.has('touched'))
+          assert(!classes2.has('untouched'))
+          assert(!classes2.has('dirty'))
+          assert(classes2.has('pristine'))
+          assert(!classes2.has('modified'))
+          assert(classes2.has('valid'))
+          assert(!classes2.has('invalid'))
+          // update
+          validity1.$el.value = 'hello'
+          triggerEvent(validity1.$el, 'input')
+          my.value = ''
+          // validate
+          validity1.validate()
+          validity2.validate()
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(classes1.has('touched'))
+          assert(!classes1.has('untouched'))
+          assert(classes1.has('dirty'))
+          assert(!classes1.has('pristine'))
+          assert(classes1.has('modified'))
+          assert(classes1.has('valid'))
+          assert(!classes1.has('invalid'))
+          assert(classes2.has('class2'))
+          assert(classes2.has('touched'))
+          assert(!classes2.has('untouched'))
+          assert(classes2.has('dirty'))
+          assert(!classes2.has('pristine'))
+          assert(classes2.has('modified'))
+          assert(!classes2.has('valid'))
+          assert(classes2.has('invalid'))
+          // back to initial data
+          validity1.$el.value = ''
+          triggerEvent(validity1.$el, 'input')
+          my.value = 'hello'
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(classes1.has('touched'))
+          assert(!classes1.has('untouched'))
+          assert(classes1.has('dirty'))
+          assert(!classes1.has('pristine'))
+          assert(!classes1.has('modified'))
+          assert(classes1.has('valid'))
+          assert(!classes1.has('invalid'))
+          assert(classes2.has('class2'))
+          assert(classes2.has('touched'))
+          assert(!classes2.has('untouched'))
+          assert(classes2.has('dirty'))
+          assert(!classes2.has('pristine'))
+          assert(!classes2.has('modified'))
+          assert(!classes2.has('valid'))
+          assert(classes2.has('invalid'))
+          // reset
+          validity1.reset()
+          validity2.reset()
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(!classes1.has('touched'))
+          assert(classes1.has('untouched'))
+          assert(!classes1.has('dirty'))
+          assert(classes1.has('pristine'))
+          assert(!classes1.has('valid'))
+          assert(!classes1.has('invalid'))
+          assert(!classes1.has('modified'))
+          assert(classes2.has('class2'))
+          assert(!classes2.has('touched'))
+          assert(classes2.has('untouched'))
+          assert(!classes2.has('dirty'))
+          assert(classes2.has('pristine'))
+          assert(!classes2.has('valid'))
+          assert(!classes2.has('invalid'))
+          assert(!classes2.has('modified'))
+        }).then(done)
+      })
+    })
+
+    describe('local custom class name', () => {
+      it('should be work', done => {
+        const classesProp1 = {
+          valid: 'valid-1',
+          invalid: 'invalid-1',
+          touched: 'touched-1',
+          untouched: 'untouched-1',
+          pristine: 'pristine-1',
+          dirty: 'dirty-1',
+          modified: 'modified-1'
+        }
+        const classesProp2 = {
+          valid: 'valid-2',
+          invalid: 'invalid-2',
+          touched: 'touched-2',
+          untouched: 'untouched-2',
+          pristine: 'pristine-2',
+          dirty: 'dirty-2',
+          modified: 'modified-2'
+        }
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required', 'numeric'],
+                  classes: classesProp1
+                },
+                ref: 'validity1'
+              }, [
+                h('input', { class: ['class1'], attrs: { type: 'text' }})
+              ]),
+              h('validity', {
+                props: {
+                  field: 'field2',
+                  validators: ['required'],
+                  classes: classesProp2
+                },
+                ref: 'validity2'
+              }, [
+                h('comp', { ref: 'my', class: ['class2'] })
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity1, validity2, my } = vm.$refs
+        let classes1, classes2
+        classes1 = classes(validity1.$el)
+        classes2 = classes(validity2.$el)
+        waitForUpdate(() => {
+          // focus
+          triggerEvent(validity1.$el, 'focusout')
+          triggerEvent(validity2.$el, 'focusout')
+          // update
+          validity1.$el.value = 'hello'
+          triggerEvent(validity1.$el, 'input')
+          my.value = ''
+          // validate
+          validity1.validate()
+          validity2.validate()
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(classes1.has(classesProp1.touched))
+          assert(!classes1.has(classesProp1.untouched))
+          assert(classes1.has(classesProp1.dirty))
+          assert(!classes1.has(classesProp1.pristine))
+          assert(classes1.has(classesProp1.modified))
+          assert(classes1.has(classesProp1.valid))
+          assert(!classes1.has(classesProp1.invalid))
+          assert(classes2.has('class2'))
+          assert(classes2.has(classesProp2.touched))
+          assert(!classes2.has(classesProp2.untouched))
+          assert(classes2.has(classesProp2.dirty))
+          assert(!classes2.has(classesProp2.pristine))
+          assert(classes2.has(classesProp2.modified))
+          assert(!classes2.has(classesProp2.valid))
+          assert(classes2.has(classesProp2.invalid))
+          // reset
+          validity1.reset()
+          validity2.reset()
+        }).thenWaitFor(1).then(() => {
+          console.log(vm.$el.outerHTML)
+          assert(classes1.has('class1'))
+          assert(!classes1.has(classesProp1.touched))
+          assert(classes1.has(classesProp1.untouched))
+          assert(!classes1.has(classesProp1.dirty))
+          assert(classes1.has(classesProp1.pristine))
+          assert(!classes1.has(classesProp1.modified))
+          assert(!classes1.has(classesProp1.valid))
+          assert(!classes1.has(classesProp1.invalid))
+          assert(classes2.has('class2'))
+          assert(!classes2.has(classesProp2.touched))
+          assert(classes2.has(classesProp2.untouched))
+          assert(!classes2.has(classesProp2.dirty))
+          assert(classes2.has(classesProp2.pristine))
+          assert(!classes2.has(classesProp2.modified))
+          assert(!classes2.has(classesProp2.valid))
+          assert(!classes2.has(classesProp2.invalid))
+        }).then(done)
+      })
+    })
+
+    describe('global custom class name', () => {
+      let orgSetting
+      const localClasses = {
+        valid: 'valid-1',
+        invalid: 'invalid-1',
+        touched: 'touched-1',
+        untouched: 'untouched-1',
+        pristine: 'pristine-1',
+        dirty: 'dirty-1',
+        modified: 'modified-1'
+      }
+      const globalClasses = {
+        valid: 'valid-2',
+        invalid: 'invalid-2',
+        touched: 'touched-2',
+        untouched: 'untouched-2',
+        pristine: 'pristine-2',
+        dirty: 'dirty-2',
+        modified: 'modified-2'
+      }
+      beforeEach(() => {
+        orgSetting = Vue.config.validator.classes
+        Vue.config.validator.classes = globalClasses
+      })
+      afterEach(() => {
+        Vue.config.validator.classes = orgSetting
+      })
+
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required', 'numeric'],
+                  classes: localClasses
+                },
+                ref: 'validity1'
+              }, [
+                h('input', { class: ['class1'], attrs: { type: 'text' }})
+              ]),
+              h('validity', {
+                props: {
+                  field: 'field2',
+                  validators: ['required']
+                },
+                ref: 'validity2'
+              }, [
+                h('comp', { ref: 'my', class: ['class2'] })
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity1, validity2, my } = vm.$refs
+        let classes1, classes2
+        classes1 = classes(validity1.$el)
+        classes2 = classes(validity2.$el)
+        waitForUpdate(() => {
+          // focus
+          triggerEvent(validity1.$el, 'focusout')
+          triggerEvent(validity2.$el, 'focusout')
+          // update
+          validity1.$el.value = 'hello'
+          triggerEvent(validity1.$el, 'input')
+          my.value = ''
+          // validate
+          validity1.validate()
+          validity2.validate()
+        }).thenWaitFor(1).then(() => {
+          assert(classes1.has('class1'))
+          assert(classes1.has(localClasses.touched))
+          assert(!classes1.has(localClasses.untouched))
+          assert(classes1.has(localClasses.dirty))
+          assert(!classes1.has(localClasses.pristine))
+          assert(classes1.has(localClasses.modified))
+          assert(classes1.has(localClasses.valid))
+          assert(!classes1.has(localClasses.invalid))
+          assert(classes2.has('class2'))
+          assert(classes2.has(globalClasses.touched))
+          assert(!classes2.has(globalClasses.untouched))
+          assert(classes2.has(globalClasses.dirty))
+          assert(!classes2.has(globalClasses.pristine))
+          assert(classes2.has(globalClasses.modified))
+          assert(!classes2.has(globalClasses.valid))
+          assert(classes2.has(globalClasses.invalid))
+          // reset
+          validity1.reset()
+          validity2.reset()
+        }).thenWaitFor(1).then(() => {
+          console.log(vm.$el.outerHTML)
+          assert(classes1.has('class1'))
+          assert(!classes1.has(localClasses.touched))
+          assert(classes1.has(localClasses.untouched))
+          assert(!classes1.has(localClasses.dirty))
+          assert(classes1.has(localClasses.pristine))
+          assert(!classes1.has(localClasses.modified))
+          assert(!classes1.has(localClasses.valid))
+          assert(!classes1.has(localClasses.invalid))
+          assert(classes2.has('class2'))
+          assert(!classes2.has(globalClasses.touched))
+          assert(classes2.has(globalClasses.untouched))
+          assert(!classes2.has(globalClasses.dirty))
+          assert(classes2.has(globalClasses.pristine))
+          assert(!classes2.has(globalClasses.modified))
+          assert(!classes2.has(globalClasses.valid))
+          assert(!classes2.has(globalClasses.invalid))
+        }).then(done)
+      })
     })
   })
 })

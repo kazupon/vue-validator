@@ -1,5 +1,6 @@
 /* @flow */
 import { warn } from './util'
+import Config from './config'
 import Asset from './asset'
 
 function plugin (Vue: GlobalAPI, options: Object = {}) {
@@ -8,6 +9,7 @@ function plugin (Vue: GlobalAPI, options: Object = {}) {
     return
   }
 
+  Config(Vue)
   Asset(Vue)
 }
 

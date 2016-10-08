@@ -16,6 +16,7 @@ export default function (Vue: GlobalAPI): Object {
         if (!child.tag) { return child }
         const newData: Object = extend({}, data)
         newData.props = extend({}, props)
+        extend(newData.props.classes, Vue.config.validator.classes)
         newData.props.child = child
         return h('validity-control', newData)
       })
