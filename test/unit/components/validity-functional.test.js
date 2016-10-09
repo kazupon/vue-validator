@@ -723,7 +723,6 @@ describe('validity functional component', () => {
           validity1.reset()
           validity2.reset()
         }).thenWaitFor(1).then(() => {
-          console.log(vm.$el.outerHTML)
           assert(classes1.has('class1'))
           assert(!classes1.has(classesProp1.touched))
           assert(classes1.has(classesProp1.untouched))
@@ -835,7 +834,6 @@ describe('validity functional component', () => {
           validity1.reset()
           validity2.reset()
         }).thenWaitFor(1).then(() => {
-          console.log(vm.$el.outerHTML)
           assert(classes1.has('class1'))
           assert(!classes1.has(localClasses.touched))
           assert(classes1.has(localClasses.untouched))
