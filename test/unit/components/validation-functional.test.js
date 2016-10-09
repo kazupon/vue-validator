@@ -494,7 +494,16 @@ describe('validation functional component', () => {
 
   describe('validation properties watching', () => {
     it('should be work', done => {
+      const validationHandler = jasmine.createSpy()
+      const validHandler = jasmine.createSpy()
+      const usernameValidationHandler = jasmine.createSpy()
+      const validationGroupHandler = jasmine.createSpy()
+      const fieldValidHandler = jasmine.createSpy()
       const vm = new Vue({
+        watch: { // automatically watching
+          '$validation.validation1.group1.field2.valid': fieldValidHandler,
+          '$validation.validation1.group1': validationGroupHandler
+        },
         mixins: [mixin],
         components,
         render (h) {
@@ -534,24 +543,16 @@ describe('validation functional component', () => {
       const field1 = vm.$el.querySelector('#username')
       const field2 = vm.$el.querySelector('#password')
       const field3 = vm.$el.querySelector('#confirm')
-      const validationHandler = jasmine.createSpy()
-      const validHandler = jasmine.createSpy()
-      const usernameValidationHandler = jasmine.createSpy()
-      const validationGroupHandler = jasmine.createSpy()
-      const fieldValidHandler = jasmine.createSpy()
       const handlers = [
         validationHandler,
         validHandler,
         usernameValidationHandler,
-        validationGroupHandler,
-        fieldValidHandler
       ]
       const unwatches = []
+      // manually watching
       unwatches.push(vm.$watch('$validation', validationHandler))
       unwatches.push(vm.$watch('$validation.validation1.valid', validHandler))
       unwatches.push(vm.$watch('$validation.validation1.field1', usernameValidationHandler))
-      unwatches.push(vm.$watch('$validation.validation1.group1', validationGroupHandler))
-      unwatches.push(vm.$watch('$validation.validation1.group1.field2.valid', fieldValidHandler))
       waitForUpdate(() => {
         validity1.validate()
         validity2.validate()
