@@ -68,8 +68,7 @@ export default class MultiElement {
   _eachItems (cb: Function): void {
     const items = this._getItems()
     for (let i = 0; i < items.length; i++) {
-      const item = items[i]
-      cb(item)
+      cb(items[i])
     }
   }
 }
