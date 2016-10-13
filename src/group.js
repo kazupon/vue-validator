@@ -35,7 +35,7 @@ export default function (Vue: GlobalAPI): Object {
       }
     },
     watch: {
-      results (val, old) {
+      results (val, old): void {
         const keys = this._validityKeys
         const results = this.results
         this.valid = this.checkResults(keys, results, 'valid', true)

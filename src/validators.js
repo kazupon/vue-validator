@@ -10,7 +10,7 @@
 export function required (val: any): boolean {
   if (Array.isArray(val)) {
     if (val.length !== 0) {
-      let valid = true
+      let valid: boolean = true
       for (let i = 0, l = val.length; i < l; i++) {
         valid = required(val[i])
         if (!valid) {
