@@ -156,6 +156,10 @@ export default function (Vue: GlobalAPI): Object {
       validators = this._keysCached(this._uid.toString(), this.results)
       value = args[0]
       cb = args[1]
+    } else if (args.length === 1) {
+      validators = this._keysCached(this._uid.toString(), this.results)
+      value = this.getValue()
+      cb = args[0]
     } else {
       validators = this._keysCached(this._uid.toString(), this.results)
       value = this.getValue()
