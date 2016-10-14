@@ -14,7 +14,7 @@ export default function (Vue: GlobalAPI): Object {
 
     const modelHandler: Function = orgListeners[0]
     const userHandler: Function = orgListeners[1]
-    const modifier: ?boolean = dir.modifiers.validity
+    const modifier: ?boolean = (dir.modifiers || {}).validity
     listeners[type] = function () {
       const args: Array<any> = toArray(arguments, 0)
       if (modifier) {
