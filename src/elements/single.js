@@ -81,41 +81,43 @@ export default class SingleElement {
   }
 
   listenInputableEvent (): void {
+    const vm = this._vm
     if (this._isBuiltIn) {
-      const el = this._vm.$el
+      const el = vm.$el
       if (el.tagName === 'SELECT') {
-        el.addEventListener('change', this._vm.handleInputable)
+        el.addEventListener('change', vm.handleInputable)
       } else {
         if (el.type === 'checkbox') {
-          el.addEventListener('change', this._vm.handleInputable)
+          el.addEventListener('change', vm.handleInputable)
         } else {
-          el.addEventListener('input', this._vm.handleInputable)
+          el.addEventListener('input', vm.handleInputable)
         }
       }
     } else if (this._isComponent) {
-      this._unwatchInputable = this._vnode.child.$watch('value', this._vm.watchInputable)
+      this._unwatchInputable = this._vnode.child.$watch('value', vm.watchInputable)
     } else {
       // TODO: should be warn !!
     }
   }
 
   unlistenInputableEvent (): void {
+    const vm = this._vm
     if (this._isBuiltIn) {
-      const el = this._vm.$el
+      const el = vm.$el
       if (el.tagName === 'SELECT') {
-        el.removeEventListener('change', this._vm.handleInputable)
+        el.removeEventListener('change', vm.handleInputable)
       } else {
         if (el.type === 'checkbox') {
-          el.removeEventListener('change', this._vm.handleInputable)
+          el.removeEventListener('change', vm.handleInputable)
         } else {
-          el.removeEventListener('input', this._vm.handleInputable)
+          el.removeEventListener('input', vm.handleInputable)
         }
       }
     } else if (this._isComponent) {
       if (this._unwatchInputable) {
         this._unwatchInputable()
         this._unwatchInputable = undefined
-        delete this['_unwatchInputable']
+        delete this._unwatchInputable
       }
     } else {
       // TODO: should be warn !!

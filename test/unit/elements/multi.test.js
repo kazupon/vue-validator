@@ -1,29 +1,16 @@
-import States from '../../../src/components/validity/states'
-import Computed from '../../../src/components/validity/computed'
-import Lifecycles from '../../../src/components/validity/lifecycles'
-import Methods from '../../../src/components/validity/methods'
 import MultiElement from '../../../src/elements/multi'
-
-const { props, data } = States(Vue)
-const computed = Computed(Vue)
-const { created } = Lifecycles(Vue)
-const methods = Methods(Vue)
 
 describe('MultiElement class', () => {
   describe('#getValue', () => {
     describe('input[type="radio"]', () => {
       it('should be work', () => {
         const vm = new Vue({
-          data: {
-            child: null
-          },
           render (h) {
-            const child = this.child = h('fieldset', [
+            return h('fieldset', [
               h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
               h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
               h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
             ])
-            return child
           }
         }).$mount()
         const multi = new MultiElement(vm)
@@ -42,16 +29,12 @@ describe('MultiElement class', () => {
     describe('input[type="checkbox"]', () => {
       it('should be work', () => {
         const vm = new Vue({
-          data: {
-            child: null
-          },
           render (h) {
-            const child = this.child = h('fieldset', [
+            return h('fieldset', [
               h('input', { attrs: { type: 'checkbox', value: 'one' }}),
               h('input', { attrs: { type: 'checkbox', value: 'two' }}),
               h('input', { attrs: { type: 'checkbox', value: 'three' }})
             ])
-            return child
           }
         }).$mount()
         const multi = new MultiElement(vm)
@@ -72,16 +55,12 @@ describe('MultiElement class', () => {
     describe('input[type="radio"]', () => {
       it('should be work', () => {
         const vm = new Vue({
-          data: {
-            child: null
-          },
           render (h) {
-            const child = this.child = h('fieldset', [
+            return h('fieldset', [
               h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
               h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
               h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
             ])
-            return child
           }
         }).$mount()
         const multi = new MultiElement(vm)
@@ -104,16 +83,12 @@ describe('MultiElement class', () => {
     describe('input[type="checkbox"]', () => {
       it('should be work', () => {
         const vm = new Vue({
-          data: {
-            child: null
-          },
           render (h) {
-            const child = this.child = h('fieldset', [
+            return h('fieldset', [
               h('input', { attrs: { type: 'checkbox', value: 'one' }}),
               h('input', { attrs: { type: 'checkbox', value: 'two' }}),
               h('input', { attrs: { type: 'checkbox', value: 'three' }})
             ])
-            return child
           }
         }).$mount()
         const multi = new MultiElement(vm)
@@ -136,81 +111,58 @@ describe('MultiElement class', () => {
 
   describe('#listenToucheableEvent / #unlistenToucheableEvent', () => {
     it('should be work', done => {
+      const handleFocusout = jasmine.createSpy()
       const vm = new Vue({
-        props,
-        data,
-        computed,
-        created,
-        methods,
-        propsData: {
-          field: 'field1',
-          child: {},
-          validators: {
-            required: true
-          }
-        },
+        methods: { willUpdateTouched: handleFocusout },
         render (h) {
-          const child = this.child = h('fieldset', [
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
+          return h('fieldset', [
+            h('input', { ref: 'input1', attrs: { type: 'radio', name: 'group', value: 'one' }}),
+            h('input', { ref: 'input2', attrs: { type: 'radio', name: 'group', value: 'two' }}),
+            h('input', { ref: 'input3', attrs: { type: 'radio', name: 'group', value: 'three' }})
           ])
-          return child
         }
       }).$mount()
+      const { input1, input2, input3 } = vm.$refs
       const multi = new MultiElement(vm)
       multi.listenToucheableEvent()
-      const items = vm.$el.querySelectorAll('input[type="radio"]')
-      triggerEvent(items[1], 'focusout')
+      triggerEvent(input1, 'focusout')
+      triggerEvent(input2, 'focusout')
       waitForUpdate(() => {
-        assert(vm.touched === true)
-        vm.reset()
+        assert(handleFocusout.calls.count() === 2)
         multi.unlistenToucheableEvent()
-        triggerEvent(items[2], 'focusout')
+        triggerEvent(input3, 'focusout')
       }).then(() => {
-        assert(vm.touched === false)
+        assert(handleFocusout.calls.count() === 2)
       }).then(done)
     })
   })
 
   describe('#listenInputableEvent / #unlistenInputableEvent', () => {
     it('should be work', done => {
-      methods.handleInputable = jasmine.createSpy()
+      const handleInputable = jasmine.createSpy()
       const vm = new Vue({
-        props,
-        data,
-        computed,
-        created,
-        methods,
-        propsData: {
-          field: 'field1',
-          child: {},
-          validators: {
-            required: true
-          }
-        },
+        methods: { handleInputable },
         render (h) {
-          const child = this.child = h('fieldset', [
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
-            h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
+          return h('fieldset', [
+            h('input', { ref: 'input1', attrs: { type: 'radio', name: 'group', value: 'one' }}),
+            h('input', { ref: 'input2', attrs: { type: 'radio', name: 'group', value: 'two' }}),
+            h('input', { ref: 'input3', attrs: { type: 'radio', name: 'group', value: 'three' }})
           ])
-          return child
         }
       }).$mount()
+      const { input1, input2, input3 } = vm.$refs
       const multi = new MultiElement(vm)
       multi.listenInputableEvent()
-      const items = vm.$el.querySelectorAll('input[type="radio"]')
-      triggerEvent(items[1], 'change')
+      triggerEvent(input1, 'change')
       waitForUpdate(() => {
-        assert(methods.handleInputable.calls.count() === 1)
-        triggerEvent(items[2], 'change')
+        assert(handleInputable.calls.count() === 1)
+        triggerEvent(input2, 'change')
       }).then(() => {
-        assert(methods.handleInputable.calls.count() === 2)
+        assert(handleInputable.calls.count() === 2)
         multi.unlistenInputableEvent()
-        triggerEvent(items[0], 'change')
+        triggerEvent(input3, 'change')
       }).then(() => {
-        assert(methods.handleInputable.calls.count() === 2)
+        assert(handleInputable.calls.count() === 2)
       }).then(done)
     })
   })
