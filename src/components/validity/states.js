@@ -1,5 +1,4 @@
 /* @flow */
-
 import baseProps from './props'
 
 export default function (Vue: GlobalAPI): Object {

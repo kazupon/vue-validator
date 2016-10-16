@@ -65,7 +65,7 @@ function memoize (fn: Function): Function {
 
 function createValidityElement (vm: ValidityComponent): ValidityElement {
   const vnode = vm.child
-  return !vnode.children
+  return !vm.multiple
     ? new SingleElement(vm, vnode)
     : new MultiElement(vm)
 }

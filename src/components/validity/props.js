@@ -10,6 +10,9 @@ export default {
   group: {
     type: String
   },
+  multiple: {
+    type: Boolean
+  },
   classes: {
     type: Object,
     default: () => {

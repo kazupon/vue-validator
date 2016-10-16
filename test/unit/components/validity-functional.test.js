@@ -397,59 +397,6 @@ describe('validity functional component', () => {
     })
   })
 
-  describe('multi element validate', () => {
-    it('should be work', done => {
-      const vm = new Vue({
-        components,
-        render (h) {
-          return h('div', [
-            h('validity', {
-              props: {
-                field: 'field1',
-                validators: ['required']
-              },
-              ref: 'validity'
-            }, [
-              h('fieldset', [
-                h('input', { attrs: { type: 'radio', name: 'group', value: 'one' }}),
-                h('input', { attrs: { type: 'radio', name: 'group', value: 'two' }}),
-                h('input', { attrs: { type: 'radio', name: 'group', value: 'three' }})
-              ])
-            ])
-          ])
-        }
-      }).$mount(el)
-      const { validity } = vm.$refs
-      const items = vm.$el.querySelectorAll('input[type="radio"]')
-      let result
-      waitForUpdate(() => {
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === true)
-        assert.deepEqual(result.errors, [{
-          field: 'field1',
-          validator: 'required'
-        }])
-        assert(validity.valid === false)
-        assert(validity.invalid === true)
-        assert(result.valid === false)
-        assert(result.invalid === true)
-      }).then(() => {
-        items[1].checked = true
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === false)
-        assert(result.errors === undefined)
-        assert(validity.valid === true)
-        assert(validity.invalid === false)
-        assert(result.valid === true)
-        assert(result.invalid === false)
-      }).then(done)
-    })
-  })
-
   describe('component validate', () => {
     it('should be work', done => {
       const vm = new Vue({
