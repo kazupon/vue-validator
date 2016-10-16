@@ -896,146 +896,224 @@ describe('validity functional component', () => {
       }
     }
 
-    describe('text', () => {
-      it('should be work', done => {
-        let valid = true
-        const vm = new Vue({
-          data: { msg: 'hello' },
-          components,
-          render (h) {
-            return h('div', [
-              h('p', [this.msg]),
-              h('validity', { props }, [
-                h('input', {
-                  ref: 'input',
-                  attrs: { type: 'text' },
-                  directives: createModelDirective('msg', 'hello', true),
-                  on: {
-                    input: [
-                      textboxModelHanlder('msg'),
-                      (e, $apply) => { valid && $apply() }
-                    ]
-                  }
-                })
-              ])
-            ])
-          }
-        }).$mount(el)
-        const { input } = vm.$refs
-        waitForUpdate(() => {
-          input.value = 'world'
-          triggerEvent(input, 'input')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.msg, 'world')
-          // simulate valid value changing
-          valid = false
-          input.value = ''
-          triggerEvent(input, 'input')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.msg, 'world')
-          // simulate invalid value changing
-          valid = true
-          triggerEvent(input, 'input')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.msg, '')
-        }).then(done)
-      })
-    })
-
-    describe('checkbox', () => {
-      function checkboxModelHandler (prop, value) {
-        return function ($event) {
-          const $$a = this[prop]
-          const $$el = $event.target
-          const $$c = $$el.checked ? true : false
-          if (Array.isArray($$a)) {
-            const $$v = value
-            const $$i = this._i($$a, $$v)
-            if ($$c) {
-              $$i < 0 && (this[prop] = $$a.concat($$v))
-            } else {
-              $$i > -1 && (this[prop] = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-            }
+    function checkboxModelHandler (prop, value) {
+      return function ($event) {
+        const $$a = this[prop]
+        const $$el = $event.target
+        const $$c = $$el.checked ? true : false
+        if (Array.isArray($$a)) {
+          const $$v = value
+          const $$i = this._i($$a, $$v)
+          if ($$c) {
+            $$i < 0 && (this[prop] = $$a.concat($$v))
           } else {
-            this[prop]= $$c
+            $$i > -1 && (this[prop] = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
           }
+        } else {
+          this[prop]= $$c
         }
       }
+    }
 
-      describe('single', () => {
+    function radioModelHanlder (prop, value) {
+      return function ($event) { this[prop] = value }
+    }
+
+    function selectModelHandler (prop) {
+      return function ($event) {
+        this[prop] = Array.prototype.filter.call(
+          $event.target.options, function (o) {
+            return o.selected
+        }).map(function (o) {
+          return '_value' in o ? o._value : o.value
+        })[0]
+      }
+    }
+
+    function componentModelHandler (prop) {
+      return function ($event) { this[prop] = $event }
+    }
+
+    describe('up to model', () => {
+      describe('text', () => {
         it('should be work', done => {
           let valid = true
           const vm = new Vue({
-            data: { checked: false },
+            data: { msg: 'hello' },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.msg]),
+                h('validity', { props }, [
+                  h('input', {
+                    ref: 'input',
+                    attrs: { type: 'text' },
+                    directives: createModelDirective('msg', 'hello', true),
+                    on: {
+                      input: [
+                        textboxModelHanlder('msg'),
+                        (e, $apply) => { valid && $apply() }
+                      ]
+                    }
+                  })
+                ])
+              ])
+            }
+          }).$mount(el)
+          const { input } = vm.$refs
+          waitForUpdate(() => {
+            input.value = 'world'
+            triggerEvent(input, 'input')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.msg, 'world')
+            // simulate valid value changing
+            valid = false
+            input.value = ''
+            triggerEvent(input, 'input')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.msg, 'world')
+            // simulate invalid value changing
+            valid = true
+            triggerEvent(input, 'input')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.msg, '')
+          }).then(done)
+        })
+      })
+
+      describe('checkbox', () => {
+        describe('single', () => {
+          it('should be work', done => {
+            let valid = true
+            const vm = new Vue({
+              data: { checked: false },
+              components,
+              render (h) {
+                return h('div', [
+                  h('p', [this.checked]),
+                  h('validity', { props }, [
+                    h('input', {
+                      ref: 'checkbox',
+                      attrs: { type: 'checkbox' },
+                      directives: createModelDirective('checked', false, true),
+                      on: {
+                        change: [
+                          checkboxModelHandler('checked'),
+                          (e, $apply) => { valid && $apply() }
+                        ]
+                      }
+                    })
+                  ])
+                ])
+              }
+            }).$mount(el)
+            const { checkbox } = vm.$refs
+            waitForUpdate(() => {
+              checkbox.checked = true
+              triggerEvent(checkbox, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert(vm.checked)
+              // simulate valid value changing
+              valid = false
+              checkbox.checked = false
+              triggerEvent(checkbox, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert(vm.checked)
+              // simulate invalid value changing
+              valid = true
+              triggerEvent(checkbox, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert(!vm.checked)
+            }).then(done)
+          })
+        })
+
+        describe('multiple', () => {
+          it('should be work', done => {
+            let valid = true
+            const vm = new Vue({
+              data: { items: [] },
+              components,
+              render (h) {
+                return h('div', [
+                  h('p', [this.items]),
+                  h('validity', { props }, [
+                    h('input', {
+                      ref: 'checkbox1',
+                      attrs: { type: 'checkbox', value: 'one' },
+                      directives: createModelDirective('items', 'one', true),
+                      on: {
+                        change: [
+                          checkboxModelHandler('items', 'one'),
+                          (e, $apply) => { valid && $apply() }
+                        ]
+                      }
+                    }),
+                    h('input', {
+                      ref: 'checkbox2',
+                      attrs: { type: 'checkbox', value: 'two' },
+                      directives: createModelDirective('items', 'two', true),
+                      on: {
+                        change: [
+                          checkboxModelHandler('items', 'two'),
+                          (e, $apply) => { valid && $apply() }
+                        ]
+                      }
+                    })
+                  ])
+                ])
+              }
+            }).$mount(el)
+            const { checkbox1, checkbox2 } = vm.$refs
+            waitForUpdate(() => {
+              checkbox1.checked = true
+              triggerEvent(checkbox1, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert.deepEqual(vm.items, ['one'])
+              // simulate valid value changing
+              valid = false
+              checkbox2.checked = true
+              triggerEvent(checkbox2, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert.deepEqual(vm.items, ['one'])
+              // simulate invalid value changing
+              valid = true
+              triggerEvent(checkbox2, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert.deepEqual(vm.items, ['one', 'two'])
+            }).then(done)
+          })
+        })
+      })
+
+      describe('radio', () => {
+        it('should be work', done => {
+          let valid = true
+          const vm = new Vue({
+            data: { checked: '' },
             components,
             render (h) {
               return h('div', [
                 h('p', [this.checked]),
                 h('validity', { props }, [
                   h('input', {
-                    ref: 'checkbox',
-                    attrs: { type: 'checkbox' },
-                    directives: createModelDirective('checked', false, true),
+                    ref: 'radio1',
+                    attrs: { type: 'radio', name: 'g1', value: 'one' },
+                    directives: createModelDirective('checked', 'one', true),
                     on: {
                       change: [
-                        checkboxModelHandler('checked'),
-                        (e, $apply) => { valid && $apply() }
-                      ]
-                    }
-                  })
-                ])
-              ])
-            }
-          }).$mount(el)
-          const { checkbox } = vm.$refs
-          waitForUpdate(() => {
-            checkbox.checked = true
-            triggerEvent(checkbox, 'change')
-          }).thenWaitFor(1).then(() => {
-            assert(vm.checked)
-            // simulate valid value changing
-            valid = false
-            checkbox.checked = false
-            triggerEvent(checkbox, 'change')
-          }).thenWaitFor(1).then(() => {
-            assert(vm.checked)
-            // simulate invalid value changing
-            valid = true
-            triggerEvent(checkbox, 'change')
-          }).thenWaitFor(1).then(() => {
-            assert(!vm.checked)
-          }).then(done)
-        })
-      })
-
-      describe('multiple', () => {
-        it('should be work', done => {
-          let valid = true
-          const vm = new Vue({
-            data: { items: [] },
-            components,
-            render (h) {
-              return h('div', [
-                h('p', [this.items]),
-                h('validity', { props }, [
-                  h('input', {
-                    ref: 'checkbox1',
-                    attrs: { type: 'checkbox', value: 'one' },
-                    directives: createModelDirective('items', 'one', true),
-                    on: {
-                      change: [
-                        checkboxModelHandler('items', 'one'),
+                        radioModelHanlder('checked', 'one'),
                         (e, $apply) => { valid && $apply() }
                       ]
                     }
                   }),
                   h('input', {
-                    ref: 'checkbox2',
-                    attrs: { type: 'checkbox', value: 'two' },
-                    directives: createModelDirective('items', 'two', true),
+                    ref: 'radio2',
+                    attrs: { type: 'radio', name: 'g1', value: 'two' },
+                    directives: createModelDirective('checked', 'two', true),
                     on: {
                       change: [
-                        checkboxModelHandler('items', 'two'),
+                        radioModelHanlder('checked', 'two'),
                         (e, $apply) => { valid && $apply() }
                       ]
                     }
@@ -1044,204 +1122,128 @@ describe('validity functional component', () => {
               ])
             }
           }).$mount(el)
-          const { checkbox1, checkbox2 } = vm.$refs
+          const { radio1, radio2 } = vm.$refs
           waitForUpdate(() => {
-            checkbox1.checked = true
-            triggerEvent(checkbox1, 'change')
+            radio1.checked = true
+            triggerEvent(radio1, 'change')
           }).thenWaitFor(1).then(() => {
-            assert.deepEqual(vm.items, ['one'])
+            assert.equal(vm.checked, 'one')
             // simulate valid value changing
             valid = false
-            checkbox2.checked = true
-            triggerEvent(checkbox2, 'change')
+            radio2.checked = true
+            triggerEvent(radio2, 'change')
           }).thenWaitFor(1).then(() => {
-            assert.deepEqual(vm.items, ['one'])
+            assert.equal(vm.checked, 'one')
             // simulate invalid value changing
             valid = true
-            triggerEvent(checkbox2, 'change')
+            triggerEvent(radio2, 'change')
           }).thenWaitFor(1).then(() => {
-            assert.deepEqual(vm.items, ['one', 'two'])
+            assert.equal(vm.checked, 'two')
           }).then(done)
         })
       })
-    })
 
-    describe('radio', () => {
-      function radioModelHanlder (prop, value) {
-        return function ($event) { this[prop] = value }
-      }
-
-      it('should be work', done => {
-        let valid = true
-        const vm = new Vue({
-          data: { checked: '' },
-          components,
-          render (h) {
-            return h('div', [
-              h('p', [this.checked]),
-              h('validity', { props }, [
-                h('input', {
-                  ref: 'radio1',
-                  attrs: { type: 'radio', name: 'g1', value: 'one' },
-                  directives: createModelDirective('checked', 'one', true),
-                  on: {
-                    change: [
-                      radioModelHanlder('checked', 'one'),
-                      (e, $apply) => { valid && $apply() }
-                    ]
-                  }
-                }),
-                h('input', {
-                  ref: 'radio2',
-                  attrs: { type: 'radio', name: 'g1', value: 'two' },
-                  directives: createModelDirective('checked', 'two', true),
-                  on: {
-                    change: [
-                      radioModelHanlder('checked', 'two'),
-                      (e, $apply) => { valid && $apply() }
-                    ]
-                  }
-                })
-              ])
-            ])
-          }
-        }).$mount(el)
-        const { radio1, radio2 } = vm.$refs
-        waitForUpdate(() => {
-          radio1.checked = true
-          triggerEvent(radio1, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.checked, 'one')
-          // simulate valid value changing
-          valid = false
-          radio2.checked = true
-          triggerEvent(radio2, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.checked, 'one')
-          // simulate invalid value changing
-          valid = true
-          triggerEvent(radio2, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.checked, 'two')
-        }).then(done)
-      })
-    })
-
-    describe('select', () => {
-      function selectModelHandler (prop) {
-        return function ($event) {
-          this[prop] = Array.prototype.filter.call(
-            $event.target.options, function (o) {
-              return o.selected
-          }).map(function (o) {
-            return '_value' in o ? o._value : o.value
-          })[0]
-        }
-      }
-
-      it('should be work', done => {
-        let valid = true
-        const vm = new Vue({
-          data: { selected: '' },
-          components,
-          render (h) {
-            return h('div', [
-              h('p', [this.selected]),
-              h('validity', { props }, [
-                h('select', {
-                  ref: 'select',
-                  directives: createModelDirective('selected', 'one', true),
-                  on: {
-                    change: [
-                      selectModelHandler('selected'),
-                      (e, $apply) => { valid && $apply() }
-                    ]
-                  }
-                }, [
-                  h('option', { attrs: { value: 'one' }}),
-                  h('option', { attrs: { value: 'two' }}),
-                  h('option', { attrs: { value: 'three' }})
+      describe('select', () => {
+        it('should be work', done => {
+          let valid = true
+          const vm = new Vue({
+            data: { selected: 'one' },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.selected]),
+                h('validity', { props }, [
+                  h('select', {
+                    ref: 'select',
+                    directives: createModelDirective('selected', this.selected, true),
+                    on: {
+                      change: [
+                        selectModelHandler('selected'),
+                        (e, $apply) => { valid && $apply() }
+                      ]
+                    }
+                  }, [
+                    h('option', { attrs: { value: 'one' }}),
+                    h('option', { attrs: { value: 'two' }}),
+                    h('option', { attrs: { value: 'three' }})
+                  ])
                 ])
               ])
-            ])
-          }
-        }).$mount(el)
-        const { select } = vm.$refs
-        waitForUpdate(() => {
-          select.selectedIndex = 1
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'two')
-          // simulate valid value changing
-          valid = false
-          select.selectedIndex = 2
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'two')
-          // simulate invalid value changing
-          valid = true
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'three')
-        }).then(done)
+            }
+          }).$mount(el)
+          const { select } = vm.$refs
+          waitForUpdate(() => {
+            select.selectedIndex = 1
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'two')
+            // simulate valid value changing
+            valid = false
+            select.selectedIndex = 2
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'two')
+            // simulate invalid value changing
+            valid = true
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'three')
+          }).then(done)
+        })
       })
-    })
 
-    describe('component', () => {
-      function componentModelHandler (prop) {
-        return function ($event) { this[prop] = $event }
-      }
-
-      it('should be work', done => {
-        let valid = true
-        const vm = new Vue({
-          data: {
-            selected: '',
-            options: [
-              { text: 'One', value: 'one' },
-              { text: 'Two', value: 'two' },
-              { text: 'Three', value: 'three' }
-            ]
-          },
-          components,
-          render (h) {
-            return h('div', [
-              h('p', [this.selected]),
-              h('validity', { props }, [
-                h('comp-input', {
-                  ref: 'comp',
-                  props: { options: this.options },
-                  directives: createModelDirective('selected', 'one', true),
-                  on: {
-                    input: [
-                      componentModelHandler('selected'),
-                      (e, $apply) => { valid && $apply() }
-                    ]
-                  }
-                })
+      describe('component', () => {
+        it('should be work', done => {
+          let valid = true
+          const vm = new Vue({
+            data: {
+              selected: '',
+              options: [
+                { text: 'One', value: 'one' },
+                { text: 'Two', value: 'two' },
+                { text: 'Three', value: 'three' }
+              ]
+            },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.selected]),
+                h('validity', { props }, [
+                  h('comp-input', {
+                    ref: 'comp',
+                    props: { options: this.options },
+                    directives: createModelDirective('selected', 'one', true),
+                    on: {
+                      input: [
+                        componentModelHandler('selected'),
+                        (e, $apply) => { valid && $apply() }
+                      ]
+                    }
+                  })
+                ])
               ])
-            ])
-          }
-        }).$mount(el)
-        const { comp } = vm.$refs
-        const { select } = comp.$refs
-        waitForUpdate(() => {
-          select.selectedIndex = 1
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'two')
-          // simulate valid value changing
-          valid = false
-          select.selectedIndex = 2
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'two')
-          // simulate invalid value changing
-          valid = true
-          triggerEvent(select, 'change')
-        }).thenWaitFor(1).then(() => {
-          assert.equal(vm.selected, 'three')
-        }).then(done)
+            }
+          }).$mount(el)
+          const { comp } = vm.$refs
+          const { select } = comp.$refs
+          waitForUpdate(() => {
+            select.selectedIndex = 1
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'two')
+            // simulate valid value changing
+            valid = false
+            select.selectedIndex = 2
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'two')
+            // simulate invalid value changing
+            valid = true
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'three')
+          }).then(done)
+        })
       })
     })
   })
