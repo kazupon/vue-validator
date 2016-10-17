@@ -42,8 +42,9 @@ describe('validity functional component', () => {
     el = document.createElement('div')
   })
 
+
   describe('rendering', () => {
-    it('should be work', done => {
+    it('should be work', () => {
       const vm = new Vue({
         components,
         render (h) {
@@ -59,11 +60,10 @@ describe('validity functional component', () => {
           ])
         }
       }).$mount(el)
-      waitForUpdate(() => {
-        assert.equal(vm.$el.outerHTML, '<div><input type="text" class="untouched pristine"></div>')
-      }).then(done)
+      assert.equal(vm.$el.outerHTML, '<div><input type="text" class="untouched pristine"></div>')
     })
   })
+
 
   describe('properties', () => {
     it('should be work', done => {
@@ -78,13 +78,12 @@ describe('validity functional component', () => {
               },
               ref: 'validity'
             }, [
-              h('input', { attrs: { type: 'text' }})
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
             ])
           ])
         }
       }).$mount(el)
-      const { validity } = vm.$refs
-      const input = vm.$el.querySelector('input')
+      const { validity, textbox } = vm.$refs
       let result = validity.result
       // created instance
       assert(result.valid === true)
@@ -96,8 +95,8 @@ describe('validity functional component', () => {
       assert(result.modified === false)
       assert(result.required === false)
       // simulate inputing
-      input.value = 'hello'
-      triggerEvent(input, 'input')
+      textbox.value = 'hello'
+      triggerEvent(textbox, 'input')
       waitForUpdate(() => {
         result = validity.result
         assert(result.valid === true)
@@ -110,7 +109,7 @@ describe('validity functional component', () => {
         assert(result.required === false)
       }).then(() => {
         // simulate focusout
-        triggerEvent(input, 'focusout')
+        triggerEvent(textbox, 'focusout')
       }).thenWaitFor(1).then(() => {
         result = validity.result
         assert(result.valid === true)
@@ -123,7 +122,7 @@ describe('validity functional component', () => {
         assert(result.required === false)
       }).then(() => {
         // simulate inputing
-        input.value = ''
+        textbox.value = ''
         // validate
         validity.validate()
         assert.equal(validity.progresses.required, 'running')
@@ -146,6 +145,7 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
+
 
   describe('event handling', () => {
     it('should be work', done => {
@@ -172,6 +172,7 @@ describe('validity functional component', () => {
               }
             }, [
               h('input', {
+                ref: 'textbox',
                 attrs: { type: 'text' },
                 on: {
                   focusout (e) {
@@ -183,26 +184,26 @@ describe('validity functional component', () => {
           ])
         }
       }).$mount(el)
-      const input = vm.$el.querySelector('input')
-      input.value = 'hello'
-      triggerEvent(input, 'input')
+      const { textbox } = vm.$refs
+      textbox.value = 'hello'
+      triggerEvent(textbox, 'input')
       waitForUpdate(() => {
         assert(dirty.calls.count() === 1)
         assert(modified.calls.count() === 1)
       }).then(() => {
-        triggerEvent(input, 'focusout')
+        triggerEvent(textbox, 'focusout')
       }).thenWaitFor(1).then(() => {
         assert(touched.calls.count() === 1)
         assert(valid.calls.count() === 1)
         assert(invalid.calls.count() === 0)
       }).then(() => {
-        input.value = ''
-        triggerEvent(input, 'input')
+        textbox.value = ''
+        triggerEvent(textbox, 'input')
       }).thenWaitFor(1).then(() => {
         assert(dirty.calls.count() === 1)
         assert(modified.calls.count() === 2)
       }).then(() => {
-        triggerEvent(input, 'focusout')
+        triggerEvent(textbox, 'focusout')
       }).thenWaitFor(1).then(() => {
         assert(touched.calls.count() === 1)
         assert(valid.calls.count() === 1)
@@ -210,6 +211,7 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
+
 
   describe('multiple validate', () => {
     it('should be work', done => {
@@ -227,16 +229,15 @@ describe('validity functional component', () => {
               },
               ref: 'validity'
             }, [
-              h('input', { attrs: { type: 'text' }})
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
             ])
           ])
         }
       }).$mount(el)
-      const { validity } = vm.$refs
-      const input = vm.$el.querySelector('input')
+      const { validity, textbox } = vm.$refs
       let result
       waitForUpdate(() => {
-        input.value = 'hello' // invalid value inputing
+        textbox.value = 'hello' // invalid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(1).then(() => {
         result = validity.result
@@ -257,7 +258,7 @@ describe('validity functional component', () => {
         assert(result.invalid === true)
       }).then(() => {
         // valid value inputing
-        input.value = '123' // valid value inputing
+        textbox.value = '123' // valid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(1).then(() => {
         result = validity.result
@@ -272,6 +273,7 @@ describe('validity functional component', () => {
     })
   })
 
+
   describe('custom validate', () => {
     it('should be work', done => {
       const vm = new Vue({
@@ -285,7 +287,7 @@ describe('validity functional component', () => {
               },
               ref: 'validity'
             }, [
-              h('input', { attrs: { type: 'text' }})
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
             ])
           ])
         },
@@ -300,11 +302,10 @@ describe('validity functional component', () => {
           }
         }
       }).$mount(el)
-      const { validity } = vm.$refs
-      const input = vm.$el.querySelector('input')
+      const { validity, textbox } = vm.$refs
       let result
       waitForUpdate(() => {
-        input.value = '' // invalid value inputing
+        textbox.value = '' // invalid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(1).then(() => {
         result = validity.result
@@ -323,7 +324,7 @@ describe('validity functional component', () => {
         assert(result.valid === false)
         assert(result.invalid === true)
       }).then(() => {
-        input.value = '-123' // valid value inputing
+        textbox.value = '-123' // valid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(1).then(() => {
         result = validity.result
@@ -338,6 +339,7 @@ describe('validity functional component', () => {
     })
   })
 
+
   describe('async validate', () => {
     it('should be work', done => {
       const vm = new Vue({
@@ -351,7 +353,7 @@ describe('validity functional component', () => {
               },
               ref: 'validity'
             }, [
-              h('input', { attrs: { type: 'text' }})
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
             ])
           ])
         },
@@ -365,11 +367,10 @@ describe('validity functional component', () => {
           }
         }
       }).$mount(el)
-      const { validity } = vm.$refs
-      const input = vm.$el.querySelector('input')
+      const { validity, textbox } = vm.$refs
       let result
       waitForUpdate(() => {
-        input.value = '' // invalid value inputing
+        textbox.value = '' // invalid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(6).then(() => {
         result = validity.result
@@ -383,7 +384,7 @@ describe('validity functional component', () => {
         assert(result.valid === false)
         assert(result.invalid === true)
       }).then(() => {
-        input.value = 'dio' // valid value inputing
+        textbox.value = 'dio' // valid value inputing
         validity.validate() // validate !!
       }).thenWaitFor(6).then(() => {
         result = validity.result
@@ -396,6 +397,7 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
+
 
   describe('component validate', () => {
     it('should be work', done => {
@@ -445,6 +447,7 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
+
 
   describe('classes', () => {
     describe('basic', () => {
@@ -516,6 +519,7 @@ describe('validity functional component', () => {
           assert(!classes2.has('modified'))
           assert(classes2.has('valid'))
           assert(!classes2.has('invalid'))
+        }).then(() => {
           // focus
           triggerEvent(validity1.$el, 'focusout')
           triggerEvent(validity2.$el, 'focusout')
@@ -536,6 +540,7 @@ describe('validity functional component', () => {
           assert(!classes2.has('modified'))
           assert(classes2.has('valid'))
           assert(!classes2.has('invalid'))
+        }).then(() => {
           // update
           validity1.$el.value = 'hello'
           triggerEvent(validity1.$el, 'input')
@@ -560,6 +565,7 @@ describe('validity functional component', () => {
           assert(classes2.has('modified'))
           assert(!classes2.has('valid'))
           assert(classes2.has('invalid'))
+        }).then(() => {
           // back to initial data
           validity1.$el.value = ''
           triggerEvent(validity1.$el, 'input')
@@ -581,6 +587,7 @@ describe('validity functional component', () => {
           assert(!classes2.has('modified'))
           assert(!classes2.has('valid'))
           assert(classes2.has('invalid'))
+        }).then(() => {
           // reset
           validity1.reset()
           validity2.reset()
@@ -604,6 +611,7 @@ describe('validity functional component', () => {
         }).then(done)
       })
     })
+
 
     describe('local custom class name', () => {
       it('should be work', done => {
@@ -684,6 +692,7 @@ describe('validity functional component', () => {
           assert(classes2.has(classesProp2.modified))
           assert(!classes2.has(classesProp2.valid))
           assert(classes2.has(classesProp2.invalid))
+        }).then(() => {
           // reset
           validity1.reset()
           validity2.reset()
@@ -707,6 +716,7 @@ describe('validity functional component', () => {
         }).then(done)
       })
     })
+
 
     describe('global custom class name', () => {
       let orgSetting
@@ -795,6 +805,7 @@ describe('validity functional component', () => {
           assert(classes2.has(globalClasses.modified))
           assert(!classes2.has(globalClasses.valid))
           assert(classes2.has(globalClasses.invalid))
+        }).then(() => {
           // reset
           validity1.reset()
           validity2.reset()
@@ -819,6 +830,7 @@ describe('validity functional component', () => {
       })
     })
   })
+
 
   describe('v-model integrations', () => {
     const props = {
@@ -913,12 +925,14 @@ describe('validity functional component', () => {
             triggerEvent(input, 'input')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.msg, 'world')
+          }).then(() => {
             // simulate valid value changing
             valid = false
             input.value = ''
             triggerEvent(input, 'input')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.msg, 'world')
+          }).then(() => {
             // simulate invalid value changing
             valid = true
             triggerEvent(input, 'input')
@@ -960,12 +974,14 @@ describe('validity functional component', () => {
               triggerEvent(checkbox, 'change')
             }).thenWaitFor(1).then(() => {
               assert(vm.checked)
+            }).then(() => {
               // simulate valid value changing
               valid = false
               checkbox.checked = false
               triggerEvent(checkbox, 'change')
             }).thenWaitFor(1).then(() => {
               assert(vm.checked)
+            }).then(() => {
               // simulate invalid value changing
               valid = true
               triggerEvent(checkbox, 'change')
@@ -1017,12 +1033,14 @@ describe('validity functional component', () => {
               triggerEvent(checkbox1, 'change')
             }).thenWaitFor(1).then(() => {
               assert.deepEqual(vm.items, ['one'])
+            }).then(() => {
               // simulate valid value changing
               valid = false
               checkbox2.checked = true
               triggerEvent(checkbox2, 'change')
             }).thenWaitFor(1).then(() => {
               assert.deepEqual(vm.items, ['one'])
+            }).then(() => {
               // simulate invalid value changing
               valid = true
               triggerEvent(checkbox2, 'change')
@@ -1075,12 +1093,14 @@ describe('validity functional component', () => {
             triggerEvent(radio1, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.checked, 'one')
+          }).then(() => {
             // simulate valid value changing
             valid = false
             radio2.checked = true
             triggerEvent(radio2, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.checked, 'one')
+          }).then(() => {
             // simulate invalid value changing
             valid = true
             triggerEvent(radio2, 'change')
@@ -1124,12 +1144,14 @@ describe('validity functional component', () => {
             triggerEvent(select, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.selected, 'two')
+          }).then(() => {
             // simulate valid value changing
             valid = false
             select.selectedIndex = 2
             triggerEvent(select, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.selected, 'two')
+          }).then(() => {
             // simulate invalid value changing
             valid = true
             triggerEvent(select, 'change')
@@ -1178,12 +1200,14 @@ describe('validity functional component', () => {
             triggerEvent(select, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.selected, 'two')
+          }).then(() => {
             // simulate valid value changing
             valid = false
             select.selectedIndex = 2
             triggerEvent(select, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.selected, 'two')
+          }).then(() => {
             // simulate invalid value changing
             valid = true
             triggerEvent(select, 'change')

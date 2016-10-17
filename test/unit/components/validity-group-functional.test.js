@@ -91,52 +91,141 @@ describe('validity-group functional component', () => {
   })
 
   describe('validate', () => {
-    it('should be work', done => {
-      const vm = new Vue({
-        components,
-        render (h) {
-          return h('div', [
-            h('validity-group', {
-              props: {
-                field: 'field1',
-                validators: ['required']
-              },
-              ref: 'validity'
-            }, [
-              h('input', { ref: 'input1', attrs: { type: 'radio', name: 'group', value: 'one' }}),
-              h('input', { ref: 'input2', attrs: { type: 'radio', name: 'group', value: 'two' }}),
-              h('input', { ref: 'input3', attrs: { type: 'radio', name: 'group', value: 'three' }})
+    describe('checkbox', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity-group', {
+                props: {
+                  field: 'field1',
+                  validators: {
+                    required: true,
+                    minlength: 2
+                  }
+                },
+                ref: 'validity'
+              }, [
+                h('input', { ref: 'checkbox1', attrs: { type: 'checkbox', value: 'one' }}),
+                h('input', { ref: 'checkbox2', attrs: { type: 'checkbox', value: 'two' }}),
+                h('input', { ref: 'checkbox3', attrs: { type: 'checkbox', value: 'three' }})
+              ])
             ])
-          ])
-        }
-      }).$mount(el)
-      const { validity, input1 } = vm.$refs
-      let result
-      waitForUpdate(() => {
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === true)
-        assert.deepEqual(result.errors, [{
-          field: 'field1',
-          validator: 'required'
-        }])
-        assert(validity.valid === false)
-        assert(validity.invalid === true)
-        assert(result.valid === false)
-        assert(result.invalid === true)
-      }).then(() => {
-        input1.checked = true
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === false)
-        assert(result.errors === undefined)
-        assert(validity.valid === true)
-        assert(validity.invalid === false)
-        assert(result.valid === true)
-        assert(result.invalid === false)
-      }).then(done)
+          }
+        }).$mount(el)
+        const { validity, checkbox1, checkbox2, checkbox3 } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert(result.minlength === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }, {
+            field: 'field1',
+            validator: 'minlength'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          checkbox1.checked = true
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.minlength === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'minlength'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          checkbox2.checked = true
+          checkbox3.checked = true
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.minlength === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
+    })
+
+    describe('radio', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity-group', {
+                props: {
+                  field: 'field1',
+                  validators: ['required']
+                },
+                ref: 'validity'
+              }, [
+                h('input', { ref: 'radio1', attrs: { type: 'radio', name: 'group', value: 'one' }}),
+                h('input', { ref: 'radio2', attrs: { type: 'radio', name: 'group', value: 'two' }}),
+                h('input', { ref: 'radio3', attrs: { type: 'radio', name: 'group', value: 'three' }})
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity, radio1, radio2, radio3 } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          radio1.checked = true
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(() => {
+          radio1.checked = false
+          radio2.checked = false
+          radio3.checked = true
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
     })
   })
 })
