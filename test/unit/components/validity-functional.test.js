@@ -213,6 +213,219 @@ describe('validity functional component', () => {
   })
 
 
+  describe('validate', () => {
+    describe('text', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required']
+                },
+                ref: 'validity'
+              }, [
+                h('input', { ref: 'textbox', attrs: { type: 'text' }})
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity, textbox } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          textbox.value = ''
+          triggerEvent(textbox, 'input')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          textbox.value = 'hello'
+          triggerEvent(textbox, 'input')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
+    })
+
+    describe('checkbox', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required']
+                },
+                ref: 'validity'
+              }, [
+                h('input', { ref: 'checkbox', attrs: { type: 'checkbox' }})
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity, checkbox } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          checkbox.checked = false
+          triggerEvent(checkbox, 'change')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          checkbox.checked = true
+          triggerEvent(checkbox, 'change')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
+    })
+
+    describe('select', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required']
+                },
+                ref: 'validity'
+              }, [
+                h('select', { ref: 'select' }, [
+                  h('option', { ref: 'option1', ettrs: { value: 'one' }}),
+                  h('option', { ref: 'option2', attrs: { value: 'two' }}),
+                  h('option', { ref: 'option3', attrs: { value: 'three' }})
+                ])
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity, select, option1, option2, option3 } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          option1.selected = false
+          option2.selected = false
+          option3.selected = false
+          triggerEvent(select, 'change')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          option1.selected = false
+          option2.selected = true
+          option3.selected = false
+          triggerEvent(select, 'change')
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
+    })
+
+    describe('component', () => {
+      it('should be work', done => {
+        const vm = new Vue({
+          components,
+          render (h) {
+            return h('div', [
+              h('validity', {
+                props: {
+                  field: 'field1',
+                  validators: ['required']
+                },
+                ref: 'validity'
+              }, [
+                h('comp', { ref: 'my' })
+              ])
+            ])
+          }
+        }).$mount(el)
+        const { validity, my } = vm.$refs
+        let result
+        waitForUpdate(() => {
+          my.value = ''
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === true)
+          assert.deepEqual(result.errors, [{
+            field: 'field1',
+            validator: 'required'
+          }])
+          assert(validity.valid === false)
+          assert(validity.invalid === true)
+          assert(result.valid === false)
+          assert(result.invalid === true)
+        }).then(() => {
+          my.value = 'hello'
+          validity.validate() // validate !!
+        }).thenWaitFor(1).then(() => {
+          result = validity.result
+          assert(result.required === false)
+          assert(result.errors === undefined)
+          assert(validity.valid === true)
+          assert(validity.invalid === false)
+          assert(result.valid === true)
+          assert(result.invalid === false)
+        }).then(done)
+      })
+    })
+  })
+
+
   describe('multiple validate', () => {
     it('should be work', done => {
       const vm = new Vue({
@@ -389,56 +602,6 @@ describe('validity functional component', () => {
       }).thenWaitFor(6).then(() => {
         result = validity.result
         assert(result.exist === false)
-        assert(result.errors === undefined)
-        assert(validity.valid === true)
-        assert(validity.invalid === false)
-        assert(result.valid === true)
-        assert(result.invalid === false)
-      }).then(done)
-    })
-  })
-
-
-  describe('component validate', () => {
-    it('should be work', done => {
-      const vm = new Vue({
-        components,
-        render (h) {
-          return h('div', [
-            h('validity', {
-              props: {
-                field: 'field1',
-                validators: ['required']
-              },
-              ref: 'validity'
-            }, [
-              h('comp', { ref: 'my' })
-            ])
-          ])
-        }
-      }).$mount(el)
-      const { validity, my } = vm.$refs
-      let result
-      waitForUpdate(() => {
-        my.value = ''
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === true)
-        assert.deepEqual(result.errors, [{
-          field: 'field1',
-          validator: 'required'
-        }])
-        assert(validity.valid === false)
-        assert(validity.invalid === true)
-        assert(result.valid === false)
-        assert(result.invalid === true)
-      }).then(() => {
-        my.value = 'hello'
-        validity.validate() // validate !!
-      }).thenWaitFor(1).then(() => {
-        result = validity.result
-        assert(result.required === false)
         assert(result.errors === undefined)
         assert(validity.valid === true)
         assert(validity.invalid === false)
