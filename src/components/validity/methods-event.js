@@ -7,7 +7,11 @@ export default function (Vue: GlobalAPI): Object {
     this.$emit(type, ...args)
   }
 
-  function _interceptEvents (child: VNode): Object {
+  function _interceptEvents (child: VNode, multiple: boolean): Object {
+    (multiple ? (child.children || []) : [child]).forEach((child: VNode) => { this._wrapEvent(child) })
+  }
+
+  function _wrapEvent (child: VNode): Object {
     const ret: Object = {}
     if (!child.tag || !child.data) { return ret }
 
@@ -41,7 +45,8 @@ export default function (Vue: GlobalAPI): Object {
 
   return {
     _fireEvent,
-    _interceptEvents
+    _interceptEvents,
+    _wrapEvent
   }
 }
 
