@@ -1,5 +1,6 @@
 /* @flow */
-import { looseEqual } from '../util'
+import { looseEqual, triggerEvent } from '../util'
+import { addEventInfo, modelValueEqual } from './helper'
 
 export default class MultiElement {
   _vm: ValidityComponent
@@ -49,6 +50,24 @@ export default class MultiElement {
     this._eachItems(item => {
       item.removeEventListener('change', this._vm.handleInputable)
     })
+  }
+
+  fireInputableEvent (): void {
+    this._eachItems(item => {
+      triggerEvent(item, 'change', addEventInfo) 
+    })
+  }
+
+  modelValueEqual (): ?boolean {
+    let ret: ?boolean = null
+    const children: Array<VNode> = (this._vm.child && this._vm.child.children) || []
+    for (let i = 0; i < children.length; i++) {
+      if (!modelValueEqual(children[i])) {
+        ret = false
+        break
+      }
+    }
+    return ret
   }
 
   _getCheckedValue (): Array<any> {

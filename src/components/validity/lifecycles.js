@@ -48,10 +48,20 @@ export default function (Vue: GlobalAPI): Object {
     toggleClasses(this.$el, this.classes.pristine, addClass)
   }
 
+  function updated () {
+    const directives = (this.child.data && this.child.data.directives) || []
+    const maybeChangeModel: ?boolean = this._elementable.modelValueEqual()
+    if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
+      this._elementable.fireInputableEvent()
+    }
+    delete this._applyWithUserHandler
+  }
+
   return {
     created,
     destroyed,
-    mounted
+    mounted,
+    updated
   }
 }
 

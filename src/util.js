@@ -6,6 +6,8 @@ const inBrowser =
 const UA = inBrowser && window.navigator.userAgent.toLowerCase()
 const isIE9 = UA && UA.indexOf('msie 9.0') > 0
 
+export const MODEL_NOTIFY_EVENT: string = '__VUE_VALIDATOR_MODEL_NOTIFY_EVENT__'
+
 export function warn (msg: string, err?: Error) {
   if (window.console) {
     console.warn('[vue-validator] ' + msg)
@@ -79,6 +81,13 @@ export function toggleClasses (el: HTMLElement, key: string, fn: Function): void
   for (let i = 0, l = keys.length; i < l; i++) {
     fn(el, keys[i])
   }
+}
+
+export function triggerEvent (el: HTMLElement, event: string, fn: Function): void {
+  const e: HTMLEvents = document.createEvent('HTMLEvents')
+  e.initEvent(event, true, true)
+  fn && fn(e)
+  el.dispatchEvent(e)
 }
 
 // TODO: should be defined strict type

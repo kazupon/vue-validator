@@ -1,5 +1,10 @@
 /* @flow */
-import { looseEqual } from '../util'
+import {
+  looseEqual,
+  triggerEvent,
+  MODEL_NOTIFY_EVENT
+} from '../util'
+import { addEventInfo, modelValueEqual } from './helper'
 
 export default class SingleElement {
   _vm: ValidityComponent
@@ -122,6 +127,31 @@ export default class SingleElement {
     } else {
       // TODO: should be warn !!
     }
+  }
+
+  fireInputableEvent (): void {
+    if (this._isBuiltIn) {
+      const el = this._vm.$el
+      if (el.tagName === 'SELECT') {
+        triggerEvent(el, 'change', addEventInfo) 
+      } else {
+        if (el.type === 'checkbox') {
+          triggerEvent(el, 'change', addEventInfo) 
+        } else {
+          triggerEvent(el, 'input', addEventInfo) 
+        }
+      }
+    } else if (this._isComponent) {
+      const args = { value: this.getValue() }
+      args[MODEL_NOTIFY_EVENT] = 'COMPONENT'
+      this._vnode.child.$emit('input', args)
+    } else {
+      // TODO: should be warn !!
+    }
+  }
+
+  modelValueEqual (): ?boolean {
+    return modelValueEqual(this._vnode)
   }
 }
 

@@ -1071,7 +1071,7 @@ describe('validity functional component', () => {
                   h('input', {
                     ref: 'input',
                     attrs: { type: 'text' },
-                    directives: createModelDirective('msg', 'hello', true),
+                    directives: createModelDirective('msg', this.msg, true),
                     on: {
                       input: [
                         textboxModelHanlder('msg'),
@@ -1241,7 +1241,6 @@ describe('validity functional component', () => {
               option2.selected = true
               option3.selected = false
               triggerEvent(select, 'change')
-              console.log('sdfljslkfklsf')
             }).thenWaitFor(1).then(() => {
               assert.deepEqual(vm.items, ['one', 'two'])
             }).then(() => {
@@ -1316,6 +1315,243 @@ describe('validity functional component', () => {
             triggerEvent(select, 'change')
           }).thenWaitFor(1).then(() => {
             assert.equal(vm.selected, 'three')
+          }).then(done)
+        })
+      })
+    })
+
+    describe('down to validity component', () => {
+      describe('text', () => {
+        it('should be work', done => {
+          let callCount = 0
+          const vm = new Vue({
+            data: { msg: 'hello' },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.msg]),
+                h('validity', { props }, [
+                  h('input', {
+                    ref: 'textbox',
+                    attrs: { type: 'text' },
+                    directives: createModelDirective('msg', this.msg, true),
+                    on: {
+                      input: [
+                        textboxModelHanlder('msg'),
+                        (e, $apply) => {
+                          callCount++
+                          $apply && $apply()
+                        }
+                      ]
+                    }
+                  })
+                ])
+              ])
+            }
+          }).$mount(el)
+          const { textbox } = vm.$refs
+          waitForUpdate(() => {
+            vm.msg = 'world'
+          }).thenWaitFor(1).then(() => {
+            //assert.equal(textbox.value, 'world')
+            assert(callCount === 1)
+          }).then(() => {
+            textbox.value = ''
+            triggerEvent(textbox, 'input')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.msg, '')
+            assert(callCount === 2)
+          }).then(done)
+        })
+      })
+
+      describe('checkbox', () => {
+        it('should be work', done => {
+          let callCount = 0
+          const vm = new Vue({
+            data: { checked: false },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.checked]),
+                h('validity', { props }, [
+                  h('input', {
+                    ref: 'checkbox',
+                    attrs: { type: 'checkbox' },
+                    directives: createModelDirective('checked', this.checked, true),
+                    on: {
+                      change: [
+                        checkboxModelHandler('checked'),
+                        (e, $apply) => {
+                          callCount++
+                          $apply && $apply()
+                        }
+                      ]
+                    }
+                  })
+                ])
+              ])
+            }
+          }).$mount(el)
+          const { checkbox } = vm.$refs
+          waitForUpdate(() => {
+            vm.checked = true
+          }).thenWaitFor(1).then(() => {
+            assert(callCount === 1)
+          }).then(() => {
+            checkbox.checked = false
+            triggerEvent(checkbox, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert(callCount === 2)
+            assert(vm.checked === false)
+          }).then(done)
+        })
+      })
+
+      describe('select', () => {
+        describe('single', () => {
+          it('should be work', done => {
+            let callCount = 0
+            const vm = new Vue({
+              data: { selected: 'one' },
+              components,
+              render (h) {
+                return h('div', [
+                  h('p', [this.selected]),
+                  h('validity', { props }, [
+                    h('select', {
+                      ref: 'select',
+                      directives: createModelDirective('selected', this.selected, true),
+                      on: {
+                        change: [
+                          selectModelHandler('selected', false),
+                          (e, $apply) => {
+                            callCount++
+                            $apply && $apply()
+                          }
+                        ]
+                      }
+                    }, [
+                      h('option', { attrs: { value: 'one' }}),
+                      h('option', { attrs: { value: 'two' }}),
+                      h('option', { attrs: { value: 'three' }})
+                    ])
+                  ])
+                ])
+              }
+            }).$mount(el)
+            const { select } = vm.$refs
+            waitForUpdate(() => {
+              vm.selected = 'two'
+            }).thenWaitFor(1).then(() => {
+              assert(callCount === 2) // 1? found strange behavor of select
+            }).then(() => {
+              select.selectedIndex = 2
+              triggerEvent(select, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert(callCount === 3) // 2
+              assert.equal(vm.selected, 'three')
+            }).then(done)
+          })
+        })
+
+        describe('multiple', () => {
+          it('should be work', done => {
+            let callCount = 0
+            const vm = new Vue({
+              data: { items: [] },
+              components,
+              render (h) {
+                return h('div', [
+                  h('p', [this.items]),
+                  h('validity', { props }, [
+                    h('select', {
+                      ref: 'select',
+                      attrs: { multiple: true },
+                      directives: createModelDirective('items', this.items, true),
+                      on: {
+                        change: [
+                          selectModelHandler('items', true),
+                          (e, $apply) => {
+                            callCount++
+                            $apply && $apply()
+                          }
+                        ]
+                      }
+                    }, [
+                      h('option', { ref: 'option1', attrs: { value: 'one' }}),
+                      h('option', { ref: 'option2', attrs: { value: 'two' }}),
+                      h('option', { ref: 'option3', attrs: { value: 'three' }})
+                    ])
+                  ])
+                ])
+              }
+            }).$mount(el)
+            const { select, option1, option2, option3 } = vm.$refs
+            waitForUpdate(() => {
+              vm.items = ['one', 'two']
+            }).thenWaitFor(1).then(() => {
+              assert(callCount === 2) // 1? found strange behavor of select
+            }).then(() => {
+              option1.selected = false
+              option2.selected = false
+              option3.selected = true
+              triggerEvent(select, 'change')
+            }).thenWaitFor(1).then(() => {
+              assert.deepEqual(vm.items, ['three'])
+              assert(callCount === 3) // 2?
+            }).then(done)
+          })
+        })
+      })
+
+      describe('component', () => {
+        it('should be work', done => {
+          let callCount = 0
+          const vm = new Vue({
+            data: {
+              selected: '',
+              options: [
+                { text: 'One', value: 'one' },
+                { text: 'Two', value: 'two' },
+                { text: 'Three', value: 'three' }
+              ]
+            },
+            components,
+            render (h) {
+              return h('div', [
+                h('p', [this.selected]),
+                h('validity', { props }, [
+                  h('comp-input', {
+                    ref: 'comp',
+                    props: { options: this.options },
+                    directives: createModelDirective('selected', this.selected, true),
+                    on: {
+                      input: [
+                        componentModelHandler('selected'),
+                        (e, $apply) => {
+                          callCount++
+                          $apply && $apply()
+                        }
+                      ]
+                    }
+                  })
+                ])
+              ])
+            }
+          }).$mount(el)
+          const { comp } = vm.$refs
+          const { select } = comp.$refs
+          waitForUpdate(() => {
+            vm.selected = 'two'
+          }).thenWaitFor(1).then(() => {
+            assert(callCount === 1)
+          }).then(() => {
+            select.selectedIndex = 2
+            triggerEvent(select, 'change')
+          }).thenWaitFor(1).then(() => {
+            assert.equal(vm.selected, 'three')
+            assert(callCount === 2)
           }).then(done)
         })
       })

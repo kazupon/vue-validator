@@ -1,4 +1,5 @@
 /* @flow */
+import { MODEL_NOTIFY_EVENT } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
   const { toArray } = Vue.util
@@ -24,11 +25,25 @@ export default function (Vue: GlobalAPI): Object {
     const modelHandler: Function = orgListeners[0]
     const userHandler: Function = orgListeners[1]
     const modelApplyer = (args) => {
-      return () => { modelHandler.apply(child.context, args) }
+      return () => {
+        this._applyWithUserHandler = true
+        modelHandler.apply(child.context, args)
+      }
     }
     const modifier: ?boolean = (dir.modifiers || {}).validity
     listeners[type] = function () {
       const args: Array<any> = toArray(arguments, 0)
+      const event: any = args[0]
+      if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
+        delete event[MODEL_NOTIFY_EVENT]
+        userHandler.apply(child.context, args)
+        return
+      } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
+        const value: any = event.value
+        args[0] = value
+        userHandler.apply(child.context, args)
+        return
+      }
 
       if (modifier) {
         args.push(modelApplyer(args))
