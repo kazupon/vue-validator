@@ -78,7 +78,7 @@ describe('validation functional component', () => {
         components,
         render (h) {
           return h('div', [
-            h('validation', { props: { name: 'validation1' } }, [
+            h('validation', { props: { name: 'validation1' }}, [
               h('h1', ['username']),
               createValidity(h, 'username', {
                 props: {
@@ -190,7 +190,7 @@ describe('validation functional component', () => {
         components,
         render (h) {
           return h('div', [
-            h('validation', { props: { name: 'validation1' } }, [
+            h('validation', { props: { name: 'validation1' }}, [
               h('h1', ['username']),
               createValidity(h, 'username', {
                 props: {
@@ -265,7 +265,7 @@ describe('validation functional component', () => {
         components,
         render (h) {
           return h('div', [
-            h('validation', { props: { name: 'validation1' } }, [
+            h('validation', { props: { name: 'validation1' }}, [
               h('h1', ['username']),
               createValidity(h, 'username', {
                 props: {
@@ -275,7 +275,7 @@ describe('validation functional component', () => {
                 ref: 'validity1'
               })
             ]),
-            h('validation', { props: { name: 'validation2' } }, [
+            h('validation', { props: { name: 'validation2' }}, [
               h('h1', ['password']),
               createValidity(h, 'password', {
                 props: {
@@ -391,7 +391,7 @@ describe('validation functional component', () => {
         components,
         render (h) {
           return h('div', [
-            h('validation', { props: { name: 'validation1' } }, [
+            h('validation', { props: { name: 'validation1' }}, [
               h('h1', ['username']),
               createValidity(h, 'username', {
                 props: {
@@ -508,7 +508,7 @@ describe('validation functional component', () => {
         components,
         render (h) {
           return h('div', [
-            h('validation', { props: { name: 'validation1' } }, [
+            h('validation', { props: { name: 'validation1' }}, [
               h('h1', ['username']),
               createValidity(h, 'username', {
                 props: {
@@ -546,7 +546,7 @@ describe('validation functional component', () => {
       const handlers = [
         validationHandler,
         validHandler,
-        usernameValidationHandler,
+        usernameValidationHandler
       ]
       const unwatches = []
       // manually watching

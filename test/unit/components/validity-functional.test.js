@@ -42,7 +42,6 @@ describe('validity functional component', () => {
     el = document.createElement('div')
   })
 
-
   describe('rendering', () => {
     it('should be work', () => {
       const vm = new Vue({
@@ -63,7 +62,6 @@ describe('validity functional component', () => {
       assert.equal(vm.$el.outerHTML, '<div><input type="text" class="untouched pristine"></div>')
     })
   })
-
 
   describe('properties', () => {
     it('should be work', done => {
@@ -146,7 +144,6 @@ describe('validity functional component', () => {
     })
   })
 
-
   describe('event handling', () => {
     it('should be work', done => {
       const valid = jasmine.createSpy()
@@ -211,7 +208,6 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
-
 
   describe('validate', () => {
     describe('text', () => {
@@ -425,7 +421,6 @@ describe('validity functional component', () => {
     })
   })
 
-
   describe('multiple validate', () => {
     it('should be work', done => {
       const vm = new Vue({
@@ -485,7 +480,6 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
-
 
   describe('custom validate', () => {
     it('should be work', done => {
@@ -552,7 +546,6 @@ describe('validity functional component', () => {
     })
   })
 
-
   describe('async validate', () => {
     it('should be work', done => {
       const vm = new Vue({
@@ -611,7 +604,6 @@ describe('validity functional component', () => {
     })
   })
 
-
   describe('classes', () => {
     describe('basic', () => {
       it('should be work', done => {
@@ -641,9 +633,8 @@ describe('validity functional component', () => {
           }
         }).$mount(el)
         const { validity1, validity2, my } = vm.$refs
-        let classes1, classes2
-        classes1 = classes(validity1.$el)
-        classes2 = classes(validity2.$el)
+        const classes1 = classes(validity1.$el)
+        const classes2 = classes(validity2.$el)
         // initialized
         assert(classes1.has('class1'))
         assert(!classes1.has('touched'))
@@ -775,7 +766,6 @@ describe('validity functional component', () => {
       })
     })
 
-
     describe('local custom class name', () => {
       it('should be work', done => {
         const classesProp1 = {
@@ -824,9 +814,8 @@ describe('validity functional component', () => {
           }
         }).$mount(el)
         const { validity1, validity2, my } = vm.$refs
-        let classes1, classes2
-        classes1 = classes(validity1.$el)
-        classes2 = classes(validity2.$el)
+        const classes1 = classes(validity1.$el)
+        const classes2 = classes(validity2.$el)
         waitForUpdate(() => {
           // focus
           triggerEvent(validity1.$el, 'focusout')
@@ -879,7 +868,6 @@ describe('validity functional component', () => {
         }).then(done)
       })
     })
-
 
     describe('global custom class name', () => {
       let orgSetting
@@ -937,9 +925,8 @@ describe('validity functional component', () => {
           }
         }).$mount(el)
         const { validity1, validity2, my } = vm.$refs
-        let classes1, classes2
-        classes1 = classes(validity1.$el)
-        classes2 = classes(validity2.$el)
+        const classes1 = classes(validity1.$el)
+        const classes2 = classes(validity2.$el)
         waitForUpdate(() => {
           // focus
           triggerEvent(validity1.$el, 'focusout')
@@ -994,7 +981,6 @@ describe('validity functional component', () => {
     })
   })
 
-
   describe('v-model integrations', () => {
     const props = {
       field: 'field1',
@@ -1022,7 +1008,7 @@ describe('validity functional component', () => {
       return function ($event) {
         const $$a = this[prop]
         const $$el = $event.target
-        const $$c = $$el.checked ? true : false
+        const $$c = $$el.checked
         if (Array.isArray($$a)) {
           const $$v = value
           const $$i = this._i($$a, $$v)
@@ -1032,21 +1018,16 @@ describe('validity functional component', () => {
             $$i > -1 && (this[prop] = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
           }
         } else {
-          this[prop]= $$c
+          this[prop] = $$c
         }
       }
-    }
-
-    function radioModelHanlder (prop, value) {
-      return function ($event) { this[prop] = value }
     }
 
     function selectModelHandler (prop, isArray) {
       return function ($event) {
         const values = Array.prototype.filter.call(
-          $event.target.options, function (o) {
-            return o.selected
-        }).map(function (o) {
+          $event.target.options, function (o) { return o.selected }
+        ).map(function (o) {
           return '_value' in o ? o._value : o.value
         })
         this[prop] = isArray ? values : values[0]
@@ -1353,7 +1334,7 @@ describe('validity functional component', () => {
           waitForUpdate(() => {
             vm.msg = 'world'
           }).thenWaitFor(1).then(() => {
-            //assert.equal(textbox.value, 'world')
+            /* assert.equal(textbox.value, 'world') */
             assert(callCount === 1)
           }).then(() => {
             textbox.value = ''

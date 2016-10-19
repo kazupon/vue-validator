@@ -42,11 +42,11 @@ export default function (Vue: any) {
       this._validities[field] = validity
 
       const { named, group }: { named?: string, group?: string } = options
-      const groupValidity: ?ValidityGroupComponent = group 
+      const groupValidity: ?ValidityGroupComponent = group
         ? this._getValidityGroup('group', group) || this._registerValidityGroup('group', group)
         : null
       const namedValidity: ?ValidityGroupComponent = named
-        ? this._getValidityGroup('named', named) || this._registerValidityGroup('named',named)
+        ? this._getValidityGroup('named', named) || this._registerValidityGroup('named', named)
         : null
       if (named && group && namedValidity && groupValidity) {
         groupValidity.register(field, validity)
@@ -171,7 +171,6 @@ export default function (Vue: any) {
     }
 
     _watchValidityResult (): void {
-      const validation = this
       this._watcher = this._validityManager.$watch('results', (val: any, old: any) => {
         Vue.set(this._host, '$validation', val)
         if (this._beginDestroy) {

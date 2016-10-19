@@ -7,7 +7,7 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'text' }})
+            return (this.child = h('input', { attrs: { type: 'text' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -22,7 +22,7 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'checkbox' }})
+            return (this.child = h('input', { attrs: { type: 'checkbox' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -37,11 +37,11 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('select', [
+            return (this.child = h('select', [
               h('option', { attrs: { value: 'one' }}),
               h('option', { attrs: { value: 'two' }}),
               h('option', { attrs: { value: 'three' }})
-            ])
+            ]))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -61,14 +61,14 @@ describe('SingleElement class', () => {
           data: { child: null },
           components: {
             comp: {
-              data () { return { value: 'hello' }},
+              data () { return { value: 'hello' } },
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return this.child = h('comp', { ref: 'my' })
+            return (this.child = h('comp', { ref: 'my' }))
           }
         }).$mount()
         const { my } = vm.$refs
@@ -88,7 +88,7 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'text' }})
+            return (this.child = h('input', { attrs: { type: 'text' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -105,7 +105,7 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'checkbox' }})
+            return (this.child = h('input', { attrs: { type: 'checkbox' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -122,11 +122,11 @@ describe('SingleElement class', () => {
         const vm = new Vue({
           data: { child: null },
           render (h) {
-            return this.child = h('select', [
+            return (this.child = h('select', [
               h('option', { attrs: { value: 'one' }}),
               h('option', { attrs: { value: 'two' }}),
               h('option', { attrs: { value: 'three' }})
-            ])
+            ]))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -150,14 +150,14 @@ describe('SingleElement class', () => {
           data: { child: null },
           components: {
             comp: {
-              data () { return { value: 'hello' }},
+              data () { return { value: 'hello' } },
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return this.child = h('comp', { ref: 'my' })
+            return (this.child = h('comp', { ref: 'my' }))
           }
         }).$mount()
         const { my } = vm.$refs
@@ -181,7 +181,7 @@ describe('SingleElement class', () => {
         data: { child: null },
         methods: { willUpdateTouched: handleFocusout },
         render (h) {
-          return this.child = h('input', { attrs: { type: 'text' }})
+          return (this.child = h('input', { attrs: { type: 'text' }}))
         }
       }).$mount()
       const single = new SingleElement(vm, vm.child)
@@ -206,7 +206,7 @@ describe('SingleElement class', () => {
           data: { child: null },
           methods: { handleInputable },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'text' }})
+            return (this.child = h('input', { attrs: { type: 'text' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -230,7 +230,7 @@ describe('SingleElement class', () => {
           data: { child: null },
           methods: { handleInputable },
           render (h) {
-            return this.child = h('input', { attrs: { type: 'checkbox' }})
+            return (this.child = h('input', { attrs: { type: 'checkbox' }}))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -254,11 +254,11 @@ describe('SingleElement class', () => {
           data: { child: null },
           methods: { handleInputable },
           render (h) {
-            return this.child = h('select', [
+            return (this.child = h('select', [
               h('option', { attrs: { value: 'one' }}),
               h('option', { attrs: { value: 'two' }}),
               h('option', { attrs: { value: 'three' }})
-            ])
+            ]))
           }
         }).$mount()
         const single = new SingleElement(vm, vm.child)
@@ -283,14 +283,14 @@ describe('SingleElement class', () => {
           methods: { watchInputable },
           components: {
             comp: {
-              data () { return { value: 'hello' }},
+              data () { return { value: 'hello' } },
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return this.child = h('comp', { ref: 'my' })
+            return (this.child = h('comp', { ref: 'my' }))
           }
         }).$mount()
         const { my } = vm.$refs

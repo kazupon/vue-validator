@@ -74,7 +74,7 @@ function getEventSources (child: VNode): Object {
   const listeners = sources.listeners = child.componentOptions
       ? child.componentOptions.listeners
       : child.data.on
-  sources.type = 
+  sources.type =
     (child.tag === 'input' && child.data.attrs.type === 'text') ||
     child.tag.match(/vue-component/)
       ? 'input'

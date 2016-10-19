@@ -17,7 +17,7 @@ describe('validity component: lifecycle', () => {
           mounted,
           methods,
           render (h) {
-            return this.child = h('input', { attrs: { type: 'text' }})
+            return (this.child = h('input', { attrs: { type: 'text' }}))
           },
           propsData: {
             field: 'field1',
@@ -55,11 +55,11 @@ describe('validity component: lifecycle', () => {
           mounted,
           methods,
           render (h) {
-            return this.child = h('fieldset', [
+            return (this.child = h('fieldset', [
               h('input', { ref: 'input1', attrs: { type: 'checkbox', value: 'one' }}),
               h('input', { ref: 'input2', attrs: { type: 'checkbox', value: 'two' }}),
               h('input', { ref: 'input3', attrs: { type: 'checkbox', value: 'three' }})
-            ])
+            ]))
           },
           propsData: {
             field: 'field1',
@@ -70,7 +70,7 @@ describe('validity component: lifecycle', () => {
             }
           }
         }).$mount()
-        const { input1, input2, input3 } = vm.$refs
+        const { input1, input2 } = vm.$refs
         assert.equal(vm._elementable.constructor.name, 'MultiElement')
         triggerEvent(input1, 'focusout')
         waitForUpdate(() => {

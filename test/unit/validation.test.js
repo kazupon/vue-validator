@@ -27,7 +27,7 @@ describe('validation class', () => {
 
   describe('register/unregsiter', () => {
     it('should be work', done => {
-      let validation1, group1, group2, field4
+      let validation1, group1, group2
       // add validation1 and field1
       validation.register('field1', createValidity('field1'), { named: 'validation1' })
       waitForUpdate(() => {

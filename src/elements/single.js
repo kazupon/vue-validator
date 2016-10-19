@@ -133,12 +133,12 @@ export default class SingleElement {
     if (this._isBuiltIn) {
       const el = this._vm.$el
       if (el.tagName === 'SELECT') {
-        triggerEvent(el, 'change', addEventInfo) 
+        triggerEvent(el, 'change', addEventInfo)
       } else {
         if (el.type === 'checkbox') {
-          triggerEvent(el, 'change', addEventInfo) 
+          triggerEvent(el, 'change', addEventInfo)
         } else {
-          triggerEvent(el, 'input', addEventInfo) 
+          triggerEvent(el, 'input', addEventInfo)
         }
       }
     } else if (this._isComponent) {

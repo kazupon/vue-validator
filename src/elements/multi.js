@@ -54,7 +54,7 @@ export default class MultiElement {
 
   fireInputableEvent (): void {
     this._eachItems(item => {
-      triggerEvent(item, 'change', addEventInfo) 
+      triggerEvent(item, 'change', addEventInfo)
     })
   }
 

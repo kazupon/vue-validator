@@ -90,7 +90,6 @@ describe('validity-group functional component', () => {
     })
   })
 
-
   describe('validate', () => {
     describe('checkbox', () => {
       it('should be work', done => {
@@ -230,7 +229,6 @@ describe('validity-group functional component', () => {
     })
   })
 
-
   describe('v-model integrations', () => {
     const props = {
       field: 'field1',
@@ -251,7 +249,7 @@ describe('validity-group functional component', () => {
       return function ($event) {
         const $$a = this[prop]
         const $$el = $event.target
-        const $$c = $$el.checked ? true : false
+        const $$c = $$el.checked
         if (Array.isArray($$a)) {
           const $$v = value
           const $$i = this._i($$a, $$v)
@@ -261,7 +259,7 @@ describe('validity-group functional component', () => {
             $$i > -1 && (this[prop] = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
           }
         } else {
-          this[prop]= $$c
+          this[prop] = $$c
         }
       }
     }
@@ -269,7 +267,6 @@ describe('validity-group functional component', () => {
     function radioModelHanlder (prop, value) {
       return function ($event) { this[prop] = value }
     }
-
 
     describe('up to model', () => {
       describe('checkbox', () => {
@@ -330,7 +327,6 @@ describe('validity-group functional component', () => {
           }).then(done)
         })
       })
-
 
       describe('radio', () => {
         it('should be work', done => {
@@ -435,7 +431,7 @@ describe('validity-group functional component', () => {
               ])
             }
           }).$mount(el)
-          const { checkbox1, checkbox2 } = vm.$refs
+          const { checkbox2 } = vm.$refs
           waitForUpdate(() => {
             vm.items = ['one']
           }).thenWaitFor(1).then(() => {
@@ -492,7 +488,7 @@ describe('validity-group functional component', () => {
               ])
             }
           }).$mount(el)
-          const { radio1, radio2 } = vm.$refs
+          const { radio2 } = vm.$refs
           waitForUpdate(() => {
             vm.checked = 'one'
           }).thenWaitFor(1).then(() => {

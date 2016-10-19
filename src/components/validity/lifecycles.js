@@ -1,6 +1,6 @@
 /* @flow */
 import { SingleElement, MultiElement } from '../../elements/index'
-import { addClass, removeClass, toggleClasses } from '../../util'
+import { addClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
   function created (): void {
@@ -49,7 +49,6 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function updated () {
-    const directives = (this.child.data && this.child.data.directives) || []
     const maybeChangeModel: ?boolean = this._elementable.modelValueEqual()
     if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
       this._elementable.fireInputableEvent()
