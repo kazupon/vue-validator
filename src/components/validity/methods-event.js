@@ -66,7 +66,7 @@ export default function (Vue: GlobalAPI): Object {
 }
 
 function getModelDirective (child: VNode): ?VNodeDirective {
-  return ((child.data && child.data.directives ) || []).find(dir => { return dir.name === 'model' })
+  return ((child.data && child.data.directives) || []).find(dir => { return dir.name === 'model' })
 }
 
 function getEventSources (child: VNode): Object {

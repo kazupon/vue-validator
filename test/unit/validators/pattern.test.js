@@ -50,13 +50,13 @@ describe('pattern', () => {
 
     describe('single quote in pattern', () => {
       it('should not be validate', () => {
-        assert(pattern("f'oo", `'/f\'oo/'`) === false)
+        assert(pattern("f'oo", `'/f'oo/'`) === false)
       })
     })
 
     describe('double quote in pattern', () => {
       it('should not be validate', () => {
-        assert(pattern('f"oo', `"/f\"oo/"`) === false)
+        assert(pattern('f"oo', `"/f"oo/"`) === false)
       })
     })
 
