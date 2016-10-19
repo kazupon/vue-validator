@@ -1,16 +1,17 @@
 /* @flow */
 
 // validator configrations
-let validator = {
+let validator: ValidatorConfig = {
   classes: {}
 }
 
 export default function (Vue: GlobalAPI): void {
   // define Vue.config.validator configration
+  // $FlowFixMe: https://github.com/facebook/flow/issues/285
   Object.defineProperty(Vue.config, 'validator', {
     enumerable: true,
     configurable: true,
-    get: () => { return validator },
-    set: val => { validator = val }
+    get: (): ValidatorConfig => { return validator },
+    set: (val: ValidatorConfig) => { validator = val }
   })
 }

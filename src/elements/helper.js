@@ -1,7 +1,7 @@
 /* @flow */
 import { looseEqual, MODEL_NOTIFY_EVENT } from '../util'
 
-export function addEventInfo (e: HTMLEvents) {
+export function addEventInfo (e: any) {
   e[MODEL_NOTIFY_EVENT] = 'DOM'
 }
 

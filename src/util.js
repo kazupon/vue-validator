@@ -25,7 +25,7 @@ export function looseEqual (a: any, b: any): boolean {
   )
 }
 
-export function getClass (el: HTMLElement): string {
+export function getClass (el: any): string {
   let classname: string | Object = el.className
   if (typeof classname === 'object') {
     classname = classname.baseVal || ''
@@ -33,7 +33,7 @@ export function getClass (el: HTMLElement): string {
   return classname
 }
 
-export function setClass (el: HTMLElement, cls: string): void {
+export function setClass (el: any, cls: string): void {
   if (isIE9 && !/svg$/.test(el.namespaceURI)) {
     el.className = cls
   } else {
@@ -41,7 +41,7 @@ export function setClass (el: HTMLElement, cls: string): void {
   }
 }
 
-export function addClass (el: HTMLElement, cls: string): void {
+export function addClass (el: any, cls: string): void {
   if (el.classList) {
     el.classList.add(cls)
   } else {
@@ -52,7 +52,7 @@ export function addClass (el: HTMLElement, cls: string): void {
   }
 }
 
-export function removeClass (el: HTMLElement, cls: string): void {
+export function removeClass (el: any, cls: string): void {
   if (el.classList) {
     el.classList.remove(cls)
   } else {
@@ -68,7 +68,7 @@ export function removeClass (el: HTMLElement, cls: string): void {
   }
 }
 
-export function toggleClasses (el: HTMLElement, key: string, fn: Function): void {
+export function toggleClasses (el: any, key: string, fn: Function): void {
   if (!el) { return }
 
   key = key.trim()
@@ -83,8 +83,8 @@ export function toggleClasses (el: HTMLElement, key: string, fn: Function): void
   }
 }
 
-export function triggerEvent (el: HTMLElement, event: string, fn: Function): void {
-  const e: HTMLEvents = document.createEvent('HTMLEvents')
+export function triggerEvent (el: any, event: string, fn: Function): void {
+  const e: any = document.createEvent('HTMLEvents')
   e.initEvent(event, true, true)
   fn && fn(e)
   el.dispatchEvent(e)

@@ -8,7 +8,7 @@ export default function (Vue: GlobalAPI): Object {
     this.$emit(type, ...args)
   }
 
-  function _interceptEvents (child: VNode, multiple: boolean): Object {
+  function _interceptEvents (child: VNode, multiple: boolean): void {
     (multiple ? (child.children || []) : [child]).forEach((child: VNode) => { this._wrapEvent(child) })
   }
 
@@ -66,17 +66,17 @@ export default function (Vue: GlobalAPI): Object {
 }
 
 function getModelDirective (child: VNode): ?VNodeDirective {
-  return (child.data.directives || []).find(dir => { return dir.name === 'model' })
+  return ((child.data && child.data.directives ) || []).find(dir => { return dir.name === 'model' })
 }
 
 function getEventSources (child: VNode): Object {
   const sources: Object = {}
   const listeners = sources.listeners = child.componentOptions
       ? child.componentOptions.listeners
-      : child.data.on
+      : (child.data && child.data.on)
   sources.type =
-    (child.tag === 'input' && child.data.attrs.type === 'text') ||
-    child.tag.match(/vue-component/)
+    (child.tag === 'input' && (child.data && child.data.attrs && child.data.attrs.type) === 'text') ||
+    (child.tag && child.tag.match(/vue-component/))
       ? 'input'
       : 'change'
   if (listeners) {
