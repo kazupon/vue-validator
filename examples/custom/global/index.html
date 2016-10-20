@@ -3,32 +3,47 @@
   <head>
     <meta charset="utf-8">
     <title>custom validator global registration example</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          Email: <input type="text" v-validate:address="['email']">
-          <div>
-            <p v-show="$validation1.address.email">Invalid your mail address format.</p>
-          </div>
-          <input type="submit" value="send" v-if="$validation1.valid">
-        </form>
-      </validator>
+      <form novalidate>
+        <label>Email:</label> 
+        <validity field="email" :validators="['email']">
+          <input type="text" @input="handleValidate">
+        </validity>
+        <div class="errors">
+          <p v-if="result.email">{{result.email}}</p>
+        </div>
+        <input type="submit" value="send" v-if="result.valid">
+      </form>
     </div>
     <script>
-      Vue.validator('email', function (val) {
-        return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+      // `email` custom validator is global registration
+      Vue.validator('email', {
+        check: function (val) {
+          return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+        },
+        message: 'Invalid your mail addres format.'
       })
 
       new Vue({
-        el: '#app',
-        data: {
-          email: ''
+        data: { result: {} },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate(function () {
+              self.result = $validity.result
+            })
+          }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>

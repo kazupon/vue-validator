@@ -3,32 +3,66 @@
   <head>
     <meta charset="utf-8">
     <title>custom validator local registration example</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        username: <input type="text" v-validate:username=['required']><br />
-        email: <input type="text" v-validate:address="['email']"><br />
-        age: <input type="text" v-validate:age=['numeric']><br />
-        site: <input type="text" v-validate:site=['url']><br />
-        <div>
-          <p v-if="$validation1.username.required">required username</p>
-          <p v-if="$validation1.address.email">invalid email address</p>
-          <p v-if="$validation1.age.numeric">invalid age value</p>
-          <p v-if="$validation1.site.url">invalid site uril format</p>
+      <form novalidate>
+        <div class="username">
+          <label>username:</label>
+          <validity field="username" :validators="['required']">
+            <input type="text" @input="handleUsername">
+          </validity>
         </div>
-      <validator>
+        <div class="age">
+          <label>age:</label>
+          <validity field="age" :validators="['numeric']">
+            <input type="text" @input="handleAge">
+          </validity>
+        </div>
+        <div class="site">
+          <label>site:</label>
+          <validity field="site" :validators="['url']">
+            <input type="text" @input="handleSite">
+          </validity>
+        </div>
+        <div class="errors">
+          <p v-if="results.username.required">required username!!</p>
+          <p v-if="results.age.numeric">invalid age numeric value!!</p>
+          <p v-if="results.site.url">invlid url!!</p>
+        </div>
+        <input type="submit" value="send" v-if="valid">
+      </form>
     </div>
     <script>
-      // `email` custom validator is global registration
-      Vue.validator('email', function (val) {
-        return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
-      })
-
       new Vue({
-        el: '#app',
+        data: {
+          results: {
+            username: {},
+            age: {},
+            site: {}
+          }
+        },
+        computed: {
+          valid: function () {
+            var results = this.results
+            var fields = Object.keys(results)
+            var ret = true
+            for (var i = 0; i < fields.length; i++) {
+              var field = fields[i]
+              if (results[field].invalid) {
+                ret = false
+                break
+              }
+            }
+            return ret
+          }
+        },
         validators: { // `numeric` and `url` custom validator is local registration
           numeric: function (val) {
             return /^[-+]?[0-9]+$/.test(val)
@@ -37,10 +71,25 @@
             return /^(http\:\/\/|https\:\/\/)(.{4,})$/.test(val)
           }
         },
-        data: {
-          email: ''
+        methods: {
+          handleUsername: function (e) {
+            this.handleValidate(e.target.$validity, 'username')
+          },
+          handleAge: function (e) {
+            this.handleValidate(e.target.$validity, 'age')
+          },
+          handleSite: function (e) {
+            this.handleValidate(e.target.$validity, 'site')
+          },
+          handleValidate: function ($validity, field) {
+            var self = this
+            $validity.validate(function () {
+              var result = $validity.result
+              self.results[field] = result
+            })
+          }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>
