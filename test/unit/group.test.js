@@ -12,12 +12,7 @@ describe('validity group', () => {
     validityControl,
     validity,
     comp: {
-      props: {
-        value: {
-          type: String,
-          default: 'hello'
-        }
-      },
+      data () { return { value: 'hello' } },
       render (h) {
         return h('input', { attrs: { type: 'text' }})
       }

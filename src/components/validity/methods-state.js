@@ -101,7 +101,7 @@ export default function (Vue: GlobalAPI): Object {
   function _unwatchValidationRawResults (): void {
     this._unwatch()
     this._unwatch = undefined
-    delete this['_unwatch']
+    delete this._unwatch
   }
 
   return {
