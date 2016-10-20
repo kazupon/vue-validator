@@ -6,7 +6,7 @@ import Mixin from './mixin'
 import Component from './components/index'
 import { mapValidation } from './util'
 
-let installed: Boolean = false
+let installed: boolean = false
 
 function plugin (Vue: GlobalAPI, options: Object = {}): void {
   if (installed) {

@@ -99,3 +99,16 @@ declare type ValidityGroupComponent = {
   getValidityKeys (): Array<string>,
   resetResults (ignore: ?string): void,
 } & Component
+
+declare interface Validationable {
+  register (
+    field: string,
+    validity: ValidityComponent | ValidityGroupComponent,
+    options: { named?: string, group?: string }
+  ): void,
+  unregister (
+    field: string,
+    options: { named?: string, group?: string }
+  ): void,
+  destroy (): void
+}

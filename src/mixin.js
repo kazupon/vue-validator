@@ -3,7 +3,7 @@
 import ValidationClass from './validation'
 
 export default function (Vue: GlobalAPI): Object {
-  const Validation = ValidationClass(Vue)
+  const Validation: Validation = ValidationClass(Vue)
 
   return {
     beforeCreate (): void {

@@ -27,7 +27,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 }
 
-function walkChildren (validation: Validation, name: ?string, children: Array<VNode>): void {
+function walkChildren (validation: Validationable, name: ?string, children: Array<VNode>): void {
   children.forEach((child: VNode) => {
     if (child &&
         child.componentOptions &&

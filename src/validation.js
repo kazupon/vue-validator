@@ -1,7 +1,7 @@
 /* @flow */
 import Group from './group'
 
-export default function (Vue: any) {
+export default function (Vue: any): any {
   const ValidityGroup = Group(Vue)
 
   class Validation {
