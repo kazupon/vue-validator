@@ -3,34 +3,40 @@
   <head>
     <meta charset="utf-8">
     <title>getting started</title>
-    <script src="../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../dist/vue-validator.min.js"></script>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
     <style>
+      input.invalid { border-color: red; }
       .errors { color: red; }
     </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          <div class="username-field">
-            <label for="username">username:</label>
-            <input id="username" type="text" v-validate:username="['required']">
-          </div>
-          <div class="comment-field">
-            <label for="comment">comment:</label>
-            <input id="comment" type="text" v-validate:comment="{ maxlength: 256 }">
-          </div>
-          <div class="errors">
-            <p v-if="$validation1.username.required">Required your name.</p>
-            <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
-          </div>
-          <input type="submit" value="send" v-if="$validation1.valid">
-        </form>
-      </validator>
+      <label for="username">username:</label>
+      <validity field="username" :validators="{ required: true, minlength: 4 }">
+        <input type="text" @input="handleValidate" @focusin="handleValidate" @focusout="handleValidate">
+      </validity>
+      <div class="errors">
+        <p v-if="result.required">required username!!</p>
+        <p v-if="result.minlength">too short username!!</p>
+      </div>
     </div>
     <script>
-      new Vue({ el: '#app' })
+      var vm = new Vue({
+        data: { result: {} },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            // refer validity object from target element
+            var $validity = e.target.$validity 
+            // run validate method !!
+            $validity.validate(function () {
+              // keep validation result from result property from validity object 
+              self.result = $validity.result
+            })
+          }
+        }
+      }).$mount('#app')
     </script>
   </body>
 </html>
