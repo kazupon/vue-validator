@@ -1,5 +1,4 @@
 /* @flow */
-
 import props from './validity/props'
 
 export default function (Vue: GlobalAPI): Object {
