@@ -30,6 +30,13 @@ export default function (Vue: GlobalAPI): Object {
         const results = this.results
         this._validityKeys.forEach((key: string) => {
           ret[key] = results[key]
+          if (ret[key].errors) {
+            const errors = ret.errors || []
+            ret[key].errors.forEach(error => {
+              errors.push(error)
+            })
+            ret.errors = errors
+          }
         })
         return ret
       }
