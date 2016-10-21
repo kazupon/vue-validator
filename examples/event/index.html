@@ -14,12 +14,12 @@
     <div id="app">
       <label for="username">username:</label>
       <validity field="username" 
-        :validators="{ required: true, minlength: 4 }"
-               @valid="handleValid" 
-               @invalid="handleInvalid" 
-               @touched="handleTouched" 
-               @dirty="handleDirty" 
-               @modified="handleModified">
+                :validators="{ required: true, minlength: 4 }"
+                @valid="handleValid" 
+                @invalid="handleInvalid" 
+                @touched="handleTouched" 
+                @dirty="handleDirty" 
+                @modified="handleModified">
         <input type="text" @input="handleValidate">
       </validity>
       <p>validation errors:</p>
@@ -29,7 +29,7 @@
       </div>
       <p>validation events:</p>
       <div class="events">
-        <p style="margin:0; padding:0"v-for="event in events">{{event.timestamp}}: {{event.type}}</p>
+        <p style="margin:0; padding:0" v-for="event in events">{{event.timestamp}}: {{event.type}}</p>
       </div>
     </div>
     <script>
@@ -41,11 +41,8 @@
         methods: {
           handleValidate: function (e) {
             var self = this
-            // refer validity object from target element
             var $validity = e.target.$validity 
-            // run validate method !!
             $validity.validate(function () {
-              // keep validation result from result property from validity object 
               self.result = $validity.result
             })
           },
