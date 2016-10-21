@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>validation classes basic example</title>
+    <title>validation glocal classes example</title>
     <script src="../../../node_modules/vue/dist/vue.js"></script>
     <script src="../../../dist/vue-validator.js"></script>
     <style>
@@ -13,9 +13,9 @@
   <body>
     <div id="app">
       <label for="username">username:</label>
-      <validity field="username" :validators="{
-        required: { rule: true, message: 'required you name !!' }
-      }">
+      <validity field="username" 
+                :classes="{ touched: 'touched-local', dirty: 'dirty-local' }" 
+                :validators="{ required: { rule: true, message: 'required you name !!' } }">
         <input id="username" 
                type="text"
                ref="username" 
@@ -28,6 +28,11 @@
       <p>classes: {{usernameClasses}}</p>
     </div>
     <script>
+      // validation global classses setting
+      Vue.config.validator.classes = {
+        valid: 'valid-global'
+      }
+
       new Vue({
         data: {
           result: {},
