@@ -3,28 +3,58 @@
   <head>
     <meta charset="utf-8">
     <title>grouping example</title>
-    <script src="../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../dist/vue-validator.min.js"></script>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1" :groups="['user', 'password']">
-        username: <input type="text" group="user" v-validate:username="['required']"><br />
-        password: <input type="password" group="password" v-validate:password1="{ minlength: 8, required: true }"/><br />
-        password (confirm): <input type="password" group="password" v-validate:password2="{ minlength: 8, required: true }"/>
-        <div class="user">
-          <span v-if="$validation1.user.invalid">Invalid yourname !!</span>
+      <validation name="validation1">
+        <div class="username">
+          <label for="username">username:</label>
+          <validity field="username" group="user" :validators="['required']">
+            <input id="username" type="text" @input="handleValidate">
+          </validity>
         </div>
         <div class="password">
-          <span v-if="$validation1.password.invalid">Invalid password input !!</span>
+          <label for="password">password:</label>
+          <validity field="password" group="password" :validators="{ minlength: 8, required: true }">
+            <input id="password" type="password" @input="handleValidate">
+          </validity>
         </div>
-        <pre>{{ $validation1 | json }}</pre>
-      </validator>
+        <div class="confirm">
+          <label for="confimr">password (confirm):</label>
+          <validity field="confirm" group="password" :validators="{ minlength: 8, required: true }">
+            <input id="confirm" type="password" @input="handleValidate">
+          </validity>
+        </div>
+        <input type="submit" value="send" v-if="valid">
+        <div class="errors">
+          <p v-if="usernameInvalid">Invalid yourname !!</p>
+          <p v-if="passwordInvalid">Invalid password input !!</p>
+        </div>
+        <div class="debug">
+          <p>validation result info</p>
+          <pre>{{$validation}}</pre>
+        </div>
+      </validation>
     </div>
     <script>
       new Vue({
-        el: '#app'
-      })
+        computed: VueValidator.mapValidation({
+          valid: '$validation.validation1.valid',
+          usernameInvalid: '$validation.validation1.user.username.invalid',
+          passwordInvalid: '$validation.validation1.password.invalid'
+        }),
+        methods: {
+          handleValidate: function (e) {
+            e.target.$validity.validate()
+          }
+        }
+      }).$mount('#app')
     </script>
   </body>
 </html>
