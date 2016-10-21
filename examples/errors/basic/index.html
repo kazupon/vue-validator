@@ -2,42 +2,53 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>error message basic example</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
+    <title>error message handling basic example</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
     <style>
+      input.invalid { border-color: red; }
       .errors { color: red; }
     </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <div class="username">
-          <label for="username">username:</label>
-          <input id="username" type="text" v-validate:username="{
-            required: { rule: true, message: 'required you name !!' }
-          }">
-        </div>
-        <div class="password">
-          <label for="password">password:</label>
-          <input id="password" type="password" v-validate:password="{
-            required: { rule: true, message: 'required you password !!' },
-            minlength: { rule: 8, message: 'your password short too !!' }
-          }"/>
-        </div>
-        <div class="errors">
-          <ul>
-            <li v-for="error in $validation1.errors">
-              <p>{{error.field}}: {{error.message}}</p>
-            </li>
-          </ul>
-        </div>
-      </validator>
+      <div class="email">
+        <label for="email">email:</label>
+        <validity field="email" :validators="{
+          required: { rule: true, message: 'required email !!' },
+          email: { rule: true, message: 'invalid email address !!' }
+        }">
+        <input id="email" type="text" @input="handleValidate" @focusin="handleValidate">
+      </div>
+      <div class="errors">
+        <ul>
+          <li v-for="error in result.errors">
+            <p>{{error.field}}: {{error.message}}</p>
+          </li>
+        </ul>
+      </div>
     </div>
     <script>
       new Vue({
-        el: '#app'
-      })
+        validators: {
+          email: function (val) {
+            return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+          }
+        },
+        data: {
+          result: {}
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+            })
+          }
+        }
+      }).$mount('#app')
     </script>
   </body>
 </html>

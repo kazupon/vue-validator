@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>error message handling example for grouping</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <validation name="validation1">
+        <div class="username">
+          <label for="username">username:</label>
+          <validity field="username" group="user" :validators="{
+            required: { rule: true, message: 'required username !!' }
+          }">
+            <input id="username" type="text" @input="handleValidate" @focusout="handleValidate">
+          </validity>
+        </div>
+        <div class="password">
+          <label for="password">password:</label>
+          <validity field="password" group="password" :validators="{
+            minlength: { rule: 8, message: 'too short password !!' },
+            required: { rule: true, message: 'required password !!' }
+          }">
+            <input id="password" type="password" @input="handleValidate" @focusout="handleValidate">
+          </validity>
+        </div>
+        <div class="confirm">
+          <label for="confimr">password (confirm):</label>
+          <validity field="confirm" group="password" :validators="{
+            minlength: { rule: 8, message: 'too short confirm !!' },
+            required: { rule: true, message: 'required confirm !!' }
+          }">
+            <input id="confirm" type="password" @input="handleValidate" @focusout="handleValidate">
+          </validity>
+        </div>
+        <input type="submit" value="send" v-if="valid">
+        <div class="errors">
+          <ul>
+            <li v-for="error in errors">{{error.field}}: {{error.validator}}</li>
+          </ul>
+          </div>
+        </div>
+      </validation>
+    </div>
+    <script>
+      new Vue({
+        computed: VueValidator.mapValidation({
+          valid: '$validation.validation1.valid',
+          errors: '$validation.validation1.errors'
+        }),
+        methods: {
+          handleValidate: function (e) {
+            e.target.$validity.validate()
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
