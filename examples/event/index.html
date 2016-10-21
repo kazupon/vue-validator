@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>validation event example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <label for="username">username:</label>
+      <validity field="username" 
+        :validators="{ required: true, minlength: 4 }"
+               @valid="handleValid" 
+               @invalid="handleInvalid" 
+               @touched="handleTouched" 
+               @dirty="handleDirty" 
+               @modified="handleModified">
+        <input type="text" @input="handleValidate">
+      </validity>
+      <p>validation errors:</p>
+      <div class="errors">
+        <p v-if="result.required">required username!!</p>
+        <p v-if="result.minlength">too short username!!</p>
+      </div>
+      <p>validation events:</p>
+      <div class="events">
+        <p style="margin:0; padding:0"v-for="event in events">{{event.timestamp}}: {{event.type}}</p>
+      </div>
+    </div>
+    <script>
+      new Vue({
+        data: {
+          result: {},
+          events: []
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            // refer validity object from target element
+            var $validity = e.target.$validity 
+            // run validate method !!
+            $validity.validate(function () {
+              // keep validation result from result property from validity object 
+              self.result = $validity.result
+            })
+          },
+          handleValid: function () {
+            this.handleValidationEvent('valid')
+          },
+          handleInvalid: function () {
+            this.handleValidationEvent('invalid')
+          },
+          handleTouched: function () {
+            this.handleValidationEvent('touched')
+          },
+          handleDirty: function () {
+            this.handleValidationEvent('dirty')
+          },
+          handleModified: function (e) {
+            this.handleValidationEvent('modified')
+          },
+          handleValidationEvent: function (event) {
+            this.events.push({
+              timestamp: new Date().getTime(),
+              type: event
+            })
+            this.events.sort(function (a, b) {
+              return a.timestamp > b.timestamp ? -1 : 1
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
