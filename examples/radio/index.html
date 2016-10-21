@@ -3,45 +3,55 @@
   <head>
     <meta charset="utf-8">
     <title>radio button validation example</title>
-    <script src="../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../dist/vue-validator.min.js"></script>
-    <style> .errors { color: red; }</style>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          <h1>Survey</h1>
-          <fieldset>
-            <legend>Which do you like fruit ?</legend>
-            <input id="apple" type="radio" name="fruit" value="apple" v-validate:fruits="{
-              required: { rule: true, message: requiredErrorMsg },
-            }">
-            <label for="apple">Apple</label>
-            <input id="orange" type="radio" name="fruit" value="orange" v-validate:fruits>
-            <label for="orange">Orage</label>
-            <input id="grape" type="radio" name="fruit" value="grage" v-validate:fruits>
-            <label for="grape">Grape</label>
-            <input id="banana" type="radio" name="fruit" value="banana" v-validate:fruits>
-            <label for="banana">Banana</label>
-            <ul class="errors">
-              <li v-for="error in $validation1.fruits.errors">
-                <p>{{error.message}}</p>
-              </li>
-            </ul>
-          </fieldset>
-        </form>
-      </validator>
+      <h1>Survey</h1>
+      <validity-group field="fruits" :validators="{
+        required: { rule: true, message: requiredErrorMsg }
+      }">
+        <legend>Which do you like fruit ?</legend>
+        <input id="apple" type="radio" name="fruit" value="apple" @change="handleValidate" @focusin="handleValidate">
+        <label for="apple">Apple</label>
+        <input id="orange" type="radio" name="fruit" value="orange" @change="handleValidate" @focusin="handleValidate">
+        <label for="orange">Orage</label>
+        <input id="grape" type="radio" name="fruit" value="grage" @change="handleValidate" @focusin="handleValidate">
+        <label for="grape">Grape</label>
+        <input id="banana" type="radio" name="fruit" value="banana" @change="handleValidate" @focusin="handleValidate">
+        <label for="banana">Banana</label>
+        <ul class="errors">
+          <li v-for="error in result.errors">
+            <p>{{error.message}}</p>
+          </li>
+        </ul>
+      </validity-group>
     </div>
     <script>
       new Vue({
-        el: '#app',
+        data: {
+          result: {}
+        },
         computed: {
           requiredErrorMsg: function () {
             return 'Required fruit !!'
           }
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity 
+            $validity.validate(function () {
+              self.result = $validity.result
+            })
+          }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>
