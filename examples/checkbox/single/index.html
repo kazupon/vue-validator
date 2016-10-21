@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>checkbox validation single using example</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <validity field="term" :validators="{
+        required: { rule: true, message: requiredErrorMsg }
+      }">
+        <input id="term" type="checkbox" @change="handleValidate">
+      </validity>
+      <label for="term">I Accept xxx's Terms of Service Agreement.</label>
+      <p class="errors" v-if="result.required">{{result.required}}</p>
+    </div>
+    <script>
+      new Vue({
+        data: { result: {} },
+        computed: {
+          requiredErrorMsg: function () {
+            return 'Required Terms of Service Agreement checking!!'
+          }
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>

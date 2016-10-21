@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>checkbox validation multi using example</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Survey</h1>
+      <validity-group field="fruits" :validators="{
+        required: { rule: true, message: requiredErrorMsg },
+        minlength: { rule: 1, message: minlengthErrorMsg },
+        maxlength: { rule: 2, message: maxlengthErrorMsg }
+      }">
+        <legend>Which do you like fruit ?</legend>
+        <input id="apple" type="checkbox" value="apple" @change="handleValidate" @focusin="handleValidate">
+        <label for="apple">Apple</label>
+        <input id="orange" type="checkbox" value="orange" @change="handleValidate" @focusin="handleValidate">
+        <label for="orange">Orage</label>
+        <input id="grape" type="checkbox" value="grage" @change="handleValidate" @focusin="handleValidate">
+        <label for="grape">Grape</label>
+        <input id="banana" type="checkbox" value="banana" @change="handleValidate" @focusin="handleValidate">
+        <label for="banana">Banana</label>
+        <ul class="errors">
+          <li v-for="error in result.errors">
+            <p>{{error.message}}</p>
+          </li>
+        </ul>
+      </validity-group>
+    </div>
+    <script>
+      new Vue({
+        data: { result: {} },
+        computed: {
+          requiredErrorMsg: function () {
+            return 'Required fruit !!'
+          },
+          minlengthErrorMsg: function () {
+            return 'Please chose at least 1 fruit !!'
+          },
+          maxlengthErrorMsg: function () {
+            return 'Please chose at most 2 fruits !!'
+          }
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
