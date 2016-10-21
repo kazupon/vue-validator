@@ -1,3 +1,4 @@
+import { DEFAULT_CLASSES } from '../../../../src/components/validity/props'
 import States from '../../../../src/components/validity/states'
 import Lifecycles from '../../../../src/components/validity/lifecycles'
 import Methods from '../../../../src/components/validity/methods'
@@ -22,6 +23,7 @@ describe('validity component: lifecycle', () => {
           propsData: {
             field: 'field1',
             child: {}, // dummy
+            classes: DEFAULT_CLASSES,
             validators: {
               required: true
             }
@@ -65,6 +67,7 @@ describe('validity component: lifecycle', () => {
             field: 'field1',
             multiple: true,
             child: {}, // dummy
+            classes: DEFAULT_CLASSES,
             validators: {
               required: true
             }

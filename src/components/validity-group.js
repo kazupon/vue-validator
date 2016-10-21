@@ -1,5 +1,5 @@
 /* @flow */
-import baseProps from './validity/props'
+import baseProps, { DEFAULT_CLASSES } from './validity/props'
 
 export default function (Vue: GlobalAPI): Object {
   const { extend } = Vue.util
@@ -21,7 +21,8 @@ export default function (Vue: GlobalAPI): Object {
       const child = h(props.tag, children)
       const newData: Object = extend({}, data)
       newData.props = extend({}, props)
-      extend(newData.props.classes, Vue.config.validator.classes)
+      // TODO: should be refactored
+      newData.props.classes = extend(extend(extend({}, DEFAULT_CLASSES), Vue.config.validator.classes), newData.props.classes)
       newData.props.child = child
       newData.props.multiple = true
       return h('validity-control', newData)

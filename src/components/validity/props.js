@@ -1,3 +1,5 @@
+/* @flow */
+
 export default {
   field: {
     type: String,
@@ -16,15 +18,17 @@ export default {
   classes: {
     type: Object,
     default: () => {
-      return {
-        valid: 'valid',
-        invalid: 'invalid',
-        touched: 'touched',
-        untouched: 'untouched',
-        pristine: 'pristine',
-        dirty: 'dirty',
-        modified: 'modified'
-      }
+      return {}
     }
   }
+}
+
+export const DEFAULT_CLASSES: Object = {
+  valid: 'valid',
+  invalid: 'invalid',
+  touched: 'touched',
+  untouched: 'untouched',
+  pristine: 'pristine',
+  dirty: 'dirty',
+  modified: 'modified'
 }
