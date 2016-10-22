@@ -18,7 +18,7 @@ export default function (Vue: GlobalAPI): Object {
 
     const dir: ?VNodeDirective = getModelDirective(child)
     if (!dir) { return ret }
-      
+
     const { type, orgListeners, listeners } = getEventSources(child)
     if (!Array.isArray(orgListeners)) { return ret }
 
