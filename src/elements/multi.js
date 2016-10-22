@@ -58,7 +58,7 @@ export default class MultiElement {
     })
   }
 
-  modelValueEqual (): ?boolean {
+  modelValueEqual (vnode: VNode): ?boolean {
     let ret: ?boolean = null
     const children: Array<VNode> = (this._vm.child && this._vm.child.children) || []
     for (let i = 0; i < children.length; i++) {

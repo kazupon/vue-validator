@@ -150,8 +150,8 @@ export default class SingleElement {
     }
   }
 
-  modelValueEqual (): ?boolean {
-    return modelValueEqual(this._vnode)
+  modelValueEqual (vnode: VNode): ?boolean {
+    return modelValueEqual(vnode)
   }
 }
 

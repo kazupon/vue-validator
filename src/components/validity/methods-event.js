@@ -18,16 +18,18 @@ export default function (Vue: GlobalAPI): Object {
 
     const dir: ?VNodeDirective = getModelDirective(child)
     if (!dir) { return ret }
-
+      
     const { type, orgListeners, listeners } = getEventSources(child)
     if (!Array.isArray(orgListeners)) { return ret }
 
     const modelHandler: Function = orgListeners[0]
     const userHandler: Function = orgListeners[1]
     const modelApplyer = (args) => {
-      return () => {
+      return (applicable: ?boolean) => {
         this._applyWithUserHandler = true
-        modelHandler.apply(child.context, args)
+        if (applicable === undefined || applicable === true) {
+          modelHandler.apply(child.context, args)
+        }
       }
     }
     const modifier: ?boolean = (dir.modifiers || {}).validity

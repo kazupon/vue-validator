@@ -10,7 +10,7 @@ export function modelValueEqual (vnode: VNode): ?boolean {
   const directive: ?VNodeDirective = directives.find((dir: VNodeDirective) => {
     return dir.name === 'model'
   })
-  return !directive
+  return (!directive || directive.oldValue === undefined)
     ? null
     : looseEqual(directive.value, directive.oldValue)
 }

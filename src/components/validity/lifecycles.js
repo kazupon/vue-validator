@@ -49,7 +49,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function updated () {
-    const maybeChangeModel: ?boolean = this._elementable.modelValueEqual()
+    const maybeChangeModel: ?boolean = this._elementable.modelValueEqual(this._vnode)
     if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
       this._elementable.fireInputableEvent()
     }
@@ -73,7 +73,7 @@ function memoize (fn: Function): Function {
 }
 
 function createValidityElement (vm: ValidityComponent): ValidityElement {
-  const vnode = vm.child
+  const vnode = vm._vnode
   return !vm.multiple
     ? new SingleElement(vm, vnode)
     : new MultiElement(vm)
