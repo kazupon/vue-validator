@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>validation progress example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <label for="username">username:</label>
+      <validity ref="username" field="username" :validators="{ exist1: true, exist2: true }">
+        <input type="text" @focusout="handleValidate">
+      </validity>
+      <div class="errors">
+        <p v-for="error in result.errors">{{error.message}}</p>
+      </div>
+      <p v-if="progresses.exist1">exist1 checking ...</p>
+      <p v-if="progresses.exist2">exist2 checking ...</p>
+      <button type="button" v-if="progresses.exist1 && progresses.exist2">register</button>
+      <pre>{{progresses}}</pre>
+    </div>
+    <script>
+      var vm = new Vue({
+        data: {
+          result: {},
+          progresses: {}
+        },
+        validators: {
+          exist1: function (val) {
+            return function (resolve, reject) {
+              setTimeout(function () { reject('already exist!!') }, 2000)
+            }
+          },
+          exist2: function (val) {
+            return function (resolve, reject) {
+              setTimeout(function () { resolve() }, 5000)
+            }
+          }
+        },
+        mounted: function () {
+          var self = this
+          var $validity = this.$refs.username
+
+          // setup initiaal progress values
+          this.progresses = $validity.progresses
+
+          // watch the progress values of validity
+          this._progressWatcher = $validity.$watch('progresses', function (val) {
+          }, { deep: true })
+        },
+        destroyed: function () {
+          // untach progress values of validity
+          this._progressWatcher()
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate(function () {
+              self.result = $validity.result
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
