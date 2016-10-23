@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>validity instance ref attribute referencing example</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <label for="username">username:</label>
+      <validity ref="username" field="username" :validators="{ required: true, minlength: 4 }">
+        <input type="text" @input="handleValidate" @focusout="handleValidate">
+      </validity>
+      <div class="errors">
+        <p v-if="result.required">required username!!</p>
+        <p v-if="result.minlength">too short username!!</p>
+      </div>
+    </div>
+    <script>
+      var vm = new Vue({
+        data: {
+          result: {}
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            // refer validity instance from $refs
+            var $validity = this.$refs.username
+            $validity.validate(function () {
+              self.result = $validity.result
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
