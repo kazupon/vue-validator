@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>grouping example</title>
+    <title>validation grouping example</title>
     <script src="../../node_modules/vue/dist/vue.js"></script>
     <script src="../../dist/vue-validator.js"></script>
     <style>
@@ -15,18 +15,21 @@
       <validation name="validation1">
         <div class="username">
           <label for="username">username:</label>
+          <!-- use the group prop -->
           <validity field="username" group="user" :validators="['required']">
             <input id="username" type="text" @input="handleValidate">
           </validity>
         </div>
         <div class="password">
           <label for="password">password:</label>
+          <!-- use the group prop -->
           <validity field="password" group="password" :validators="{ minlength: 8, required: true }">
             <input id="password" type="password" @input="handleValidate">
           </validity>
         </div>
         <div class="confirm">
           <label for="confimr">password (confirm):</label>
+          <!-- use the group prop -->
           <validity field="confirm" group="password" :validators="{ minlength: 8, required: true }">
             <input id="confirm" type="password" @input="handleValidate">
           </validity>
@@ -44,6 +47,7 @@
     </div>
     <script>
       new Vue({
+        // you can access the keypath of group name including
         computed: VueValidator.mapValidation({
           valid: '$validation.validation1.valid',
           usernameInvalid: '$validation.validation1.user.username.invalid',
