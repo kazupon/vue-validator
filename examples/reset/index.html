@@ -3,43 +3,63 @@
   <head>
     <meta charset="utf-8">
     <title>validation result resetting example</title>
-    <script src="../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../dist/vue-validator.min.js"></script>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
     <style>
+      input.invalid { border-color: red; }
       .errors { color: red; }
     </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          <div class="username-field">
-            <label for="username">username:</label>
-            <input id="username" type="text" v-validate:username="['required']">
-          </div>
-          <div class="comment-field">
-            <label for="comment">comment:</label>
-            <input id="comment" type="text" v-validate:comment="{ maxlength: 256 }">
-          </div>
-          <div class="errors">
-            <p v-if="$validation1.username.required">Required your name.</p>
-            <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
-          </div>
-          <input type="submit" value="send" v-if="$validation1.valid">
-          <button type="button" @click="onReset">Reset Validation</button>
-        </form>
-        <pre>{{ $validation1 | json }}</pre>
-      </validator>
+      <label for="username">username:</label>
+      <validity ref="validity" field="username" :validators="{ required: true, minlength: 4 }">
+        <input type="text" @input="handleValidate" @focusin="handleValidate" @focusout="handleValidate">
+      </validity>
+      <div class="errors">
+        <p v-if="result.required">required username!!</p>
+        <p v-if="result.minlength">too short username!!</p>
+      </div>
+      <button type="button" @click="resetValidation">reset validation</button>
+      <div class="result">
+        <p>validation result:</p>
+        <pre>{{result}}</pre>
+      </div>
     </div>
     <script>
       new Vue({
-        el: '#app',
+        data: {
+          result: {}
+        },
+        mounted: function () {
+          var self = this
+          var $validity = this.$refs.validity
+
+          // initialize validation result
+          this.result = $validity.result
+
+          // sync validation result with $watch of validity
+          this._resultWatcher = $validity.$watch('result', function (val) {
+            self.result = val
+          })
+        },
+        destroyed: function () {
+          // unwatch validation result of validity
+          this._resultWatcher()
+        },
         methods: {
-          onReset: function () {
-            this.$resetValidation()
+          handleValidate: function (e) {
+            // validate
+            var $validity = this.$refs.validity
+            $validity.validate()
+          },
+          resetValidation: function (e) {
+            // reset validation result
+            var $validity = this.$refs.validity
+            $validity.reset()
           }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>
