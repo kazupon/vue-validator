@@ -2,71 +2,79 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>validation timing customization example</title>
-    <script src="../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../dist/vue-validator.min.js"></script>
+    <title>validate timing example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
     <style>
+      input.invalid { border-color: red; }
       .errors { color: red; }
     </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation">
-        <form novalidate @submit="onSubmit">
-          <h1>user registration</h1>
-          <div class="username">
-            <label for="username">username:</label>
-            <input id="username" type="text" 
-              detect-change="off" detect-blur="off" v-validate:username="{
-              required: { rule: true, message: 'required you name !!' }
-            }" />
-          </div>
-          <div class="password">
-            <label for="password">password:</label>
-            <input id="password" type="password" v-model="password" 
-              detect-change="off" detect-blur="off" v-validate:password="{
-              required: { rule: true, message: 'required you new password !!' },
-              minlength: { rule: 8, message: 'your new password short too !!' }
-            }" />
-          </div>
-          <div class="confirm">
-            <label for="confirm">confirm password:</label>
-            <input id="confirm" type="password" 
-              detect-change="off" detect-blur="off" v-validate:confirm="{
-              required: { rule: true, message: 'required you confirm password !!' },
-              confirm: { rule: password, message: 'your confirm password incorrect !!' }
-            }" />
-          </div>
-          <div class="errors" v-if="$validation.touched">
-            <validator-errors :validation="$validation"></validator-errors>
-          </div>
-          <input type="submit" value="register" />
-        </form>
-      </validator>
+      <validation name="registration" @submit="handleSubmit">
+        <h1>user registration</h1>
+        <div class="username">
+          <label for="username">username:</label>
+          <validity ref="username" field="username" :validators="{
+            required: { rule: true, message: 'required you name !!' }
+          }">
+            <input id="username" type="text" @focusout="handleValidate">
+          </validity>
+        </div>
+        <div class="password">
+          <label for="password">password:</label>
+          <validity ref="password" field="password" group="password" :validators="{
+            required: { rule: true, message: 'required you new password !!' },
+            minlength: { rule: 8, message: 'your new password short too !!' }
+          }">
+            <input id="password" type="password" @focusout="handleValidate">
+          </validity>
+        </div>
+        <div class="confirm">
+          <label for="confirm">confirm password:</label>
+          <validity ref="confirm" field="confirm" group="password" :validators="{
+            required: { rule: true, message: 'required you confirm password !!' },
+            confirm: { rule: true, message: 'your confirm password incorrect !!' }
+          }">
+            <input id="confirm" type="password" @focusout="handleValidate">
+          </validity>
+        </div>
+        <div class="errors">
+          <p v-for="error in errors">{{error.message}}</p>
+        </div>
+        <input type="submit" value="register" :disabled="!validated || !valid">
+        <pre>{{$validation}}</pre>
+      </validation>
     </div>
     <script>
       new Vue({
-        el: '#app',
         data: {
-          password: ''
+          validated: false
         },
+        computed: VueValidator.mapValidation({
+          valid: '$validation.registration.valid',
+          errors: '$validation.registration.errors'
+        }),
         validators: {
-          confirm: function (val, target) {
-            return val === target
+          confirm: function (val) {
+            return val === this.$refs.password.$el.value
           }
         },
         methods: {
-          onSubmit: function (e) {
-            // validate manually
+          handleSubmit: function (e) {
+            if (!this.validated || !this.valid) {
+              e.preventDefault()
+            }
+          },
+          handleValidate: function (e) {
             var self = this
-            this.$validate(true, function () {
-              if (self.$validation.invalid) {
-                e.preventDefault()
-              }
+            e.target.$validity.validate(function () {
+              self.validated = true
             })
           }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>
