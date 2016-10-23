@@ -16,18 +16,21 @@
       <validation name="validation1">
         <div class="username">
           <label for="username">username:</label>
+          <!-- validity component wrapped with it -->
           <validity field="username" :validators="['required']">
             <input id="username" type="text" @input="handleValidate">
           </validity>
         </div>
         <div class="password">
           <label for="password">password:</label>
+          <!-- validity component wrapped with it -->
           <validity field="password" :validators="{ minlength: 8, required: true }">
             <input id="password" type="password" @input="handleValidate">
           </validity>
         </div>
         <div class="confirm">
           <label for="confimr">password (confirm):</label>
+          <!-- validity component wrapped with it -->
           <validity field="confirm" :validators="{ minlength: 8, required: true }">
             <input id="confirm" type="password" @input="handleValidate">
           </validity>
@@ -46,6 +49,10 @@
     </div>
     <script>
       new Vue({
+        // The validation result of validity component (instance) wrapped 
+        // with validation component is managed it.
+        // Also, You can map the these validation result to computed properties
+        // with`mapValidation` helper function.
         computed: VueValidator.mapValidation({
           valid: '$validation.validation1.valid',
           usernameInvalid: '$validation.validation1.username.invalid',
