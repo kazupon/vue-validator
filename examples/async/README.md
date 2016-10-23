@@ -2,6 +2,12 @@
 
 > async validation example
 
+## Run the Demo
+``` bash
+# serve at localhost:8000
+npm run start
+```
+
 ## Build Setup
 
 ``` bash
@@ -15,8 +21,4 @@ npm run dev
 npm run build
 ```
 
-## Run the Demo
-``` bash
-# serve at localhost:8000
-npm run start
-```
+For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

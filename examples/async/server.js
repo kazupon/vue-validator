@@ -28,7 +28,9 @@ app.post('/validations/exist', (req, res, next) => {
   if (~users.indexOf(req.body.username)) {
     res.status(400).json({ message: 'already registration !!' })
   } else {
-    res.status(200).json({})
+    setTimeout(function () {
+      res.status(200).json({})
+    }, 2000)
   }
 })
 
