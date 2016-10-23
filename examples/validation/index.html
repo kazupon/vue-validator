@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>validation component example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- wrap validity component -->
+      <validation name="validation1">
+        <div class="username">
+          <label for="username">username:</label>
+          <validity field="username" :validators="['required']">
+            <input id="username" type="text" @input="handleValidate">
+          </validity>
+        </div>
+        <div class="password">
+          <label for="password">password:</label>
+          <validity field="password" :validators="{ minlength: 8, required: true }">
+            <input id="password" type="password" @input="handleValidate">
+          </validity>
+        </div>
+        <div class="confirm">
+          <label for="confimr">password (confirm):</label>
+          <validity field="confirm" :validators="{ minlength: 8, required: true }">
+            <input id="confirm" type="password" @input="handleValidate">
+          </validity>
+        </div>
+        <input type="submit" value="send" v-if="valid">
+        <div class="errors">
+          <p v-if="usernameInvalid">Invalid yourname inputting !!</p>
+          <p v-if="passwordInvalid">Invalid password inputting !!</p>
+          <p v-if="confirmInvalid">Invalid confirm password inputting !!</p>
+        </div>
+        <div class="debug">
+          <p>validation result info</p>
+          <pre>{{$validation}}</pre>
+        </div>
+      </validation>
+    </div>
+    <script>
+      new Vue({
+        computed: VueValidator.mapValidation({
+          valid: '$validation.validation1.valid',
+          usernameInvalid: '$validation.validation1.username.invalid',
+          passwordInvalid: '$validation.validation1.password.invalid',
+          confirmInvalid: '$validation.validation1.confirm.invalid'
+        }),
+        methods: {
+          handleValidate: function (e) {
+            e.target.$validity.validate()
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
