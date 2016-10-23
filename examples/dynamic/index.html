@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>dynamic validity generation example</title>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <form novalidate>
+        <div class="validate-field" v-for="(field, index) in fields">
+          <label :for="field.id">{{field.label}}</label>
+          <validity :ref="field.id" :field="field.id" :validators="field.validator">
+            <input type="text" :id="field.id" :placeholder="field.placeholder" @input="handleValidate">
+          </validity>
+        </div>
+        <div class="errors">
+          <p v-for="error in errors">{{error.field}}:{{error.validator}}</p>
+        </div>
+        <pre>{{results}}</pre>
+      </form>
+    </div>
+    <script>
+      var vm = new Vue({
+        data: {
+          results: {},
+          fields: [{
+            id: 'username',
+            label: 'username',
+            name: 'username',
+            placeholder: 'input your username',
+            validator: { required: true, maxlength: 16 }
+          }, {
+            id: 'message',
+            label: 'message',
+            name: 'message',
+            placeholder: 'input your message',
+            validator: { required: true, minlength: 8 }
+          }]
+        },
+        computed: {
+          keys: function () {
+            return this.fields.map(function (field) { return field.id })
+          },
+          errors: function () {
+            var self = this
+            var ret = []
+            Object.keys(this.results).forEach(function (key) {
+              if (self.results[key] && self.results[key].errors) {
+                self.results[key].errors.forEach(function (err) {
+                  ret.push(err)
+                })
+              }
+            })
+            return ret
+          }
+        },
+        mounted: function () {
+          var self = this
+          this._validityWacthers = []
+
+          // initialize validation result & validation result watching
+          this.keys.forEach(function (key) {
+            self.$set(self.results, key, {})
+            var $validity = self.$refs[key][0]
+            self._validityWacthers.push($validity.$watch('result', function (val) {
+              self.results[key] = val
+            }, { deep: true }))
+          })
+        },
+        destroyed: function () {
+          this._validityWacthers.forEach(function (watcher) {
+            watcher()
+          })
+          delete this._validityWacthers
+        },
+        methods: {
+          handleValidate: function (e) {
+            var self = this
+            var $validity = e.target.$validity
+            $validity.validate()
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
