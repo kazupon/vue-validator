@@ -13,8 +13,9 @@
   <body>
     <div id="app">
       <label for="username">username:</label>
+      <!-- wrap the target formable element with validity component -->
       <validity field="username" :validators="{ required: true, minlength: 4 }">
-        <input type="text" @input="handleValidate" @focusin="handleValidate" @focusout="handleValidate">
+        <input type="text" @input="handleValidate" @focusout="handleValidate">
       </validity>
       <div class="errors">
         <p v-if="result.required">required username!!</p>
@@ -22,16 +23,16 @@
       </div>
     </div>
     <script>
-      var vm = new Vue({
+      new Vue({
         data: { result: {} },
         methods: {
           handleValidate: function (e) {
             var self = this
-            // refer validity object from target element
+            // get validity instance
             var $validity = e.target.$validity 
             // run validate method !!
             $validity.validate(function () {
-              // keep validation result from result property from validity object 
+              // keep validation result from result property of validity instance
               self.result = $validity.result
             })
           }
