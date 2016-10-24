@@ -13,6 +13,9 @@ export default function (Vue: GlobalAPI): Object {
     // for event control flags
     this._modified = false
 
+    // for v-model integration flag
+    this._modelIntegrationMode = 'NONE'
+
     // watch validation raw results
     this._watchValidationRawResults()
 
@@ -49,11 +52,18 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function updated () {
-    const maybeChangeModel: ?boolean = this._elementable.modelValueEqual(this._vnode)
-    if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
-      this._elementable.fireInputableEvent()
+    if (this._modelIntegrationMode == 'MODEL_AND_USER') {
+      const maybeChangeModel: ?boolean = this._elementable.modelValueEqual(this._vnode)
+      if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
+        this._elementable.fireInputableEvent()
+      }
+      delete this._applyWithUserHandler
+    } else if (this._modelIntegrationMode === 'MODEL') {
+      const maybeChangeModel: ?boolean = this._elementable.modelValueEqual(this._vnode)
+      if (maybeChangeModel !== null && !maybeChangeModel) {
+        this._elementable.fireInputableEvent()
+      }
     }
-    delete this._applyWithUserHandler
   }
 
   return {

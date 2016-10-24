@@ -20,39 +20,59 @@ export default function (Vue: GlobalAPI): Object {
     if (!dir) { return ret }
 
     const { type, orgListeners, listeners } = getEventSources(child)
-    if (!Array.isArray(orgListeners)) { return ret }
+    const modelHandler: Function = Array.isArray(orgListeners) ? orgListeners[0] : orgListeners
+    const userHandler: Function = Array.isArray(orgListeners) ? orgListeners[1] : null
 
-    const modelHandler: Function = orgListeners[0]
-    const userHandler: Function = orgListeners[1]
+    let integrationMode = this._modelIntegrationMode
+    if (modelHandler && userHandler) {
+      integrationMode = this._modelIntegrationMode = 'MODEL_AND_USER'
+    } else if (modelHandler && !userHandler) {
+      integrationMode = this._modelIntegrationMode = 'MODEL'
+    }
+
     const modelApplyer = (args) => {
       return (applicable: ?boolean) => {
-        this._applyWithUserHandler = true
+        if (userHandler) {
+          this._applyWithUserHandler = true
+        }
         if (applicable === undefined || applicable === true) {
           modelHandler.apply(child.context, args)
         }
       }
     }
+
     const modifier: ?boolean = (dir.modifiers || {}).validity
+
+    const validity = this
     listeners[type] = function () {
       const args: Array<any> = toArray(arguments, 0)
-      const event: any = args[0]
-      if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
-        delete event[MODEL_NOTIFY_EVENT]
-        userHandler.apply(child.context, args)
-        return
-      } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
-        const value: any = event.value
-        args[0] = value
-        userHandler.apply(child.context, args)
-        return
-      }
+      if (integrationMode === 'MODEL_AND_USER') {
+        const event: any = args[0]
+        if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
+          delete event[MODEL_NOTIFY_EVENT]
+          userHandler.apply(child.context, args)
+          return
+        } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
+          const value: any = event.value
+          args[0] = value
+          userHandler.apply(child.context, args)
+          return
+        }
 
-      if (modifier) {
-        args.push(modelApplyer(args))
-        userHandler.apply(child.context, args)
-      } else {
-        userHandler.apply(child.context, args)
-        modelHandler.apply(child.context, args)
+        if (modifier) {
+          const fn = validity._applyer = modelApplyer(args)
+          args.push(fn)
+          userHandler.apply(child.context, args)
+        } else {
+          userHandler.apply(child.context, args)
+          modelHandler.apply(child.context, args)
+        }
+      } else if (integrationMode === 'MODEL') {
+        if (modifier) {
+          validity._applyer = modelApplyer(args)
+        } else {
+          modelHandler.apply(child.context, args)
+        }
       }
     }
 
@@ -60,10 +80,18 @@ export default function (Vue: GlobalAPI): Object {
     return ret
   }
 
+  function pass (applicable: ?boolean) {
+    // TODO: should be implementsed error cases
+    if (this._modelIntegrationMode !== 'NONE' && this._applyer) {
+      this._applyer(applicable)
+    }
+  }
+
   return {
     _fireEvent,
     _interceptEvents,
-    _wrapEvent
+    _wrapEvent,
+    pass
   }
 }
 
