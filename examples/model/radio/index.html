@@ -2,48 +2,61 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>v-model validation example for radio button</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
-    <style> .errors { color: red; }</style>
+    <title>v-model integration example for radio</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          <h1>Survey</h1>
-          <fieldset>
-            <legend>Which do you like fruit ?</legend>
-            <input id="apple" type="radio" name="fruit" value="apple" v-model="selected" v-validate:fruits="{
-              required: { rule: true, message: requiredErrorMsg },
-            }">
-            <label for="apple">Apple</label>
-            <input id="orange" type="radio" name="fruit" value="orange" v-model="selected" v-validate:fruits>
-            <label for="orange">Orage</label>
-            <input id="grape" type="radio" name="fruit" value="grage" v-model="selected" v-validate:fruits>
-            <label for="grape">Grape</label>
-            <input id="banana" type="radio" name="fruit" value="banana" v-model="selected" v-validate:fruits>
-            <label for="banana">Banana</label>
-            <ul class="errors">
-              <li v-for="error in $validation1.fruits.errors">
-                <p>{{error.message}}</p>
-              </li>
-            </ul>
-            <pre>$data: {{ $data | json }}</pre>
-          </fieldset>
-        </form>
-      </validator>
+      <h1>Survey</h1>
+      <validity-group ref="validity" field="fruits" :validators="{
+        required: { rule: true, message: requiredErrorMsg }
+      }">
+        <legend>Which do you like fruit ?</legend>
+        <input id="apple" type="radio" name="fruit" value="apple" v-model.validity="selected">
+        <label for="apple">Apple</label>
+        <input id="orange" type="radio" name="fruit" value="orange" v-model.validity="selected">
+        <label for="orange">Orage</label>
+        <input id="grape" type="radio" name="fruit" value="grage" v-model.validity="selected">
+        <label for="grape">Grape</label>
+        <input id="banana" type="radio" name="fruit" value="banana" v-model.validity="selected">
+        <label for="banana">Banana</label>
+        <ul class="errors">
+          <li v-for="error in result.errors">
+            <p>{{error.message}}</p>
+          </li>
+        </ul>
+      </validity-group>
+      <button @click="handleApply">Apply</button>
+      <p>model value: {{selected}}</p>
     </div>
     <script>
       new Vue({
-        el: '#app',
-        data: { selected: '' },
+        data: {
+          selected: '',
+          result: {}
+        },
         computed: {
           requiredErrorMsg: function () {
             return 'Required fruit !!'
           }
+        },
+        methods: {
+          handleApply: function (e) {
+            var self = this
+            var $validity = this.$refs.validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+              $validity.pass(result.valid)
+            })
+          }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>

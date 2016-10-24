@@ -2,41 +2,56 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>v-model validation example for select</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
-    <style>.errors { color: red; }</style>
+    <title>v-model intergration example for select</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      select.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          <label for="language">select your favorite programming languages</label><br />
-          <select multiple size="10" v-model="langs" v-validate:lang="{ required: true, maxlength: 3 }">
-            <option value="javascript">JavaScript</option>
-            <option value="ruby">Ruby</option>
-            <option value="python">Python</option>
-            <option value="perl">Perl</option>
-            <option value="lua">Lua</option>
-            <option value="go">Go</option>
-            <option value="rust">Rust</option>
-            <option value="elixir">Elixir</option>
-            <option value="c">C</option>
-            <option value="none">Not a nothing here</option>
-          </select>
-          <div class="errors">
-            <p v-if="$validation1.lang.required">Required !!</p>
-            <p v-if="$validation1.lang.maxlength">Sorry, The maximum is 3 languages !!</p>
-          </div>
-          <pre>$data: {{ $data | json }}</pre>
-        </form>
-      </validator>
+      <label for="language">select your favorite programming languages</label><br />
+      <validity ref="validity" field="lang" :validators="{ required: true, maxlength: 3 }">
+        <select multiple size="10" v-model.validity="langs">
+          <option value="javascript">JavaScript</option>
+          <option value="ruby">Ruby</option>
+          <option value="python">Python</option>
+          <option value="perl">Perl</option>
+          <option value="lua">Lua</option>
+          <option value="go">Go</option>
+          <option value="rust">Rust</option>
+          <option value="elixir">Elixir</option>
+          <option value="c">C</option>
+          <option value="none">Not a nothing here</option>
+        </select>
+      </validity>
+      <div class="errors">
+        <p v-if="result.required">Required !!</p>
+        <p v-if="result.maxlength">Sorry, The maximum is 3 languages !!</p>
+      </div>
+      <button @click="handleApply">Apply</button>
+      <p>model value: {{langs}}</p>
     </div>
     <script>
       new Vue({
-        el: '#app',
-        data: { langs: ['javascript', 'lua', 'go'] }
-      })
+        data: {
+          langs: ['javascript', 'lua', 'go'],
+          result: {}
+        },
+        methods: {
+          handleApply: function (e) {
+            var self = this
+            var $validity = this.$refs.validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+              $validity.pass(result.valid)
+            })
+          }
+        }
+      }).$mount('#app')
     </script>
   </body>
 </html>

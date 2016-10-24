@@ -2,30 +2,44 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>v-model validation example for textbox</title>
-    <script src="../../../node_modules/vue/dist/vue.min.js"></script>
-    <script src="../../../dist/vue-validator.min.js"></script>
+    <title>v-model integration example for text</title>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../../dist/vue-validator.js"></script>
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
   </head>
   <body>
     <div id="app">
-      <validator name="validation1">
-        <form novalidate>
-          message: <input type="text" v-model="msg" v-validate:message="{ required: true, minlength: 8 }"><br />
-          <div>
-            <p v-if="$validation1.message.required">Required your message.</p>
-            <p v-if="$validation1.message.minlength">Too short message.</p>
-          </div>
-          <pre>$data: {{ $data | json }}</pre>
-        </form>
-      </validator>
+      <label for="username">username:</label>
+      <validity ref="validity" field="username" :validators="{ minlength: 4 }">
+        <input type="text" v-model.validity="msg">
+      </validity>
+      <div class="errors">
+        <p v-if="result.minlength">too short username!!</p>
+      </div>
+      <button @click="handleApply">Apply</button>
+      <p>model value: {{msg}}</p>
     </div>
     <script>
-      new Vue({
-        el: '#app',
+      var vm = new Vue({
         data: {
-          msg: 'hello'
+          msg: '',
+          result: {}
+        },
+        methods: {
+          handleApply: function (e) {
+            var self = this
+            var $validity = this.$refs.validity
+            $validity.validate(function () {
+              var result = $validity.result
+              self.result = result
+              $validity.pass(result.valid)
+            })
+          }
         }
-      })
+      }).$mount('#app')
     </script>
   </body>
 </html>
