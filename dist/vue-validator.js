@@ -353,6 +353,13 @@ var Group = function (Vue) {
         var results = this.results;
         this._validityKeys.forEach(function (key) {
           ret[key] = results[key];
+          if (ret[key].errors) {
+            var errors = ret.errors || [];
+            ret[key].errors.forEach(function (error) {
+              errors.push(error);
+            });
+            ret.errors = errors;
+          }
         });
         return ret
       }
@@ -669,6 +676,8 @@ var Mixin = function (Vue) {
   }
 };
 
+/*  */
+
 var baseProps = {
   field: {
     type: String,
@@ -687,17 +696,19 @@ var baseProps = {
   classes: {
     type: Object,
     default: function () {
-      return {
-        valid: 'valid',
-        invalid: 'invalid',
-        touched: 'touched',
-        untouched: 'untouched',
-        pristine: 'pristine',
-        dirty: 'dirty',
-        modified: 'modified'
-      }
+      return {}
     }
   }
+};
+
+var DEFAULT_CLASSES = {
+  valid: 'valid',
+  invalid: 'invalid',
+  touched: 'touched',
+  untouched: 'untouched',
+  pristine: 'pristine',
+  dirty: 'dirty',
+  modified: 'modified'
 };
 
 /*  */
@@ -853,7 +864,7 @@ function modelValueEqual (vnode) {
   var directive = directives.find(function (dir) {
     return dir.name === 'model'
   });
-  return !directive
+  return (!directive || directive.oldValue === undefined)
     ? null
     : looseEqual(directive.value, directive.oldValue)
 }
@@ -999,8 +1010,8 @@ SingleElement.prototype.fireInputableEvent = function fireInputableEvent () {
   }
 };
 
-SingleElement.prototype.modelValueEqual = function modelValueEqual$1 () {
-  return modelValueEqual(this._vnode)
+SingleElement.prototype.modelValueEqual = function modelValueEqual$1 (vnode) {
+  return modelValueEqual(vnode)
 };
 
 Object.defineProperties( SingleElement.prototype, prototypeAccessors );
@@ -1079,12 +1090,13 @@ MultiElement.prototype.fireInputableEvent = function fireInputableEvent () {
   });
 };
 
-MultiElement.prototype.modelValueEqual = function modelValueEqual$1 () {
+MultiElement.prototype.modelValueEqual = function modelValueEqual$1 (vnode) {
   var ret = null;
   var children = (this._vm.child && this._vm.child.children) || [];
   for (var i = 0; i < children.length; i++) {
-    if (!modelValueEqual(children[i])) {
-      ret = false;
+    var maybeEqual = modelValueEqual(children[i]);
+    if (!maybeEqual) {
+      ret = maybeEqual;
       break
     }
   }
@@ -1126,6 +1138,9 @@ var Lifecycles = function (Vue) {
     // for event control flags
     this._modified = false;
 
+    // for v-model integration flag
+    this._modelIntegrationMode = 'NONE';
+
     // watch validation raw results
     this._watchValidationRawResults();
 
@@ -1164,11 +1179,18 @@ var Lifecycles = function (Vue) {
   }
 
   function updated () {
-    var maybeChangeModel = this._elementable.modelValueEqual();
-    if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
-      this._elementable.fireInputableEvent();
+    if (this._modelIntegrationMode === 'MODEL_AND_USER') {
+      var maybeChangeModel = this._elementable.modelValueEqual(this._vnode);
+      if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
+        this._elementable.fireInputableEvent();
+      }
+      delete this._applyWithUserHandler;
+    } else if (this._modelIntegrationMode === 'MODEL') {
+      var maybeChangeModel$1 = this._elementable.modelValueEqual(this._vnode);
+      if (maybeChangeModel$1 !== null && !maybeChangeModel$1) {
+        this._elementable.fireInputableEvent();
+      }
     }
-    delete this._applyWithUserHandler;
   }
 
   return {
@@ -1191,7 +1213,7 @@ function memoize (fn) {
 }
 
 function createValidityElement (vm) {
-  var vnode = vm.child;
+  var vnode = vm._vnode;
   return !vm.multiple
     ? new SingleElement(vm, vnode)
     : new MultiElement(vm)
@@ -1229,37 +1251,59 @@ var Event = function (Vue) {
     var type = ref.type;
     var orgListeners = ref.orgListeners;
     var listeners = ref.listeners;
-    if (!Array.isArray(orgListeners)) { return ret }
+    var modelHandler = Array.isArray(orgListeners) ? orgListeners[0] : orgListeners;
+    var userHandler = Array.isArray(orgListeners) ? orgListeners[1] : null;
 
-    var modelHandler = orgListeners[0];
-    var userHandler = orgListeners[1];
+    var integrationMode = this._modelIntegrationMode;
+    if (modelHandler && userHandler) {
+      integrationMode = this._modelIntegrationMode = 'MODEL_AND_USER';
+    } else if (modelHandler && !userHandler) {
+      integrationMode = this._modelIntegrationMode = 'MODEL';
+    }
+
     var modelApplyer = function (args) {
-      return function () {
-        this$1._applyWithUserHandler = true;
-        modelHandler.apply(child.context, args);
+      return function (applicable) {
+        if (userHandler) {
+          this$1._applyWithUserHandler = true;
+        }
+        if (applicable === undefined || applicable === true) {
+          modelHandler.apply(child.context, args);
+        }
       }
     };
+
     var modifier = (dir.modifiers || {}).validity;
+
+    var validity = this;
     listeners[type] = function () {
       var args = toArray(arguments, 0);
-      var event = args[0];
-      if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
-        delete event[MODEL_NOTIFY_EVENT];
-        userHandler.apply(child.context, args);
-        return
-      } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
-        var value = event.value;
-        args[0] = value;
-        userHandler.apply(child.context, args);
-        return
-      }
+      if (integrationMode === 'MODEL_AND_USER') {
+        var event = args[0];
+        if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
+          delete event[MODEL_NOTIFY_EVENT];
+          userHandler && userHandler.apply(child.context, args);
+          return
+        } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
+          var value = event.value;
+          args[0] = value;
+          userHandler && userHandler.apply(child.context, args);
+          return
+        }
 
-      if (modifier) {
-        args.push(modelApplyer(args));
-        userHandler.apply(child.context, args);
-      } else {
-        userHandler.apply(child.context, args);
-        modelHandler.apply(child.context, args);
+        if (modifier) {
+          var fn = validity._applyer = modelApplyer(args);
+          args.push(fn);
+          userHandler && userHandler.apply(child.context, args);
+        } else {
+          userHandler && userHandler.apply(child.context, args);
+          modelHandler.apply(child.context, args);
+        }
+      } else if (integrationMode === 'MODEL') {
+        if (modifier) {
+          validity._applyer = modelApplyer(args);
+        } else {
+          modelHandler.apply(child.context, args);
+        }
       }
     };
 
@@ -1267,10 +1311,18 @@ var Event = function (Vue) {
     return ret
   }
 
+  function pass (applicable) {
+    // TODO: should be implementsed error cases
+    if (this._modelIntegrationMode !== 'NONE' && this._applyer) {
+      this._applyer(applicable);
+    }
+  }
+
   return {
     _fireEvent: _fireEvent,
     _interceptEvents: _interceptEvents,
-    _wrapEvent: _wrapEvent
+    _wrapEvent: _wrapEvent,
+    pass: pass
   }
 };
 
@@ -1426,9 +1478,11 @@ function isPromise (p) {
 }
 
 var Validate = function (Vue) {
+  var ref = Vue.util;
+  var isPlainObject = ref.isPlainObject;
+  var resolveAsset = ref.resolveAsset;
+
   function _resolveValidator (name) {
-    var ref = Vue.util;
-    var resolveAsset = ref.resolveAsset;
     var options = (this.child && this.child.context)
       ? this.child.context.$options
       : this.$options;
@@ -1440,9 +1494,6 @@ var Validate = function (Vue) {
     field,
     value
   ) {
-    var ref = Vue.util;
-    var isPlainObject = ref.isPlainObject;
-
     var asset = this._resolveValidator(validator);
     if (!asset) {
       // TODO: should be warned
@@ -1519,7 +1570,7 @@ var Validate = function (Vue) {
     var rule = ref.rule;
     var msg = ref.msg;
 
-    var future = fn.call(this, value, rule);
+    var future = fn.call(this.child.context, value, rule);
     if (typeof future === 'function') { // function
       future(function () { // resolve
         cb(true);
@@ -1571,6 +1622,7 @@ var Validate = function (Vue) {
     return true
   }
 
+  // TODO: should be re-design of API
   function validate () {
     var this$1 = this;
     var args = [], len = arguments.length;
@@ -1586,9 +1638,15 @@ var Validate = function (Vue) {
       value = args[1];
       cb = args[2];
     } else if (args.length === 2) {
-      validators = this._keysCached(this._uid.toString(), this.results);
-      value = args[0];
-      cb = args[1];
+      if (isPlainObject(args[0])) {
+        validators = [args[0].validator];
+        value = args[0].value || this.getValue();
+        cb = args[1];
+      } else {
+        validators = this._keysCached(this._uid.toString(), this.results);
+        value = args[0];
+        cb = args[1];
+      }
     } else if (args.length === 1) {
       validators = this._keysCached(this._uid.toString(), this.results);
       value = this.getValue();
@@ -1599,7 +1657,7 @@ var Validate = function (Vue) {
       cb = null;
     }
 
-    if (args.length === 3) {
+    if (args.length === 3 || (args.length === 2 && isPlainObject(args[0]))) {
       ret = this._validate(validators[0], value, cb);
     } else {
       validators.forEach(function (validator) {
@@ -1681,7 +1739,8 @@ var Validity = function (Vue) {
         if (!child.tag) { return child }
         var newData = extend({}, data);
         newData.props = extend({}, props);
-        extend(newData.props.classes, Vue.config.validator.classes);
+        // TODO: should be refactored
+        newData.props.classes = extend(extend(extend({}, DEFAULT_CLASSES), Vue.config.validator.classes), newData.props.classes);
         newData.props.child = child;
         return h('validity-control', newData)
       })
@@ -1715,7 +1774,8 @@ var ValidityGroup = function (Vue) {
       var child = h(props.tag, children);
       var newData = extend({}, data);
       newData.props = extend({}, props);
-      extend(newData.props.classes, Vue.config.validator.classes);
+      // TODO: should be refactored
+      newData.props.classes = extend(extend(extend({}, DEFAULT_CLASSES), Vue.config.validator.classes), newData.props.classes);
       newData.props.child = child;
       newData.props.multiple = true;
       return h('validity-control', newData)
@@ -1726,6 +1786,9 @@ var ValidityGroup = function (Vue) {
 /*  */
 
 var Validation = function (Vue) {
+  var ref = Vue.util;
+  var extend = ref.extend;
+
   return {
     functional: true,
     props: {
@@ -1753,7 +1816,11 @@ var Validation = function (Vue) {
       }
       var tag = props.tag || 'form';
       walkChildren(parent._validation, props.name, children);
-      return h(tag, tag === 'form' ? { attrs: { novalidate: true }} : {}, children)
+      var newData = extend({ attrs: {}}, data);
+      if (tag === 'form') {
+        newData.attrs.novalidate = true;
+      }
+      return h(tag, newData, children)
     }
   }
 };
