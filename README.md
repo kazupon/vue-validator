@@ -6,15 +6,14 @@
 
 Validator component for Vue.js
 
->:warning: NOTE: WIP for Vue.js 2.0 :construction:
+>:warning: NOTE: official release for Vue.js 2.0 not yet :construction:
 
 
 ## Compatibility
 - v2 later
     - Vue.js `1.0.20`+
-- v3 (**WIP** :construction:)
-    - Vue.js `2.0 beta`+
-
+- v3 alpha (**WIP** :construction:)
+    - Vue.js `2.0.3 later
 
 ## Documentation
 - v2 later
@@ -22,6 +21,9 @@ Validator component for Vue.js
 - v3
     - **Not yet** (Progress: https://github.com/vuejs/vue-validator/issues/257)
 
+## Projects
+- v2: (maintance: https://github.com/vuejs/vue-validator/projects/1)
+- v3: (for 3.0 release: https://github.com/vuejs/vue-validator/projects/2)
 
 ## Contributing
 - Fork it !
@@ -31,6 +33,7 @@ Validator component for Vue.js
 - Submit a pull request to `2.x` branch of `vuejs/vue-validator` repository !
 
 ### Branch
+- dev (developement branch for v3 later)
 - 2.x (maintance branch for v2 later)
 
 
