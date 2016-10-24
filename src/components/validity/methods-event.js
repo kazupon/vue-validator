@@ -21,7 +21,7 @@ export default function (Vue: GlobalAPI): Object {
 
     const { type, orgListeners, listeners } = getEventSources(child)
     const modelHandler: Function = Array.isArray(orgListeners) ? orgListeners[0] : orgListeners
-    const userHandler: Function = Array.isArray(orgListeners) ? orgListeners[1] : null
+    const userHandler: ?Function = Array.isArray(orgListeners) ? orgListeners[1] : null
 
     let integrationMode = this._modelIntegrationMode
     if (modelHandler && userHandler) {
@@ -50,21 +50,21 @@ export default function (Vue: GlobalAPI): Object {
         const event: any = args[0]
         if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
           delete event[MODEL_NOTIFY_EVENT]
-          userHandler.apply(child.context, args)
+          userHandler && userHandler.apply(child.context, args)
           return
         } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
           const value: any = event.value
           args[0] = value
-          userHandler.apply(child.context, args)
+          userHandler && userHandler.apply(child.context, args)
           return
         }
 
         if (modifier) {
           const fn = validity._applyer = modelApplyer(args)
           args.push(fn)
-          userHandler.apply(child.context, args)
+          userHandler && userHandler.apply(child.context, args)
         } else {
-          userHandler.apply(child.context, args)
+          userHandler && userHandler.apply(child.context, args)
           modelHandler.apply(child.context, args)
         }
       } else if (integrationMode === 'MODEL') {

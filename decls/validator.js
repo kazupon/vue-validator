@@ -76,7 +76,7 @@ declare interface ValidityElement {
   listenInputableEvent (): void,
   unlistenInputableEvent (): void,
   fireInputableEvent (): void,
-  modelValueEqual (): ?boolean
+  modelValueEqual (vnode: VNode): ?boolean
 }
 
 declare type $ValidityGroupResult = Dictionary<ValidationResult>

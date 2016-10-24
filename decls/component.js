@@ -66,9 +66,6 @@ declare interface Component {
     namespace?: string
   ) => VNode;
 
-  /*
-   * NOTE: should not be published internal interface ...
-   *
   // private properties
   _uid: number;
   _isVue: true;
@@ -131,7 +128,6 @@ declare interface Component {
   _b: (vnode: VNodeWithData, value: any) => void;
   // retrive custom keyCode
   _k: (key: string) => ?number;
-  */
 
   // allow dynamic method registration
   [key: string]: any

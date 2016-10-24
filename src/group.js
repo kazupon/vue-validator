@@ -31,7 +31,7 @@ export default function (Vue: GlobalAPI): Object {
         this._validityKeys.forEach((key: string) => {
           ret[key] = results[key]
           if (ret[key].errors) {
-            const errors = ret.errors || []
+            const errors: any = ret.errors || []
             ret[key].errors.forEach(error => {
               errors.push(error)
             })
