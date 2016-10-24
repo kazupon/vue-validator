@@ -24,12 +24,11 @@ export default function (Vue: GlobalAPI): Object {
       }
       const tag = props.tag || 'form'
       walkChildren(parent._validation, props.name, children)
-      const newData = extend({ attrs: {} }, data)
+      const newData = extend({ attrs: {}}, data)
       if (tag === 'form') {
         newData.attrs.novalidate = true
       }
       return h(tag, newData, children)
-      //return h(tag, tag === 'form' ? { attrs: { novalidate: true }} : {}, children)
     }
   }
 }

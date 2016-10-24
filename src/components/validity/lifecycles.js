@@ -52,7 +52,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function updated () {
-    if (this._modelIntegrationMode == 'MODEL_AND_USER') {
+    if (this._modelIntegrationMode === 'MODEL_AND_USER') {
       const maybeChangeModel: ?boolean = this._elementable.modelValueEqual(this._vnode)
       if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
         this._elementable.fireInputableEvent()
