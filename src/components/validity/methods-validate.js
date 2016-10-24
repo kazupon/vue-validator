@@ -91,7 +91,7 @@ export default function (Vue: GlobalAPI): Object {
     { fn, value, field, rule, msg }: $ValidateDescriptor,
     cb: Function
   ): void {
-    const future: any = fn.call(this, value, rule)
+    const future: any = fn.call(this.child.context, value, rule)
     if (typeof future === 'function') { // function
       future(() => { // resolve
         cb(true)
@@ -153,7 +153,7 @@ export default function (Vue: GlobalAPI): Object {
       value = args[1]
       cb = args[2]
     } else if (args.length === 2) {
-      if (isObject(args[0])) {
+      if (isPlainObject(args[0])) {
         validators = [args[0].validator]
         value = args[0].value || this.getValue()
         cb = args[1]
@@ -172,7 +172,7 @@ export default function (Vue: GlobalAPI): Object {
       cb = null
     }
 
-    if (args.length === 3 || (args.length === 2 && isObject(args[0]))) {
+    if (args.length === 3 || (args.length === 2 && isPlainObject(args[0]))) {
       ret = this._validate(validators[0], value, cb)
     } else {
       validators.forEach((validator: string) => {
