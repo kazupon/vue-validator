@@ -1,3 +1,55 @@
+<a name="3.0.0-alpha.1"></a>
+# [3.0.0-alpha.1](https://github.com/vuejs/vue-validator/compare/v2.1.3...v3.0.0-alpha.1) (2016-10-24)
+
+This is the first release of 3.0 for Vue 2.0
+
+- There are still some features bugs. Some features still needs to be worked on.
+    - v-model integration
+    - comonent validation
+- **NOT** recommended for production using.
+- There are not still official documetation. Documentation still needs to be worked on.
+- There are example codes. see the [here](https://github.com/vuejs/vue-validator/tree/dev/examples)
+
+
+<a name="2.1.7"></a>
+## [2.1.7](https://github.com/vuejs/vue-validator/compare/v2.1.6...v2.1.7) (2016-09-09)
+
+
+### :bug: Bug Fixes
+
+* **reset:** fix cannot reset with using initial params and v-model ([4c6c793](https://github.com/vuejs/vue-validator/commit/4c6c793))
+
+
+
+<a name="2.1.6"></a>
+## [2.1.6](https://github.com/vuejs/vue-validator/compare/v2.1.5...v2.1.6) (2016-08-19)
+
+
+### :bug: Bug Fixes
+
+* **validate:** fix initial compilation error ([fa99a91](https://github.com/vuejs/vue-validator/commit/fa99a91)), closes [#288](https://github.com/vuejs/vue-validator/issues/288)
+
+
+
+<a name="2.1.5"></a>
+## [2.1.5](https://github.com/vuejs/vue-validator/compare/v2.1.4...v2.1.5) (2016-07-25)
+
+
+### :bug: Bug Fixes
+
+* **validate:** fix cannot change validation rule and error message ([7013c4e](https://github.com/vuejs/vue-validator/commit/7013c4e))
+
+
+
+<a name="2.1.4"></a>
+## [2.1.4](https://github.com/vuejs/vue-validator/compare/v2.1.3...v2.1.4) (2016-07-19)
+
+
+### :bug: Bug Fixes
+
+* **validator:** fix dynamic custom validator error ([b5d5487](https://github.com/vuejs/vue-validator/commit/b5d5487)), closes [#274](https://github.com/vuejs/vue-validator/issues/274)
+
+
 <a name="2.1.3"></a>
 ## [2.1.3](https://github.com/vuejs/vue-validator/compare/v2.1.2...v2.1.3) (2016-05-29)
 
