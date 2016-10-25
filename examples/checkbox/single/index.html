@@ -13,7 +13,7 @@
   <body>
     <div id="app">
       <validity field="term" :validators="{
-        required: { rule: true, message: requiredErrorMsg }
+        required: { message: requiredErrorMsg }
       }">
         <input id="term" type="checkbox" @change="handleValidate">
       </validity>

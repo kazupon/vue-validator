@@ -14,7 +14,7 @@
     <div id="app">
       <h1>Survey</h1>
       <validity-group field="fruits" :validators="{
-        required: { rule: true, message: requiredErrorMsg }
+        required: { message: requiredErrorMsg }
       }">
         <legend>Which do you like fruit ?</legend>
         <input id="apple" type="radio" name="fruit" value="apple" @change="handleValidate" @focusin="handleValidate">

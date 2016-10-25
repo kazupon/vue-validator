@@ -15,7 +15,7 @@
       <label for="username">username:</label>
       <validity field="username" 
                 :classes="{ touched: 'touched-local', dirty: 'dirty-locale' }" 
-                :validators="{ required: { rule: true, message: 'required you name !!' } }">
+                :validators="{ required: { message: 'required you name !!' } }">
         <input id="username" 
                type="text"
                ref="username" 

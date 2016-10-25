@@ -16,7 +16,7 @@
         <div class="username">
           <label for="username">username:</label>
           <validity field="username" group="user" :validators="{
-            required: { rule: true, message: 'required username !!' }
+            required: { message: 'required username !!' }
           }">
             <input id="username" type="text" @input="handleValidate" @focusout="handleValidate">
           </validity>
@@ -25,7 +25,7 @@
           <label for="password">password:</label>
           <validity field="password" group="password" :validators="{
             minlength: { rule: 8, message: 'too short password !!' },
-            required: { rule: true, message: 'required password !!' }
+            required: { message: 'required password !!' }
           }">
             <input id="password" type="password" @input="handleValidate" @focusout="handleValidate">
           </validity>
@@ -34,7 +34,7 @@
           <label for="confimr">password (confirm):</label>
           <validity field="confirm" group="password" :validators="{
             minlength: { rule: 8, message: 'too short confirm !!' },
-            required: { rule: true, message: 'required confirm !!' }
+            required: { message: 'required confirm !!' }
           }">
             <input id="confirm" type="password" @input="handleValidate" @focusout="handleValidate">
           </validity>

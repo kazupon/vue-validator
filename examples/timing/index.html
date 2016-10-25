@@ -17,7 +17,7 @@
         <div class="username">
           <label for="username">username:</label>
           <validity ref="username" field="username" :validators="{
-            required: { rule: true, message: 'required you name !!' }
+            required: { message: 'required you name !!' }
           }">
             <input id="username" type="text" @focusout="handleValidate">
           </validity>
@@ -25,7 +25,7 @@
         <div class="password">
           <label for="password">password:</label>
           <validity ref="password" field="password" group="password" :validators="{
-            required: { rule: true, message: 'required you new password !!' },
+            required: { message: 'required you new password !!' },
             minlength: { rule: 8, message: 'your new password short too !!' }
           }">
             <input id="password" type="password" @focusout="handleValidate">
@@ -34,7 +34,7 @@
         <div class="confirm">
           <label for="confirm">confirm password:</label>
           <validity ref="confirm" field="confirm" group="password" :validators="{
-            required: { rule: true, message: 'required you confirm password !!' },
+            required: { message: 'required you confirm password !!' },
             confirm: { rule: true, message: 'your confirm password incorrect !!' }
           }">
             <input id="confirm" type="password" @focusout="handleValidate">

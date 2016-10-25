@@ -15,8 +15,8 @@
       <div class="email">
         <label for="email">email:</label>
         <validity field="email" :validators="{
-          required: { rule: true, message: 'required email !!' },
-          email: { rule: true, message: 'invalid email address !!' }
+          required: { message: 'required email !!' },
+          email: { message: 'invalid email address !!' }
         }">
         <input id="email" type="text" @input="handleValidate" @focusin="handleValidate">
       </div>

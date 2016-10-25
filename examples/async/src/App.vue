@@ -4,8 +4,8 @@
     <div class="username">
       <label for="username">username:</label>
       <validity ref="validity" field="username" :validators="{
-        required: { rule: true, message: 'required your name !!' },
-        exist: { rule: true }
+        required: { message: 'required your name !!' },
+        exist: true
       }">
         <input id="username" type="text" @focusout="handleValidate">
       </validity>
