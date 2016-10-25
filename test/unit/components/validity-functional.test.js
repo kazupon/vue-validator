@@ -10,10 +10,8 @@ describe('validity functional component', () => {
   const components = {
     validityControl,
     validity,
-    comp: {
-      data () {
-        return { value: 'hello' }
-      },
+    'my-comp': {
+      props: ['value'],
       render (h) {
         return h('input', { attrs: { type: 'text' }})
       }
@@ -374,6 +372,7 @@ describe('validity functional component', () => {
     describe('component', () => {
       it('should be work', done => {
         const vm = new Vue({
+          data: { value: 'hello' },
           components,
           render (h) {
             return h('div', [
@@ -384,15 +383,16 @@ describe('validity functional component', () => {
                 },
                 ref: 'validity'
               }, [
-                h('comp', { ref: 'my' })
+                h('my-comp', { props: { value: this.value }})
               ])
             ])
           }
         }).$mount(el)
-        const { validity, my } = vm.$refs
+        const { validity } = vm.$refs
         let result
         waitForUpdate(() => {
-          my.value = ''
+          vm.value = ''
+        }).thenWaitFor(1).then(() => {
           validity.validate() // validate !!
         }).thenWaitFor(1).then(() => {
           result = validity.result
@@ -406,7 +406,8 @@ describe('validity functional component', () => {
           assert(result.valid === false)
           assert(result.invalid === true)
         }).then(() => {
-          my.value = 'hello'
+          vm.value = 'hello'
+        }).thenWaitFor(1).then(() => {
           validity.validate() // validate !!
         }).thenWaitFor(1).then(() => {
           result = validity.result
@@ -608,6 +609,7 @@ describe('validity functional component', () => {
     describe('basic', () => {
       it('should be work', done => {
         const vm = new Vue({
+          data: { value: 'hello' },
           components,
           render (h) {
             return h('div', [
@@ -627,12 +629,12 @@ describe('validity functional component', () => {
                 },
                 ref: 'validity2'
               }, [
-                h('comp', { ref: 'my', class: ['class2'] })
+                h('my-comp', { props: { value: this.value }, class: ['class2'] })
               ])
             ])
           }
         }).$mount(el)
-        const { validity1, validity2, my } = vm.$refs
+        const { validity1, validity2 } = vm.$refs
         const classes1 = classes(validity1.$el)
         const classes2 = classes(validity2.$el)
         // initialized
@@ -698,7 +700,8 @@ describe('validity functional component', () => {
           // update
           validity1.$el.value = 'hello'
           triggerEvent(validity1.$el, 'input')
-          my.value = ''
+          vm.value = ''
+        }).thenWaitFor(1).then(() => {
           // validate
           validity1.validate()
           validity2.validate()
@@ -723,7 +726,8 @@ describe('validity functional component', () => {
           // back to initial data
           validity1.$el.value = ''
           triggerEvent(validity1.$el, 'input')
-          my.value = 'hello'
+        }).thenWaitFor(1).then(() => {
+          vm.value = 'hello'
         }).thenWaitFor(1).then(() => {
           assert(classes1.has('class1'))
           assert(classes1.has('touched'))
@@ -787,6 +791,7 @@ describe('validity functional component', () => {
           modified: 'modified-2'
         }
         const vm = new Vue({
+          data: { value: 'hello' },
           components,
           render (h) {
             return h('div', [
@@ -808,12 +813,12 @@ describe('validity functional component', () => {
                 },
                 ref: 'validity2'
               }, [
-                h('comp', { ref: 'my', class: ['class2'] })
+                h('my-comp', { props: { value: this.value }, class: ['class2'] })
               ])
             ])
           }
         }).$mount(el)
-        const { validity1, validity2, my } = vm.$refs
+        const { validity1, validity2 } = vm.$refs
         const classes1 = classes(validity1.$el)
         const classes2 = classes(validity2.$el)
         waitForUpdate(() => {
@@ -823,7 +828,8 @@ describe('validity functional component', () => {
           // update
           validity1.$el.value = 'hello'
           triggerEvent(validity1.$el, 'input')
-          my.value = ''
+          vm.value = ''
+        }).thenWaitFor(1).then(() => {
           // validate
           validity1.validate()
           validity2.validate()
@@ -899,6 +905,7 @@ describe('validity functional component', () => {
 
       it('should be work', done => {
         const vm = new Vue({
+          data: { value: 'hello' },
           components,
           render (h) {
             return h('div', [
@@ -919,12 +926,12 @@ describe('validity functional component', () => {
                 },
                 ref: 'validity2'
               }, [
-                h('comp', { ref: 'my', class: ['class2'] })
+                h('my-comp', { props: { value: this.value }, class: ['class2'] })
               ])
             ])
           }
         }).$mount(el)
-        const { validity1, validity2, my } = vm.$refs
+        const { validity1, validity2 } = vm.$refs
         const classes1 = classes(validity1.$el)
         const classes2 = classes(validity2.$el)
         waitForUpdate(() => {
@@ -934,7 +941,8 @@ describe('validity functional component', () => {
           // update
           validity1.$el.value = 'hello'
           triggerEvent(validity1.$el, 'input')
-          my.value = ''
+          vm.value = ''
+        }).thenWaitFor(1).then(() => {
           // validate
           validity1.validate()
           validity2.validate()
