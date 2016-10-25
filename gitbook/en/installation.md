@@ -8,8 +8,9 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 
 ### jsdelivr
 
+uppkg
 ```html
-<script src="https://cdn.jsdelivr.net/vue.validator/2.1.3/vue-validator.min.js"></script>
+<script src="https://unpkg.com/vue-validator@3.0.0-alpha.1/dist/vue-validator.min.js"></script>
 ```
 
 ## NPM
