@@ -16,6 +16,18 @@ const main = readFile('src/index.js', 'utf-8')
   .replace(/plugin\.version = '[\d\.]+'/, `plugin.version = '${pack.version}'`)
 writeFile('src/index.js', main)
 
+// update installation.md
+const langs = ['en']
+langs.forEach(lang => {
+  const installation = fs
+    .readFileSync(`./gitbook/${lang}/installation.md`, 'utf-8')
+    .replace(
+      /<script src="https:\/\/unpkg\.com\/vue-validator@[\d\-\w\.]+.[\d]+\/dist\/vue-validator\.min\.js"><\/script>/,
+      '<script src="https://unpkg.com/vue-validator@' + pack.version + '/dist/vue-validator.min.js"></script>'
+    )
+  fs.writeFileSync(`./gitbook/${lang}/installation.md`, installation)
+})
+
 let entries = getAllEntries()
 
 // filter entries via command line arg
