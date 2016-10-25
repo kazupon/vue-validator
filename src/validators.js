@@ -7,32 +7,33 @@
  * required
  * This function validate whether the value has been filled out.
  */
-export function required (val: any): boolean {
+export function required (val: any, arg?: boolean): boolean {
+  const isRequired: boolean = arg === undefined ? true : arg
   if (Array.isArray(val)) {
     if (val.length !== 0) {
       let valid: boolean = true
       for (let i = 0, l = val.length; i < l; i++) {
-        valid = required(val[i])
-        if (!valid) {
+        valid = required(val[i], isRequired)
+        if ((isRequired && !valid) || (!isRequired && valid)) {
           break
         }
       }
       return valid
     } else {
-      return false
+      return !isRequired
     }
   } else if (typeof val === 'number' || typeof val === 'function') {
-    return true
+    return isRequired
   } else if (typeof val === 'boolean') {
-    return val
+    return val === isRequired
   } else if (typeof val === 'string') {
-    return val.length > 0
+    return isRequired ? (val.length > 0) : (val.length <= 0)
   } else if (val !== null && typeof val === 'object') {
-    return Object.keys(val).length > 0
+    return isRequired ? (Object.keys(val).length > 0) : (Object.keys(val).length <= 0)
   } else if (val === null || val === undefined) {
-    return false
+    return !isRequired
   } else {
-    return false
+    return !isRequired
   }
 }
 
