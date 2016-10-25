@@ -19,7 +19,7 @@ Validator component for Vue.js
 - v2 later
     - See [here](http://vuejs.github.io/vue-validator/)
 - v3
-    - **Not yet** (Progress: https://github.com/vuejs/vue-validator/issues/257)
+    - **WIP** :construction: [here](https://vuejs.github.io/vue-validator/)
 
 ## Projects
 - v2: (maintance: https://github.com/vuejs/vue-validator/projects/1)
