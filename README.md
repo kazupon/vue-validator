@@ -13,7 +13,7 @@ Validator component for Vue.js
 - v2 later
     - Vue.js `1.0.20`+
 - v3 alpha (**WIP** :construction:)
-    - Vue.js `2.0.3 later
+    - Vue.js `2.0.3` later
 
 ## Documentation
 - v2 later
