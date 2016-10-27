@@ -2,7 +2,7 @@ import ValidityControl from '../../../src/components/validity/index'
 import Validity from '../../../src/components/validity.js'
 import Validation from '../../../src/components/validation'
 import Mixin from '../../../src/mixin'
-import { mapValidation } from '../../../src/util'
+import { mapValidation } from '../../../src/helper'
 
 const validityControl = ValidityControl(Vue)
 const validity = Validity(Vue)

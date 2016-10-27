@@ -4,7 +4,7 @@ import Config from './config'
 import Asset from './asset'
 import Mixin from './mixin'
 import Component from './components/index'
-import { mapValidation } from './util'
+import { mapValidation } from './helper'
 
 let installed: boolean = false
 
