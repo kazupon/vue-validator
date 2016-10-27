@@ -1,5 +1,5 @@
 /* @flow */
-import Group from './group'
+import Group from './components/validity-result-group'
 
 export default function (Vue: any): any {
   const ValidityGroup = Group(Vue)
