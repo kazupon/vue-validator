@@ -1,12 +1,14 @@
 /* @flow */
 import {
-  looseEqual,
   triggerEvent,
   MODEL_NOTIFY_EVENT
 } from '../util'
-import { addEventInfo, modelValueEqual } from './helper'
+import Helper from './helper'
 
 export default function (Vue: GlobalAPI): any {
+  const { looseEqual } = Vue.util
+  const { addEventInfo, modelValueEqual } = Helper(Vue)
+
   class SingleElement {
     _vm: ValidityComponent
     _vnode: any

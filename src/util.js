@@ -17,14 +17,6 @@ export function warn (msg: string, err?: Error) {
   }
 }
 
-export function looseEqual (a: any, b: any): boolean {
-  return a === b || (
-    isObject(a) && isObject(b)
-      ? JSON.stringify(a) === JSON.stringify(b)
-      : false
-  )
-}
-
 export function getClass (el: any): string {
   let classname: string | Object = el.className
   if (typeof classname === 'object') {
@@ -88,8 +80,4 @@ export function triggerEvent (el: any, event: string, fn: Function): void {
   e.initEvent(event, true, true)
   fn && fn(e)
   el.dispatchEvent(e)
-}
-
-function isObject (obj: Object): boolean {
-  return obj !== null && typeof obj === 'object'
 }
