@@ -1,4 +1,6 @@
-import MultiElement from '../../../src/elements/multi'
+import MultiElementClass from '../../../src/elements/multi'
+
+const MultiElement = MultiElementClass(Vue)
 
 describe('MultiElement class', () => {
   describe('#getValue', () => {

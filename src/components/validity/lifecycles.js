@@ -1,8 +1,17 @@
 /* @flow */
-import { SingleElement, MultiElement } from '../../elements/index'
+import Elements from '../../elements/index'
 import { addClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
+  const { SingleElement, MultiElement } = Elements(Vue)
+
+  function createValidityElement (vm: ValidityComponent): ValidityElement {
+    const vnode = vm._vnode
+    return !vm.multiple
+      ? new SingleElement(vm, vnode)
+      : new MultiElement(vm)
+  }
+
   function created (): void {
     this._elementable = null
 
@@ -80,11 +89,4 @@ function memoize (fn: Function): Function {
     const hit = cache[id]
     return hit || (cache[id] = fn(...args))
   }
-}
-
-function createValidityElement (vm: ValidityComponent): ValidityElement {
-  const vnode = vm._vnode
-  return !vm.multiple
-    ? new SingleElement(vm, vnode)
-    : new MultiElement(vm)
 }

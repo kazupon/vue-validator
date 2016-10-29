@@ -1,9 +1,13 @@
 /* @flow */
+import SingleElementClass from './single'
+import MultiElementClass from './multi'
 
-import SingleElement from './single'
-import MultiElement from './multi'
+export default function (Vue: GlobalAPI): Object {
+  const SingleElement = SingleElementClass(Vue)
+  const MultiElement = MultiElementClass(Vue)
 
-export {
-  SingleElement,
-  MultiElement
+  return {
+    SingleElement,
+    MultiElement
+  }
 }

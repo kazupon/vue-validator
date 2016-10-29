@@ -1,4 +1,6 @@
-import SingleElement from '../../../src/elements/single'
+import SingleElementClass from '../../../src/elements/single'
+
+const SingleElement = SingleElementClass(Vue)
 
 describe('SingleElement class', () => {
   describe('#getValue', () => {
