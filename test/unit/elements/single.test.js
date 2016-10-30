@@ -56,35 +56,6 @@ describe('SingleElement class', () => {
         assert.deepEqual(single.getValue(), ['two', 'three'])
       })
     })
-
-    describe('component', () => {
-      it('should be work', done => {
-        const vm = new Vue({
-          data: {
-            child: null,
-            value: 'hello'
-          },
-          components: {
-            comp: {
-              props: ['value'],
-              render (h) {
-                return h('input', { attrs: { type: 'text' }})
-              }
-            }
-          },
-          render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
-          }
-        }).$mount()
-        const single = new SingleElement(vm, vm.child)
-        assert.equal(single.getValue(), 'hello')
-        waitForUpdate(() => {
-          vm.value = 'world'
-        }).thenWaitFor(1).then(() => {
-          assert.equal(single.getValue(), 'world')
-        }).then(done)
-      })
-    })
   })
 
   describe('#checkModified', () => {
@@ -146,38 +117,6 @@ describe('SingleElement class', () => {
         vm.$el.options[1].selected = false
         vm.$el.options[2].selected = false
         assert(single.checkModified() === false)
-      })
-    })
-
-    describe('component', () => {
-      it('should be work', done => {
-        const vm = new Vue({
-          data: {
-            child: null,
-            value: 'hello'
-          },
-          components: {
-            comp: {
-              props: ['value'],
-              render (h) {
-                return h('input', { attrs: { type: 'text' }})
-              }
-            }
-          },
-          render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
-          }
-        }).$mount()
-        const single = new SingleElement(vm, vm.child)
-        assert(single.checkModified() === false)
-        waitForUpdate(() => {
-          vm.value = 'world'
-        }).thenWaitFor(1).then(() => {
-          assert(single.checkModified() === true)
-          vm.value = 'hello'
-        }).thenWaitFor(1).then(() => {
-          assert(single.checkModified() === false)
-        }).then(done)
       })
     })
   })
@@ -279,41 +218,6 @@ describe('SingleElement class', () => {
           triggerEvent(vm.$el, 'change')
         }).then(() => {
           assert(handleInputable.calls.count() === 1)
-        }).then(done)
-      })
-    })
-
-    describe('component', () => {
-      it('should be work', done => {
-        const watchInputable = jasmine.createSpy()
-        const vm = new Vue({
-          data: {
-            child: null,
-            value: 'hello'
-          },
-          methods: { watchInputable },
-          components: {
-            comp: {
-              props: ['value'],
-              render (h) {
-                return h('input', { attrs: { type: 'text' }})
-              }
-            }
-          },
-          render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
-          }
-        }).$mount()
-        const single = new SingleElement(vm, vm.child)
-        single.listenInputableEvent()
-        waitForUpdate(() => {
-          vm.value = 'world'
-        }).thenWaitFor(1).then(() => {
-          assert(watchInputable.calls.count() === 1)
-          single.unlistenInputableEvent()
-          vm.value = 'hello'
-        }).thenWaitFor(1).then(() => {
-          assert(watchInputable.calls.count() === 1)
         }).then(done)
       })
     })

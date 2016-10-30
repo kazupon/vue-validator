@@ -3,13 +3,16 @@ import Elements from '../../elements/index'
 import { addClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
-  const { SingleElement, MultiElement } = Elements(Vue)
+  const { SingleElement, MultiElement, ComponentElement } = Elements(Vue)
 
-  function createValidityElement (vm: ValidityComponent): ValidityElement {
-    const vnode = vm._vnode
-    return !vm.multiple
-      ? new SingleElement(vm, vnode)
-      : new MultiElement(vm)
+  function createValidityElement (vm: ValidityComponent, vnode: VNode): ?ValidityElement {
+    return vm.multiple
+      ? new MultiElement(vm)
+      : checkBuiltInElement(vnode)
+        ? new SingleElement(vm)
+        : checkComponentElement(vnode)
+          ? new ComponentElement(vm, vnode)
+          : null
   }
 
   function created (): void {
@@ -52,9 +55,13 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function mounted (): void {
-    this._elementable = createValidityElement(this)
-    this._elementable.listenToucheableEvent()
-    this._elementable.listenInputableEvent()
+    this._elementable = createValidityElement(this, this._vnode)
+    if (this._elementable) {
+      this._elementable.listenToucheableEvent()
+      this._elementable.listenInputableEvent()
+    } else {
+      // TODO: should be warn
+    }
 
     toggleClasses(this.$el, this.classes.untouched, addClass)
     toggleClasses(this.$el, this.classes.pristine, addClass)
@@ -89,4 +96,17 @@ function memoize (fn: Function): Function {
     const hit = cache[id]
     return hit || (cache[id] = fn(...args))
   }
+}
+
+function checkComponentElement (vnode: VNode): any {
+  return vnode.child &&
+    vnode.componentOptions &&
+    vnode.tag &&
+    vnode.tag.match(/vue-component/)
+}
+
+function checkBuiltInElement (vnode: VNode): any {
+  return !vnode.child &&
+    !vnode.componentOptions &&
+    vnode.tag
 }
