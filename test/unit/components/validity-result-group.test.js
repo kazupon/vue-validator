@@ -1,6 +1,6 @@
 import ValidityControl from '../../../src/components/validity/index'
 import Validity from '../../../src/components/validity.js'
-import ValidityGroup from  '../../../src/components/validity-result-group'
+import ValidityGroup from '../../../src/components/validity-result-group'
 
 const validityControl = ValidityControl(Vue)
 const validity = Validity(Vue)
