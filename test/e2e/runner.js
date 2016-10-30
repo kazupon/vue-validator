@@ -12,7 +12,7 @@ if (args.indexOf('--config') === -1) {
   args = args.concat(['--config', 'config/nightwatch.conf.js'])
 }
 if (args.indexOf('--env') === -1) {
-  args = args.concat(['--env', 'chrome,firefox,phantomjs'])
+  args = args.concat(['--env', process.env.CIRCLECI ? 'phantomjs' : 'chrome'])
 }
 const i = args.indexOf('--test')
 if (i > -1) {
