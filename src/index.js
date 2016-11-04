@@ -1,5 +1,5 @@
 /* @flow */
-import { warn } from './util'
+import warn from './warn'
 import Config from './config'
 import Asset from './asset'
 import Mixin from './mixin'

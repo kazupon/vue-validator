@@ -1,5 +1,5 @@
 /* @flow */
-import { warn } from './util'
+import warn from './warn'
 
 // TODO: should be defined strict type
 export function mapValidation (results: Array<any> | Object): Object {

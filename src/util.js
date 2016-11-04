@@ -8,15 +8,6 @@ const isIE9 = UA && UA.indexOf('msie 9.0') > 0
 
 export const MODEL_NOTIFY_EVENT: string = '__VUE_VALIDATOR_MODEL_NOTIFY_EVENT__'
 
-export function warn (msg: string, err?: Error) {
-  if (window.console) {
-    console.warn('[vue-validator] ' + msg)
-    if (err) {
-      console.warn(err.stack)
-    }
-  }
-}
-
 export function getClass (el: any): string {
   let classname: string | Object = el.className
   if (typeof classname === 'object') {
