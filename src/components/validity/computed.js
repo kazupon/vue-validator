@@ -1,6 +1,8 @@
 /* @flow */
 
 export default function (Vue: GlobalAPI): Object {
+  const { isPlainObject } = Vue.util
+
   function invalid (): boolean {
     return !this.valid
   }
@@ -11,6 +13,24 @@ export default function (Vue: GlobalAPI): Object {
 
   function untouched (): boolean {
     return !this.touched
+  }
+
+  function _setError (
+    result: ValidationResult,
+    field: string,
+    validator: string,
+    message: ?string,
+    prop: ?string
+  ): void {
+    const error: ValidationError = { field, validator }
+    if (message) {
+      error.message = message
+    }
+    if (prop) {
+      error.prop = prop
+    }
+    result.errors = result.errors || []
+    result.errors.push(error)
   }
 
   function result (): ValidationResult {
@@ -26,21 +46,38 @@ export default function (Vue: GlobalAPI): Object {
 
     const keys = this._keysCached(this._uid.toString(), this.results)
     keys.forEach((validator: string) => {
-      const result: boolean | string = getValidatorResult(validator, this.results[validator])
-      if (result === false) { // success
-        ret[validator] = false
-      } else { // failed
-        const error: ValidationError = { field: this.field, validator }
-        if (typeof result === 'string') {
-          error.message = result
+      const result = this.results[validator]
+      if (typeof result === 'boolean') {
+        if (result) {
+          ret[validator] = false
+        } else {
+          _setError(ret, this.field, validator)
+          ret[validator] = !result
         }
-        if (!ret.errors) {
-          ret.errors = []
-        }
-        if (Array.isArray(ret.errors)) {
-          ret.errors.push(error)
-        }
+      } else if (typeof result === 'string') {
+        _setError(ret, this.field, validator, result)
         ret[validator] = result
+      } else if (isPlainObject(result)) { // object
+        const props: Array<string> = Object.keys(result)
+        props.forEach((prop: string) => {
+          const propRet: boolean | string | void = result[prop]
+          ret[prop] = ret[prop] || {}
+          if (typeof propRet === 'boolean') {
+            if (result) {
+              ret[prop][validator] = false
+            } else {
+              _setError(ret, this.field, validator, undefined, prop)
+              ret[prop][validator] = !propRet
+            }
+          } else if (typeof propRet === 'string') {
+            _setError(ret, this.field, validator, propRet, prop)
+            ret[prop][validator] = propRet
+          } else {
+            ret[prop][validator] = false
+          }
+        })
+      } else {
+        ret[validator] = false
       }
     })
 
@@ -53,19 +90,4 @@ export default function (Vue: GlobalAPI): Object {
     untouched,
     result
   }
-}
-
-function getValidatorResult (
-  validator: string,
-  result: $ValidationRawResult
-): boolean | string {
-  if (typeof result === 'boolean' && !result) {
-    return true
-  }
-
-  if (typeof result === 'string' && result) {
-    return result
-  }
-
-  return false
 }

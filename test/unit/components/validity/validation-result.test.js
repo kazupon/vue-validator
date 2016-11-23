@@ -21,7 +21,15 @@ describe('validity component: validation result', () => {
         field: 'field1',
         child: {}, // dummy
         validators: {
-          required: true
+          required: true,
+          max: {
+            props: {
+              prop1: {
+                rule: 256,
+                message: 'too big!!'
+              }
+            }
+          }
         }
       }
     })
@@ -161,6 +169,7 @@ describe('validity component: validation result', () => {
       assert(result.pristine === true)
       assert(result.modified === false)
       assert(result.required === false)
+      assert.deepEqual(result.prop1, { max: false })
       assert(result.errors === undefined)
 
       // simulate some updating
@@ -179,12 +188,14 @@ describe('validity component: validation result', () => {
         assert(result.pristine === false)
         assert(result.modified === true)
         assert(result.required === true)
+        assert.deepEqual(result.prop1, { max: false })
         assert.deepEqual(result.errors, [{
           field: 'field1', validator: 'required'
         }])
 
         // set invalid validation raw result
         vm.results['required'] = 'required field1'
+        vm.results['max']['prop1'] = 'too long!!'
       }).then(() => {
         result = vm.result
         assert(result.valid === false)
@@ -195,8 +206,11 @@ describe('validity component: validation result', () => {
         assert(result.pristine === false)
         assert(result.modified === true)
         assert.deepEqual(result.required, 'required field1')
+        assert.deepEqual(result.prop1.max, 'too long!!')
         assert.deepEqual(result.errors, [{
           field: 'field1', validator: 'required', message: 'required field1'
+        }, {
+          field: 'field1', validator: 'max', message: 'too long!!', prop: 'prop1'
         }])
       }).then(done)
     })

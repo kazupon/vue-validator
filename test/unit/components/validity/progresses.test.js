@@ -42,6 +42,40 @@ describe('validity component: progresses', () => {
     })
   })
 
+  describe('prop validator', () => {
+    it('should be work', done => {
+      baseOptions.propsData = {
+        field: 'field1',
+        child: {}, // dummy
+        validators: {
+          max: {
+            props: {
+              prop1: {
+                rule: 256
+              }
+            }
+          }
+        }
+      }
+      const vm = new Vue(baseOptions)
+      const progresses = []
+      const unwatch = vm.$watch('progresses', (val) => {
+        console.log('progresses#watch', JSON.stringify(val))
+        progresses.push(val.max.prop1)
+      }, { deep: true })
+      // initial
+      assert.equal(vm.progresses.max.prop1, '')
+      waitForUpdate(() => {
+        vm.validate('max', '')
+      }).thenWaitFor(1).then(() => {
+        assert.equal(progresses.shift(), 'running')
+        assert.equal(progresses.shift(), '')
+        assert.equal(vm.progresses.max.prop1, '')
+        unwatch()
+      }).then(done)
+    })
+  })
+
   describe('custom validator', () => {
     it('should be work', done => {
       baseOptions.propsData = {

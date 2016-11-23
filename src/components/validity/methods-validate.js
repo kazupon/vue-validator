@@ -50,16 +50,22 @@ export default function (Vue: GlobalAPI): Object {
       return null
     }
 
-    if (isPlainObject(this.validators)) {
-      if (isPlainObject(this.validators[validator])) {
-        if (this.validators[validator].rule) {
-          rule = this.validators[validator].rule
-        }
-        if (this.validators[validator].message) {
-          msg = this.validators[validator].message
+    let props = null
+    const validators = this.validators
+    if (isPlainObject(validators)) {
+      if (isPlainObject(validators[validator])) {
+        if (validators[validator].props && isPlainObject(validators[validator].props)) {
+          props = validators[validator].props
+        } else {
+          if (validators[validator].rule) {
+            rule = validators[validator].rule
+          }
+          if (validators[validator].message) {
+            msg = validators[validator].message
+          }
         }
       } else {
-        rule = this.validators[validator]
+        rule = validators[validator]
       }
     }
 
@@ -69,6 +75,9 @@ export default function (Vue: GlobalAPI): Object {
     }
     if (msg) {
       descriptor.msg = msg
+    }
+    if (props) {
+      descriptor.props = props
     }
 
     return descriptor
@@ -88,7 +97,8 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function _invokeValidator (
-    { fn, value, field, rule, msg }: $ValidateDescriptor,
+    { fn, field, rule, msg }: ValidateDescriptor | $ValidateDescriptor,
+    value: any,
     cb: Function
   ): void {
     const future: any = fn.call(this.child.context, value, rule)
@@ -111,13 +121,14 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
+  // TODO:should be refactor!!
   function _validate (validator: string, value: any, cb: Function): boolean {
     const descriptor = this._getValidateDescriptor(validator, this.field, value)
-    if (descriptor) {
+    if (descriptor && !descriptor.props) {
       if (this.progresses[validator]) { return false }
       this.progresses[validator] = 'running'
       this.$nextTick(() => {
-        this._invokeValidator(descriptor, (ret: boolean, msg: ?string) => {
+        this._invokeValidator(descriptor, descriptor.value, (ret: boolean, msg: ?string) => {
           this.progresses[validator] = ''
           this.results[validator] = msg || ret
           if (cb) {
@@ -131,6 +142,34 @@ export default function (Vue: GlobalAPI): Object {
             }
             this._fireEvent('validate', validator, e)
           }
+        })
+      })
+    } else if (descriptor && descriptor.props) {
+      const propsKeys = Object.keys(descriptor.props)
+      propsKeys.forEach((prop: string) => {
+        if (this.progresses[validator][prop]) { return }
+        this.progresses[validator][prop] = 'running'
+        const propDescriptor = {
+          fn: descriptor.fn,
+          value: descriptor.value,
+          filed: descriptor.filed
+        }
+        if (descriptor.props[prop].rule) {
+          propDescriptor.rule = descriptor.props[prop].rule
+        }
+        if (descriptor.props[prop].message) {
+          propDescriptor.msg = descriptor.props[prop].message
+        }
+        this.$nextTick(() => {
+          this._invokeValidator(propDescriptor, propDescriptor.value, (result: boolean, msg: ?string) => {
+            this.progresses[validator][prop] = ''
+            this.results[validator][prop] = msg || result
+            const e: Object = { prop, result }
+            if (msg) {
+              e['msg'] = msg
+            }
+            this._fireEvent('validate', validator, e)
+          })
         })
       })
     } else {

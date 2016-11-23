@@ -21,7 +21,15 @@ describe('validity component: reset', () => {
         field: 'field1',
         child: {}, // dummy
         validators: {
-          required: true
+          required: true,
+          max: {
+            props: {
+              prop1: {
+                rule: 256,
+                message: 'too big!!'
+              }
+            }
+          }
         }
       }
     })
@@ -37,6 +45,7 @@ describe('validity component: reset', () => {
     vm.willUpdateTouched()
     // set invalid validation raw result
     vm.results['required'] = false
+    vm.results['max']['prop1'] = 'too long!!'
     waitForUpdate(() => {
       // simulate progresses setting
       vm.progresses.required = 'running'
@@ -52,8 +61,10 @@ describe('validity component: reset', () => {
       assert(result.pristine === true)
       assert(result.modified === false)
       assert(result.required === false)
+      assert.deepEqual(result.prop1, { max: false })
       assert(result.errors === undefined)
       assert.equal(vm.progresses.required, '')
+      assert.equal(vm.progresses.max.prop1, '')
     }).then(done)
   })
 

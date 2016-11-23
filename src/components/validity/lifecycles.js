@@ -3,6 +3,7 @@ import Elements from '../../elements/index'
 import { addClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
+  const { isPlainObject } = Vue.util
   const { SingleElement, MultiElement, ComponentElement } = Elements(Vue)
 
   function createValidityElement (vm: ValidityComponent, vnode: VNode): ?ValidityElement {
@@ -15,12 +16,35 @@ export default function (Vue: GlobalAPI): Object {
           : null
   }
 
+  function mapValidatorProps (validators: any) {
+    const normalized = typeof validators === 'string' ? [validators] : validators
+    const ret: Dictionary<Array<string>> = {}
+    if (isPlainObject(normalized)) {
+      Object.keys(normalized).forEach((validator: string) => {
+        const props: ?Object = (normalized[validator]
+          && normalized[validator]['props']
+          && isPlainObject(normalized[validator]['props']))
+            ? normalized[validator]['props']    
+            : null
+        if (props) {
+          Object.keys(props).forEach((prop: string) => {
+            if (!ret[prop]) { ret[prop] = [] }
+            ret[prop].push(validator)
+          })
+        }
+      })
+    }
+    return ret
+  }
+
   function created (): void {
     this._elementable = null
 
     this._keysCached = memoize(results => {
       return Object.keys(results)
     })
+
+    this._validatorPropMap = memoize(mapValidatorProps)
 
     // for event control flags
     this._modified = false

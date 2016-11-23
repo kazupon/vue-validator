@@ -2,7 +2,43 @@
 import baseProps from './props'
 
 export default function (Vue: GlobalAPI): Object {
-  const { extend } = Vue.util
+  const { extend, isPlainObject } = Vue.util
+
+  function initialStates (states: any, validators: Array<string> | Object, init = undefined): void {
+    if (Array.isArray(validators)) {
+      validators.forEach((validator: string) => {
+        states[validator] = init
+      })
+    } else {
+      Object.keys(validators).forEach((validator: string) => {
+        const props: ?Object = (validators[validator]
+          && validators[validator]['props']
+          && isPlainObject(validators[validator]['props']))
+            ? validators[validator]['props']
+            : null
+        if (props) {
+          Object.keys(props).forEach((prop: string) => {
+            states[validator] = {}
+            states[validator][prop] = init
+          })
+        } else {
+          states[validator] = init
+        }
+      })
+    }
+  }
+
+  function getInitialResults (validators: Array<string> | Object): $ValidationRawResult {
+    const results: $ValidationRawResult = {}
+    initialStates(results, validators, undefined)
+    return results
+  }
+
+  function getInitialProgresses (validators: Array<string> | Object): ValidatorProgresses {
+    const progresses: ValidatorProgresses = {}
+    initialStates(progresses, validators, '')
+    return progresses
+  }
 
   const props: Object = extend({
     child: {
@@ -29,30 +65,6 @@ export default function (Vue: GlobalAPI): Object {
   }
 }
 
-function nomalizeValidators (target: string | Object | Array<string>): Array<string> {
-  let validators: Array<string>
-  if (typeof target === 'string') {
-    validators = [target]
-  } else if (Array.isArray(target)) {
-    validators = target
-  } else {
-    validators = Object.keys(target)
-  }
-  return validators
-}
-
-function getInitialResults (validators: Array<string>): $ValidationRawResult {
-  const results: $ValidationRawResult = {}
-  validators.forEach((validator: string) => {
-    results[validator] = undefined
-  })
-  return results
-}
-
-function getInitialProgresses (validators: Array<string>): ValidatorProgresses {
-  const progresses: ValidatorProgresses = {}
-  validators.forEach((validator: string) => {
-    progresses[validator] = ''
-  })
-  return progresses
+function nomalizeValidators (target: string | Object | Array<string>): Array<string> | Object {
+  return typeof target === 'string' ? [target] : target
 }

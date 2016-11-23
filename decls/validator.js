@@ -14,7 +14,8 @@ declare type ValidatorAsset = Function | ValidatorDefinition
 declare type ValidationError = {
   field: string,
   validator: string,
-  message?: string
+  message?: string,
+  prop?: string
 }
 
 declare type $ValidationCommonResult = {
@@ -29,17 +30,21 @@ declare type $ValidationCommonResult = {
 
 declare type ValidationResult = Dictionary<Array<ValidationError> | boolean | string> & $ValidationCommonResult
 
-declare type ValidatorProgresses = Dictionary<string>
+declare type ValidatorProgresses = Dictionary<string | Dictionary<string>>
 
-declare type $ValidationRawResult = Dictionary<boolean | string | void>
+declare type $ValidationRawResult = Dictionary<boolean | string | void | Dictionary<boolean | string | void>>
 
-declare type $ValidateDescriptor = {
+declare type ValidateDescriptor = {
   fn: Function,
   value: any,
   field: string,
   rule?: any,
   msg?: string | Function
 }
+
+declare type $ValidateDescriptor = {
+  props?: Dictionary<Array<string>>
+} & ValidateDescriptor
 
 declare type ValidityComponent = {
   field: string,

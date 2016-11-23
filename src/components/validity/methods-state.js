@@ -2,6 +2,8 @@
 import { addClass, removeClass, toggleClasses } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
+  const { isPlainObject } = Vue.util
+
   function getValue (options?: Object): any {
     return this._elementable.getValue()
   }
@@ -47,13 +49,23 @@ export default function (Vue: GlobalAPI): Object {
     this.willUpdateModified()
   }
 
+  function _initStates (keys: Array<string>, target: any, init = undefined) {
+    for (let i = 0; i < keys.length; i++) {
+      const result = target[keys[i]]
+      if (isPlainObject(result)) {
+        const nestedKeys = Object.keys(result)
+        _initStates(nestedKeys, result, init)
+      } else {
+        target[keys[i]] = init
+      }
+    }
+  }
+
   function reset (): void {
     this._unwatchValidationRawResults()
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
-    for (let i = 0; i < keys.length; i++) {
-      this.results[keys[i]] = undefined
-      this.progresses[keys[i]] = ''
-    }
+    _initStates(keys, this.results, undefined)
+    _initStates(keys, this.progresses, '')
     toggleClasses(this.$el, this.classes.valid, removeClass)
     toggleClasses(this.$el, this.classes.invalid, removeClass)
     toggleClasses(this.$el, this.classes.touched, removeClass)
@@ -69,24 +81,33 @@ export default function (Vue: GlobalAPI): Object {
     this._watchValidationRawResults()
   }
 
-  function _watchValidationRawResults (): void {
-    this._unwatch = this.$watch('results', (val: Object) => {
-      let valid: boolean = true
-      const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
-      for (let i = 0; i < keys.length; i++) {
-        const result: $ValidationRawResult = this.results[keys[i]]
-        if (typeof result === 'boolean' && !result) {
-          valid = false
-          break
-        }
-        if (typeof result === 'string' && result) {
-          valid = false
+  function _walkValid (keys: Array<string>, target: any): boolean {
+    let valid = true
+    for (let i = 0; i < keys.length; i++) {
+      const result = target[keys[i]]
+      if (typeof result === 'boolean' && !result) {
+        valid = false
+        break
+      }
+      if (typeof result === 'string' && result) {
+        valid = false
+        break
+      }
+      if (isPlainObject(result)) {
+        const nestedKeys = Object.keys(result)
+        valid = _walkValid(nestedKeys, result)
+        if (!valid) {
           break
         }
       }
-      this.valid = valid
+    }
+    return valid
+  }
 
-      if (valid) {
+  function _watchValidationRawResults (): void {
+    this._unwatch = this.$watch('results', (val: Object) => {
+      this.valid = _walkValid(this._keysCached(this._uid.toString(), this.results), this.results)
+      if (this.valid) {
         toggleClasses(this.$el, this.classes.valid, addClass)
         toggleClasses(this.$el, this.classes.invalid, removeClass)
       } else {
@@ -94,7 +115,7 @@ export default function (Vue: GlobalAPI): Object {
         toggleClasses(this.$el, this.classes.invalid, addClass)
       }
 
-      this._fireEvent(valid ? 'valid' : 'invalid')
+      this._fireEvent(this.valid ? 'valid' : 'invalid')
     }, { deep: true })
   }
 

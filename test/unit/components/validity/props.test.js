@@ -28,6 +28,14 @@ describe('validity component: props', () => {
             maxlength: {
               rule: 8,
               message: 'too long!!'
+            },
+            max: {
+              props: {
+                prop1: {
+                  rule: 256,
+                  message: 'too big!!'
+                }
+              }
             }
           }
         }
@@ -50,7 +58,18 @@ describe('validity component: props', () => {
                 assert(err === null)
                 assert(ret === true)
                 assert(msg === undefined)
-                done()
+                const handler = jasmine.createSpy()
+                vm.$on('validate', handler)
+                waitForUpdate(() => {
+                  vm.validate('max', 512, () => {})
+                }).thenWaitFor(6).then(() => {
+                  const calls = handler.calls
+                  assert(calls.count() === 1)
+                  assert.equal(calls.argsFor(0)[0], 'max')
+                  assert.equal(calls.argsFor(0)[1].prop, 'prop1')
+                  assert.equal(calls.argsFor(0)[1].result, false)
+                  assert.equal(calls.argsFor(0)[1].msg, 'too big!!')
+                }).then(done)
               })
             })
           })
