@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>component validation example</title>
+    <script src="https://unpkg.com/jquery@3.1.1"></script>
+    <script src="https://unpkg.com/select2@4.0.3"></script>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../dist/vue-validator.js"></script>
+    <link href="https://unpkg.com/select2@4.0.3/dist/css/select2.min.css" rel="stylesheet" type="text/css">
+    <style>
+      input.invalid { border-color: red; }
+      .errors { color: red; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <validity ref="validity" field="select" :validators="{
+      selected: { props: { value: { message: 'not selected item!!' } } }
+      }">
+        <select2 :options="options" :value="selected" @input="handleValidate">
+          <option value="0">----- Select one -----</option>
+        </select2>
+      </validity>
+      <p class="errors" v-if="result.errors">{{result.value.selected}}</p>
+    </div>
+    <script>
+      new Vue({
+        data: {
+          selected: 0,
+          options: [
+            { id: 1, text: 'Hello' },
+            { id: 2, text: 'World' }
+          ],
+          result: {}
+        },
+        validators: {
+          selected: function (val) {
+            return parseInt(val, 10) !== 0
+          }
+        },
+        components: {
+          // select2 wrap component
+          select2: {
+            template: '<select><slot></slot></select>',
+            props: ['options', 'value'],
+            mounted: function () {
+              var vm = this
+              $(this.$el)
+                .val(this.value)
+                .select2({ data: this.options })
+                .on('change', function () {
+                  // value: event out
+                  vm.$emit('input', this.value)
+                })
+            },
+            destroyed: function () {
+              $(this.$el).off().select2('destroy')
+            }
+          }
+        },
+        mounted () {
+          var self = this
+          var $validity = this.$refs.validity
+          $validity.$on('validate', function () {
+            self.result = $validity.result
+          })
+
+          $validity.validate()
+        },
+        methods: {
+          handleValidate: function (val) {
+            this.selected = val
+            this.$nextTick(function () {
+              var $validity = this.$refs.validity
+              $validity.validate()
+            })
+          }
+        }
+      }).$mount('#app')
+    </script>
+  </body>
+</html>
