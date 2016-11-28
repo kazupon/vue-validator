@@ -9,26 +9,33 @@ describe('ComponentElement class', () => {
         const vm = new Vue({
           data: {
             child: null,
-            value: 'hello'
+            value: 'hello',
+            prop1: 'foo'
           },
           components: {
             comp: {
-              props: ['value'],
+              props: ['value', 'prop1'],
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
+            return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
+          },
+          methods: {
+            _validatorProps () {
+              return ['value', 'prop1']
+            }
           }
         }).$mount()
         const component = new ComponentElement(vm, vm.child)
-        assert.equal(component.getValue(), 'hello')
+        assert.deepEqual(component.getValue(), { value: 'hello', prop1: 'foo' })
         waitForUpdate(() => {
           vm.value = 'world'
+          vm.prop1 = 'bar'
         }).thenWaitFor(1).then(() => {
-          assert.equal(component.getValue(), 'world')
+          assert.deepEqual(component.getValue(), { value: 'world', prop1: 'bar'})
         }).then(done)
       })
     })
@@ -40,27 +47,35 @@ describe('ComponentElement class', () => {
         const vm = new Vue({
           data: {
             child: null,
-            value: 'hello'
+            value: 'hello',
+            prop1: 'foo'
           },
           components: {
             comp: {
-              props: ['value'],
+              props: ['value', 'prop1'],
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
+            return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
+          },
+          methods: {
+            _validatorProps () {
+              return ['value', 'prop1']
+            }
           }
         }).$mount()
         const component = new ComponentElement(vm, vm.child)
         assert(component.checkModified() === false)
         waitForUpdate(() => {
           vm.value = 'world'
+          vm.prop1 = 'bar'
         }).thenWaitFor(1).then(() => {
           assert(component.checkModified() === true)
           vm.value = 'hello'
+          vm.prop1 = 'foo'
         }).thenWaitFor(1).then(() => {
           assert(component.checkModified() === false)
         }).then(done)
@@ -71,15 +86,15 @@ describe('ComponentElement class', () => {
   describe('#listenToucheableEvent / #unlistenToucheableEvent', () => {
     it('should be work', done => {
       const handleFocusout = jasmine.createSpy()
+      const _validatorProps = function () { return ['value', 'prop1'] }
       const vm = new Vue({
-        methods: { willUpdateTouched: handleFocusout },
         data: {
           child: null,
           value: 'hello'
         },
         components: {
           comp: {
-            props: ['value'],
+            props: ['value', 'prop1'],
             render (h) {
               return h('input', { attrs: { type: 'text' }})
             }
@@ -87,7 +102,11 @@ describe('ComponentElement class', () => {
         },
         render (h) {
           return (this.child = h('comp', { props: { value: this.value }}))
-        }
+        },
+        methods: {
+          willUpdateTouched: handleFocusout,
+          _validatorProps
+        },
       }).$mount()
       const component = new ComponentElement(vm, vm.child)
       component.listenToucheableEvent()
@@ -107,34 +126,38 @@ describe('ComponentElement class', () => {
     describe('component', () => {
       it('should be work', done => {
         const watchInputable = jasmine.createSpy()
+        const _validatorProps = function () { return ['value', 'prop1'] }
         const vm = new Vue({
           data: {
             child: null,
-            value: 'hello'
+            value: 'hello',
+            prop1: 'foo'
           },
-          methods: { watchInputable },
           components: {
             comp: {
-              props: ['value'],
+              props: ['value', 'prop1'],
               render (h) {
                 return h('input', { attrs: { type: 'text' }})
               }
             }
           },
           render (h) {
-            return (this.child = h('comp', { props: { value: this.value }}))
-          }
+            return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
+          },
+          methods: { watchInputable, _validatorProps }
         }).$mount()
         const component = new ComponentElement(vm, vm.child)
         component.listenInputableEvent()
         waitForUpdate(() => {
           vm.value = 'world'
+          vm.prop1 = 'bar'
         }).thenWaitFor(1).then(() => {
-          assert(watchInputable.calls.count() === 1)
+          assert(watchInputable.calls.count() === 2)
           component.unlistenInputableEvent()
           vm.value = 'hello'
+          vm.prop1 = 'foo'
         }).thenWaitFor(1).then(() => {
-          assert(watchInputable.calls.count() === 1)
+          assert(watchInputable.calls.count() === 2)
         }).then(done)
       })
     })

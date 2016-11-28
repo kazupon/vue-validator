@@ -149,10 +149,11 @@ export default function (Vue: GlobalAPI): Object {
       propsKeys.forEach((prop: string) => {
         if (this.progresses[validator][prop]) { return }
         this.progresses[validator][prop] = 'running'
+        const values = descriptor.value
         const propDescriptor = {
           fn: descriptor.fn,
-          value: descriptor.value,
-          filed: descriptor.filed
+          value: values[prop],
+          field: descriptor.field
         }
         if (descriptor.props[prop].rule) {
           propDescriptor.rule = descriptor.props[prop].rule
@@ -164,6 +165,7 @@ export default function (Vue: GlobalAPI): Object {
           this._invokeValidator(propDescriptor, propDescriptor.value, (result: boolean, msg: ?string) => {
             this.progresses[validator][prop] = ''
             this.results[validator][prop] = msg || result
+            console.log('prop_invoi', result, msg, validator, prop, values, propDescriptor)
             const e: Object = { prop, result }
             if (msg) {
               e['msg'] = msg

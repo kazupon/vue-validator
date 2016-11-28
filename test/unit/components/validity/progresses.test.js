@@ -60,13 +60,12 @@ describe('validity component: progresses', () => {
       const vm = new Vue(baseOptions)
       const progresses = []
       const unwatch = vm.$watch('progresses', (val) => {
-        console.log('progresses#watch', JSON.stringify(val))
         progresses.push(val.max.prop1)
       }, { deep: true })
       // initial
       assert.equal(vm.progresses.max.prop1, '')
       waitForUpdate(() => {
-        vm.validate('max', '')
+        vm.validate('max', { prop1: '' }, () => {})
       }).thenWaitFor(1).then(() => {
         assert.equal(progresses.shift(), 'running')
         assert.equal(progresses.shift(), '')

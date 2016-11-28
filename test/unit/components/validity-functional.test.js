@@ -379,7 +379,15 @@ describe('validity functional component', () => {
               h('validity', {
                 props: {
                   field: 'field1',
-                  validators: ['required']
+                  validators: {
+                    required: {
+                      props: {
+                        value: {
+                          rule: true
+                        }
+                      }
+                    }
+                  }
                 },
                 ref: 'validity'
               }, [
@@ -396,10 +404,11 @@ describe('validity functional component', () => {
           validity.validate() // validate !!
         }).thenWaitFor(1).then(() => {
           result = validity.result
-          assert(result.required === true)
+          assert(result.value.required === true)
           assert.deepEqual(result.errors, [{
             field: 'field1',
-            validator: 'required'
+            validator: 'required',
+            prop: 'value'
           }])
           assert(validity.valid === false)
           assert(validity.invalid === true)
@@ -411,7 +420,7 @@ describe('validity functional component', () => {
           validity.validate() // validate !!
         }).thenWaitFor(1).then(() => {
           result = validity.result
-          assert(result.required === false)
+          assert(result.value.required === false)
           assert(result.errors === undefined)
           assert(validity.valid === true)
           assert(validity.invalid === false)
@@ -625,7 +634,9 @@ describe('validity functional component', () => {
               h('validity', {
                 props: {
                   field: 'field2',
-                  validators: ['required']
+                  validators: {
+                    required: { props: { value: { rule: true }}}
+                  }
                 },
                 ref: 'validity2'
               }, [
@@ -808,7 +819,9 @@ describe('validity functional component', () => {
               h('validity', {
                 props: {
                   field: 'field2',
-                  validators: ['required'],
+                  validators: {
+                    required: { props: { value: { rule: true }}}
+                  },
                   classes: classesProp2
                 },
                 ref: 'validity2'
@@ -922,7 +935,9 @@ describe('validity functional component', () => {
               h('validity', {
                 props: {
                   field: 'field2',
-                  validators: ['required']
+                  validators: {
+                    required: { props: { value: { rule: true }}}
+                  }
                 },
                 ref: 'validity2'
               }, [

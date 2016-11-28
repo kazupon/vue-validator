@@ -16,9 +16,9 @@ export default function (Vue: GlobalAPI): Object {
           : null
   }
 
-  function mapValidatorProps (validators: any) {
+  function getValidatorProps (validators: any): Array<string> {
     const normalized = typeof validators === 'string' ? [validators] : validators
-    const ret: Dictionary<Array<string>> = {}
+    const targets: Array<string> = []
     if (isPlainObject(normalized)) {
       Object.keys(normalized).forEach((validator: string) => {
         const props: ?Object = (normalized[validator]
@@ -28,13 +28,14 @@ export default function (Vue: GlobalAPI): Object {
             : null
         if (props) {
           Object.keys(props).forEach((prop: string) => {
-            if (!ret[prop]) { ret[prop] = [] }
-            ret[prop].push(validator)
+            if (!~targets.indexOf(prop)) {
+              targets.push(prop)
+            }
           })
         }
       })
     }
-    return ret
+    return targets
   }
 
   function created (): void {
@@ -44,7 +45,7 @@ export default function (Vue: GlobalAPI): Object {
       return Object.keys(results)
     })
 
-    this._validatorPropMap = memoize(mapValidatorProps)
+    this._validatorProps = memoize(getValidatorProps)
 
     // for event control flags
     this._modified = false

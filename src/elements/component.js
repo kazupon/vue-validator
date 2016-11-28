@@ -13,10 +13,10 @@ export default function (Vue: GlobalAPI): any {
     initValue: any
 
     constructor (vm: ValidityComponent, vnode: any) {
-      console.log('ComponentElement#constructor')
       this._vm = vm
       this._vnode = vnode
       this.initValue = this.getValue()
+      this._watchers = []
       this.attachValidity()
     }
 
@@ -24,12 +24,21 @@ export default function (Vue: GlobalAPI): any {
       this._vm.$el.$validity = this._vm
     }
 
+    getValidatorProps (): Array<string> {
+      const vm = this._vm
+      return vm._validatorProps(vm._uid.toString(), vm.validators)
+    }
+
     getValue (): any {
-      return this._vnode.child.value
+      const value: Dictionary<string> = {}
+      this.getValidatorProps().forEach((prop: string) => {
+        value[prop] = this._vnode.child[prop]
+      })
+      return value
     }
 
     checkModified (): boolean {
-      return !looseEqual(this.initValue, this._vnode.child.value)
+      return !looseEqual(this.initValue, this.getValue())
     }
 
     listenToucheableEvent (): void {
@@ -41,15 +50,14 @@ export default function (Vue: GlobalAPI): any {
     }
 
     listenInputableEvent (): void {
-      this._unwatchInputable = this._vnode.child.$watch('value', this._vm.watchInputable)
+      this.getValidatorProps().forEach((prop: string) => {
+        this._watchers.push(this._vnode.child.$watch(prop, this._vm.watchInputable))
+      })
     }
 
     unlistenInputableEvent (): void {
-      if (this._unwatchInputable) {
-        this._unwatchInputable()
-        this._unwatchInputable = undefined
-        delete this._unwatchInputable
-      }
+      this._watchers.forEach(watcher => { watcher() })
+      this._watchers = []
     }
 
     fireInputableEvent (): void {

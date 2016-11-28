@@ -63,7 +63,7 @@ export default function (Vue: GlobalAPI): Object {
           const propRet: boolean | string | void = result[prop]
           ret[prop] = ret[prop] || {}
           if (typeof propRet === 'boolean') {
-            if (result) {
+            if (propRet) {
               ret[prop][validator] = false
             } else {
               _setError(ret, this.field, validator, undefined, prop)

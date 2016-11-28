@@ -61,7 +61,7 @@ describe('validity component: props', () => {
                 const handler = jasmine.createSpy()
                 vm.$on('validate', handler)
                 waitForUpdate(() => {
-                  vm.validate('max', 512, () => {})
+                  vm.validate('max', { prop1: 512 }, () => {})
                 }).thenWaitFor(6).then(() => {
                   const calls = handler.calls
                   assert(calls.count() === 1)
