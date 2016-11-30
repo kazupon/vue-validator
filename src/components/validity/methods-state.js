@@ -62,6 +62,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function reset (): void {
+    this._unwatchValidationRawProgresses()
     this._unwatchValidationRawResults()
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
     _initStates(keys, this.results, undefined)
@@ -78,7 +79,9 @@ export default function (Vue: GlobalAPI): Object {
     this.touched = false
     this.modified = false
     this._modified = false
+    this.progress = ''
     this._watchValidationRawResults()
+    this._watchValidationRawProgresses()
   }
 
   function _walkValid (keys: Array<string>, target: any): boolean {
@@ -105,8 +108,11 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function _watchValidationRawResults (): void {
-    this._unwatch = this.$watch('results', (val: Object) => {
-      this.valid = _walkValid(this._keysCached(this._uid.toString(), this.results), this.results)
+    this._unwatchResults = this.$watch('results', (val: Object) => {
+      this.valid = _walkValid(
+        this._keysCached(this._uid.toString(), this.results),
+        this.results
+      )
       if (this.valid) {
         toggleClasses(this.$el, this.classes.valid, addClass)
         toggleClasses(this.$el, this.classes.invalid, removeClass)
@@ -120,9 +126,43 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function _unwatchValidationRawResults (): void {
-    this._unwatch()
-    this._unwatch = undefined
-    delete this._unwatch
+    this._unwatchResults()
+    this._unwatchResults = undefined
+    delete this._unwatchResults
+  }
+
+  function _walkProgresses (keys: Array<string>, target: any): string {
+    let progress = ''
+    for (let i = 0; i < keys.length; i++) {
+      const result = target[keys[i]]
+      if (typeof result === 'string' && result) {
+        progress = result
+        break
+      }
+      if (isPlainObject(result)) {
+        const nestedKeys = Object.keys(result)
+        progress = _walkProgresses(nestedKeys, result)
+        if (!progress) {
+          break
+        }
+      }
+    }
+    return progress
+  }
+
+  function _watchValidationRawProgresses (): void {
+    this._unwatchProgresses = this.$watch('progresses', (val: any) => {
+      this.progress = _walkProgresses(
+        this._keysCached(this._uid.toString(), this.results),
+        this.progresses
+      )
+    }, { deep: true })
+  }
+
+  function _unwatchValidationRawProgresses (): void {
+    this._unwatchProgresses()
+    this._unwatchProgresses = undefined
+    delete this._unwatchProgresses
   }
 
   return {
@@ -135,6 +175,8 @@ export default function (Vue: GlobalAPI): Object {
     watchInputable,
     reset,
     _watchValidationRawResults,
-    _unwatchValidationRawResults
+    _unwatchValidationRawResults,
+    _watchValidationRawProgresses,
+    _unwatchValidationRawProgresses
   }
 }

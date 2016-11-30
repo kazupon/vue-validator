@@ -165,7 +165,6 @@ export default function (Vue: GlobalAPI): Object {
           this._invokeValidator(propDescriptor, propDescriptor.value, (result: boolean, msg: ?string) => {
             this.progresses[validator][prop] = ''
             this.results[validator][prop] = msg || result
-            console.log('prop_invoi', result, msg, validator, prop, values, propDescriptor)
             const e: Object = { prop, result }
             if (msg) {
               e['msg'] = msg

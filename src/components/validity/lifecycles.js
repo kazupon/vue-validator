@@ -56,6 +56,9 @@ export default function (Vue: GlobalAPI): Object {
     // watch validation raw results
     this._watchValidationRawResults()
 
+    // watch validation raw progress
+    this._watchValidationRawProgresses()
+
     const validation = this.$options.propsData ? this.$options.propsData.validation : null
     if (validation) {
       const { instance, name } = validation
@@ -72,6 +75,7 @@ export default function (Vue: GlobalAPI): Object {
       instance.unregister(this.field, this, { named: name, group })
     }
 
+    this._unwatchValidationRawProgresses()
     this._unwatchValidationRawResults()
 
     this._elementable.unlistenInputableEvent()

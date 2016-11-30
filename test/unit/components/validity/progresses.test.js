@@ -166,4 +166,38 @@ describe('validity component: progresses', () => {
       })
     })
   })
+
+  describe('progress computed prop', () => {
+    it('should be work', done => {
+      baseOptions.propsData = {
+        field: 'field1',
+        child: {}, // dummy
+        validators: {
+          required: true,
+          custom1: true,
+          exist: true
+        }
+      }
+      baseOptions.validators = {
+        custom1: {
+          check (val) {
+            return true
+          }
+        },
+        exist (val) {
+          return (resolve, reject) => {
+            setTimeout(() => { resolve() }, 5)
+          }
+        }
+      }
+      const vm = new Vue(baseOptions)
+      waitForUpdate(() => {
+        vm.validate('test', () => {})
+      }).thenWaitFor(1).then(() => {
+        assert.equal(vm.progress, 'running')
+      }).thenWaitFor(6).then(() => {
+        assert.equal(vm.progress, '')
+      }).then(done)
+    })
+  })
 })
