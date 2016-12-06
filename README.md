@@ -8,6 +8,8 @@ Validator component for Vue.js
 
 >:warning: NOTE: official release for Vue.js 2.0 not yet :construction:
 
+## NOTICE !!
+`vue-validator` have retiring from vue.js official plugins. in the future, `vue-validator` is continuing as personal project.
 
 ## Compatibility
 - v2 later
