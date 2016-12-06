@@ -1,10 +1,7 @@
 /* @flow */
-import { MODEL_NOTIFY_EVENT } from '../util'
-import Helper from './helper'
 
 export default function (Vue: GlobalAPI): any {
   const { looseEqual } = Vue.util
-  const { modelValueEqual } = Helper(Vue)
 
   class ComponentElement {
     _vm: ValidityComponent
@@ -58,16 +55,6 @@ export default function (Vue: GlobalAPI): any {
     unlistenInputableEvent (): void {
       this._watchers.forEach(watcher => { watcher() })
       this._watchers = []
-    }
-
-    fireInputableEvent (): void {
-      const args = { value: this.getValue() }
-      args[MODEL_NOTIFY_EVENT] = 'COMPONENT'
-      this._vnode.child.$emit('input', args)
-    }
-
-    modelValueEqual (vnode: VNode): ?boolean {
-      return modelValueEqual(vnode)
     }
   }
 

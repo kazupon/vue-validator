@@ -1,10 +1,7 @@
 /* @flow */
-import { triggerEvent } from '../util'
-import Helper from './helper'
 
 export default function (Vue: GlobalAPI): any {
   const { looseEqual } = Vue.util
-  const { addEventInfo, modelValueEqual } = Helper(Vue)
 
   class MultiElement {
     _vm: ValidityComponent
@@ -54,25 +51,6 @@ export default function (Vue: GlobalAPI): any {
       this._eachItems(item => {
         item.removeEventListener('change', this._vm.handleInputable)
       })
-    }
-
-    fireInputableEvent (): void {
-      this._eachItems(item => {
-        triggerEvent(item, 'change', addEventInfo)
-      })
-    }
-
-    modelValueEqual (vnode: VNode): ?boolean {
-      let ret: ?boolean = null
-      const children: Array<VNode> = (this._vm.child && this._vm.child.children) || []
-      for (let i = 0; i < children.length; i++) {
-        const maybeEqual: ?boolean = modelValueEqual(children[i])
-        if (!maybeEqual) {
-          ret = maybeEqual
-          break
-        }
-      }
-      return ret
     }
 
     _getCheckedValue (): Array<any> {

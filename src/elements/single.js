@@ -1,10 +1,7 @@
 /* @flow */
-import { triggerEvent } from '../util'
-import Helper from './helper'
 
 export default function (Vue: GlobalAPI): any {
   const { looseEqual } = Vue.util
-  const { addEventInfo, modelValueEqual } = Helper(Vue)
 
   class SingleElement {
     _vm: ValidityComponent
@@ -81,23 +78,6 @@ export default function (Vue: GlobalAPI): any {
           el.removeEventListener('input', vm.handleInputable)
         }
       }
-    }
-
-    fireInputableEvent (): void {
-      const el = this._vm.$el
-      if (el.tagName === 'SELECT') {
-        triggerEvent(el, 'change', addEventInfo)
-      } else {
-        if (el.type === 'checkbox') {
-          triggerEvent(el, 'change', addEventInfo)
-        } else {
-          triggerEvent(el, 'input', addEventInfo)
-        }
-      }
-    }
-
-    modelValueEqual (vnode: VNode): ?boolean {
-      return modelValueEqual(vnode)
     }
   }
 
