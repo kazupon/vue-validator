@@ -36,8 +36,10 @@ declare type $ValidationRawResult = Dictionary<boolean | string | void | Diction
 
 declare type ValidateDescriptor = {
   fn: Function,
+  name: string,
   value: any,
   field: string,
+  prop?: string,
   rule?: any,
   msg?: string | Function
 }

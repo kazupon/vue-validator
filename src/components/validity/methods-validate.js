@@ -8,7 +8,7 @@ function isPromise (p: Object): boolean {
 }
 
 export default function (Vue: GlobalAPI): Object {
-  const { isPlainObject, resolveAsset } = Vue.util
+  const { extend, isPlainObject, resolveAsset } = Vue.util
 
   function _resolveValidator (name: string): ?ValidatorAsset {
     const options = (this.child && this.child.context)
@@ -17,7 +17,7 @@ export default function (Vue: GlobalAPI): Object {
     return resolveAsset(options, 'validators', name)
   }
 
-  function _getValidateDescriptor (
+  function _getValidateRawDescriptor (
     validator: string,
     field: string,
     value: any
@@ -97,7 +97,7 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function _invokeValidator (
-    { fn, field, rule, msg }: ValidateDescriptor | $ValidateDescriptor,
+    { fn, field, rule, msg }: Object,
     value: any,
     cb: Function
   ): void {
@@ -121,9 +121,95 @@ export default function (Vue: GlobalAPI): Object {
     }
   }
 
+  function _getValidateDescriptors (
+    validator: string,
+    field: string,
+    value: any
+  ): Array<ValidateDescriptor> {
+    const descriptors: Array<ValidateDescriptor> = []
+
+    const rawDescriptor = this._getValidateRawDescriptor(validator, this.field, value)
+    if (!rawDescriptor) { return descriptors }
+
+    let descriptor = null
+    if (!rawDescriptor.props) {
+      descriptor = { name: validator }
+      extend(descriptor, rawDescriptor)
+      descriptors.push(descriptor)
+    } else {
+      const propsKeys = Object.keys(descriptor.props)
+      propsKeys.forEach((prop: string) => {
+        descriptor = {
+          fn: rawDescriptor.fn,
+          name: validator,
+          value: rawDescriptor.value[prop],
+          field: rawDescriptor.field,
+          prop
+        }
+        if (rawDescriptor.props[prop].rule) {
+          descriptor.rule = rawDescriptor.props[prop].rule
+        }
+        if (rawDescriptor.props[prop].message) {
+          descriptor.msg = rawDescriptor.props[prop].message
+        }
+        descriptors.push(descriptor)
+      })
+    }
+
+    return descriptors
+  }
+
+  function _syncValidates (field: string, cb: Function): void {
+    const validators: Array<string> = this._keysCached(this._uid.toString(), this.results)
+    const value: any = this.getValue()
+    const descriptors: Array<ValidateDescriptor> = []
+    validators.forEach((validator: string) => {
+      this._getValidateDescriptors(validator, field, value).forEach((desc: ValidateDescriptor) => {
+        descriptors.push(desc)
+      })
+    })
+
+    let count = 0
+    const len = descriptors.length
+    descriptors.forEach((desc: ValidateDescriptor) => {
+      const validator: string = desc.name
+      const prop = desc.prop
+      if ((!prop && this.progresses[validator]) || (prop && this.progresses[validator][prop]))  {
+        count++
+        if (count === len) {
+          cb(this._walkValid(this._keysCached(this._uid.toString(), this.results), this.results))
+        }
+        return
+      }
+
+      if (!prop) {
+        this.progresses[validator] = 'running'
+      } else {
+        this.progresses[validator][prop] = 'running'
+      }
+
+      this.$nextTick(() => {
+        this._invokeValidator(desc, desc.value, (ret: boolean, msg: ?string) => {
+          if (!prop) {
+            this.progresses[validator] = ''
+            this.results[validator] = msg || ret
+          } else {
+            this.progresses[validator][prop] = ''
+            this.results[validator][prop] = msg || ret
+          }
+
+          count++
+          if (count === len) {
+            cb(this._walkValid(this._keysCached(this._uid.toString(), this.results), this.results))
+          }
+        })
+      })
+    })
+  }
+
   // TODO:should be refactor!!
   function _validate (validator: string, value: any, cb: Function): boolean {
-    const descriptor = this._getValidateDescriptor(validator, this.field, value)
+    const descriptor = this._getValidateRawDescriptor(validator, this.field, value)
     if (descriptor && !descriptor.props) {
       if (this.progresses[validator]) { return false }
       this.progresses[validator] = 'running'
@@ -225,10 +311,12 @@ export default function (Vue: GlobalAPI): Object {
 
   return {
     _resolveValidator,
-    _getValidateDescriptor,
+    _getValidateRawDescriptor,
+    _getValidateDescriptors,
     _resolveMessage,
     _invokeValidator,
     _validate,
+    _syncValidates,
     validate
   }
 }

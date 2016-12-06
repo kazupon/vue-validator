@@ -174,6 +174,7 @@ export default function (Vue: GlobalAPI): Object {
     handleInputable,
     watchInputable,
     reset,
+    _walkValid,
     _watchValidationRawResults,
     _unwatchValidationRawResults,
     _watchValidationRawProgresses,
