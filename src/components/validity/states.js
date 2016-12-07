@@ -44,6 +44,9 @@ export default function (Vue: GlobalAPI): Object {
     child: {
       type: Object,
       required: true
+    },
+    value: {
+      type: Object
     }
   }, baseProps)
 

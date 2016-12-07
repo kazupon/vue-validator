@@ -38,6 +38,14 @@ export default function (Vue: GlobalAPI): Object {
     return targets
   }
 
+  function watchModelable (val: any): void {
+    this.$emit('input', {
+      result: this.result,
+      progress: this.progress,
+      progresses: this.progresses
+    })
+  }
+
   function created (): void {
     this._elementable = null
 
@@ -69,6 +77,16 @@ export default function (Vue: GlobalAPI): Object {
       instance.unregister(this.field, this, { named: name, group })
     }
 
+    if (this._unwatchResultProp) {
+      this._unwatchResultProp()
+      this._unwatchResultProp = null
+    }
+
+    if (this._unwatchProgressProp) {
+      this._unwatchProgressProp()
+      this._unwatchProgressProp = null
+    }
+
     this._unwatchValidationRawResults()
 
     this._elementable.unlistenInputableEvent()
@@ -85,6 +103,11 @@ export default function (Vue: GlobalAPI): Object {
       // TODO: should be warn
     }
     
+    if (hasModelDirective(this.$vnode)) {
+      this._unwatchResultProp = this.$watch('result', watchModelable)
+      this._unwatchProgressProp = this.$watch('progress', watchModelable)
+    }
+
     toggleClasses(this.$el, this.classes.untouched, addClass)
     toggleClasses(this.$el, this.classes.pristine, addClass)
   }
@@ -116,3 +139,8 @@ function checkBuiltInElement (vnode: VNode): any {
     !vnode.componentOptions &&
     vnode.tag
 }
+
+function hasModelDirective (vnode: VNode): boolean {
+  return ((vnode && vnode.data && vnode.data.directives) || []).find(dir => { return dir.name === 'model' }) ? true : false
+}
+

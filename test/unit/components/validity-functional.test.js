@@ -1003,4 +1003,64 @@ describe('validity functional component', () => {
       })
     })
   })
+
+  describe('v-model', () => {
+    it('should be work', done => {
+      function createModelDirective (key, value, modifier) {
+        const modifiers = modifier ? { validity: true } : {}
+        return [{
+          expression: key,
+          modifiers,
+          name: 'model',
+          rawName: 'v-model',
+          value: value
+        }]
+      }
+      const vm = new Vue({
+        data: { validation: {}},
+        components,
+        validators: {
+          exist (val) {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                val === 'dio' ? resolve() : reject()
+              }, 5)
+            })
+          }
+        },
+        render (h) {
+          const input = (function ($event) { this.validation = $event }).bind(this)
+          return h('div', [
+            h('validity', {
+              props: {
+                field: 'field1',
+                validators: ['required', 'numeric', 'exist']
+              },
+              directives: createModelDirective('validation', this.validation),
+              on: { input },
+              ref: 'validity',
+            }, [
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
+            ])
+          ])
+        }
+      }).$mount(el)
+      const { validity, textbox } = vm.$refs
+      waitForUpdate(() => {
+        validity.validate() // validate !!
+      }).thenWaitFor(1).then(() => {
+        assert.deepEqual(vm.validation, {
+          result: validity.result,
+          progress: validity.progress,
+          progresses: validity.progresses
+        })
+      }).thenWaitFor(6).then(() => {
+        assert.deepEqual(vm.validation, {
+          result: validity.result,
+          progress: validity.progress,
+          progresses: validity.progresses
+        })
+      }).then(done)
+    })
+  })
 })
