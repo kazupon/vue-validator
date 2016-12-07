@@ -62,7 +62,6 @@ export default function (Vue: GlobalAPI): Object {
   }
 
   function reset (): void {
-    this._unwatchValidationRawProgresses()
     this._unwatchValidationRawResults()
     const keys: Array<string> = this._keysCached(this._uid.toString(), this.results)
     _initStates(keys, this.results, undefined)
@@ -79,9 +78,7 @@ export default function (Vue: GlobalAPI): Object {
     this.touched = false
     this.modified = false
     this._modified = false
-    this.progress = ''
     this._watchValidationRawResults()
-    this._watchValidationRawProgresses()
   }
 
   function _walkValid (keys: Array<string>, target: any): boolean {
@@ -131,40 +128,6 @@ export default function (Vue: GlobalAPI): Object {
     delete this._unwatchResults
   }
 
-  function _walkProgresses (keys: Array<string>, target: any): string {
-    let progress = ''
-    for (let i = 0; i < keys.length; i++) {
-      const result = target[keys[i]]
-      if (typeof result === 'string' && result) {
-        progress = result
-        break
-      }
-      if (isPlainObject(result)) {
-        const nestedKeys = Object.keys(result)
-        progress = _walkProgresses(nestedKeys, result)
-        if (!progress) {
-          break
-        }
-      }
-    }
-    return progress
-  }
-
-  function _watchValidationRawProgresses (): void {
-    this._unwatchProgresses = this.$watch('progresses', (val: any) => {
-      this.progress = _walkProgresses(
-        this._keysCached(this._uid.toString(), this.results),
-        this.progresses
-      )
-    }, { deep: true })
-  }
-
-  function _unwatchValidationRawProgresses (): void {
-    this._unwatchProgresses()
-    this._unwatchProgresses = undefined
-    delete this._unwatchProgresses
-  }
-
   return {
     getValue,
     checkModified,
@@ -176,8 +139,6 @@ export default function (Vue: GlobalAPI): Object {
     reset,
     _walkValid,
     _watchValidationRawResults,
-    _unwatchValidationRawResults,
-    _watchValidationRawProgresses,
-    _unwatchValidationRawProgresses
+    _unwatchValidationRawResults
   }
 }

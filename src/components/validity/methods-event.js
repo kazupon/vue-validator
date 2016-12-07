@@ -1,5 +1,4 @@
 /* @flow */
-import { MODEL_NOTIFY_EVENT } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
 

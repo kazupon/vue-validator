@@ -1,21 +1,9 @@
 /* @flow */
 
 export default function (Vue: GlobalAPI): Object {
-  const { isPlainObject } = Vue.util
+ const { isPlainObject } = Vue.util
 
-  function invalid (): boolean {
-    return !this.valid
-  }
-
-  function pristine (): boolean {
-    return !this.dirty
-  }
-
-  function untouched (): boolean {
-    return !this.touched
-  }
-
-  function _setError (
+  function setError (
     result: ValidationResult,
     field: string,
     validator: string,
@@ -31,6 +19,37 @@ export default function (Vue: GlobalAPI): Object {
     }
     result.errors = result.errors || []
     result.errors.push(error)
+  }
+
+  function walkProgresses (keys: Array<string>, target: any): string {
+    let progress = ''
+    for (let i = 0; i < keys.length; i++) {
+      const result = target[keys[i]]
+      if (typeof result === 'string' && result) {
+        progress = result
+        break
+      }
+      if (isPlainObject(result)) {
+        const nestedKeys = Object.keys(result)
+        progress = walkProgresses(nestedKeys, result)
+        if (!progress) {
+          break
+        }
+      }
+    }
+    return progress
+  }
+
+  function invalid (): boolean {
+    return !this.valid
+  }
+
+  function pristine (): boolean {
+    return !this.dirty
+  }
+
+  function untouched (): boolean {
+    return !this.touched
   }
 
   function result (): ValidationResult {
@@ -51,11 +70,11 @@ export default function (Vue: GlobalAPI): Object {
         if (result) {
           ret[validator] = false
         } else {
-          _setError(ret, this.field, validator)
+          setError(ret, this.field, validator)
           ret[validator] = !result
         }
       } else if (typeof result === 'string') {
-        _setError(ret, this.field, validator, result)
+        setError(ret, this.field, validator, result)
         ret[validator] = result
       } else if (isPlainObject(result)) { // object
         const props: Array<string> = Object.keys(result)
@@ -66,11 +85,11 @@ export default function (Vue: GlobalAPI): Object {
             if (propRet) {
               ret[prop][validator] = false
             } else {
-              _setError(ret, this.field, validator, undefined, prop)
+              setError(ret, this.field, validator, undefined, prop)
               ret[prop][validator] = !propRet
             }
           } else if (typeof propRet === 'string') {
-            _setError(ret, this.field, validator, propRet, prop)
+            setError(ret, this.field, validator, propRet, prop)
             ret[prop][validator] = propRet
           } else {
             ret[prop][validator] = false
@@ -84,10 +103,20 @@ export default function (Vue: GlobalAPI): Object {
     return ret
   }
 
+  function progress (): string {
+    let ret = ''
+    ret = walkProgresses(
+      this._keysCached(this._uid.toString(), this.results),
+      this.progresses
+    )
+    return ret
+  }
+
   return {
     invalid,
     pristine,
     untouched,
-    result
+    result,
+    progress
   }
 }

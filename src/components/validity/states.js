@@ -55,8 +55,7 @@ export default function (Vue: GlobalAPI): Object {
       dirty: false,
       touched: false,
       modified: false,
-      progresses: getInitialProgresses(validators),
-      progress: ''
+      progresses: getInitialProgresses(validators)
     }
   }
 
