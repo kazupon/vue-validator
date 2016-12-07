@@ -13,7 +13,7 @@
   <body>
     <div id="app">
       <h1>Survey</h1>
-      <validity-group field="fruits" :validators="{
+      <validity-group field="fruits" v-model="validation" :validators="{
         required: { message: requiredErrorMsg },
         minlength: { rule: 1, message: minlengthErrorMsg },
         maxlength: { rule: 2, message: maxlengthErrorMsg }
@@ -28,7 +28,7 @@
         <input id="banana" type="checkbox" value="banana" @change="handleValidate" @focusin="handleValidate">
         <label for="banana">Banana</label>
         <ul class="errors">
-          <li v-for="error in result.errors">
+          <li v-for="error in validation.result.errors">
             <p>{{error.message}}</p>
           </li>
         </ul>
@@ -36,7 +36,11 @@
     </div>
     <script>
       new Vue({
-        data: { result: {} },
+        data: {
+          validation: {
+            result: {}
+          }
+        },
         computed: {
           requiredErrorMsg: function () {
             return 'Required fruit !!'
@@ -50,12 +54,8 @@
         },
         methods: {
           handleValidate: function (e) {
-            var self = this
             var $validity = e.target.$validity
-            $validity.validate(function () {
-              var result = $validity.result
-              self.result = result
-            })
+            $validity.validate()
           }
         }
       }).$mount('#app')
