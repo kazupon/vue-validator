@@ -33,7 +33,7 @@ function installComponent (Vue: GlobalAPI): void {
 }
 
 plugin.mapValidation = mapValidation // for standalone
-plugin.version = '3.0.0-alpha.1'
+plugin.version = '__VERSION__'
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin)

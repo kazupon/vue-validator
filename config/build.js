@@ -1,6 +1,4 @@
 const fs = require('fs')
-const readFile = fs.readFileSync
-const writeFile = fs.writeFileSync
 const exist = fs.existsSync
 const mkdir = fs.mkdirSync
 const pack = require('../package.json')
@@ -10,11 +8,6 @@ const build = require('./bundle')
 if (!exist('dist')) {
   mkdir('dist')
 }
-
-// update main file
-const main = readFile('src/index.js', 'utf-8')
-  .replace(/plugin\.version = '[\d\.]+'/, `plugin.version = '${pack.version}'`)
-writeFile('src/index.js', main)
 
 // update installation.md
 const langs = ['en']
