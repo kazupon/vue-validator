@@ -15,6 +15,12 @@ export default {
   multiple: {
     type: Boolean
   },
+  autotouch: {
+    type: String,
+    default: () => {
+      return 'on'
+    }
+  },
   classes: {
     type: Object,
     default: () => {

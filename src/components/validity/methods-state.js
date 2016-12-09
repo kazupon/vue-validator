@@ -128,6 +128,10 @@ export default function (Vue: GlobalAPI): Object {
     delete this._unwatchResults
   }
 
+  function touch (): void {
+    this.willUpdateTouched()
+  }
+
   return {
     getValue,
     checkModified,
@@ -139,6 +143,7 @@ export default function (Vue: GlobalAPI): Object {
     reset,
     _walkValid,
     _watchValidationRawResults,
-    _unwatchValidationRawResults
+    _unwatchValidationRawResults,
+    touch
   }
 }

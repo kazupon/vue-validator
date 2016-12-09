@@ -1063,4 +1063,41 @@ describe('validity functional component', () => {
       }).then(done)
     })
   })
+
+  describe('manually touch', () => {
+    it('should be work', done => {
+      const vm = new Vue({
+        components,
+        render (h) {
+          return h('div', [
+            h('validity', {
+              ref: 'validity',
+              props: {
+                field: 'field1',
+                autotouch: 'off',
+                validators: { required: true }
+              }
+            }, [
+              h('input', { ref: 'textbox', attrs: { type: 'text' }})
+            ])
+          ])
+        }
+      }).$mount(el)
+      const { validity, textbox } = vm.$refs
+      let result
+      waitForUpdate(() => {
+        triggerEvent(textbox, 'focusout')
+      }).thenWaitFor(1).then(() => {
+        result = validity.result
+        assert(result.touched === false)
+        assert(result.untouched === true)
+        // manually touch with API
+        validity.touch()
+      }).thenWaitFor(1).then(() => {
+        result = validity.result
+        assert(result.touched === true)
+        assert(result.untouched === false)
+      }).then(done)
+    })
+  })
 })

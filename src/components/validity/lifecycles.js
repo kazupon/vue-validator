@@ -90,14 +90,18 @@ export default function (Vue: GlobalAPI): Object {
     this._unwatchValidationRawResults()
 
     this._elementable.unlistenInputableEvent()
-    this._elementable.unlistenToucheableEvent()
+    if (this.autotouch === 'on') {
+      this._elementable.unlistenToucheableEvent()
+    }
     this._elementable = null
   }
 
   function mounted (): void {
     this._elementable = createValidityElement(this, this._vnode)
     if (this._elementable) {
-      this._elementable.listenToucheableEvent()
+      if (this.autotouch === 'on') {
+        this._elementable.listenToucheableEvent()
+      }
       this._elementable.listenInputableEvent()
     } else {
       // TODO: should be warn
