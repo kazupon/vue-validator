@@ -1,7 +1,7 @@
 module.exports = {
-  validity_event: function (browser) {
+  touch: function (browser) {
     browser
-      .url('http://localhost:8080/examples/validity/event/')
+      .url('http://localhost:8080/examples/touch/')
       // initial loaded
       .waitForElementVisible('#app', 1000)
       .waitForElementNotPresent('.errors .required', 1000)
@@ -21,6 +21,9 @@ module.exports = {
       .trigger('input', 'input')
       .waitForElementNotPresent('.errors .required', 1000)
       .waitForElementNotPresent('.errors .minlength', 1000)
+      // manully touch
+      .moveToElement('.errors', 5, 5).mouseButtonClick() // focusout
+      .waitForElementPresent('.touch', 1000)
       .end()
   }
 }

@@ -1,7 +1,7 @@
 module.exports = {
-  validity_event: function (browser) {
+  validity_model: function (browser) {
     browser
-      .url('http://localhost:8080/examples/validity/event/')
+      .url('http://localhost:8080/examples/validity/model/')
       // initial loaded
       .waitForElementVisible('#app', 1000)
       .waitForElementNotPresent('.errors .required', 1000)

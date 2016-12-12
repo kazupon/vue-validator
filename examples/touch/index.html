@@ -22,9 +22,10 @@
         @focusin="$refs.validity.validate()" 
         @focusout="$refs.validity.touch()">
       </validity>
+      <p class="touch" v-if="validation.result.touched">Touch!!</p>
       <div class="errors">
-        <p v-if="validation.result.required">required username!!</p>
-        <p v-if="validation.result.minlength">too short username!!</p>
+        <p class="required" v-if="validation.result.required">required username!!</p>
+        <p class="minlength" v-if="validation.result.minlength">too short username!!</p>
       </div>
       <div class="result">
         <p>validation result:</p>
@@ -32,7 +33,7 @@
       </div>
     </div>
     <script>
-      new Vue({
+      var vm = new Vue({
         data: {
           validation: {
             result: {}

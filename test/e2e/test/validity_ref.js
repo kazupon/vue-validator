@@ -1,5 +1,5 @@
 module.exports = {
-  started: function (browser) {
+  validity_ref: function (browser) {
     browser
       .url('http://localhost:8080/examples/validity/ref/')
       // initial loaded

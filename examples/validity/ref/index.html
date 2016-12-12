@@ -17,8 +17,8 @@
         <input type="text" @input="handleValidate" @focusout="handleValidate">
       </validity>
       <div class="errors">
-        <p v-if="result.required">required username!!</p>
-        <p v-if="result.minlength">too short username!!</p>
+        <p class="required" v-if="result.required">required username!!</p>
+        <p class="minlength" v-if="result.minlength">too short username!!</p>
       </div>
     </div>
     <script>

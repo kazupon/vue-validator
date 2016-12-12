@@ -37,9 +37,9 @@
         </div>
         <input type="submit" value="send" v-if="valid">
         <div class="errors">
-          <p v-if="usernameInvalid">Invalid yourname inputting !!</p>
-          <p v-if="passwordInvalid">Invalid password inputting !!</p>
-          <p v-if="confirmInvalid">Invalid confirm password inputting !!</p>
+          <p class="username-invalid" v-if="usernameInvalid">Invalid yourname inputting !!</p>
+          <p class="password-invalid" v-if="passwordInvalid">Invalid password inputting !!</p>
+          <p class="confirm-invalid" v-if="confirmInvalid">Invalid confirm password inputting !!</p>
         </div>
         <div class="debug">
           <p>validation result info</p>
@@ -48,7 +48,7 @@
       </validation>
     </div>
     <script>
-      new Vue({
+      var vm = new Vue({
         // The validation result of validity component (instance) wrapped 
         // with validation component is managed it.
         // Also, You can map the these validation result to computed properties
