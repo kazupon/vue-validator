@@ -2,7 +2,7 @@
 module.exports = {
   src_folders: ['test/e2e/test'],
   output_folder: 'test/e2e/report',
-  custom_commands_path: ['node_modules/nightwatch-helpers/commands'],
+  custom_commands_path: ['node_modules/nightwatch-helpers/commands', 'test/e2e/commands'],
   custom_assertions_path: ['node_modules/nightwatch-helpers/assertions'],
 
   selenium: {
