@@ -87,6 +87,9 @@ export default function (Vue: GlobalAPI): Object {
           this.resetResults(name)
         })
       },
+      validityCount (): Number {
+        return this._validityKeys.length
+      },
       isRegistered (name: string): boolean {
         return name in this._validities
       },

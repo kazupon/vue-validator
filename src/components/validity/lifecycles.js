@@ -74,7 +74,7 @@ export default function (Vue: GlobalAPI): Object {
     if (validation) {
       const { instance, name } = validation
       const group = this.group
-      instance.unregister(this.field, this, { named: name, group })
+      instance.unregister(this.field, { named: name, group })
     }
 
     if (this._unwatchResultProp) {

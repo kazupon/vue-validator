@@ -83,20 +83,29 @@ export default function (Vue: any): any {
       const namedValidity: ?ValidityGroupComponent = named ? this._getValidityGroup('named', named) : null
       if (named && group && namedValidity && groupValidity) {
         groupValidity.unregister(field)
-        namedValidity.isRegistered(group) && namedValidity.unregister(group)
-        this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
+        if (groupValidity.validityCount() === 0) {
+          namedValidity.isRegistered(group) && namedValidity.unregister(group)
+          this._unregisterValidityGroup('group', group)
+        }
+        if (namedValidity.validityCount() === 0) {
+          this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
+          this._unregisterValidityGroup('named', named)
+        }
       } else if (namedValidity) {
         namedValidity.unregister(field)
-        this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
+        if (namedValidity.validityCount() === 0) {
+          this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
+          this._unregisterValidityGroup('named', named)
+        }
       } else if (groupValidity) {
         groupValidity.unregister(field)
-        this._validityManager.isRegistered(group) && this._validityManager.unregister(group)
+        if (groupValidity.validityCount() === 0) {
+          this._validityManager.isRegistered(group) && this._validityManager.unregister(group)
+          this._unregisterValidityGroup('group', group)
+        }
       } else {
         this._validityManager.unregister(field)
       }
-
-      group && this._unregisterValidityGroup('group', group)
-      named && this._unregisterValidityGroup('named', named)
     }
 
     destroy (): void {
