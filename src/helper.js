@@ -22,7 +22,7 @@ export function mapValidation (results: Array<any> | Object): Object {
       do {
         path = paths.shift()
         value = value[path]
-      } while (paths.length > 0)
+      } while (paths.length > 0 && value !== undefined)
       return value
     }
   })
