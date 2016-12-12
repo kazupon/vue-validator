@@ -13,51 +13,23 @@
   <body>
     <div id="app">
       <label for="username">username:</label>
-      <validity ref="validity" field="username" :validators="{ required: true, minlength: 4 }">
-        <input type="text" @input="handleValidate" @focusin="handleValidate" @focusout="handleValidate">
+      <validity ref="validity" field="username" v-model="validation" :validators="{ required: true, minlength: 4 }">
+        <input type="text" @input="$refs.validity.validate()">
       </validity>
       <div class="errors">
-        <p v-if="result.required">required username!!</p>
-        <p v-if="result.minlength">too short username!!</p>
+        <p class="required" v-if="validation.result.required">required username!!</p>
+        <p class="minlength" v-if="validation.result.minlength">too short username!!</p>
       </div>
-      <button type="button" @click="resetValidation">reset validation</button>
+      <button type="button" @click="$refs.validity.reset()">reset validation</button>
       <div class="result">
         <p>validation result:</p>
-        <pre>{{result}}</pre>
+        <pre>{{validation}}</pre>
       </div>
     </div>
     <script>
       new Vue({
         data: {
-          result: {}
-        },
-        mounted: function () {
-          var self = this
-          var $validity = this.$refs.validity
-
-          // initialize validation result
-          this.result = $validity.result
-
-          // sync validation result with $watch of validity
-          this._resultWatcher = $validity.$watch('result', function (val) {
-            self.result = val
-          })
-        },
-        destroyed: function () {
-          // unwatch validation result of validity
-          this._resultWatcher()
-        },
-        methods: {
-          handleValidate: function (e) {
-            // validate
-            var $validity = this.$refs.validity
-            $validity.validate()
-          },
-          resetValidation: function (e) {
-            // reset validation result
-            var $validity = this.$refs.validity
-            $validity.reset()
-          }
+          validation: { result: {} }
         }
       }).$mount('#app')
     </script>
