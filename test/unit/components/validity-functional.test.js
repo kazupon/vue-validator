@@ -1029,7 +1029,7 @@ describe('validity functional component', () => {
           }
         },
         render (h) {
-          const input = (function ($event) { this.validation = $event }).bind(this)
+          const input = function ($event) { this.validation = $event }.bind(this)
           return h('div', [
             h('validity', {
               props: {
@@ -1038,14 +1038,14 @@ describe('validity functional component', () => {
               },
               directives: createModelDirective('validation', this.validation),
               on: { input },
-              ref: 'validity',
+              ref: 'validity'
             }, [
               h('input', { ref: 'textbox', attrs: { type: 'text' }})
             ])
           ])
         }
       }).$mount(el)
-      const { validity, textbox } = vm.$refs
+      const { validity } = vm.$refs
       waitForUpdate(() => {
         validity.validate() // validate !!
       }).thenWaitFor(1).then(() => {

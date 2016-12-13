@@ -35,7 +35,7 @@ describe('ComponentElement class', () => {
           vm.value = 'world'
           vm.prop1 = 'bar'
         }).thenWaitFor(1).then(() => {
-          assert.deepEqual(component.getValue(), { value: 'world', prop1: 'bar'})
+          assert.deepEqual(component.getValue(), { value: 'world', prop1: 'bar' })
         }).then(done)
       })
     })
@@ -106,7 +106,7 @@ describe('ComponentElement class', () => {
         methods: {
           willUpdateTouched: handleFocusout,
           _validatorProps
-        },
+        }
       }).$mount()
       const component = new ComponentElement(vm, vm.child)
       component.listenToucheableEvent()

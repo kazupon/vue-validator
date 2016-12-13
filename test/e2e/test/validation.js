@@ -8,7 +8,7 @@ module.exports = {
       .waitForElementNotPresent('.errors .password-invalid', 1000)
       .waitForElementNotPresent('.errors .confirm-invalid', 1000)
       .waitForElementPresent('input[type="submit"]', 1000)
-      // input valid username 
+      // input valid username
       .enterValue('#username', 'kazupon')
       .waitForElementNotPresent('.errors .username-invalid', 1000)
       .waitForElementPresent('input[type="submit"]', 1000)

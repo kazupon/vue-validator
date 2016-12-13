@@ -174,7 +174,7 @@ export default function (Vue: GlobalAPI): Object {
     descriptors.forEach((desc: ValidateDescriptor) => {
       const validator: string = desc.name
       const prop = desc.prop
-      if ((!prop && this.progresses[validator]) || (prop && this.progresses[validator][prop]))  {
+      if ((!prop && this.progresses[validator]) || (prop && this.progresses[validator][prop])) {
         count++
         if (count === len) {
           cb(this._walkValid(this._keysCached(this._uid.toString(), this.results), this.results))

@@ -21,10 +21,10 @@ export default function (Vue: GlobalAPI): Object {
     const targets: Array<string> = []
     if (isPlainObject(normalized)) {
       Object.keys(normalized).forEach((validator: string) => {
-        const props: ?Object = (normalized[validator]
-          && normalized[validator]['props']
-          && isPlainObject(normalized[validator]['props']))
-            ? normalized[validator]['props']    
+        const props: ?Object = (normalized[validator] &&
+          normalized[validator]['props'] &&
+          isPlainObject(normalized[validator]['props']))
+            ? normalized[validator]['props']
             : null
         if (props) {
           Object.keys(props).forEach((prop: string) => {
@@ -106,7 +106,7 @@ export default function (Vue: GlobalAPI): Object {
     } else {
       // TODO: should be warn
     }
-    
+
     if (hasModelDirective(this.$vnode)) {
       this._unwatchResultProp = this.$watch('result', watchModelable)
       this._unwatchProgressProp = this.$watch('progress', watchModelable)
@@ -145,6 +145,6 @@ function checkBuiltInElement (vnode: VNode): any {
 }
 
 function hasModelDirective (vnode: VNode): boolean {
-  return ((vnode && vnode.data && vnode.data.directives) || []).find(dir => { return dir.name === 'model' }) ? true : false
+  return ((vnode && vnode.data && vnode.data.directives) || []).find(dir => { return dir.name === 'model' })
 }
 

@@ -11,9 +11,9 @@ export default function (Vue: GlobalAPI): Object {
       })
     } else {
       Object.keys(validators).forEach((validator: string) => {
-        const props: ?Object = (validators[validator]
-          && validators[validator]['props']
-          && isPlainObject(validators[validator]['props']))
+        const props: ?Object = (validators[validator] &&
+          validators[validator]['props'] &&
+          isPlainObject(validators[validator]['props']))
             ? validators[validator]['props']
             : null
         if (props) {

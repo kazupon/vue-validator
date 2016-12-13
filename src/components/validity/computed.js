@@ -1,7 +1,7 @@
 /* @flow */
 
 export default function (Vue: GlobalAPI): Object {
- const { isPlainObject } = Vue.util
+  const { isPlainObject } = Vue.util
 
   function setError (
     result: ValidationResult,
