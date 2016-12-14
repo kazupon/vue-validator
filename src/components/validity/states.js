@@ -4,7 +4,7 @@ import baseProps from './props'
 export default function (Vue: GlobalAPI): Object {
   const { extend, isPlainObject } = Vue.util
 
-  function initialStates (states: any, validators: Array<string> | Object, init = undefined): void {
+  function initialStates (states: any, validators: any, init = undefined): void {
     if (Array.isArray(validators)) {
       validators.forEach((validator: string) => {
         states[validator] = init

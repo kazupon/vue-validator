@@ -131,15 +131,14 @@ export default function (Vue: GlobalAPI): Object {
     const rawDescriptor = this._getValidateRawDescriptor(validator, this.field, value)
     if (!rawDescriptor) { return descriptors }
 
-    let descriptor = null
     if (!rawDescriptor.props) {
-      descriptor = { name: validator }
+      const descriptor: Object = { name: validator }
       extend(descriptor, rawDescriptor)
       descriptors.push(descriptor)
     } else {
-      const propsKeys = Object.keys(descriptor.props)
+      const propsKeys = Object.keys(!rawDescriptor.props)
       propsKeys.forEach((prop: string) => {
-        descriptor = {
+        const descriptor: Object = {
           fn: rawDescriptor.fn,
           name: validator,
           value: rawDescriptor.value[prop],
@@ -172,7 +171,7 @@ export default function (Vue: GlobalAPI): Object {
     let count = 0
     const len = descriptors.length
     descriptors.forEach((desc: ValidateDescriptor) => {
-      const validator: string = desc.name
+      const validator: any = desc.name
       const prop = desc.prop
       if ((!prop && this.progresses[validator]) || (prop && this.progresses[validator][prop])) {
         count++
@@ -236,7 +235,7 @@ export default function (Vue: GlobalAPI): Object {
         if (this.progresses[validator][prop]) { return }
         this.progresses[validator][prop] = 'running'
         const values = descriptor.value
-        const propDescriptor = {
+        const propDescriptor: Object = {
           fn: descriptor.fn,
           value: values[prop],
           field: descriptor.field

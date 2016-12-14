@@ -1,9 +1,8 @@
 /* @flow */
 import Elements from '../../elements/index'
-import { addClass, toggleClasses } from '../../util'
+import { addClass, toggleClasses, memoize } from '../../util'
 
 export default function (Vue: GlobalAPI): Object {
-  const { isPlainObject } = Vue.util
   const { SingleElement, MultiElement, ComponentElement } = Elements(Vue)
 
   function createValidityElement (vm: ValidityComponent, vnode: VNode): ?ValidityElement {
@@ -14,28 +13,6 @@ export default function (Vue: GlobalAPI): Object {
         : checkComponentElement(vnode)
           ? new ComponentElement(vm, vnode)
           : null
-  }
-
-  function getValidatorProps (validators: any): Array<string> {
-    const normalized = typeof validators === 'string' ? [validators] : validators
-    const targets: Array<string> = []
-    if (isPlainObject(normalized)) {
-      Object.keys(normalized).forEach((validator: string) => {
-        const props: ?Object = (normalized[validator] &&
-          normalized[validator]['props'] &&
-          isPlainObject(normalized[validator]['props']))
-            ? normalized[validator]['props']
-            : null
-        if (props) {
-          Object.keys(props).forEach((prop: string) => {
-            if (!~targets.indexOf(prop)) {
-              targets.push(prop)
-            }
-          })
-        }
-      })
-    }
-    return targets
   }
 
   function watchModelable (val: any): void {
@@ -52,8 +29,6 @@ export default function (Vue: GlobalAPI): Object {
     this._keysCached = memoize(results => {
       return Object.keys(results)
     })
-
-    this._validatorProps = memoize(getValidatorProps)
 
     // for event control flags
     this._modified = false
@@ -123,14 +98,6 @@ export default function (Vue: GlobalAPI): Object {
   }
 }
 
-function memoize (fn: Function): Function {
-  const cache = Object.create(null)
-  return function memoizeFn (id: string, ...args): any {
-    const hit = cache[id]
-    return hit || (cache[id] = fn(...args))
-  }
-}
-
 function checkComponentElement (vnode: VNode): any {
   return vnode.child &&
     vnode.componentOptions &&
@@ -144,7 +111,6 @@ function checkBuiltInElement (vnode: VNode): any {
     vnode.tag
 }
 
-function hasModelDirective (vnode: VNode): boolean {
-  return ((vnode && vnode.data && vnode.data.directives) || []).find(dir => { return dir.name === 'model' })
+function hasModelDirective (vnode: VNode): any {
+  return ((vnode && vnode.data && vnode.data.directives) || []).find(dir => dir.name === 'model')
 }
-

@@ -63,3 +63,11 @@ export function toggleClasses (el: any, key: string, fn: Function): void {
     fn(el, keys[i])
   }
 }
+
+export function memoize (fn: Function): Function {
+  const cache = Object.create(null)
+  return function memoizeFn (id: string, ...args): any {
+    const hit = cache[id]
+    return hit || (cache[id] = fn(...args))
+  }
+}

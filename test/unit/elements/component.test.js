@@ -22,14 +22,11 @@ describe('ComponentElement class', () => {
           },
           render (h) {
             return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
-          },
-          methods: {
-            _validatorProps () {
-              return ['value', 'prop1']
-            }
           }
         }).$mount()
         const component = new ComponentElement(vm, vm.child)
+        // set stup
+        component._validatorProps = () => { return ['value', 'prop1'] }
         assert.deepEqual(component.getValue(), { value: 'hello', prop1: 'foo' })
         waitForUpdate(() => {
           vm.value = 'world'
@@ -60,14 +57,9 @@ describe('ComponentElement class', () => {
           },
           render (h) {
             return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
-          },
-          methods: {
-            _validatorProps () {
-              return ['value', 'prop1']
-            }
           }
         }).$mount()
-        const component = new ComponentElement(vm, vm.child)
+        const component = new ComponentElement(vm, vm.child, () => ['value', 'prop1'])
         assert(component.checkModified() === false)
         waitForUpdate(() => {
           vm.value = 'world'
@@ -86,7 +78,6 @@ describe('ComponentElement class', () => {
   describe('#listenToucheableEvent / #unlistenToucheableEvent', () => {
     it('should be work', done => {
       const handleFocusout = jasmine.createSpy()
-      const _validatorProps = function () { return ['value', 'prop1'] }
       const vm = new Vue({
         data: {
           child: null,
@@ -104,11 +95,12 @@ describe('ComponentElement class', () => {
           return (this.child = h('comp', { props: { value: this.value }}))
         },
         methods: {
-          willUpdateTouched: handleFocusout,
-          _validatorProps
+          willUpdateTouched: handleFocusout
         }
       }).$mount()
       const component = new ComponentElement(vm, vm.child)
+      // set stup
+      component._validatorProps = () => { return ['value', 'prop1'] }
       component.listenToucheableEvent()
       triggerEvent(vm.$el, 'focusout')
       waitForUpdate(() => {
@@ -126,7 +118,6 @@ describe('ComponentElement class', () => {
     describe('component', () => {
       it('should be work', done => {
         const watchInputable = jasmine.createSpy()
-        const _validatorProps = function () { return ['value', 'prop1'] }
         const vm = new Vue({
           data: {
             child: null,
@@ -144,9 +135,11 @@ describe('ComponentElement class', () => {
           render (h) {
             return (this.child = h('comp', { props: { value: this.value, prop1: this.prop1 }}))
           },
-          methods: { watchInputable, _validatorProps }
+          methods: { watchInputable }
         }).$mount()
         const component = new ComponentElement(vm, vm.child)
+        // set stup
+        component._validatorProps = () => { return ['value', 'prop1'] }
         component.listenInputableEvent()
         waitForUpdate(() => {
           vm.value = 'world'

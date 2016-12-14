@@ -25,7 +25,8 @@ declare type $ValidationCommonResult = {
   pristine: boolean,
   touched: boolean,
   untouched: boolean,
-  modified: boolean
+  modified: boolean,
+  errors?: Array<ValidationError>
 }
 
 declare type ValidationResult = Dictionary<Array<ValidationError> | boolean | string> & $ValidationCommonResult
@@ -36,7 +37,7 @@ declare type $ValidationRawResult = Dictionary<boolean | string | void | Diction
 
 declare type ValidateDescriptor = {
   fn: Function,
-  name: string,
+  name?: string,
   value: any,
   field: string,
   prop?: string,
@@ -60,8 +61,10 @@ declare type ValidityComponent = {
   untouched: boolean,
   modified: boolean,
   result: ValidationResult,
+  progress: string,
   progresses: ValidatorProgresses,
   multiple: boolean,
+  autotouch: boolean,
 
   checkModified (): boolean,
   willUpdateTouched (options?: any): void,
@@ -70,6 +73,7 @@ declare type ValidityComponent = {
   handleInputable (e: Event): void,
   watchInputable (val: any): void,
   reset (): void,
+  touch (): void,
   validate (...args: Array<any>): boolean,
 } & Component
 
@@ -100,6 +104,7 @@ declare type $ValidationGroupResult = Dictionary<ValidationResult> & $Validation
 
 declare type ValidityGroupComponent = {
   results: $ValidityGroupResult,
+  validityCount (): Number,
   register (name:string, validity: ValidityComponent | ValidityGroupComponent): void,
   unregister (name: string): void,
   isRegistered (name: string): boolean,

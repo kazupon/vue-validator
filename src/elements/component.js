@@ -1,17 +1,43 @@
 /* @flow */
+import { memoize } from '../util'
 
 export default function (Vue: GlobalAPI): any {
-  const { looseEqual } = Vue.util
+  const { looseEqual, isPlainObject } = Vue.util
+
+  function getValidatorProps (validators: any): Array<string> {
+    const normalized: any = typeof validators === 'string' ? [validators] : validators
+    const targets: Array<string> = []
+    if (isPlainObject(normalized)) {
+      Object.keys(normalized).forEach((validator: string) => {
+        const props: ?Object = (normalized[validator] &&
+          normalized[validator]['props'] &&
+          isPlainObject(normalized[validator]['props']))
+            ? normalized[validator]['props']
+            : null
+        if (props) {
+          Object.keys(props).forEach((prop: string) => {
+            if (!~targets.indexOf(prop)) {
+              targets.push(prop)
+            }
+          })
+        }
+      })
+    }
+    return targets
+  }
 
   class ComponentElement {
     _vm: ValidityComponent
     _vnode: any
     _unwatchInputable: Function | void
+    _watchers: Array<Function>
+    _validatorProps: Function
     initValue: any
 
-    constructor (vm: ValidityComponent, vnode: any) {
+    constructor (vm: ValidityComponent, vnode: any, validatorProps: ?Function) {
       this._vm = vm
       this._vnode = vnode
+      this._validatorProps = validatorProps || memoize(getValidatorProps)
       this.initValue = this.getValue()
       this._watchers = []
       this.attachValidity()
@@ -23,7 +49,7 @@ export default function (Vue: GlobalAPI): any {
 
     getValidatorProps (): Array<string> {
       const vm = this._vm
-      return vm._validatorProps(vm._uid.toString(), vm.validators)
+      return this._validatorProps(vm._uid.toString(), vm.validators)
     }
 
     getValue (): any {

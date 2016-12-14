@@ -91,13 +91,13 @@ export default function (Vue: any): any {
           this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
           this._unregisterValidityGroup('named', named)
         }
-      } else if (namedValidity) {
+      } else if (named && namedValidity) {
         namedValidity.unregister(field)
         if (namedValidity.validityCount() === 0) {
           this._validityManager.isRegistered(named) && this._validityManager.unregister(named)
           this._unregisterValidityGroup('named', named)
         }
-      } else if (groupValidity) {
+      } else if (group && groupValidity) {
         groupValidity.unregister(field)
         if (groupValidity.validityCount() === 0) {
           this._validityManager.isRegistered(group) && this._validityManager.unregister(group)
