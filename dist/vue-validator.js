@@ -1,5 +1,5 @@
 /*!
- * vue-validator v3.0.0-alpha.1 
+ * vue-validator v3.0.0-alpha.2 
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -11,14 +11,6 @@
 
 /*  */
 
-var inBrowser =
-  typeof window !== 'undefined' &&
-  Object.prototype.toString.call(window) !== '[object Object]';
-var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
-
-var MODEL_NOTIFY_EVENT = '__VUE_VALIDATOR_MODEL_NOTIFY_EVENT__';
-
 function warn (msg, err) {
   if (window.console) {
     console.warn('[vue-validator] ' + msg);
@@ -26,122 +18,6 @@ function warn (msg, err) {
       console.warn(err.stack);
     }
   }
-}
-
-function looseEqual (a, b) {
-  return a === b || (
-    isObject(a) && isObject(b)
-      ? JSON.stringify(a) === JSON.stringify(b)
-      : false
-  )
-}
-
-function getClass (el) {
-  var classname = el.className;
-  if (typeof classname === 'object') {
-    classname = classname.baseVal || '';
-  }
-  return classname
-}
-
-function setClass (el, cls) {
-  if (isIE9 && !/svg$/.test(el.namespaceURI)) {
-    el.className = cls;
-  } else {
-    el.setAttribute('class', cls);
-  }
-}
-
-function addClass (el, cls) {
-  if (el.classList) {
-    el.classList.add(cls);
-  } else {
-    var cur = ' ' + getClass(el) + ' ';
-    if (cur.indexOf(' ' + cls + ' ') < 0) {
-      setClass(el, (cur + cls).trim());
-    }
-  }
-}
-
-function removeClass (el, cls) {
-  if (el.classList) {
-    el.classList.remove(cls);
-  } else {
-    var cur = ' ' + getClass(el) + ' ';
-    var tar = ' ' + cls + ' ';
-    while (cur.indexOf(tar) >= 0) {
-      cur = cur.replace(tar, ' ');
-    }
-    setClass(el, cur.trim());
-  }
-  if (!el.className) {
-    el.removeAttribute('class');
-  }
-}
-
-function toggleClasses (el, key, fn) {
-  if (!el) { return }
-
-  key = key.trim();
-  if (key.indexOf(' ') === -1) {
-    fn(el, key);
-    return
-  }
-
-  var keys = key.split(/\s+/);
-  for (var i = 0, l = keys.length; i < l; i++) {
-    fn(el, keys[i]);
-  }
-}
-
-function triggerEvent (el, event, fn) {
-  var e = document.createEvent('HTMLEvents');
-  e.initEvent(event, true, true);
-  fn && fn(e);
-  el.dispatchEvent(e);
-}
-
-// TODO: should be defined strict type
-function mapValidation (results) {
-  var res = {};
-
-  normalizeMap(results).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    res[key] = function mappedValidation () {
-      var validation = this.$validation;
-      if (!this._isMounted) {
-        return null
-      }
-      var paths = val.split('.');
-      var first = paths.shift();
-      if (first !== '$validation') {
-        warn(("unknown validation result path: " + val));
-        return null
-      }
-      var path;
-      var value = validation;
-      do {
-        path = paths.shift();
-        value = value[path];
-      } while (paths.length > 0)
-      return value
-    };
-  });
-
-  return res
-}
-
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
-}
-
-// TODO: should be defined strict type
-function normalizeMap (map) {
-  return Array.isArray(map)
-    ? map.map(function (key) { return ({ key: key, val: key }); })
-    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
 }
 
 /*  */
@@ -171,32 +47,33 @@ var Config = function (Vue) {
  * required
  * This function validate whether the value has been filled out.
  */
-function required (val) {
+function required (val, arg) {
+  var isRequired = arg === undefined ? true : arg;
   if (Array.isArray(val)) {
     if (val.length !== 0) {
       var valid = true;
       for (var i = 0, l = val.length; i < l; i++) {
-        valid = required(val[i]);
-        if (!valid) {
+        valid = required(val[i], isRequired);
+        if ((isRequired && !valid) || (!isRequired && valid)) {
           break
         }
       }
       return valid
     } else {
-      return false
+      return !isRequired
     }
   } else if (typeof val === 'number' || typeof val === 'function') {
-    return true
+    return isRequired
   } else if (typeof val === 'boolean') {
-    return val
+    return val === isRequired
   } else if (typeof val === 'string') {
-    return val.length > 0
+    return isRequired ? (val.length > 0) : (val.length <= 0)
   } else if (val !== null && typeof val === 'object') {
-    return Object.keys(val).length > 0
+    return isRequired ? (Object.keys(val).length > 0) : (Object.keys(val).length <= 0)
   } else if (val === null || val === undefined) {
-    return false
+    return !isRequired
   } else {
-    return false
+    return !isRequired
   }
 }
 
@@ -416,6 +293,9 @@ var Group = function (Vue) {
           this$1.resetResults(name);
         });
       },
+      validityCount: function validityCount () {
+        return this._validityKeys.length
+      },
       isRegistered: function isRegistered (name) {
         return name in this._validities
       },
@@ -550,20 +430,29 @@ var ValidationClass = function (Vue) {
     var namedValidity = named ? this._getValidityGroup('named', named) : null;
     if (named && group && namedValidity && groupValidity) {
       groupValidity.unregister(field);
-      namedValidity.isRegistered(group) && namedValidity.unregister(group);
-      this._validityManager.isRegistered(named) && this._validityManager.unregister(named);
-    } else if (namedValidity) {
+      if (groupValidity.validityCount() === 0) {
+        namedValidity.isRegistered(group) && namedValidity.unregister(group);
+        this._unregisterValidityGroup('group', group);
+      }
+      if (namedValidity.validityCount() === 0) {
+        this._validityManager.isRegistered(named) && this._validityManager.unregister(named);
+        this._unregisterValidityGroup('named', named);
+      }
+    } else if (named && namedValidity) {
       namedValidity.unregister(field);
-      this._validityManager.isRegistered(named) && this._validityManager.unregister(named);
-    } else if (groupValidity) {
+      if (namedValidity.validityCount() === 0) {
+        this._validityManager.isRegistered(named) && this._validityManager.unregister(named);
+        this._unregisterValidityGroup('named', named);
+      }
+    } else if (group && groupValidity) {
       groupValidity.unregister(field);
-      this._validityManager.isRegistered(group) && this._validityManager.unregister(group);
+      if (groupValidity.validityCount() === 0) {
+        this._validityManager.isRegistered(group) && this._validityManager.unregister(group);
+        this._unregisterValidityGroup('group', group);
+      }
     } else {
       this._validityManager.unregister(field);
     }
-
-    group && this._unregisterValidityGroup('group', group);
-    named && this._unregisterValidityGroup('named', named);
   };
 
   Validation.prototype.destroy = function destroy () {
@@ -693,6 +582,12 @@ var baseProps = {
   multiple: {
     type: Boolean
   },
+  autotouch: {
+    type: String,
+    default: function () {
+      return 'on'
+    }
+  },
   classes: {
     type: Object,
     default: function () {
@@ -715,11 +610,53 @@ var DEFAULT_CLASSES = {
 var States = function (Vue) {
   var ref = Vue.util;
   var extend = ref.extend;
+  var isPlainObject = ref.isPlainObject;
+
+  function initialStates (states, validators, init) {
+    if ( init === void 0 ) init = undefined;
+
+    if (Array.isArray(validators)) {
+      validators.forEach(function (validator) {
+        states[validator] = init;
+      });
+    } else {
+      Object.keys(validators).forEach(function (validator) {
+        var props = (validators[validator] &&
+          validators[validator]['props'] &&
+          isPlainObject(validators[validator]['props']))
+            ? validators[validator]['props']
+            : null;
+        if (props) {
+          Object.keys(props).forEach(function (prop) {
+            states[validator] = {};
+            states[validator][prop] = init;
+          });
+        } else {
+          states[validator] = init;
+        }
+      });
+    }
+  }
+
+  function getInitialResults (validators) {
+    var results = {};
+    initialStates(results, validators, undefined);
+    return results
+  }
+
+  function getInitialProgresses (validators) {
+    var progresses = {};
+    initialStates(progresses, validators, '');
+    return progresses
+  }
 
   var props = extend({
     child: {
       type: Object,
       required: true
+    },
+    value: {
+      type: Object
     }
   }, baseProps);
 
@@ -742,36 +679,52 @@ var States = function (Vue) {
 };
 
 function nomalizeValidators (target) {
-  var validators;
-  if (typeof target === 'string') {
-    validators = [target];
-  } else if (Array.isArray(target)) {
-    validators = target;
-  } else {
-    validators = Object.keys(target);
-  }
-  return validators
-}
-
-function getInitialResults (validators) {
-  var results = {};
-  validators.forEach(function (validator) {
-    results[validator] = undefined;
-  });
-  return results
-}
-
-function getInitialProgresses (validators) {
-  var progresses = {};
-  validators.forEach(function (validator) {
-    progresses[validator] = '';
-  });
-  return progresses
+  return typeof target === 'string' ? [target] : target
 }
 
 /*  */
 
 var Computed = function (Vue) {
+  var ref = Vue.util;
+  var isPlainObject = ref.isPlainObject;
+
+  function setError (
+    result,
+    field,
+    validator,
+    message,
+    prop
+  ) {
+    var error = { field: field, validator: validator };
+    if (message) {
+      error.message = message;
+    }
+    if (prop) {
+      error.prop = prop;
+    }
+    result.errors = result.errors || [];
+    result.errors.push(error);
+  }
+
+  function walkProgresses (keys, target) {
+    var progress = '';
+    for (var i = 0; i < keys.length; i++) {
+      var result = target[keys[i]];
+      if (typeof result === 'string' && result) {
+        progress = result;
+        break
+      }
+      if (isPlainObject(result)) {
+        var nestedKeys = Object.keys(result);
+        progress = walkProgresses(nestedKeys, result);
+        if (!progress) {
+          break
+        }
+      }
+    }
+    return progress
+  }
+
   function invalid () {
     return !this.valid
   }
@@ -799,24 +752,50 @@ var Computed = function (Vue) {
 
     var keys = this._keysCached(this._uid.toString(), this.results);
     keys.forEach(function (validator) {
-      var result = getValidatorResult(validator, this$1.results[validator]);
-      if (result === false) { // success
-        ret[validator] = false;
-      } else { // failed
-        var error = { field: this$1.field, validator: validator };
-        if (typeof result === 'string') {
-          error.message = result;
+      var result = this$1.results[validator];
+      if (typeof result === 'boolean') {
+        if (result) {
+          ret[validator] = false;
+        } else {
+          setError(ret, this$1.field, validator);
+          ret[validator] = !result;
         }
-        if (!ret.errors) {
-          ret.errors = [];
-        }
-        if (Array.isArray(ret.errors)) {
-          ret.errors.push(error);
-        }
+      } else if (typeof result === 'string') {
+        setError(ret, this$1.field, validator, result);
         ret[validator] = result;
+      } else if (isPlainObject(result)) { // object
+        var props = Object.keys(result);
+        props.forEach(function (prop) {
+          var propRet = result[prop];
+          ret[prop] = ret[prop] || {};
+          if (typeof propRet === 'boolean') {
+            if (propRet) {
+              ret[prop][validator] = false;
+            } else {
+              setError(ret, this$1.field, validator, undefined, prop);
+              ret[prop][validator] = !propRet;
+            }
+          } else if (typeof propRet === 'string') {
+            setError(ret, this$1.field, validator, propRet, prop);
+            ret[prop][validator] = propRet;
+          } else {
+            ret[prop][validator] = false;
+          }
+        });
+      } else {
+        ret[validator] = false;
       }
     });
 
+    return ret
+  }
+
+  function progress () {
+    var ret = '';
+    ret = walkProgresses(
+      this._keysCached(this._uid.toString(), this.results),
+      this.progresses
+    );
     return ret
   }
 
@@ -824,81 +803,38 @@ var Computed = function (Vue) {
     invalid: invalid,
     pristine: pristine,
     untouched: untouched,
-    result: result
+    result: result,
+    progress: progress
   }
 };
-
-function getValidatorResult (
-  validator,
-  result
-) {
-  if (typeof result === 'boolean' && !result) {
-    return true
-  }
-
-  if (typeof result === 'string' && result) {
-    return result
-  }
-
-  return false
-}
 
 /*  */
 
 var Render = function (Vue) {
   return {
     render: function render (h) {
-      this._interceptEvents(this.child, this.multiple);
       return this.child
     }
   }
 };
 
 /*  */
-function addEventInfo (e) {
-  e[MODEL_NOTIFY_EVENT] = 'DOM';
-}
 
-function modelValueEqual (vnode) {
-  var directives = (vnode.data && vnode.data.directives) || [];
-  var directive = directives.find(function (dir) {
-    return dir.name === 'model'
-  });
-  return (!directive || directive.oldValue === undefined)
-    ? null
-    : looseEqual(directive.value, directive.oldValue)
-}
+var SingleElementClass = function (Vue) {
+  var ref = Vue.util;
+  var looseEqual = ref.looseEqual;
 
-/*  */
-var SingleElement = function SingleElement (vm, vnode) {
-  this._vm = vm;
-  this._vnode = vnode;
-  this.initValue = this.getValue();
-  this.attachValidity();
-};
+  var SingleElement = function SingleElement (vm) {
+    this._vm = vm;
+    this.initValue = this.getValue();
+    this.attachValidity();
+  };
 
-var prototypeAccessors = { _isBuiltIn: {},_isComponent: {} };
+  SingleElement.prototype.attachValidity = function attachValidity () {
+    this._vm.$el.$validity = this._vm;
+  };
 
-prototypeAccessors._isBuiltIn.get = function () {
-  var vnode = this._vnode;
-  return !vnode.child &&
-    !vnode.componentOptions &&
-    vnode.tag
-};
-
-prototypeAccessors._isComponent.get = function () {
-  var vnode = this._vnode;
-  return vnode.child &&
-    vnode.componentOptions &&
-    vnode.tag.match(/vue-component/)
-};
-
-SingleElement.prototype.attachValidity = function attachValidity () {
-  this._vm.$el.$validity = this._vm;
-};
-
-SingleElement.prototype.getValue = function getValue () {
-  if (this._isBuiltIn) {
+  SingleElement.prototype.getValue = function getValue () {
     var el = this._vm.$el;
     if (el.tagName === 'SELECT') {
       return getSelectValue(el)
@@ -909,16 +845,9 @@ SingleElement.prototype.getValue = function getValue () {
         return el.value
       }
     }
-  } else if (this._isComponent) {
-    return this._vnode.child.value
-  } else {
-    // TODO: should be warn !!
-    return ''
-  }
-};
+  };
 
-SingleElement.prototype.checkModified = function checkModified () {
-  if (this._isBuiltIn) {
+  SingleElement.prototype.checkModified = function checkModified () {
     var el = this._vm.$el;
     if (el.tagName === 'SELECT') {
       return !looseEqual(this.initValue, getSelectValue(el))
@@ -929,25 +858,18 @@ SingleElement.prototype.checkModified = function checkModified () {
         return !looseEqual(this.initValue, el.value)
       }
     }
-  } else if (this._isComponent) {
-    return !looseEqual(this.initValue, this._vnode.child.value)
-  } else {
-    // TODO: should be warn !!
-    return false
-  }
-};
+  };
 
-SingleElement.prototype.listenToucheableEvent = function listenToucheableEvent () {
-  this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched);
-};
+  SingleElement.prototype.listenToucheableEvent = function listenToucheableEvent () {
+    this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched);
+  };
 
-SingleElement.prototype.unlistenToucheableEvent = function unlistenToucheableEvent () {
-  this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched);
-};
+  SingleElement.prototype.unlistenToucheableEvent = function unlistenToucheableEvent () {
+    this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched);
+  };
 
-SingleElement.prototype.listenInputableEvent = function listenInputableEvent () {
-  var vm = this._vm;
-  if (this._isBuiltIn) {
+  SingleElement.prototype.listenInputableEvent = function listenInputableEvent () {
+    var vm = this._vm;
     var el = vm.$el;
     if (el.tagName === 'SELECT') {
       el.addEventListener('change', vm.handleInputable);
@@ -958,16 +880,10 @@ SingleElement.prototype.listenInputableEvent = function listenInputableEvent () 
         el.addEventListener('input', vm.handleInputable);
       }
     }
-  } else if (this._isComponent) {
-    this._unwatchInputable = this._vnode.child.$watch('value', vm.watchInputable);
-  } else {
-    // TODO: should be warn !!
-  }
-};
+  };
 
-SingleElement.prototype.unlistenInputableEvent = function unlistenInputableEvent () {
-  var vm = this._vm;
-  if (this._isBuiltIn) {
+  SingleElement.prototype.unlistenInputableEvent = function unlistenInputableEvent () {
+    var vm = this._vm;
     var el = vm.$el;
     if (el.tagName === 'SELECT') {
       el.removeEventListener('change', vm.handleInputable);
@@ -978,43 +894,10 @@ SingleElement.prototype.unlistenInputableEvent = function unlistenInputableEvent
         el.removeEventListener('input', vm.handleInputable);
       }
     }
-  } else if (this._isComponent) {
-    if (this._unwatchInputable) {
-      this._unwatchInputable();
-      this._unwatchInputable = undefined;
-      delete this._unwatchInputable;
-    }
-  } else {
-    // TODO: should be warn !!
-  }
-};
+  };
 
-SingleElement.prototype.fireInputableEvent = function fireInputableEvent () {
-  if (this._isBuiltIn) {
-    var el = this._vm.$el;
-    if (el.tagName === 'SELECT') {
-      triggerEvent(el, 'change', addEventInfo);
-    } else {
-      if (el.type === 'checkbox') {
-        triggerEvent(el, 'change', addEventInfo);
-      } else {
-        triggerEvent(el, 'input', addEventInfo);
-      }
-    }
-  } else if (this._isComponent) {
-    var args = { value: this.getValue() };
-    args[MODEL_NOTIFY_EVENT] = 'COMPONENT';
-    this._vnode.child.$emit('input', args);
-  } else {
-    // TODO: should be warn !!
-  }
+  return SingleElement
 };
-
-SingleElement.prototype.modelValueEqual = function modelValueEqual$1 (vnode) {
-  return modelValueEqual(vnode)
-};
-
-Object.defineProperties( SingleElement.prototype, prototypeAccessors );
 
 function getSelectValue (el) {
   var value = [];
@@ -1028,106 +911,290 @@ function getSelectValue (el) {
 }
 
 /*  */
-var MultiElement = function MultiElement (vm) {
-  // TODO: should be checked whether included radio or checkbox
-  this._vm = vm;
-  this.initValue = this.getValue();
-  this.attachValidity();
-};
 
-MultiElement.prototype.attachValidity = function attachValidity () {
-    var this$1 = this;
+var MultiElementClass = function (Vue) {
+  var ref = Vue.util;
+  var looseEqual = ref.looseEqual;
 
-  this._vm.$el.$validity = this._vm;
-  this._eachItems(function (item) {
-    item.$validity = this$1._vm;
-  });
-};
+  var MultiElement = function MultiElement (vm) {
+    // TODO: should be checked whether included radio or checkbox
+    this._vm = vm;
+    this.initValue = this.getValue();
+    this.attachValidity();
+  };
 
-MultiElement.prototype.getValue = function getValue () {
-  return this._getCheckedValue()
-};
+  MultiElement.prototype.attachValidity = function attachValidity () {
+      var this$1 = this;
 
-MultiElement.prototype.checkModified = function checkModified () {
-  return !looseEqual(this.initValue, this._getCheckedValue())
-};
+    this._vm.$el.$validity = this._vm;
+    this._eachItems(function (item) {
+      item.$validity = this$1._vm;
+    });
+  };
 
-MultiElement.prototype.listenToucheableEvent = function listenToucheableEvent () {
-    var this$1 = this;
+  MultiElement.prototype.getValue = function getValue () {
+    return this._getCheckedValue()
+  };
 
-  this._eachItems(function (item) {
-    item.addEventListener('focusout', this$1._vm.willUpdateTouched);
-  });
-};
+  MultiElement.prototype.checkModified = function checkModified () {
+    return !looseEqual(this.initValue, this._getCheckedValue())
+  };
 
-MultiElement.prototype.unlistenToucheableEvent = function unlistenToucheableEvent () {
-    var this$1 = this;
+  MultiElement.prototype.listenToucheableEvent = function listenToucheableEvent () {
+      var this$1 = this;
 
-  this._eachItems(function (item) {
-    item.removeEventListener('focusout', this$1._vm.willUpdateTouched);
-  });
-};
+    this._eachItems(function (item) {
+      item.addEventListener('focusout', this$1._vm.willUpdateTouched);
+    });
+  };
 
-MultiElement.prototype.listenInputableEvent = function listenInputableEvent () {
-    var this$1 = this;
+  MultiElement.prototype.unlistenToucheableEvent = function unlistenToucheableEvent () {
+      var this$1 = this;
 
-  this._eachItems(function (item) {
-    item.addEventListener('change', this$1._vm.handleInputable);
-  });
-};
+    this._eachItems(function (item) {
+      item.removeEventListener('focusout', this$1._vm.willUpdateTouched);
+    });
+  };
 
-MultiElement.prototype.unlistenInputableEvent = function unlistenInputableEvent () {
-    var this$1 = this;
+  MultiElement.prototype.listenInputableEvent = function listenInputableEvent () {
+      var this$1 = this;
 
-  this._eachItems(function (item) {
-    item.removeEventListener('change', this$1._vm.handleInputable);
-  });
-};
+    this._eachItems(function (item) {
+      item.addEventListener('change', this$1._vm.handleInputable);
+    });
+  };
 
-MultiElement.prototype.fireInputableEvent = function fireInputableEvent () {
-  this._eachItems(function (item) {
-    triggerEvent(item, 'change', addEventInfo);
-  });
-};
+  MultiElement.prototype.unlistenInputableEvent = function unlistenInputableEvent () {
+      var this$1 = this;
 
-MultiElement.prototype.modelValueEqual = function modelValueEqual$1 (vnode) {
-  var ret = null;
-  var children = (this._vm.child && this._vm.child.children) || [];
-  for (var i = 0; i < children.length; i++) {
-    var maybeEqual = modelValueEqual(children[i]);
-    if (!maybeEqual) {
-      ret = maybeEqual;
-      break
+    this._eachItems(function (item) {
+      item.removeEventListener('change', this$1._vm.handleInputable);
+    });
+  };
+
+  MultiElement.prototype._getCheckedValue = function _getCheckedValue () {
+    var value = [];
+    this._eachItems(function (item) {
+      if (!item.disabled && item.checked) {
+        value.push(item.value);
+      }
+    });
+    return value
+  };
+
+  MultiElement.prototype._getItems = function _getItems () {
+    return this._vm.$el.querySelectorAll('input[type="checkbox"], input[type="radio"]')
+  };
+
+  MultiElement.prototype._eachItems = function _eachItems (cb) {
+    var items = this._getItems();
+    for (var i = 0; i < items.length; i++) {
+      cb(items[i]);
     }
-  }
-  return ret
-};
+  };
 
-MultiElement.prototype._getCheckedValue = function _getCheckedValue () {
-  var value = [];
-  this._eachItems(function (item) {
-    if (!item.disabled && item.checked) {
-      value.push(item.value);
-    }
-  });
-  return value
-};
-
-MultiElement.prototype._getItems = function _getItems () {
-  return this._vm.$el.querySelectorAll('input[type="checkbox"], input[type="radio"]')
-};
-
-MultiElement.prototype._eachItems = function _eachItems (cb) {
-  var items = this._getItems();
-  for (var i = 0; i < items.length; i++) {
-    cb(items[i]);
-  }
+  return MultiElement
 };
 
 /*  */
+
+var inBrowser =
+  typeof window !== 'undefined' &&
+  Object.prototype.toString.call(window) !== '[object Object]';
+var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+
+function getClass (el) {
+  var classname = el.className;
+  if (typeof classname === 'object') {
+    classname = classname.baseVal || '';
+  }
+  return classname
+}
+
+function setClass (el, cls) {
+  if (isIE9 && !/svg$/.test(el.namespaceURI)) {
+    el.className = cls;
+  } else {
+    el.setAttribute('class', cls);
+  }
+}
+
+function addClass (el, cls) {
+  if (el.classList) {
+    el.classList.add(cls);
+  } else {
+    var cur = ' ' + getClass(el) + ' ';
+    if (cur.indexOf(' ' + cls + ' ') < 0) {
+      setClass(el, (cur + cls).trim());
+    }
+  }
+}
+
+function removeClass (el, cls) {
+  if (el.classList) {
+    el.classList.remove(cls);
+  } else {
+    var cur = ' ' + getClass(el) + ' ';
+    var tar = ' ' + cls + ' ';
+    while (cur.indexOf(tar) >= 0) {
+      cur = cur.replace(tar, ' ');
+    }
+    setClass(el, cur.trim());
+  }
+  if (!el.className) {
+    el.removeAttribute('class');
+  }
+}
+
+function toggleClasses (el, key, fn) {
+  if (!el) { return }
+
+  key = key.trim();
+  if (key.indexOf(' ') === -1) {
+    fn(el, key);
+    return
+  }
+
+  var keys = key.split(/\s+/);
+  for (var i = 0, l = keys.length; i < l; i++) {
+    fn(el, keys[i]);
+  }
+}
+
+function memoize (fn) {
+  var cache = Object.create(null);
+  return function memoizeFn (id) {
+    var args = [], len = arguments.length - 1;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
+
+    var hit = cache[id];
+    return hit || (cache[id] = fn.apply(void 0, args))
+  }
+}
+
+/*  */
+var ComponentElementClass = function (Vue) {
+  var ref = Vue.util;
+  var looseEqual = ref.looseEqual;
+  var isPlainObject = ref.isPlainObject;
+
+  function getValidatorProps (validators) {
+    var normalized = typeof validators === 'string' ? [validators] : validators;
+    var targets = [];
+    if (isPlainObject(normalized)) {
+      Object.keys(normalized).forEach(function (validator) {
+        var props = (normalized[validator] &&
+          normalized[validator]['props'] &&
+          isPlainObject(normalized[validator]['props']))
+            ? normalized[validator]['props']
+            : null;
+        if (props) {
+          Object.keys(props).forEach(function (prop) {
+            if (!~targets.indexOf(prop)) {
+              targets.push(prop);
+            }
+          });
+        }
+      });
+    }
+    return targets
+  }
+
+  var ComponentElement = function ComponentElement (vm, vnode, validatorProps) {
+    this._vm = vm;
+    this._vnode = vnode;
+    this._validatorProps = validatorProps || memoize(getValidatorProps);
+    this.initValue = this.getValue();
+    this._watchers = [];
+    this.attachValidity();
+  };
+
+  ComponentElement.prototype.attachValidity = function attachValidity () {
+    this._vm.$el.$validity = this._vm;
+  };
+
+  ComponentElement.prototype.getValidatorProps = function getValidatorProps$1 () {
+    var vm = this._vm;
+    return this._validatorProps(vm._uid.toString(), vm.validators)
+  };
+
+  ComponentElement.prototype.getValue = function getValue () {
+      var this$1 = this;
+
+    var value = {};
+    this.getValidatorProps().forEach(function (prop) {
+      value[prop] = this$1._vnode.child[prop];
+    });
+    return value
+  };
+
+  ComponentElement.prototype.checkModified = function checkModified () {
+    return !looseEqual(this.initValue, this.getValue())
+  };
+
+  ComponentElement.prototype.listenToucheableEvent = function listenToucheableEvent () {
+    this._vm.$el.addEventListener('focusout', this._vm.willUpdateTouched);
+  };
+
+  ComponentElement.prototype.unlistenToucheableEvent = function unlistenToucheableEvent () {
+    this._vm.$el.removeEventListener('focusout', this._vm.willUpdateTouched);
+  };
+
+  ComponentElement.prototype.listenInputableEvent = function listenInputableEvent () {
+      var this$1 = this;
+
+    this.getValidatorProps().forEach(function (prop) {
+      this$1._watchers.push(this$1._vnode.child.$watch(prop, this$1._vm.watchInputable));
+    });
+  };
+
+  ComponentElement.prototype.unlistenInputableEvent = function unlistenInputableEvent () {
+    this._watchers.forEach(function (watcher) { watcher(); });
+    this._watchers = [];
+  };
+
+  return ComponentElement
+};
+
+/*  */
+var Elements = function (Vue) {
+  var SingleElement = SingleElementClass(Vue);
+  var MultiElement = MultiElementClass(Vue);
+  var ComponentElement = ComponentElementClass(Vue);
+
+  return {
+    SingleElement: SingleElement,
+    MultiElement: MultiElement,
+    ComponentElement: ComponentElement
+  }
+};
 
 /*  */
 var Lifecycles = function (Vue) {
+  var ref = Elements(Vue);
+  var SingleElement = ref.SingleElement;
+  var MultiElement = ref.MultiElement;
+  var ComponentElement = ref.ComponentElement;
+
+  function createValidityElement (vm, vnode) {
+    return vm.multiple
+      ? new MultiElement(vm)
+      : checkBuiltInElement(vnode)
+        ? new SingleElement(vm)
+        : checkComponentElement(vnode)
+          ? new ComponentElement(vm, vnode)
+          : null
+  }
+
+  function watchModelable (val) {
+    this.$emit('input', {
+      result: this.result,
+      progress: this.progress,
+      progresses: this.progresses
+    });
+  }
+
   function created () {
     this._elementable = null;
 
@@ -1137,9 +1204,6 @@ var Lifecycles = function (Vue) {
 
     // for event control flags
     this._modified = false;
-
-    // for v-model integration flag
-    this._modelIntegrationMode = 'NONE';
 
     // watch validation raw results
     this._watchValidationRawResults();
@@ -1159,71 +1223,75 @@ var Lifecycles = function (Vue) {
       var instance = validation.instance;
       var name = validation.name;
       var group = this.group;
-      instance.unregister(this.field, this, { named: name, group: group });
+      instance.unregister(this.field, { named: name, group: group });
+    }
+
+    if (this._unwatchResultProp) {
+      this._unwatchResultProp();
+      this._unwatchResultProp = null;
+    }
+
+    if (this._unwatchProgressProp) {
+      this._unwatchProgressProp();
+      this._unwatchProgressProp = null;
     }
 
     this._unwatchValidationRawResults();
 
     this._elementable.unlistenInputableEvent();
-    this._elementable.unlistenToucheableEvent();
+    if (this.autotouch === 'on') {
+      this._elementable.unlistenToucheableEvent();
+    }
     this._elementable = null;
   }
 
   function mounted () {
-    this._elementable = createValidityElement(this);
-    this._elementable.listenToucheableEvent();
-    this._elementable.listenInputableEvent();
+    this._elementable = createValidityElement(this, this._vnode);
+    if (this._elementable) {
+      if (this.autotouch === 'on') {
+        this._elementable.listenToucheableEvent();
+      }
+      this._elementable.listenInputableEvent();
+    } else {
+      // TODO: should be warn
+    }
+
+    if (hasModelDirective(this.$vnode)) {
+      this._unwatchResultProp = this.$watch('result', watchModelable);
+      this._unwatchProgressProp = this.$watch('progress', watchModelable);
+    }
 
     toggleClasses(this.$el, this.classes.untouched, addClass);
     toggleClasses(this.$el, this.classes.pristine, addClass);
   }
 
-  function updated () {
-    if (this._modelIntegrationMode === 'MODEL_AND_USER') {
-      var maybeChangeModel = this._elementable.modelValueEqual(this._vnode);
-      if (!this._applyWithUserHandler && maybeChangeModel !== null && !maybeChangeModel) {
-        this._elementable.fireInputableEvent();
-      }
-      delete this._applyWithUserHandler;
-    } else if (this._modelIntegrationMode === 'MODEL') {
-      var maybeChangeModel$1 = this._elementable.modelValueEqual(this._vnode);
-      if (maybeChangeModel$1 !== null && !maybeChangeModel$1) {
-        this._elementable.fireInputableEvent();
-      }
-    }
-  }
-
   return {
     created: created,
     destroyed: destroyed,
-    mounted: mounted,
-    updated: updated
+    mounted: mounted
   }
 };
 
-function memoize (fn) {
-  var cache = Object.create(null);
-  return function memoizeFn (id) {
-    var args = [], len = arguments.length - 1;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-
-    var hit = cache[id];
-    return hit || (cache[id] = fn.apply(void 0, args))
-  }
+function checkComponentElement (vnode) {
+  return vnode.child &&
+    vnode.componentOptions &&
+    vnode.tag &&
+    vnode.tag.match(/vue-component/)
 }
 
-function createValidityElement (vm) {
-  var vnode = vm._vnode;
-  return !vm.multiple
-    ? new SingleElement(vm, vnode)
-    : new MultiElement(vm)
+function checkBuiltInElement (vnode) {
+  return !vnode.child &&
+    !vnode.componentOptions &&
+    vnode.tag
+}
+
+function hasModelDirective (vnode) {
+  return ((vnode && vnode.data && vnode.data.directives) || []).find(function (dir) { return dir.name === 'model'; })
 }
 
 /*  */
-var Event = function (Vue) {
-  var ref = Vue.util;
-  var toArray = ref.toArray;
 
+var Event = function (Vue) {
   function _fireEvent (type) {
     var args = [], len = arguments.length - 1;
     while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
@@ -1232,122 +1300,16 @@ var Event = function (Vue) {
     var ref;
   }
 
-  function _interceptEvents (child, multiple) {
-    var this$1 = this;
-
-    (multiple ? (child.children || []) : [child]).forEach(function (child) { this$1._wrapEvent(child); });
-  }
-
-  function _wrapEvent (child) {
-    var this$1 = this;
-
-    var ret = {};
-    if (!child.tag || !child.data) { return ret }
-
-    var dir = getModelDirective(child);
-    if (!dir) { return ret }
-
-    var ref = getEventSources(child);
-    var type = ref.type;
-    var orgListeners = ref.orgListeners;
-    var listeners = ref.listeners;
-    var modelHandler = Array.isArray(orgListeners) ? orgListeners[0] : orgListeners;
-    var userHandler = Array.isArray(orgListeners) ? orgListeners[1] : null;
-
-    var integrationMode = this._modelIntegrationMode;
-    if (modelHandler && userHandler) {
-      integrationMode = this._modelIntegrationMode = 'MODEL_AND_USER';
-    } else if (modelHandler && !userHandler) {
-      integrationMode = this._modelIntegrationMode = 'MODEL';
-    }
-
-    var modelApplyer = function (args) {
-      return function (applicable) {
-        if (userHandler) {
-          this$1._applyWithUserHandler = true;
-        }
-        if (applicable === undefined || applicable === true) {
-          modelHandler.apply(child.context, args);
-        }
-      }
-    };
-
-    var modifier = (dir.modifiers || {}).validity;
-
-    var validity = this;
-    listeners[type] = function () {
-      var args = toArray(arguments, 0);
-      if (integrationMode === 'MODEL_AND_USER') {
-        var event = args[0];
-        if (event[MODEL_NOTIFY_EVENT] === 'DOM') {
-          delete event[MODEL_NOTIFY_EVENT];
-          userHandler && userHandler.apply(child.context, args);
-          return
-        } else if (event[MODEL_NOTIFY_EVENT] === 'COMPONENT') {
-          var value = event.value;
-          args[0] = value;
-          userHandler && userHandler.apply(child.context, args);
-          return
-        }
-
-        if (modifier) {
-          var fn = validity._applyer = modelApplyer(args);
-          args.push(fn);
-          userHandler && userHandler.apply(child.context, args);
-        } else {
-          userHandler && userHandler.apply(child.context, args);
-          modelHandler.apply(child.context, args);
-        }
-      } else if (integrationMode === 'MODEL') {
-        if (modifier) {
-          validity._applyer = modelApplyer(args);
-        } else {
-          modelHandler.apply(child.context, args);
-        }
-      }
-    };
-
-    ret.dir = dir;
-    return ret
-  }
-
-  function pass (applicable) {
-    // TODO: should be implementsed error cases
-    if (this._modelIntegrationMode !== 'NONE' && this._applyer) {
-      this._applyer(applicable);
-    }
-  }
-
   return {
-    _fireEvent: _fireEvent,
-    _interceptEvents: _interceptEvents,
-    _wrapEvent: _wrapEvent,
-    pass: pass
+    _fireEvent: _fireEvent
   }
 };
 
-function getModelDirective (child) {
-  return ((child.data && child.data.directives) || []).find(function (dir) { return dir.name === 'model' })
-}
-
-function getEventSources (child) {
-  var sources = {};
-  var listeners = sources.listeners = child.componentOptions
-      ? child.componentOptions.listeners
-      : (child.data && child.data.on);
-  sources.type =
-    (child.tag === 'input' && (child.data && child.data.attrs && child.data.attrs.type) === 'text') ||
-    (child.tag && child.tag.match(/vue-component/))
-      ? 'input'
-      : 'change';
-  if (listeners) {
-    sources.orgListeners = listeners[sources.type];
-  }
-  return sources
-}
-
 /*  */
 var State = function (Vue) {
+  var ref = Vue.util;
+  var isPlainObject = ref.isPlainObject;
+
   function getValue (options) {
     return this._elementable.getValue()
   }
@@ -1393,15 +1355,25 @@ var State = function (Vue) {
     this.willUpdateModified();
   }
 
-  function reset () {
-    var this$1 = this;
+  function _initStates (keys, target, init) {
+    if ( init === void 0 ) init = undefined;
 
+    for (var i = 0; i < keys.length; i++) {
+      var result = target[keys[i]];
+      if (isPlainObject(result)) {
+        var nestedKeys = Object.keys(result);
+        _initStates(nestedKeys, result, init);
+      } else {
+        target[keys[i]] = init;
+      }
+    }
+  }
+
+  function reset () {
     this._unwatchValidationRawResults();
     var keys = this._keysCached(this._uid.toString(), this.results);
-    for (var i = 0; i < keys.length; i++) {
-      this$1.results[keys[i]] = undefined;
-      this$1.progresses[keys[i]] = '';
-    }
+    _initStates(keys, this.results, undefined);
+    _initStates(keys, this.progresses, '');
     toggleClasses(this.$el, this.classes.valid, removeClass);
     toggleClasses(this.$el, this.classes.invalid, removeClass);
     toggleClasses(this.$el, this.classes.touched, removeClass);
@@ -1417,26 +1389,38 @@ var State = function (Vue) {
     this._watchValidationRawResults();
   }
 
-  function _watchValidationRawResults () {
-    var this$1 = this;
-
-    this._unwatch = this.$watch('results', function (val) {
-      var valid = true;
-      var keys = this$1._keysCached(this$1._uid.toString(), this$1.results);
-      for (var i = 0; i < keys.length; i++) {
-        var result = this$1.results[keys[i]];
-        if (typeof result === 'boolean' && !result) {
-          valid = false;
-          break
-        }
-        if (typeof result === 'string' && result) {
-          valid = false;
+  function _walkValid (keys, target) {
+    var valid = true;
+    for (var i = 0; i < keys.length; i++) {
+      var result = target[keys[i]];
+      if (typeof result === 'boolean' && !result) {
+        valid = false;
+        break
+      }
+      if (typeof result === 'string' && result) {
+        valid = false;
+        break
+      }
+      if (isPlainObject(result)) {
+        var nestedKeys = Object.keys(result);
+        valid = _walkValid(nestedKeys, result);
+        if (!valid) {
           break
         }
       }
-      this$1.valid = valid;
+    }
+    return valid
+  }
 
-      if (valid) {
+  function _watchValidationRawResults () {
+    var this$1 = this;
+
+    this._unwatchResults = this.$watch('results', function (val) {
+      this$1.valid = _walkValid(
+        this$1._keysCached(this$1._uid.toString(), this$1.results),
+        this$1.results
+      );
+      if (this$1.valid) {
         toggleClasses(this$1.$el, this$1.classes.valid, addClass);
         toggleClasses(this$1.$el, this$1.classes.invalid, removeClass);
       } else {
@@ -1444,14 +1428,18 @@ var State = function (Vue) {
         toggleClasses(this$1.$el, this$1.classes.invalid, addClass);
       }
 
-      this$1._fireEvent(valid ? 'valid' : 'invalid');
+      this$1._fireEvent(this$1.valid ? 'valid' : 'invalid');
     }, { deep: true });
   }
 
   function _unwatchValidationRawResults () {
-    this._unwatch();
-    this._unwatch = undefined;
-    delete this._unwatch;
+    this._unwatchResults();
+    this._unwatchResults = undefined;
+    delete this._unwatchResults;
+  }
+
+  function touch () {
+    this.willUpdateTouched();
   }
 
   return {
@@ -1463,8 +1451,10 @@ var State = function (Vue) {
     handleInputable: handleInputable,
     watchInputable: watchInputable,
     reset: reset,
+    _walkValid: _walkValid,
     _watchValidationRawResults: _watchValidationRawResults,
-    _unwatchValidationRawResults: _unwatchValidationRawResults
+    _unwatchValidationRawResults: _unwatchValidationRawResults,
+    touch: touch
   }
 };
 
@@ -1479,6 +1469,7 @@ function isPromise (p) {
 
 var Validate = function (Vue) {
   var ref = Vue.util;
+  var extend = ref.extend;
   var isPlainObject = ref.isPlainObject;
   var resolveAsset = ref.resolveAsset;
 
@@ -1489,7 +1480,7 @@ var Validate = function (Vue) {
     return resolveAsset(options, 'validators', name)
   }
 
-  function _getValidateDescriptor (
+  function _getValidateRawDescriptor (
     validator,
     field,
     value
@@ -1522,16 +1513,22 @@ var Validate = function (Vue) {
       return null
     }
 
-    if (isPlainObject(this.validators)) {
-      if (isPlainObject(this.validators[validator])) {
-        if (this.validators[validator].rule) {
-          rule = this.validators[validator].rule;
-        }
-        if (this.validators[validator].message) {
-          msg = this.validators[validator].message;
+    var props = null;
+    var validators = this.validators;
+    if (isPlainObject(validators)) {
+      if (isPlainObject(validators[validator])) {
+        if (validators[validator].props && isPlainObject(validators[validator].props)) {
+          props = validators[validator].props;
+        } else {
+          if (validators[validator].rule) {
+            rule = validators[validator].rule;
+          }
+          if (validators[validator].message) {
+            msg = validators[validator].message;
+          }
         }
       } else {
-        rule = this.validators[validator];
+        rule = validators[validator];
       }
     }
 
@@ -1541,6 +1538,9 @@ var Validate = function (Vue) {
     }
     if (msg) {
       descriptor.msg = msg;
+    }
+    if (props) {
+      descriptor.props = props;
     }
 
     return descriptor
@@ -1561,11 +1561,11 @@ var Validate = function (Vue) {
 
   function _invokeValidator (
     ref,
+    value,
     cb
   ) {
     var this$1 = this;
     var fn = ref.fn;
-    var value = ref.value;
     var field = ref.field;
     var rule = ref.rule;
     var msg = ref.msg;
@@ -1590,15 +1590,103 @@ var Validate = function (Vue) {
     }
   }
 
+  function _getValidateDescriptors (
+    validator,
+    field,
+    value
+  ) {
+    var descriptors = [];
+
+    var rawDescriptor = this._getValidateRawDescriptor(validator, this.field, value);
+    if (!rawDescriptor) { return descriptors }
+
+    if (!rawDescriptor.props) {
+      var descriptor = { name: validator };
+      extend(descriptor, rawDescriptor);
+      descriptors.push(descriptor);
+    } else {
+      var propsKeys = Object.keys(!rawDescriptor.props);
+      propsKeys.forEach(function (prop) {
+        var descriptor = {
+          fn: rawDescriptor.fn,
+          name: validator,
+          value: rawDescriptor.value[prop],
+          field: rawDescriptor.field,
+          prop: prop
+        };
+        if (rawDescriptor.props[prop].rule) {
+          descriptor.rule = rawDescriptor.props[prop].rule;
+        }
+        if (rawDescriptor.props[prop].message) {
+          descriptor.msg = rawDescriptor.props[prop].message;
+        }
+        descriptors.push(descriptor);
+      });
+    }
+
+    return descriptors
+  }
+
+  function _syncValidates (field, cb) {
+    var this$1 = this;
+
+    var validators = this._keysCached(this._uid.toString(), this.results);
+    var value = this.getValue();
+    var descriptors = [];
+    validators.forEach(function (validator) {
+      this$1._getValidateDescriptors(validator, field, value).forEach(function (desc) {
+        descriptors.push(desc);
+      });
+    });
+
+    var count = 0;
+    var len = descriptors.length;
+    descriptors.forEach(function (desc) {
+      var validator = desc.name;
+      var prop = desc.prop;
+      if ((!prop && this$1.progresses[validator]) || (prop && this$1.progresses[validator][prop])) {
+        count++;
+        if (count === len) {
+          cb(this$1._walkValid(this$1._keysCached(this$1._uid.toString(), this$1.results), this$1.results));
+        }
+        return
+      }
+
+      if (!prop) {
+        this$1.progresses[validator] = 'running';
+      } else {
+        this$1.progresses[validator][prop] = 'running';
+      }
+
+      this$1.$nextTick(function () {
+        this$1._invokeValidator(desc, desc.value, function (ret, msg) {
+          if (!prop) {
+            this$1.progresses[validator] = '';
+            this$1.results[validator] = msg || ret;
+          } else {
+            this$1.progresses[validator][prop] = '';
+            this$1.results[validator][prop] = msg || ret;
+          }
+
+          count++;
+          if (count === len) {
+            cb(this$1._walkValid(this$1._keysCached(this$1._uid.toString(), this$1.results), this$1.results));
+          }
+        });
+      });
+    });
+  }
+
+  // TODO:should be refactor!!
   function _validate (validator, value, cb) {
     var this$1 = this;
 
-    var descriptor = this._getValidateDescriptor(validator, this.field, value);
-    if (descriptor) {
+    var descriptor = this._getValidateRawDescriptor(validator, this.field, value);
+    if (descriptor && !descriptor.props) {
       if (this.progresses[validator]) { return false }
       this.progresses[validator] = 'running';
       this.$nextTick(function () {
-        this$1._invokeValidator(descriptor, function (ret, msg) {
+        this$1._invokeValidator(descriptor, descriptor.value, function (ret, msg) {
           this$1.progresses[validator] = '';
           this$1.results[validator] = msg || ret;
           if (cb) {
@@ -1612,6 +1700,35 @@ var Validate = function (Vue) {
             }
             this$1._fireEvent('validate', validator, e);
           }
+        });
+      });
+    } else if (descriptor && descriptor.props) {
+      var propsKeys = Object.keys(descriptor.props);
+      propsKeys.forEach(function (prop) {
+        if (this$1.progresses[validator][prop]) { return }
+        this$1.progresses[validator][prop] = 'running';
+        var values = descriptor.value;
+        var propDescriptor = {
+          fn: descriptor.fn,
+          value: values[prop],
+          field: descriptor.field
+        };
+        if (descriptor.props[prop].rule) {
+          propDescriptor.rule = descriptor.props[prop].rule;
+        }
+        if (descriptor.props[prop].message) {
+          propDescriptor.msg = descriptor.props[prop].message;
+        }
+        this$1.$nextTick(function () {
+          this$1._invokeValidator(propDescriptor, propDescriptor.value, function (result, msg) {
+            this$1.progresses[validator][prop] = '';
+            this$1.results[validator][prop] = msg || result;
+            var e = { prop: prop, result: result };
+            if (msg) {
+              e['msg'] = msg;
+            }
+            this$1._fireEvent('validate', validator, e);
+          });
         });
       });
     } else {
@@ -1670,10 +1787,12 @@ var Validate = function (Vue) {
 
   return {
     _resolveValidator: _resolveValidator,
-    _getValidateDescriptor: _getValidateDescriptor,
+    _getValidateRawDescriptor: _getValidateRawDescriptor,
+    _getValidateDescriptors: _getValidateDescriptors,
     _resolveMessage: _resolveMessage,
     _invokeValidator: _invokeValidator,
     _validate: _validate,
+    _syncValidates: _syncValidates,
     validate: validate
   }
 };
@@ -1850,6 +1969,46 @@ var Component = function (Vue) {
 };
 
 /*  */
+// TODO: should be defined strict type
+function mapValidation (results) {
+  var res = {};
+
+  normalizeMap(results).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedValidation () {
+      var validation = this.$validation;
+      if (!this._isMounted) {
+        return null
+      }
+      var paths = val.split('.');
+      var first = paths.shift();
+      if (first !== '$validation') {
+        warn(("unknown validation result path: " + val));
+        return null
+      }
+      var path;
+      var value = validation;
+      do {
+        path = paths.shift();
+        value = value[path];
+      } while (paths.length > 0 && value !== undefined)
+      return value
+    };
+  });
+
+  return res
+}
+
+// TODO: should be defined strict type
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/*  */
 var installed = false;
 
 function plugin (Vue, options) {
@@ -1879,7 +2038,7 @@ function installComponent (Vue) {
 }
 
 plugin.mapValidation = mapValidation; // for standalone
-plugin.version = '3.0.0-alpha.1';
+plugin.version = '3.0.0-alpha.2';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
