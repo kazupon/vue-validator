@@ -20,7 +20,7 @@
           </validity>
         </div>
         <div class="errors">
-          <p v-for="error in errors">{{error.field}}:{{error.validator}}</p>
+          <p :class="error.field + '-' + error.validator" v-for="error in errors">{{error.field}}:{{error.validator}}</p>
         </div>
         <pre>{{results}}</pre>
       </form>

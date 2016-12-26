@@ -14,38 +14,34 @@
     <div id="app">
       <label for="username">username:</label>
       <validity field="username" 
+                ref="validity"
+                v-model="validation"
                 :validators="{ required: true, minlength: 4 }"
                 @valid="handleValid" 
                 @invalid="handleInvalid" 
                 @touched="handleTouched" 
                 @dirty="handleDirty" 
                 @modified="handleModified">
-        <input type="text" @input="handleValidate">
+        <input type="text" @input="$refs.validity.validate()">
       </validity>
       <p>validation errors:</p>
       <div class="errors">
-        <p v-if="result.required">required username!!</p>
-        <p v-if="result.minlength">too short username!!</p>
+        <p v-if="validation.result.required">required username!!</p>
+        <p v-if="validation.result.minlength">too short username!!</p>
       </div>
       <p>validation events:</p>
       <div class="events">
-        <p style="margin:0; padding:0" v-for="event in events">{{event.timestamp}}: {{event.type}}</p>
+        <p :style="style" :data-event="event.type" v-for="event in events">{{event.timestamp}}: {{event.type}}</p>
       </div>
     </div>
     <script>
-      new Vue({
+      var vm = new Vue({
         data: {
-          result: {},
+          style: { margin: 0, padding: 0 },
+          validation: { result: {} },
           events: []
         },
         methods: {
-          handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity 
-            $validity.validate(function () {
-              self.result = $validity.result
-            })
-          },
           handleValid: function () {
             this.handleValidationEvent('valid')
           },

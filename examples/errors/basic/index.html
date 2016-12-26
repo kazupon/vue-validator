@@ -14,19 +14,19 @@
     <div id="app">
       <div class="email">
         <label for="email">email:</label>
-        <validity field="email" :validators="{
+        <validity ref="validity" field="email" v-model="validation" :validators="{
           required: { message: 'required email !!' },
           email: { message: 'invalid email address !!' }
         }">
-        <input id="email" type="text" @input="handleValidate" @focusin="handleValidate">
+        <input type="text" 
+               @input="$refs.validity.validate()" 
+               @focusin="$refs.validity.validate()">
       </div>
-      <div class="errors">
-        <ul>
-          <li v-for="error in result.errors">
-            <p>{{error.field}}: {{error.message}}</p>
-          </li>
-        </ul>
-      </div>
+      <ul class="errors">
+        <li v-for="error in validation.result.errors">
+          <p :class="error.validator">{{error.field}}: {{error.message}}</p>
+        </li>
+      </ul>
     </div>
     <script>
       new Vue({
@@ -36,17 +36,7 @@
           }
         },
         data: {
-          result: {}
-        },
-        methods: {
-          handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity
-            $validity.validate(function () {
-              var result = $validity.result
-              self.result = result
-            })
-          }
+          validation: { result: {} }
         }
       }).$mount('#app')
     </script>

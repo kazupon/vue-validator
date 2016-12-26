@@ -12,30 +12,24 @@
   </head>
   <body>
     <div id="app">
-      <validity field="term" :validators="{
-        required: { message: requiredErrorMsg }
-      }">
-        <input id="term" type="checkbox" @change="handleValidate">
+      <validity field="term" 
+                ref="validity" 
+                v-model="validation" 
+                :validators="{ required: { message: requiredErrorMsg } }"
+      >
+        <input id="term" type="checkbox" @change="$refs.validity.validate()">
       </validity>
       <label for="term">I Accept xxx's Terms of Service Agreement.</label>
-      <p class="errors" v-if="result.required">{{result.required}}</p>
+      <p class="errors" v-if="validation.result.required">{{validation.result.required}}</p>
     </div>
     <script>
       new Vue({
-        data: { result: {} },
+        data: {
+          validation: { result: {} }
+        },
         computed: {
           requiredErrorMsg: function () {
             return 'Required Terms of Service Agreement checking!!'
-          }
-        },
-        methods: {
-          handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity
-            $validity.validate(function () {
-              var result = $validity.result
-              self.result = result
-            })
           }
         }
       }).$mount('#app')

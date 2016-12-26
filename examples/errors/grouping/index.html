@@ -15,37 +15,35 @@
       <validation name="validation1">
         <div class="username">
           <label for="username">username:</label>
-          <validity field="username" group="user" :validators="{
+          <validity ref="username" field="username" group="user" :validators="{
             required: { message: 'required username !!' }
           }">
-            <input id="username" type="text" @input="handleValidate" @focusout="handleValidate">
+            <input id="username" type="text" @input="$refs.username.validate()">
           </validity>
         </div>
         <div class="password">
           <label for="password">password:</label>
-          <validity field="password" group="password" :validators="{
+          <validity ref="password" field="password" group="password" :validators="{
             minlength: { rule: 8, message: 'too short password !!' },
             required: { message: 'required password !!' }
           }">
-            <input id="password" type="password" @input="handleValidate" @focusout="handleValidate">
+            <input id="password" type="password" @input="$refs.password.validate()">
           </validity>
         </div>
         <div class="confirm">
           <label for="confimr">password (confirm):</label>
-          <validity field="confirm" group="password" :validators="{
+          <validity ref="confirm" field="confirm" group="password" :validators="{
             minlength: { rule: 8, message: 'too short confirm !!' },
             required: { message: 'required confirm !!' }
           }">
-            <input id="confirm" type="password" @input="handleValidate" @focusout="handleValidate">
+            <input id="confirm" type="password" @input="$refs.confirm.validate()">
           </validity>
         </div>
         <input type="submit" value="send" v-if="valid">
-        <div class="errors">
-          <ul>
-            <li v-for="error in errors">{{error.field}}: {{error.validator}}</li>
-          </ul>
-          </div>
-        </div>
+        <ul class="errors">
+          <li :class="error.field + '-' + error.validator"
+              v-for="error in errors">{{error.field}}: {{error.message}}</li>
+        </ul>
       </validation>
     </div>
     <script>
@@ -53,12 +51,7 @@
         computed: VueValidator.mapValidation({
           valid: '$validation.validation1.valid',
           errors: '$validation.validation1.errors'
-        }),
-        methods: {
-          handleValidate: function (e) {
-            e.target.$validity.validate()
-          }
-        }
+        })
       }).$mount('#app')
     </script>
   </body>

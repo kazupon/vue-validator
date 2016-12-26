@@ -29,7 +29,7 @@
         <label for="banana">Banana</label>
         <ul class="errors">
           <li v-for="error in validation.result.errors">
-            <p>{{error.message}}</p>
+            <p :class="error.field + '-' + error.validator">{{error.message}}</p>
           </li>
         </ul>
       </validity-group>

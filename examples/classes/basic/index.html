@@ -13,7 +13,7 @@
   <body>
     <div id="app">
       <label for="username">username:</label>
-      <validity field="username" :validators="{
+      <validity field="username" v-model="validation" :validators="{
         required: { message: 'required you name !!' }
       }">
         <input id="username" 
@@ -23,14 +23,16 @@
                @input="handleValidation">
       </validity>
       <div class="errors">
-        <p v-if="result.required">{{result.required}}</p>
+        <p v-if="validation.result.required">{{validation.result.required}}</p>
       </div>
       <p>classes: {{usernameClasses}}</p>
     </div>
     <script>
       new Vue({
         data: {
-          result: {},
+          validation: {
+            result: {}
+          },
           usernameClasses: ''
         },
         methods: {
@@ -39,7 +41,6 @@
             var username = this.$refs.username
             var $validity = e.target.$validity
             $validity.validate(function () {
-              self.result = $validity.result
               self.usernameClasses = username.className
             })
           }

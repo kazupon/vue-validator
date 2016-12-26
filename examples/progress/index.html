@@ -13,22 +13,22 @@
   <body>
     <div id="app">
       <label for="username">username:</label>
-      <validity ref="username" field="username" :validators="{ exist1: true, exist2: true }">
-        <input type="text" @focusout="handleValidate">
+      <validity ref="validity" field="username" v-model="validation" :validators="validators">
+        <input type="text" @input="handleValidate">
       </validity>
       <div class="errors">
-        <p v-for="error in result.errors">{{error.message}}</p>
+        <p v-for="error in validation.result.errors">{{error.message}}</p>
       </div>
-      <p v-if="progresses.exist1">exist1 checking ...</p>
-      <p v-if="progresses.exist2">exist2 checking ...</p>
-      <button type="button" v-if="progresses.exist1 && progresses.exist2">register</button>
-      <pre>{{progresses}}</pre>
+      <p class="exist1" v-if="validation.progresses.exist1">exist1 checking ...</p>
+      <p class="exist2" v-if="validation.progresses.exist2">exist2 checking ...</p>
+      <button type="button" v-if="!validation.progress">register</button>
+      <pre>{{validation}}</pre>
     </div>
     <script>
       var vm = new Vue({
         data: {
-          result: {},
-          progresses: {}
+          validators: { exist1: true, exist2: true },
+          validation: { result: {}, progresses: {} }
         },
         validators: {
           exist1: function (val) {
@@ -38,32 +38,17 @@
           },
           exist2: function (val) {
             return function (resolve, reject) {
-              setTimeout(function () { resolve() }, 5000)
+              setTimeout(function () { resolve() }, 4000)
             }
           }
         },
-        mounted: function () {
-          var self = this
-          var $validity = this.$refs.username
-
-          // setup initiaal progress values
-          this.progresses = $validity.progresses
-
-          // watch the progress values of validity
-          this._progressWatcher = $validity.$watch('progresses', function (val) {
-          }, { deep: true })
-        },
-        destroyed: function () {
-          // untach progress values of validity
-          this._progressWatcher()
-        },
         methods: {
           handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity
-            $validity.validate(function () {
-              self.result = $validity.result
-            })
+            var validity = this.$refs.validity
+            if (this.validation.progress) {
+              return
+            }
+            validity.validate()
           }
         }
       }).$mount('#app')

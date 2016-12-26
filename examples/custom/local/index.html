@@ -16,25 +16,25 @@
         <div class="username">
           <label>username:</label>
           <validity field="username" :validators="['required']">
-            <input type="text" @input="handleUsername">
+            <input type="text" name="username" @input="handleUsername">
           </validity>
         </div>
         <div class="age">
           <label>age:</label>
           <validity field="age" :validators="['numeric']">
-            <input type="text" @input="handleAge">
+            <input type="text" name="age" @input="handleAge">
           </validity>
         </div>
         <div class="site">
           <label>site:</label>
           <validity field="site" :validators="['url']">
-            <input type="text" @input="handleSite">
+            <input type="text" name="site" @input="handleSite">
           </validity>
         </div>
         <div class="errors">
-          <p v-if="results.username.required">required username!!</p>
-          <p v-if="results.age.numeric">invalid age numeric value!!</p>
-          <p v-if="results.site.url">invlid url!!</p>
+          <p class="username" v-if="results.username.required">required username!!</p>
+          <p class="age" v-if="results.age.numeric">invalid age numeric value!!</p>
+          <p class="site" v-if="results.site.url">invlid url!!</p>
         </div>
         <input type="submit" value="send" v-if="valid">
       </form>

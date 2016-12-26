@@ -14,13 +14,13 @@
     <div id="app">
       <form novalidate>
         <label>Email:</label> 
-        <validity field="email" :validators="['email']">
-          <input type="text" @input="handleValidate">
+        <validity ref="validity" field="email" v-model="validation" :validators="['email']">
+          <input type="text" @input="$refs.validity.validate()">
         </validity>
         <div class="errors">
-          <p v-if="result.email">{{result.email}}</p>
+          <p class="email" v-if="validation.result.email">{{validation.result.email}}</p>
         </div>
-        <input type="submit" value="send" v-if="result.valid">
+        <input type="submit" value="send" v-if="validation.result.valid">
       </form>
     </div>
     <script>
@@ -33,14 +33,9 @@
       })
 
       new Vue({
-        data: { result: {} },
-        methods: {
-          handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity
-            $validity.validate(function () {
-              self.result = $validity.result
-            })
+        data: {
+          validation: {
+            result: {} 
           }
         }
       }).$mount('#app')
