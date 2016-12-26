@@ -15,7 +15,7 @@ langs.forEach(lang => {
   const installation = fs
     .readFileSync(`./gitbook/${lang}/installation.md`, 'utf-8')
     .replace(
-      /<script src="https:\/\/unpkg\.com\/vue-validator@[\d\-\w\.]+.[\d]+\/dist\/vue-validator\.min\.js"><\/script>/,
+      /<script src="https:\/\/unpkg\.com\/vue-validator@[\d\-\w.]+.[\d]+\/dist\/vue-validator\.min\.js"><\/script>/,
       '<script src="https://unpkg.com/vue-validator@' + pack.version + '/dist/vue-validator.min.js"></script>'
     )
   fs.writeFileSync(`./gitbook/${lang}/installation.md`, installation)

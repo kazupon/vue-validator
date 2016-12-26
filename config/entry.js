@@ -8,7 +8,7 @@ function toUpper (_, c) {
   return c ? c.toUpperCase() : ''
 }
 
-const classifyRE = /(?:^|[-_\/])(\w)/g
+const classifyRE = /(?:^|[-_/])(\w)/g
 function classify (str) {
   return str.replace(classifyRE, toUpper)
 }
