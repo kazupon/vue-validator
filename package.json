@@ -101,7 +101,7 @@
     "sauce:coolkids": "karma start config/karma.sauce.conf.js -- 0",
     "sauce:ie": "karma start config/karma.sauce.conf.js -- 1",
     "sauce:mobile": "karma start config/karma.sauce.conf.js -- 2",
-    "test": "npm run lint && npm run flow && npm run test:cover",
+    "test": "npm run lint && npm run flow && npm run test:coveralls",
     "test:cover": "karma start config/karma.cover.conf.js",
     "test:coveralls": "karma start config/karma.coveralls.conf.js",
     "test:e2e": "npm run build && node test/e2e/runner.js --env chrome",
