@@ -10,7 +10,7 @@ See [dist folder](https://github.com/vuejs/vue-validator/tree/dev/dist). Note th
 
 uppkg
 ```html
-<script src="https://unpkg.com/vue-validator@3.0.0-alpha.1/dist/vue-validator.min.js"></script>
+<script src="https://unpkg.com/vue-validator@3.0.0-alpha.2/dist/vue-validator.min.js"></script>
 ```
 
 ## NPM
