@@ -1,3 +1,39 @@
+<a name="3.0.0-alpha.2"></a>
+# [3.0.0-alpha.2](https://github.com/kazupon/vue-validator/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2016-12-26)
+
+
+### :boom: Breaking changes
+
+* not support v-model integration for v3 ([0b152bc](https://github.com/kazupon/vue-validator/commit/0b152bc))
+
+
+### :bug: Bug Fixes
+
+* **mapValidation:** fix typeError [ci skip] ([853b7b3](https://github.com/kazupon/vue-validator/commit/853b7b3)), closes [#340](https://github.com/kazupon/vue-validator/issues/340)
+* **validation:** fix unregsiter error [ci skip] ([39ba1ab](https://github.com/kazupon/vue-validator/commit/39ba1ab)), closes [#336](https://github.com/kazupon/vue-validator/issues/336) [#338](https://github.com/kazupon/vue-validator/issues/338) [#347](https://github.com/kazupon/vue-validator/issues/347)
+
+
+### :star: New Features
+
+* **validator:** toogle support for required validator ([541411e](https://github.com/kazupon/vue-validator/commit/541411e)), closes [#258](https://github.com/kazupon/vue-validator/issues/258)
+* manually touch with API [ci skip] ([484d360](https://github.com/kazupon/vue-validator/commit/484d360))
+* support v-model validation result [ci skip] ([bfe63e2](https://github.com/kazupon/vue-validator/commit/bfe63e2))
+
+
+### :up: Updates
+
+* **examples:** valudator rule ignoring cases ([6963747](https://github.com/kazupon/vue-validator/commit/6963747))
+* **validate:** add internal validate methods [ci skip] ([68b15c3](https://github.com/kazupon/vue-validator/commit/68b15c3))
+* change to my repository name [ci skip] ([98dba92](https://github.com/kazupon/vue-validator/commit/98dba92))
+
+
+### :zap: Improvements
+
+* **component:** fix component validation [ci skip] ([53258ea](https://github.com/kazupon/vue-validator/commit/53258ea))
+* **data:** add progress data [ci skip] ([f2d2164](https://github.com/kazupon/vue-validator/commit/f2d2164))
+
+
+
 <a name="3.0.0-alpha.1"></a>
 # [3.0.0-alpha.1](https://github.com/vuejs/vue-validator/compare/v2.1.3...v3.0.0-alpha.1) (2016-10-24)
 
