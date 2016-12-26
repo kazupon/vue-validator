@@ -13,8 +13,8 @@
   <body>
     <div id="app">
       <label for="language">select your favorite programming languages</label><br />
-      <validity field="lang" :validators="{ required: true, maxlength: 3 }">
-        <select multiple size="10" @change="handleValidate">
+      <validity ref="validity" field="lang" v-model="validation" :validators="{ required: true, maxlength: 3 }">
+        <select multiple size="10" @change="$refs.validity.validate()">
           <option value="javascript">JavaScript</option>
           <option value="ruby">Ruby</option>
           <option value="python">Python</option>
@@ -28,21 +28,15 @@
         </select>
       </validity>
       <div class="errors">
-        <p v-if="result.required">Required !!</p>
-        <p v-if="result.maxlength">Sorry, The maximum is 3 languages !!</p>
+        <p class="required" v-if="validation.result.required">Required !!</p>
+        <p class="maxlength" v-if="validation.result.maxlength">Sorry, The maximum is 3 languages !!</p>
       </div>
     </div>
     <script>
       new Vue({
-        data: { result: {} },
-        methods: {
-          handleValidate: function (e) {
-            var self = this
-            var $validity = e.target.$validity
-            $validity.validate(function () {
-              var result = $validity.result
-              self.result = result
-            })
+        data: {
+          validation: {
+            result: {}
           }
         }
       }).$mount('#app')

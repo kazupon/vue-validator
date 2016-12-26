@@ -15,14 +15,14 @@
   </head>
   <body>
     <div id="app">
-      <validity ref="validity" field="select" :validators="{
+      <validity ref="validity" field="select" v-model="validation" :validators="{
       selected: { props: { value: { message: 'not selected item!!' } } }
       }">
         <select2 :options="options" :value="selected" @input="handleValidate">
           <option value="0">----- Select one -----</option>
         </select2>
       </validity>
-      <p class="errors" v-if="result.errors">{{result.value.selected}}</p>
+      <p class="errors" v-if="validation.result.errors">{{validation.result.value.selected}}</p>
     </div>
     <script>
       new Vue({
@@ -32,7 +32,9 @@
             { id: 1, text: 'Hello' },
             { id: 2, text: 'World' }
           ],
-          result: {}
+          validation: {
+            result: {}
+          }
         },
         validators: {
           selected: function (val) {
@@ -60,13 +62,8 @@
           }
         },
         mounted () {
-          var self = this
-          var $validity = this.$refs.validity
-          $validity.$on('validate', function () {
-            self.result = $validity.result
-          })
-
-          $validity.validate()
+          // initial validation
+          this.$refs.validity.validate()
         },
         methods: {
           handleValidate: function (val) {
