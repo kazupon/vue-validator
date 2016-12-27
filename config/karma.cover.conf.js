@@ -5,11 +5,10 @@ module.exports = config => {
     browsers: ['PhantomJS'],
     reporters: ['mocha', 'coverage'],
     coverageReporter: {
-      reporters: [{
-        type: 'lcov', dir: '../coverage'
-      }, {
-        type: 'text-summary', dir: '../coverage'
-      }]
+      reporters: [
+        { type: 'lcov', dir: '../coverage', subdir: '.' },
+        { type: 'text-summary', dir: '../coverage', subdir: '.' }
+      ]
     },
     singleRun: true
   })
