@@ -1,7 +1,7 @@
 # vue-validator
 
 [![CircleCI Status](https://circleci.com/gh/kazupon/vue-validator/tree/dev.svg?style=shield&circle-token=36fad1862fbb44da91a28217df8fba769d6d1ce7)](https://circleci.com/gh/kazupon/vue-validator/tree/dev)
-[![Coverage Status](https://coveralls.io/repos/github/kazupon/vue-validator/badge.svg?branch=dev)](https://coveralls.io/github/kazupon/vue-validator?branch=dev)
+[![codecov](https://codecov.io/gh/kazupon/vue-validator/branch/dev/graph/badge.svg)](https://codecov.io/gh)
 [![npm package](https://img.shields.io/npm/v/vue-validator.svg)](https://www.npmjs.com/package/vue-validator)
 
 Validator component for Vue.js
