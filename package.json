@@ -90,6 +90,7 @@
     "build": "node config/build.js",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./node_modules/git-commit-message-convention/convention.js",
     "clean": "rm -rf coverage && rm -rf dist/*.js* && rm ./*.log",
+    "coverage": "cat ./coverage/lcov.info",
     "dev": "webpack-dev-server --quiet --config config/webpack.dev.conf.js --host 0.0.0.0",
     "docs": "gitbook serve ./gitbook ./docs",
     "docs:build": "gitbook build ./gitbook ./docs",
