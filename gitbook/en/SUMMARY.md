@@ -6,3 +6,5 @@
 
 - [Installation](installation.md)
 - [Getting Started](started.md)
+- [Validation With Component](validate.md)
+- [Validation Results](results.md)
