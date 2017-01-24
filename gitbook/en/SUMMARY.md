@@ -11,3 +11,4 @@
 - [Built-in Validators](validators.md)
 - [Reset Validation Results](reset.md)
 - [Form Validatable elements](elements.md)
+- [Grouping](grouping.md)
