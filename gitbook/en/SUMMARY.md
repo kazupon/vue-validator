@@ -8,3 +8,4 @@
 - [Getting Started](started.md)
 - [Validation With Component](validate.md)
 - [Validation Results](results.md)
+- [Built-in Validators](validators.md)
