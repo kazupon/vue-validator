@@ -13,3 +13,4 @@
 - [Form Validatable elements](elements.md)
 - [Grouping](grouping.md)
 - [Error Messages](errors.md)
+- [Events](events.md)
