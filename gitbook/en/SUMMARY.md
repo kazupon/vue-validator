@@ -14,3 +14,4 @@
 - [Grouping](grouping.md)
 - [Error Messages](errors.md)
 - [Events](events.md)
+- [Custom Validator](custom.md)
