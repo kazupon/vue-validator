@@ -45,15 +45,15 @@ describe('reset single field', () => {
       // change
       const field1 = el.getElementsByTagName('input')[0]
       const field2 = el.getElementsByTagName('input')[1]
-      field1.value = '11'
-      field2.value = 'hi'
+      field1.value = '200'
+      field2.value = 'World'
       trigger(field1, 'input')
       trigger(field1, 'blur')
       trigger(field2, 'input')
       trigger(field2, 'blur')
       vm.$nextTick(() => {
         // reset
-        vm.$resetValidation(() => {
+        vm.$resetField('field1', () => {
           assert(vm.$validator1.field1.required === false)
           assert(vm.$validator1.field1.min === false)
           assert(vm.$validator1.field1.max === true)
@@ -61,15 +61,15 @@ describe('reset single field', () => {
           assert(vm.$validator1.field1.dirty === false)
           assert(vm.$validator1.field1.modified === false)
           assert(vm.$validator1.field1.touched === false)
-          assert(vm.$validator1.field2.minlength === true)
-          assert(vm.$validator1.field2.valid === false)
-          assert(vm.$validator1.field2.dirty === false)
-          assert(vm.$validator1.field2.modified === false)
-          assert(vm.$validator1.field2.touched === false)
+          assert(vm.$validator1.field2.minlength === false)
+          assert(vm.$validator1.field2.valid === true)
+          assert(vm.$validator1.field2.dirty === true)
+          assert(vm.$validator1.field2.modified === true)
+          assert(vm.$validator1.field2.touched === true)
           assert(vm.$validator1.valid === false)
-          assert(vm.$validator1.dirty === false)
-          assert(vm.$validator1.modified === false)
-          assert(vm.$validator1.touched === false)
+          assert(vm.$validator1.dirty === true)
+          assert(vm.$validator1.modified === true)
+          assert(vm.$validator1.touched === true)
           done()
         })
       })
@@ -84,7 +84,6 @@ describe('reset single field', () => {
           <form novalidate>
             <input type="checkbox" value="foo" v-validate:field1="{ required: true, minlength: 1 }">
             <input type="checkbox" value="bar" v-validate:field1>
-            <input type="checkbox" value="buz" v-validate:field1>
           </form>
         </validator>
       `

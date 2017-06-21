@@ -2176,7 +2176,6 @@ var Validator$1 = function () {
   Validator.prototype._resetField = function _resetField(field, cb) {
     var validation = this._getValidationFrom(field);
     validation.reset();
-    ////this.validate({field: field});
     this._validates(cb);
   };
 

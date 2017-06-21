@@ -18,14 +18,15 @@
             <input id="username" type="text" v-validate:username="['required']">
             <button type="button" @click="onReset('username')">Reset Validation</button>
           </div>
-          <div class="comment-field">
-            <label for="comment">comment:</label>
-            <input id="comment" type="text" v-validate:comment="{ maxlength: 256 }">
-            <button type="button" @click="onReset('comment')">Reset Validation</button>
+          <div class="password-field">
+            <label for="password">password:</label>
+            <input id="password" type="password" v-validate:password="{ required: true, maxlength: 15 }">
+            <button type="button" @click="onReset('password')">Reset Validation</button>
           </div>
           <div class="errors">
-            <p v-if="$validation1.username.required">Required your name.</p>
-            <p v-if="$validation1.comment.maxlength">Your comment is too long.</p>
+            <p v-if="$validation1.username.required">Your name is required.</p>
+            <p v-if="$validation1.password.required">Your password is required.</p>
+            <p v-if="$validation1.password.maxlength">Your password is too long.</p>
           </div>
           <input type="submit" value="send" v-if="$validation1.valid">
           <button type="button" @click="onResetAll">Reset Validation</button>
