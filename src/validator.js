@@ -279,7 +279,9 @@ export default class Validator {
 
   _resetField (field, cb) {
     var validation = this._getValidationFrom(field)
-    validation.reset()
+    if (validation) {
+      validation.reset()
+    }
     this._validates(cb)
   }
 
