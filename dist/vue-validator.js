@@ -1,6 +1,6 @@
 /*!
  * vue-validator v2.1.7
- * (c) 2016 kazuya kawaguchi
+ * (c) 2017 kazuya kawaguchi
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -9,62 +9,6 @@
   (global.VueValidator = factory());
 }(this, function () { 'use strict';
 
-  var babelHelpers = {};
-  babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  };
-
-  babelHelpers.classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-
-  babelHelpers.createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-
-  babelHelpers.inherits = function (subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  };
-
-  babelHelpers.possibleConstructorReturn = function (self, call) {
-    if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
-  };
-
-  babelHelpers;
   /**
    * Utilties
    */
@@ -211,6 +155,173 @@
     }
   }
 
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
+
+  var asyncGenerator = function () {
+    function AwaitValue(value) {
+      this.value = value;
+    }
+
+    function AsyncGenerator(gen) {
+      var front, back;
+
+      function send(key, arg) {
+        return new Promise(function (resolve, reject) {
+          var request = {
+            key: key,
+            arg: arg,
+            resolve: resolve,
+            reject: reject,
+            next: null
+          };
+
+          if (back) {
+            back = back.next = request;
+          } else {
+            front = back = request;
+            resume(key, arg);
+          }
+        });
+      }
+
+      function resume(key, arg) {
+        try {
+          var result = gen[key](arg);
+          var value = result.value;
+
+          if (value instanceof AwaitValue) {
+            Promise.resolve(value.value).then(function (arg) {
+              resume("next", arg);
+            }, function (arg) {
+              resume("throw", arg);
+            });
+          } else {
+            settle(result.done ? "return" : "normal", result.value);
+          }
+        } catch (err) {
+          settle("throw", err);
+        }
+      }
+
+      function settle(type, value) {
+        switch (type) {
+          case "return":
+            front.resolve({
+              value: value,
+              done: true
+            });
+            break;
+
+          case "throw":
+            front.reject(value);
+            break;
+
+          default:
+            front.resolve({
+              value: value,
+              done: false
+            });
+            break;
+        }
+
+        front = front.next;
+
+        if (front) {
+          resume(front.key, front.arg);
+        } else {
+          back = null;
+        }
+      }
+
+      this._invoke = send;
+
+      if (typeof gen.return !== "function") {
+        this.return = undefined;
+      }
+    }
+
+    if (typeof Symbol === "function" && Symbol.asyncIterator) {
+      AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+        return this;
+      };
+    }
+
+    AsyncGenerator.prototype.next = function (arg) {
+      return this._invoke("next", arg);
+    };
+
+    AsyncGenerator.prototype.throw = function (arg) {
+      return this._invoke("throw", arg);
+    };
+
+    AsyncGenerator.prototype.return = function (arg) {
+      return this._invoke("return", arg);
+    };
+
+    return {
+      wrap: function (fn) {
+        return function () {
+          return new AsyncGenerator(fn.apply(this, arguments));
+        };
+      },
+      await: function (value) {
+        return new AwaitValue(value);
+      }
+    };
+  }();
+
+  var classCallCheck = function (instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
+  var inherits = function (subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  };
+
+  var possibleConstructorReturn = function (self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  };
+
   /**
    * Fundamental validate functions
    */
@@ -244,7 +355,7 @@
       return val;
     } else if (typeof val === 'string') {
       return val.length > 0;
-    } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers.typeof(val)) === 'object') {
+    } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object') {
       return Object.keys(val).length > 0;
     } else if (val === null || val === undefined) {
       return false;
@@ -357,7 +468,9 @@
     );
   }
 
-var validators = Object.freeze({
+
+
+  var validators = Object.freeze({
     required: required,
     pattern: pattern,
     minlength: minlength,
@@ -440,10 +553,10 @@ var validators = Object.freeze({
   function ValidateClass (Vue) {
     var vIf = Vue.directive('if');
     var FragmentFactory = Vue.FragmentFactory;
-    var _Vue$util = Vue.util;
-    var toArray = _Vue$util.toArray;
-    var replace = _Vue$util.replace;
-    var createAnchor = _Vue$util.createAnchor;
+    var _Vue$util = Vue.util,
+        toArray = _Vue$util.toArray,
+        replace = _Vue$util.replace,
+        createAnchor = _Vue$util.createAnchor;
 
     /**
      * `v-validate-class` directive
@@ -517,15 +630,15 @@ var validators = Object.freeze({
   function Validate (Vue) {
     var FragmentFactory = Vue.FragmentFactory;
     var parseDirective = Vue.parsers.directive.parseDirective;
-    var _Vue$util = Vue.util;
-    var inBrowser = _Vue$util.inBrowser;
-    var bind = _Vue$util.bind;
-    var on = _Vue$util.on;
-    var off = _Vue$util.off;
-    var createAnchor = _Vue$util.createAnchor;
-    var replace = _Vue$util.replace;
-    var camelize = _Vue$util.camelize;
-    var isPlainObject = _Vue$util.isPlainObject;
+    var _Vue$util = Vue.util,
+        inBrowser = _Vue$util.inBrowser,
+        bind = _Vue$util.bind,
+        on = _Vue$util.on,
+        off = _Vue$util.off,
+        createAnchor = _Vue$util.createAnchor,
+        replace = _Vue$util.replace,
+        camelize = _Vue$util.camelize,
+        isPlainObject = _Vue$util.isPlainObject;
 
     // Test for IE10/11 textarea placeholder clone bug
 
@@ -597,10 +710,9 @@ var validators = Object.freeze({
 
         var raw = el.getAttribute('v-model');
 
-        var _parseModelRaw = this.parseModelRaw(raw);
-
-        var model = _parseModelRaw.model;
-        var filters = _parseModelRaw.filters;
+        var _parseModelRaw = this.parseModelRaw(raw),
+            model = _parseModelRaw.model,
+            filters = _parseModelRaw.filters;
 
         this.model = model;
 
@@ -796,7 +908,7 @@ var validators = Object.freeze({
 
   var BaseValidation = function () {
     function BaseValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      babelHelpers.classCallCheck(this, BaseValidation);
+      classCallCheck(this, BaseValidation);
 
       this.field = field;
       this.touched = false;
@@ -897,7 +1009,7 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype.willUpdateFlags = function willUpdateFlags() {
-      var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+      var touched = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       touched && this.willUpdateTouched(this._el, 'blur');
       this.willUpdateDirty(this._el);
@@ -935,12 +1047,11 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype.handleValidate = function handleValidate(el) {
-      var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-      var _ref$type = _ref.type;
-      var type = _ref$type === undefined ? null : _ref$type;
-      var _ref$noopable = _ref.noopable;
-      var noopable = _ref$noopable === undefined ? false : _ref$noopable;
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref$type = _ref.type,
+          type = _ref$type === undefined ? null : _ref$type,
+          _ref$noopable = _ref.noopable,
+          noopable = _ref$noopable === undefined ? false : _ref$noopable;
 
       this.willUpdateTouched(el, type);
       this.willUpdateDirty(el);
@@ -952,8 +1063,8 @@ var validators = Object.freeze({
     BaseValidation.prototype.validate = function validate(cb) {
       var _this4 = this;
 
-      var noopable = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-      var el = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+      var noopable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var el = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
       var _ = exports$1.Vue.util;
 
@@ -1058,22 +1169,20 @@ var validators = Object.freeze({
     BaseValidation.prototype.willUpdateClasses = function willUpdateClasses(results) {
       var _this5 = this;
 
-      var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       if (this._checkClassIds(el)) {
-        (function () {
-          var classIds = _this5._getClassIds(el);
-          _this5.vm.$nextTick(function () {
-            _this5.vm.$emit(VALIDATE_UPDATE, classIds, _this5, results);
-          });
-        })();
+        var classIds = this._getClassIds(el);
+        this.vm.$nextTick(function () {
+          _this5.vm.$emit(VALIDATE_UPDATE, classIds, _this5, results);
+        });
       } else {
         this.updateClasses(results);
       }
     };
 
     BaseValidation.prototype.updateClasses = function updateClasses(results) {
-      var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       this._updateClasses(el || this._el, results);
     };
@@ -1143,9 +1252,9 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype._toggleValid = function _toggleValid(el, valid) {
-      var _util$Vue$util = exports$1.Vue.util;
-      var addClass = _util$Vue$util.addClass;
-      var removeClass = _util$Vue$util.removeClass;
+      var _util$Vue$util = exports$1.Vue.util,
+          addClass = _util$Vue$util.addClass,
+          removeClass = _util$Vue$util.removeClass;
 
       var validClass = this._classes.valid || 'valid';
       var invalidClass = this._classes.invalid || 'invalid';
@@ -1160,9 +1269,9 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype._toggleTouched = function _toggleTouched(el, touched) {
-      var _util$Vue$util2 = exports$1.Vue.util;
-      var addClass = _util$Vue$util2.addClass;
-      var removeClass = _util$Vue$util2.removeClass;
+      var _util$Vue$util2 = exports$1.Vue.util,
+          addClass = _util$Vue$util2.addClass,
+          removeClass = _util$Vue$util2.removeClass;
 
       var touchedClass = this._classes.touched || 'touched';
       var untouchedClass = this._classes.untouched || 'untouched';
@@ -1177,9 +1286,9 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype._togglePristine = function _togglePristine(el, pristine) {
-      var _util$Vue$util3 = exports$1.Vue.util;
-      var addClass = _util$Vue$util3.addClass;
-      var removeClass = _util$Vue$util3.removeClass;
+      var _util$Vue$util3 = exports$1.Vue.util,
+          addClass = _util$Vue$util3.addClass,
+          removeClass = _util$Vue$util3.removeClass;
 
       var pristineClass = this._classes.pristine || 'pristine';
       var dirtyClass = this._classes.dirty || 'dirty';
@@ -1194,9 +1303,9 @@ var validators = Object.freeze({
     };
 
     BaseValidation.prototype._toggleModfied = function _toggleModfied(el, modified) {
-      var _util$Vue$util4 = exports$1.Vue.util;
-      var addClass = _util$Vue$util4.addClass;
-      var removeClass = _util$Vue$util4.removeClass;
+      var _util$Vue$util4 = exports$1.Vue.util,
+          addClass = _util$Vue$util4.addClass,
+          removeClass = _util$Vue$util4.removeClass;
 
       var modifiedClass = this._classes.modified || 'modified';
 
@@ -1293,7 +1402,7 @@ var validators = Object.freeze({
       return resolveAsset(this._vm.$options, 'validators', name);
     };
 
-    babelHelpers.createClass(BaseValidation, [{
+    createClass(BaseValidation, [{
       key: 'vm',
       get: function get() {
         return this._vm;
@@ -1328,12 +1437,12 @@ var validators = Object.freeze({
    */
 
   var CheckboxValidation = function (_BaseValidation) {
-    babelHelpers.inherits(CheckboxValidation, _BaseValidation);
+    inherits(CheckboxValidation, _BaseValidation);
 
     function CheckboxValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      babelHelpers.classCallCheck(this, CheckboxValidation);
+      classCallCheck(this, CheckboxValidation);
 
-      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._inits = [];
       return _this;
@@ -1412,7 +1521,7 @@ var validators = Object.freeze({
     CheckboxValidation.prototype.willUpdateFlags = function willUpdateFlags() {
       var _this3 = this;
 
-      var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+      var touched = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       each(this._inits, function (item, index) {
         touched && _this3.willUpdateTouched(item.el, 'blur');
@@ -1433,7 +1542,7 @@ var validators = Object.freeze({
     CheckboxValidation.prototype.updateClasses = function updateClasses(results) {
       var _this4 = this;
 
-      var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       if (el) {
         // for another element
@@ -1473,22 +1582,14 @@ var validators = Object.freeze({
     };
 
     CheckboxValidation.prototype._getValue = function _getValue(el) {
-      var _this5 = this;
-
       if (!this._inits || this._inits.length === 0) {
         return el.checked;
       } else {
-        var _ret = function () {
-          var vals = [];
-          each(_this5._inits, function (item, index) {
-            item.el.checked && vals.push(item.el.value);
-          });
-          return {
-            v: vals
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+        var vals = [];
+        each(this._inits, function (item, index) {
+          item.el.checked && vals.push(item.el.value);
+        });
+        return vals;
       }
     };
 
@@ -1503,24 +1604,16 @@ var validators = Object.freeze({
     };
 
     CheckboxValidation.prototype._checkModified = function _checkModified(target) {
-      var _this6 = this;
-
       if (this._inits.length === 0) {
         return this._init !== target.checked;
       } else {
-        var _ret2 = function () {
-          var modified = false;
-          each(_this6._inits, function (item, index) {
-            if (!modified) {
-              modified = item.init !== item.el.checked;
-            }
-          });
-          return {
-            v: modified
-          };
-        }();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+        var modified = false;
+        each(this._inits, function (item, index) {
+          if (!modified) {
+            modified = item.init !== item.el.checked;
+          }
+        });
+        return modified;
       }
     };
 
@@ -1532,12 +1625,12 @@ var validators = Object.freeze({
    */
 
   var RadioValidation = function (_BaseValidation) {
-    babelHelpers.inherits(RadioValidation, _BaseValidation);
+    inherits(RadioValidation, _BaseValidation);
 
     function RadioValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      babelHelpers.classCallCheck(this, RadioValidation);
+      classCallCheck(this, RadioValidation);
 
-      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._inits = [];
       return _this;
@@ -1592,7 +1685,7 @@ var validators = Object.freeze({
     RadioValidation.prototype.willUpdateFlags = function willUpdateFlags() {
       var _this3 = this;
 
-      var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+      var touched = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       each(this._inits, function (item, index) {
         touched && _this3.willUpdateTouched(item.el, 'blur');
@@ -1613,7 +1706,7 @@ var validators = Object.freeze({
     RadioValidation.prototype.updateClasses = function updateClasses(results) {
       var _this4 = this;
 
-      var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       if (el) {
         // for another element
@@ -1653,22 +1746,14 @@ var validators = Object.freeze({
     };
 
     RadioValidation.prototype._getValue = function _getValue(el) {
-      var _this5 = this;
-
       if (!this._inits || this._inits.length === 0) {
         return el.checked;
       } else {
-        var _ret = function () {
-          var vals = [];
-          each(_this5._inits, function (item, index) {
-            item.el.checked && vals.push(item.el.value);
-          });
-          return {
-            v: vals
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+        var vals = [];
+        each(this._inits, function (item, index) {
+          item.el.checked && vals.push(item.el.value);
+        });
+        return vals;
       }
     };
 
@@ -1683,24 +1768,16 @@ var validators = Object.freeze({
     };
 
     RadioValidation.prototype._checkModified = function _checkModified(target) {
-      var _this6 = this;
-
       if (this._inits.length === 0) {
         return this._init !== target.checked;
       } else {
-        var _ret2 = function () {
-          var modified = false;
-          each(_this6._inits, function (item, index) {
-            if (!modified) {
-              modified = item.init !== item.el.checked;
-            }
-          });
-          return {
-            v: modified
-          };
-        }();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+        var modified = false;
+        each(this._inits, function (item, index) {
+          if (!modified) {
+            modified = item.init !== item.el.checked;
+          }
+        });
+        return modified;
       }
     };
 
@@ -1712,12 +1789,12 @@ var validators = Object.freeze({
    */
 
   var SelectValidation = function (_BaseValidation) {
-    babelHelpers.inherits(SelectValidation, _BaseValidation);
+    inherits(SelectValidation, _BaseValidation);
 
     function SelectValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
-      babelHelpers.classCallCheck(this, SelectValidation);
+      classCallCheck(this, SelectValidation);
 
-      var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+      var _this = possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
 
       _this._multiple = _this._el.hasAttribute('multiple');
       return _this;
@@ -1808,7 +1885,7 @@ var validators = Object.freeze({
     function Validator(name, dir, groups, classes) {
       var _this = this;
 
-      babelHelpers.classCallCheck(this, Validator);
+      classCallCheck(this, Validator);
 
       this.name = name;
 
@@ -1838,6 +1915,9 @@ var validators = Object.freeze({
       // define the validation resetting meta method to vue instance
       this._defineResetValidation();
 
+      // define the validation resetting for a single field
+      this._defineResetField();
+
       // define the validate manually meta method to vue instance
       this._defineValidate();
 
@@ -1853,6 +1933,8 @@ var validators = Object.freeze({
       delete vm['$validate'];
       vm.$resetValidation = null;
       delete vm['$resetValidation'];
+      vm.$resetField = null;
+      delete vm['$resetField'];
       vm._validatorMaps[this.name] = null;
       delete vm._validatorMaps[this.name];
       vm[this.name] = null;
@@ -1932,18 +2014,17 @@ var validators = Object.freeze({
     };
 
     Validator.prototype.validate = function validate() {
-      var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-      var _ref$el = _ref.el;
-      var el = _ref$el === undefined ? null : _ref$el;
-      var _ref$field = _ref.field;
-      var field = _ref$field === undefined ? null : _ref$field;
-      var _ref$touched = _ref.touched;
-      var touched = _ref$touched === undefined ? false : _ref$touched;
-      var _ref$noopable = _ref.noopable;
-      var noopable = _ref$noopable === undefined ? false : _ref$noopable;
-      var _ref$cb = _ref.cb;
-      var cb = _ref$cb === undefined ? null : _ref$cb;
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$el = _ref.el,
+          el = _ref$el === undefined ? null : _ref$el,
+          _ref$field = _ref.field,
+          field = _ref$field === undefined ? null : _ref$field,
+          _ref$touched = _ref.touched,
+          touched = _ref$touched === undefined ? false : _ref$touched,
+          _ref$noopable = _ref.noopable,
+          noopable = _ref$noopable === undefined ? false : _ref$noopable,
+          _ref$cb = _ref.cb,
+          cb = _ref$cb === undefined ? null : _ref$cb;
 
       if (!field) {
         // all
@@ -1996,12 +2077,35 @@ var validators = Object.freeze({
       };
     };
 
-    Validator.prototype._defineValidate = function _defineValidate() {
+    Validator.prototype._defineResetField = function _defineResetField() {
       var _this5 = this;
 
-      this._dir.vm.$validate = function () {
+      this._dir.vm.$resetField = function () {
         for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
+        }
+
+        var field = null;
+        var cb = null;
+
+        each(args, function (arg, index) {
+          if (typeof arg === 'string') {
+            field = arg;
+          } else if (typeof arg === 'function') {
+            cb = arg;
+          }
+        });
+
+        _this5._resetField(field, cb);
+      };
+    };
+
+    Validator.prototype._defineValidate = function _defineValidate() {
+      var _this6 = this;
+
+      this._dir.vm.$validate = function () {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
         }
 
         var field = null;
@@ -2018,26 +2122,26 @@ var validators = Object.freeze({
           }
         });
 
-        _this5.validate({ field: field, touched: touched, cb: cb });
+        _this6.validate({ field: field, touched: touched, cb: cb });
       };
     };
 
     Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
-      var _this6 = this;
+      var _this7 = this;
 
       this._dir.vm.$setValidationErrors = function (errors) {
-        _this6._setValidationErrors(errors);
+        _this7._setValidationErrors(errors);
       };
     };
 
     Validator.prototype._validate = function _validate(field) {
-      var touched = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-      var noopable = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var touched = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var noopable = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-      var _this7 = this;
+      var _this8 = this;
 
-      var el = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
-      var cb = arguments.length <= 4 || arguments[4] === undefined ? null : arguments[4];
+      var el = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+      var cb = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
 
       var scope = this._scope;
 
@@ -2046,14 +2150,14 @@ var validators = Object.freeze({
         validation.willUpdateFlags(touched);
         validation.validate(function (results) {
           exports$1.Vue.set(scope, field, results);
-          _this7._fireEvents();
+          _this8._fireEvents();
           cb && cb();
         }, noopable, el);
       }
     };
 
     Validator.prototype._validates = function _validates(cb) {
-      var _this8 = this;
+      var _this9 = this;
 
       var scope = this._scope;
 
@@ -2064,13 +2168,21 @@ var validators = Object.freeze({
         });
       }, function () {
         // finished
-        _this8._fireEvents();
+        _this9._fireEvents();
         cb && cb();
       });
     };
 
     Validator.prototype._getValidationFrom = function _getValidationFrom(field) {
       return this._validations[field] || this._checkboxValidations[field] && this._checkboxValidations[field].validation || this._radioValidations[field] && this._radioValidations[field].validation;
+    };
+
+    Validator.prototype._resetField = function _resetField(field, cb) {
+      var validation = this._getValidationFrom(field);
+      if (validation) {
+        validation.reset();
+      }
+      this._validates(cb);
     };
 
     Validator.prototype._resetValidation = function _resetValidation(cb) {
@@ -2081,7 +2193,7 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._setValidationErrors = function _setValidationErrors(errors) {
-      var _this9 = this;
+      var _this10 = this;
 
       var extend = exports$1.Vue.util.extend;
 
@@ -2097,7 +2209,7 @@ var validators = Object.freeze({
 
       // set errors
       each(temp, function (values, field) {
-        var results = _this9._scope[field];
+        var results = _this10._scope[field];
         var newResults = {};
 
         each(values, function (error) {
@@ -2111,10 +2223,10 @@ var validators = Object.freeze({
         results.errors = values;
         extend(newResults, results);
 
-        var validation = _this9._getValidationFrom(field);
+        var validation = _this10._getValidationFrom(field);
         validation.willUpdateClasses(newResults, validation.el);
 
-        exports$1.Vue.set(_this9._scope, field, newResults);
+        exports$1.Vue.set(_this10._scope, field, newResults);
       });
     };
 
@@ -2203,8 +2315,8 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._fireEvent = function _fireEvent(type) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
+      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
       }
 
       var handler = this._events[this._getEventName(type)];
@@ -2233,7 +2345,7 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._defineProperties = function _defineProperties(validationsGetter, targetGetter) {
-      var _this10 = this;
+      var _this11 = this;
 
       var bind = exports$1.Vue.util.bind;
 
@@ -2251,7 +2363,7 @@ var validators = Object.freeze({
           enumerable: true,
           configurable: true,
           get: function get() {
-            return bind(descriptor.fn, _this10)(descriptor.arg);
+            return bind(descriptor.fn, _this11)(descriptor.arg);
           }
         });
       });
@@ -2270,7 +2382,7 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._walkValidations = function _walkValidations(validations, property, condition) {
-      var _this11 = this;
+      var _this12 = this;
 
       var hasOwn = exports$1.Vue.util.hasOwn;
       var ret = condition;
@@ -2279,8 +2391,8 @@ var validators = Object.freeze({
         if (ret === !condition) {
           return;
         }
-        if (hasOwn(_this11._scope, validation.field)) {
-          var target = _this11._scope[validation.field];
+        if (hasOwn(_this12._scope, validation.field)) {
+          var target = _this12._scope[validation.field];
           if (target && target[property] === !condition) {
             ret = !condition;
           }
@@ -2319,15 +2431,15 @@ var validators = Object.freeze({
     };
 
     Validator.prototype._defineErrors = function _defineErrors(validationsGetter) {
-      var _this12 = this;
+      var _this13 = this;
 
       var hasOwn = exports$1.Vue.util.hasOwn;
       var isPlainObject = exports$1.Vue.util.isPlainObject;
       var errors = [];
 
       each(validationsGetter(), function (validation, key) {
-        if (hasOwn(_this12._scope, validation.field)) {
-          var target = _this12._scope[validation.field];
+        if (hasOwn(_this13._scope, validation.field)) {
+          var target = _this13._scope[validation.field];
           if (target && !empty(target.errors)) {
             each(target.errors, function (err, index) {
               var error = { field: validation.field };
@@ -2350,7 +2462,7 @@ var validators = Object.freeze({
       });
     };
 
-    babelHelpers.createClass(Validator, [{
+    createClass(Validator, [{
       key: 'validations',
       get: function get() {
         var extend = exports$1.Vue.util.extend;
@@ -2375,13 +2487,13 @@ var validators = Object.freeze({
   function Validator (Vue) {
     var FragmentFactory = Vue.FragmentFactory;
     var vIf = Vue.directive('if');
-    var _Vue$util = Vue.util;
-    var isArray = _Vue$util.isArray;
-    var isPlainObject = _Vue$util.isPlainObject;
-    var createAnchor = _Vue$util.createAnchor;
-    var replace = _Vue$util.replace;
-    var extend = _Vue$util.extend;
-    var camelize = _Vue$util.camelize;
+    var _Vue$util = Vue.util,
+        isArray = _Vue$util.isArray,
+        isPlainObject = _Vue$util.isPlainObject,
+        createAnchor = _Vue$util.createAnchor,
+        replace = _Vue$util.replace,
+        extend = _Vue$util.extend,
+        camelize = _Vue$util.camelize;
 
     /**
      * `validator` element directive
@@ -2494,10 +2606,9 @@ var validators = Object.freeze({
       template: '<div><partial :name="partial"></partial></div>',
 
       partials: {}
-    };
 
-    // only use ValidatorError component
-    error.partials['validator-error-default'] = '<p>{{field}}: {{message}}</p>';
+      // only use ValidatorError component
+    };error.partials['validator-error-default'] = '<p>{{field}}: {{message}}</p>';
 
     return error;
   }
@@ -2565,10 +2676,9 @@ var validators = Object.freeze({
       template: '<template v-for="error in errors">' + '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message">' + '</component>' + '</template>',
 
       components: {}
-    };
 
-    // define 'partial' prop
-    errors.props['partial'] = error.props['partial'];
+      // define 'partial' prop
+    };errors.props['partial'] = error.props['partial'];
 
     // only use ValidatorErrors component
     errors.components[error.name] = error;
@@ -2587,7 +2697,7 @@ var validators = Object.freeze({
    */
 
   function plugin(Vue) {
-    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     if (plugin.installed) {
       warn('already installed.');

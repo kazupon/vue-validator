@@ -212,8 +212,8 @@ describe('github issues', () => {
         trigger(foo, 'blur')
         vm.$nextTick(() => {
           assert(vm.$validator1.field1.required === false)
-          assert(vm.$validator1.field1.minlength === true)
-          assert(vm.$validator1.field1.valid === false)
+          assert(vm.$validator1.field1.minlength === false)
+          assert(vm.$validator1.field1.valid === true)
           assert(vm.$validator1.field1.touched === true)
           assert(vm.$validator1.field1.dirty === true)
           assert(vm.$validator1.field1.modified === true)

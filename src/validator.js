@@ -41,6 +41,9 @@ export default class Validator {
     // define the validation resetting meta method to vue instance
     this._defineResetValidation()
 
+    // define the validation resetting for a single field
+    this._defineResetField()
+
     // define the validate manually meta method to vue instance
     this._defineValidate()
 
@@ -56,6 +59,8 @@ export default class Validator {
     delete vm['$validate']
     vm.$resetValidation = null
     delete vm['$resetValidation']
+    vm.$resetField = null
+    delete vm['$resetField']
     vm._validatorMaps[this.name] = null
     delete vm._validatorMaps[this.name]
     vm[this.name] = null
@@ -193,6 +198,23 @@ export default class Validator {
     }
   }
 
+  _defineResetField () {
+    this._dir.vm.$resetField = (...args) => {
+      let field = null
+      let cb = null
+
+      each(args, (arg, index) => {
+        if (typeof arg === 'string') {
+          field = arg
+        } else if (typeof arg === 'function') {
+          cb = arg
+        }
+      })
+
+      this._resetField(field, cb)
+    }
+  }
+
   _defineValidate () {
     this._dir.vm.$validate = (...args) => {
       let field = null
@@ -253,6 +275,14 @@ export default class Validator {
     return this._validations[field]
       || (this._checkboxValidations[field] && this._checkboxValidations[field].validation)
       || (this._radioValidations[field] && this._radioValidations[field].validation)
+  }
+
+  _resetField (field, cb) {
+    var validation = this._getValidationFrom(field)
+    if (validation) {
+      validation.reset()
+    }
+    this._validates(cb)
   }
 
   _resetValidation (cb) {
