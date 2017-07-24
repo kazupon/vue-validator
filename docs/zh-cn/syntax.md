@@ -135,6 +135,7 @@ new Vue({
       <span v-if="$validation.id.maxlength">Your ID is too long.</span>
     </div>
   </form>
+</validator>
 ```
 
 ## 绑定
