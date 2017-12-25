@@ -1,10 +1,14 @@
-# vue-validator
+# vue-validator - DEPRECATED
 
 [![CircleCI Status](https://circleci.com/gh/kazupon/vue-validator/tree/dev.svg?style=shield&circle-token=36fad1862fbb44da91a28217df8fba769d6d1ce7)](https://circleci.com/gh/kazupon/vue-validator/tree/dev)
 [![codecov](https://codecov.io/gh/kazupon/vue-validator/branch/dev/graph/badge.svg)](https://codecov.io/gh/kazupon/vue-validator)
 [![npm package](https://img.shields.io/npm/v/vue-validator.svg)](https://www.npmjs.com/package/vue-validator)
 
 Validator component for Vue.js
+
+### :warning: Please note, this project is deprecated and no longer being maintained
+I recommend that you use [other validation libraries](https://github.com/vuejs/awesome-vue#validation).
+Thank you for everything you have done for vue-validator.
 
 >:warning: NOTE: official release for Vue.js 2.0 not yet :construction:
 
